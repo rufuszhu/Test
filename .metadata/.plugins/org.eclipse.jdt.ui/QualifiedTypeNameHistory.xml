@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentTabHost"/>
+<fullyQualifiedTypeName name="android.support.v7.app.ActionBar.TabListener"/>
+<fullyQualifiedTypeName name="android.widget.TabHost"/>
+<fullyQualifiedTypeName name="android.widget.TabHost.OnTabChangeListener"/>
+<fullyQualifiedTypeName name="android.R.string"/>
+<fullyQualifiedTypeName name="android.view.MenuInflater"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.R.id"/>
+<fullyQualifiedTypeName name="android.graphics.Color"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.MainActivity"/>
+<fullyQualifiedTypeName name="android.view.Menu"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.Adapters.NavigationAdapter"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.Adapters.NavigationItemAdapter"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.R"/>
+<fullyQualifiedTypeName name="digital.dispatch.TaxiLimoNewUI.Utils.Utils"/>
+</qualifiedTypeNameHistroy>

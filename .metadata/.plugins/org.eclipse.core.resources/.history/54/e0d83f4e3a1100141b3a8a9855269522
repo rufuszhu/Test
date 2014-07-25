@@ -1,0 +1,60 @@
+package digital.dispatch.TaxiLimoNewUI;
+
+import java.util.Locale;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class HomeFragment extends Fragment {
+	/**
+	 * The fragment argument representing the section number for this fragment.
+	 */
+	private static final String ARG_SECTION_NUMBER = "section_number";
+	private FragmentTabHost mTabHost;
+	
+	/**
+	 * Returns a new instance of this fragment for the given section number.
+	 */
+	public static HomeFragment newInstance() {
+		HomeFragment fragment = new HomeFragment();
+		Bundle args = new Bundle();
+		args.putInt(ARG_SECTION_NUMBER, 1);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+		
+		mTabHost = (FragmentTabHost)rootView.findViewById(android.R.id.tabhost);
+        mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
+        
+		mTabHost.addTab(mTabHost.newTabSpec("fragmentb").setIndicator("Book"),
+				BookFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("fragmentc").setIndicator("Track"),
+        		TrackFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("fragmentd").setIndicator("History"),
+        		HistoryFragment.class, null);
+        
+        
+		return rootView;
+	}
+	
+	
+}
