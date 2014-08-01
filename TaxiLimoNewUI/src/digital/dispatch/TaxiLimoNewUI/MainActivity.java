@@ -2,21 +2,27 @@ package digital.dispatch.TaxiLimoNewUI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+	private static final String TAG = "MainActivity";
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -58,8 +64,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         setupTab();
         
         restoreActionBar();
+
+        
 	}
 	
+
+
 	private void initView(){
 		bookTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
 		trackTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
@@ -79,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             TrackFragment.class, null);
         mTabHost.addTab(mTabHost.newTabSpec(HISTORY_TAB).setIndicator(getTabIndicator(this,historyImageView,historyTabView,R.string.history,R.drawable.ic_action_event)),
             HistoryFragment.class, null);
-        mTabHost.setCurrentTab(currentTab);
+        //mTabHost.setCurrentTab(currentTab);
         mTabHost.setOnTabChangedListener(new FragmentTabHost.OnTabChangeListener(){
         	@Override
         	public void onTabChanged(String tabId) {

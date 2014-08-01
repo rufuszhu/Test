@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="clear"></string>
+
+    <string name="clear"></string>
     <string name="app_name">TaxiLimo</string>
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
@@ -21,5 +22,6 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_preference">PreferenceActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_modify_address">ModifyAddressActivity</string>
 
 </resources>
