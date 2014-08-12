@@ -4,30 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="vertical"
-   		android:paddingLeft="10px"
-    	android:paddingRight="10px"
-   		android:paddingTop="10px">
+        android:layout_height="0dp"
+        android:layout_weight=".20"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" 
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="5dp" >
 
             <EditText
                 android:id="@+id/tv_streetNumber"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginRight="5px"
+                android:paddingLeft="5px"
+                android:layout_weight=".4"
+                android:background="@drawable/shape_textview_border"
                 android:ems="10"
-                android:inputType="number" 
-                android:layout_weight=".4">
+                android:inputType="number" >
+
                 <requestFocus />
             </EditText>
 
@@ -35,45 +36,106 @@
                 android:id="@+id/tv_unitNumber"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="5px"
+                android:layout_marginRight="10px"
+                android:layout_weight=".4"
+                android:paddingLeft="5px"
+                android:background="@drawable/shape_textview_border"
                 android:ems="10"
-                android:inputType="number" 
-                android:layout_weight=".4"/>
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/driver_note_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Driver Note"
                 android:layout_weight=".2"
-               	android:background="@drawable/white_button_selector"/>
-
+                android:paddingLeft="5px"
+                android:background="@drawable/white_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="Driver Note" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" 
+            android:layout_height="50dp"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:padding="5px" >
 
             <EditText
                 android:id="@+id/tv_destination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5px"
+                android:background="@drawable/shape_textview_border"
                 android:ems="10" />
-            
         </LinearLayout>
-        
-        <ExpandableListView
-                android:id="@+id/lvExp"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>  
-
-	
-        
     </LinearLayout>
 
+    <ExpandableListView
+        android:id="@+id/lvExp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" 
+        android:layout_weight=".65">
+    </ExpandableListView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal" 
+        android:layout_weight=".15">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:orientation="horizontal" 
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/gray_button_selector">
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" 
+            android:clickable="true"
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:background="@drawable/gray_button_selector">
+            
+             <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+           
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
