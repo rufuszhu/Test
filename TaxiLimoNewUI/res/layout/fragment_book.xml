@@ -37,7 +37,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
-            android:text="Forge Place, Richmond, BC"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageButton
@@ -57,7 +56,6 @@
         android:orientation="horizontal" >
 
         <LinearLayout
-            android:id="@+id/pickupTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".3"
@@ -68,6 +66,7 @@
             android:paddingTop="@dimen/option_padding" >
 
             <LinearLayout
+                android:id="@+id/pickupTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="@dimen/map_alpha"
@@ -159,7 +158,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".7"
                     android:gravity="center"
-                    android:text="Note" />
+                    android:text="@string/empty_note" />
             </LinearLayout>
         </LinearLayout>
 
@@ -261,5 +260,13 @@
                 android:text="Book" />
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/presence_online" />
 
 </RelativeLayout>

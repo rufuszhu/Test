@@ -1,14 +1,25 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,32 +33,36 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class BookFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+public class BookFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
+	private final int REQUEST_CODE = 2;
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "Book";
 	private static final int DRIVER_NOTE_MAX_LENGTH = 256;
@@ -55,11 +70,16 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
-	
+
 	private Dialog messageDialog;
-	private String driverNoteString;
+	private String driverNoteString = "";
 	private TextView textNote;
-	
+	private TextView address_bar_text;
+	private LatLng currentLatLng;
+	private String countryCode;
+
+	private Handler mHandler = new Handler();
+
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000) // 5 seconds
@@ -74,13 +94,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		return fragment;
 	}
 
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		Logger.e(TAG, "on CREATE");
-//		setHasOptionsMenu(true);
-//	}
-
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// only show refresh if drawer is not open.
@@ -91,45 +104,81 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "on CREATEVIEW");
-		//View rootView = inflater.inflate(R.layout.fragment_book, container, false);
-		
+		// View rootView = inflater.inflate(R.layout.fragment_book, container, false);
 		if (view != null) {
-	        ViewGroup parent = (ViewGroup) view.getParent();
-	        if (parent != null)
-	            parent.removeView(view);
-	    }
-	    try {
-	        view = inflater.inflate(R.layout.fragment_book, container, false);
-	    } catch (InflateException e) {
-	        /* map is already there, just return view as it is */
-	    }
-	    
-	    
-	    textNote = (TextView) view.findViewById(R.id.text_note);
-	    
-	    
-	    ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
+			ViewGroup parent = (ViewGroup) view.getParent();
+			if (parent != null)
+				parent.removeView(view);
+		}
+		try {
+			view = inflater.inflate(R.layout.fragment_book, container, false);
+		} catch (InflateException e) {
+			/* map is already there, just return view as it is */
+		}
+
+		textNote = (TextView) view.findViewById(R.id.text_note);
+		address_bar_text = (TextView) view.findViewById(R.id.text_address);
+		Utils.setNoteIndication(getActivity(),textNote);
+
+		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				onCurrentLocationClick();
 			}
 		});
-		
+
 		LinearLayout addressBar = (LinearLayout) view.findViewById(R.id.addressBar);
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				onAddressBarClick();
+				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
+				if (servicesConnected()) {
+					intent.putExtra(MBDefinition.CURRENT_LOCATION_EXTRA, mLocationClient.getLastLocation());
+				}
+				intent.putExtra(MBDefinition.IS_DESTINATION, false);
+				startActivityForResult(intent, REQUEST_CODE);
 			}
 		});
-		
+
+		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
+		pickTime.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//TimePickerDialog.timepick(getActivity(), 1, 20);
+			}
+		});
+
 		LinearLayout driverNote = (LinearLayout) view.findViewById(R.id.driverNote);
 		driverNote.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				setUpMessageDialog();
+				//setUpMessageDialog();
+				Dialog messageDialog = new Dialog(getActivity());
+				
+				Utils.setUpMessageDialog(getActivity(),messageDialog,textNote);
+				
 			}
 		});
-		
-	    return view;
+
+		TextView destination = (TextView) view.findViewById(R.id.destination_button);
+		destination.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				// Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
+				// if(servicesConnected()){
+				// intent.putExtra("currentLocation", mLocationClient.getLastLocation());
+				// }
+				// startActivityForResult(intent,REQUEST_CODE);
+				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
+				intent.putExtra(MBDefinition.IS_DESTINATION, true);
+				startActivity(intent);
+			}
+		});
+
+		TextView book_btn = (TextView) view.findViewById(R.id.book_button);
+		book_btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				// Logger.e(TAG, getUserCountry(getActivity()));
+			}
+		});
+
+		return view;
 	}
 
 	@Override
@@ -149,17 +198,47 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			mLocationClient.disconnect();
 		}
 	}
-	
-    /**
-     * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on
-     * all entry points that call methods on the Google Maps API.
-     */
-    private boolean checkReady() {
-        if (mMap == null) {
-            return false;
-        }
-        return true;
-    }
+
+	/**
+	 * Verify that Google Play services is available before making a request.
+	 * 
+	 * @return true if Google Play services is available, otherwise false
+	 */
+	private boolean servicesConnected() {
+
+		// Check that Google Play services is available
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+
+		// If Google Play services is available
+		if (ConnectionResult.SUCCESS == resultCode) {
+			// In debug mode, log the status
+			Log.d(LocationUtils.APPTAG, getString(R.string.play_services_available));
+
+			// Continue
+			return true;
+			// Google Play services was not available for some reason
+		} else {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google
+	 * Maps API.
+	 */
+	private boolean checkReady() {
+		if (mMap == null) {
+			return false;
+		}
+		return true;
+	}
 
 	private void setUpMapIfNeeded() {
 		// Do a null check to confirm that we have not already instantiated the map.
@@ -170,6 +249,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			if (mMap != null) {
 				mMap.setMyLocationEnabled(false);
 				mMap.getUiSettings().setZoomControlsEnabled(false);
+				mMap.setOnCameraChangeListener(this);
 			}
 		}
 	}
@@ -180,13 +260,13 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 					this); // OnConnectionFailedListener
 		}
 	}
-	
-	private void setUpMessageDialog(){
+
+	private void setUpMessageDialog() {
 		final EditText driverMessage;
 		final TextView textRemaining;
 		TextView ok;
 		TextView clear;
-		
+
 		messageDialog = new Dialog(getActivity());
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.message_dialog);
@@ -194,12 +274,14 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
-		textRemaining =  (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
-		driverMessage.addTextChangedListener(new TextWatcher(){
+		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
+
+		driverMessage.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable note) {
-				textRemaining.setText(DRIVER_NOTE_MAX_LENGTH-note.length() + " Charaters Left");
+				textRemaining.setText(DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
 			}
+
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 			}
@@ -208,13 +290,21 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 			}
 		});
-		
+
+		driverMessage.setText(driverNoteString);
+		driverMessage.setSelection(driverNoteString.length());
+
 		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
 		ok.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				driverNoteString = driverMessage.getText().toString();
-				
-				textNote.setText(driverNoteString.substring(0, Math.min(10, driverNoteString.length())));
+
+				if (driverNoteString.length() > 10)
+					textNote.setText(driverNoteString.substring(0, 10) + "...");
+				else if (driverNoteString.length() == 0)
+					textNote.setText(getResources().getText(R.string.empty_note));
+				else
+					textNote.setText(driverNoteString);
 				messageDialog.dismiss();
 			}
 		});
@@ -224,17 +314,26 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				driverMessage.setText("");
 			}
 		});
-		
-		
+
 		messageDialog.show();
 	}
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		mLocationClient.requestLocationUpdates(
-                REQUEST,
-                this);  // LocationListener
+		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
 
+		Address address = ((MainActivity) getActivity()).getAddress();
+		if (address != null) {
+			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
+			if (checkReady()) {
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
+			}
+		} else {
+			if (checkReady()) {
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()),
+						MBDefinition.DEFAULT_ZOOM));
+			}
+		}
 	}
 
 	@Override
@@ -250,31 +349,60 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
+	public void onCameraChange(CameraPosition cameraPosition) {
+		
+		// when should I reset this????
+		((MainActivity) getActivity()).setAddress(null);
+		//LatLng cameraTarget = mMap.getCameraPosition().target;
+		Location location = new Location("");
+		location.setLatitude(cameraPosition.target.latitude);
+		location.setLongitude(cameraPosition.target.longitude);
+		
+		getAddress(location);
+			
 
+		
 	}
-	
-	private void onAddressBarClick(){
-		Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-		startActivity(intent);
+
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		/*
+		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play
+		 * services activity that can resolve error.
+		 */
+		if (connectionResult.hasResolution()) {
+			try {
+
+				// Start an Activity that tries to resolve the error
+				connectionResult.startResolutionForResult(getActivity(), LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+				/*
+				 * Thrown if Google Play services canceled the original PendingIntent
+				 */
+
+			} catch (IntentSender.SendIntentException e) {
+
+				// Log the error
+				e.printStackTrace();
+			}
+		} else {
+
+			// If no resolution is available, display a dialog to the user with the error.
+			showErrorDialog(connectionResult.getErrorCode());
+		}
+
 	}
 
 	private void onCurrentLocationClick() {
-		LatLng userLocation;
-		Location currentLocation = null;
+		if (servicesConnected()) {
 
-		currentLocation = getBestLocation();
-		if (currentLocation == null) {
-			// show location not available
-			// new AlertDialog.Builder(this).setTitle(R.string.GPS_location).setMessage(R.string.book_map_GPS_service_disabled).setCancelable(false)
-			// .setNeutralButton(R.string.GPS_setting, mGPSSettingListener).setPositiveButton(R.string.positive_button, null).show();
-		} else {
-			userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-			Logger.v(TAG, "currentLocation address " + userLocation.toString());
+			// Get the current location
+			Location currentLocation = mLocationClient.getLastLocation();
+			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 			// mCurrentLocation = currentLocation;
 
-			CameraPosition currentPosition = new CameraPosition.Builder().target(userLocation).zoom(16.5f).bearing(0).tilt(0).build();
+			CameraPosition currentPosition = new CameraPosition.Builder().target(currLatLng).zoom(MBDefinition.DEFAULT_ZOOM).bearing(0).tilt(0)
+					.build();
 			CameraUpdate locatoinUpdate = CameraUpdateFactory.newCameraPosition(currentPosition);
 			mMap.animateCamera(locatoinUpdate);
 			// A few more markers for good measure.
@@ -283,127 +411,179 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		}
 	}
 
-	private Location getBestLocation() {
-		Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
-		Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
-		Location mapLocation = null;
-		Location tmpLocation;
+	// For Eclipse with ADT, suppress warnings about Geocoder.isPresent()
+	@SuppressLint("NewApi")
+	public void getAddress(Location location) {
 
-		if (mMap != null) {
-			if (mLocationClient != null && mLocationClient.isConnected())
-				mapLocation = mLocationClient.getLastLocation();
+		// In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !Geocoder.isPresent()) {
+			// No geocoder is present. Issue an error message
+			Toast.makeText(getActivity(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+			return;
 		}
 
-		if (mapLocation != null) {
-			Logger.v(TAG, "getBestLocation map location accurate = " + mapLocation.getAccuracy());
-			return mapLocation;
-		}
-
-		if (gpsLocation == null) {
-			Logger.v(TAG, "No GPS Location available.");
-			return networkLocation;
-		}
-
-		if (networkLocation == null) {
-
-			Logger.v(TAG, "No Network Location available");
-			return gpsLocation;
-		}
-
-		Logger.v(TAG, "GPS location:");
-		Logger.v(TAG, "   accurate=" + gpsLocation.getAccuracy() + " time=" + gpsLocation.getTime());
-		Logger.v(TAG, "Netowrk location:");
-		Logger.v(TAG, "   accurate=" + networkLocation.getAccuracy() + " time=" + networkLocation.getTime());
-
-		if (gpsLocation.getAccuracy() < networkLocation.getAccuracy()) {
-			Logger.v(TAG, "use GPS location");
-			tmpLocation = gpsLocation;
-
-		} else {
-			Logger.v(TAG, "use networkLocation");
-			tmpLocation = networkLocation;
-		}
-		return tmpLocation;
-
+		new GetAddressTask(getActivity()).execute(location);
 	}
 
-	private Location getLocationByProvider(String provider) {
-		Location location = null;
+	/**
+	 * Show a dialog returned by Google Play services for the connection error code
+	 * 
+	 * @param errorCode
+	 *            An error code returned from onConnectionFailed
+	 */
+	private void showErrorDialog(int errorCode) {
 
-		LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		// Get the error dialog from Google Play services
+		Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode, getActivity(), LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
 
-		try {
-			if (locationManager.isProviderEnabled(provider)) {
-				location = locationManager.getLastKnownLocation(provider);
+		// If Google Play services can provide an error dialog
+		if (errorDialog != null) {
+
+			// Create a new DialogFragment in which to show the error dialog
+			ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+
+			// Set the dialog in the DialogFragment
+			errorFragment.setDialog(errorDialog);
+
+			// Show the error dialog in the DialogFragment
+			errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+		}
+	}
+
+	/**
+	 * An AsyncTask that calls getFromLocation() in the background. The class uses the following generic types: Location - A
+	 * {@link android.location.Location} object containing the current location, passed as the input parameter to doInBackground() Void - indicates
+	 * that progress units are not used by this subclass String - An address passed to onPostExecute()
+	 */
+	protected class GetAddressTask extends AsyncTask<Location, Void, String> {
+
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public GetAddressTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected String doInBackground(Location... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
+			 * that conform to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			Location location = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				return errorString;
 			}
-		} catch (IllegalArgumentException e) {
-			Logger.e(TAG, "Cannot acces Provider " + provider);
+			// If the reverse geocode returned an address
+			if (addresses != null && addresses.size() > 0) {
+
+				// Get the first address
+				Address address = addresses.get(0);
+
+				return LocationUtils.addressToString(getActivity(), address);
+
+				// If there aren't any addresses, post a message
+			} else {
+				return getString(R.string.no_address_found);
+			}
 		}
 
-		return location;
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
+		 * UI thread.
+		 */
+		@Override
+		protected void onPostExecute(String address) {
+
+			// // Turn off the progress bar
+			// mActivityIndicator.setVisibility(View.GONE);
+			//
+			// // Set the address in the UI
+			address_bar_text.setText(address);
+		}
 	}
 
-	// public void callService() {
-	// getParam();
-	// }
-
-	// private void initDatabase(){
-	// DatabaseHandler mDb = new DatabaseHandler(getActivity());
+	// public Location getLocationFromAddress(String strAddress){
 	//
-	// }
-
-	// @SuppressLint("NewApi")
-	// private void getParam() {
-	// if (Build.VERSION.SDK_INT >= 11) {
-	// new GetMBParamTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-	// }
-	// else {
-	// new GetMBParamTask().execute();
-	// }
-	// }
+	// Geocoder coder = new Geocoder(getActivity());
+	// List<Address> address;
+	// GeoPoint p1 = null;
 	//
-	//
-	//
-	// private class GetMBParamTask extends AsyncTask<String, Integer, Void>
-	// implements IMGParamResponseListener, IRequestTimerListener {
-	// GetMBParamRequest gMBpReq;
-	//
-	// //The code to be executed in a background thread.
-	// @Override
-	// protected Void doInBackground(String... params)
-	// {
-	// gMBpReq = new GetMBParamRequest(this, this);
-	//
-	//
-	// gMBpReq.sendRequest("http://iis.com.dds.osp.itaxi.interface/", "http://192.168.50.160:76/Service.asmx?wsdl");
-	//
+	// try {
+	// address = coder.getFromLocationName(strAddress,1);
+	// if (address == null) {
 	// return null;
 	// }
+	// Address location = address.get(0);
+	// location.getLatitude();
+	// location.getLongitude();
 	//
-	// @Override
-	// public void onResponseReady(GetMBParamResponse response) {
+	// return location;
+	// }catch (IOException exception1) {
 	//
-	// MGParam paramList = response.GetParams();
-	// // TODO: single source, handle MB3.0 might have this param
-	// Log.e(TAG, paramList.getCCPaymentEnabled()+"");
-	// Log.e(TAG, paramList.getDropOffMand()+"");
+	// // Log an error and return an error message
+	// Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+	//
+	// // print the stack trace
+	// exception1.printStackTrace();
+	//
+	//
+	// // Catch incorrect latitude or longitude values
+	// } catch (IllegalArgumentException exception2) {
+	//
+	// // Construct a message containing the invalid arguments
+	// String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
+	// // Log the error and print the stack trace
+	// Log.e(LocationUtils.APPTAG, errorString);
+	// exception2.printStackTrace();
+	//
 	//
 	// }
-	//
-	// @Override
-	// public void onErrorResponse(String errorString) {
-	//
-	// Log.v(TAG, "error response: " + errorString);
-	// }
-	//
-	// @Override
-	// public void onError() {
-	//
-	// Log.v(TAG, "no response");
-	// }
-	//
-	// @Override
-	// public void onProgressUpdate(int progress) {}
 	// }
 
 }

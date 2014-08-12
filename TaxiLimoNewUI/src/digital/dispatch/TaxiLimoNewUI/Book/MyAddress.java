@@ -1,0 +1,37 @@
+package digital.dispatch.TaxiLimoNewUI.Book;
+
+import java.io.InputStream;
+
+import android.net.Uri;
+
+public class MyAddress {
+	private String name, address;
+	private Uri img_URI;
+	public MyAddress(Uri imgURI, String name, String addr){
+		this.img_URI=imgURI;
+		this.name=name;
+		this.address=addr;
+	}
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Uri getImg_URI() {
+		return img_URI;
+	}
+
+	public void setImg_URI(Uri img_URI) {
+		this.img_URI = img_URI;
+	}
+
+}
