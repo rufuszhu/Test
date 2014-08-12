@@ -22,12 +22,14 @@ import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends ActionBarActivity implements
+		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static final String TAG = "MainActivity";
 
 	/**
-	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+	 * Fragment managing the behaviors, interactions and presentation of the
+	 * navigation drawer.
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private Address mAddress;
@@ -47,7 +49,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	private final String HISTORY_TAB = "history";
 	private static int currentTab = 0;
 	/**
-	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+	 * Used to store the last screen title. For use in
+	 * {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
 
@@ -56,11 +59,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 		initView();
 
@@ -73,12 +78,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Logger.e("onActivityResult");
-		if (resultCode == RESULT_OK) {
-			// this address comes from modifyAddress activity, and it has been validated
-			if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
-				//Logger.e("dataBundle address: " + dataBundle.getString(MBDefinition.ADDRESS));
-				setAddress((Address) data.getExtras().getParcelable(MBDefinition.ADDRESS));
-				Logger.e(getAddress().getAddressLine(0));
+		Logger.e("requestCode: " + requestCode);
+		if (requestCode == MBDefinition.REQUEST_ADDRESS_CODE) {
+			if (resultCode == RESULT_OK) {
+				// this address comes from modifyAddress activity, and it has
+				// been validated
+				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
+					// Logger.e("dataBundle address: " +
+					// dataBundle.getString(MBDefinition.ADDRESS));
+					setAddress((Address) data.getExtras().getParcelable(
+							MBDefinition.ADDRESS));
+					Logger.e(getAddress().getAddressLine(0));
+				}
 			}
 		}
 	}
@@ -89,7 +100,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		historyTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
 		bookImageView = (ImageView) bookTabView.findViewById(R.id.tab_icon);
 		trackImageView = (ImageView) trackTabView.findViewById(R.id.tab_icon);
-		historyImageView = (ImageView) historyTabView.findViewById(R.id.tab_icon);
+		historyImageView = (ImageView) historyTabView
+				.findViewById(R.id.tab_icon);
 	}
 
 	private void setupTab() {
@@ -98,13 +110,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 		mTabHost.addTab(
 				mTabHost.newTabSpec(BOOK_TAB).setIndicator(
-						getTabIndicator(this, bookImageView, bookTabView, R.string.book, R.drawable.ic_action_refresh)), BookFragment.class, null);
+						getTabIndicator(this, bookImageView, bookTabView,
+								R.string.book, R.drawable.ic_action_refresh)),
+				BookFragment.class, null);
 		mTabHost.addTab(
 				mTabHost.newTabSpec(TRACK_TAB).setIndicator(
-						getTabIndicator(this, trackImageView, trackTabView, R.string.track, R.drawable.ic_action_event)), TrackFragment.class, null);
+						getTabIndicator(this, trackImageView, trackTabView,
+								R.string.track, R.drawable.ic_action_event)),
+				TrackFragment.class, null);
 		mTabHost.addTab(
 				mTabHost.newTabSpec(HISTORY_TAB).setIndicator(
-						getTabIndicator(this, historyImageView, historyTabView, R.string.history, R.drawable.ic_action_event)),
+						getTabIndicator(this, historyImageView, historyTabView,
+								R.string.history, R.drawable.ic_action_event)),
 				HistoryFragment.class, null);
 		// mTabHost.setCurrentTab(currentTab);
 		mTabHost.setOnTabChangedListener(new FragmentTabHost.OnTabChangeListener() {
@@ -117,7 +134,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		mTabHost.getTabWidget().setDividerDrawable(null);
 	}
 
-	private View getTabIndicator(Context context, ImageView iv, View view, int title, int drawable) {
+	private View getTabIndicator(Context context, ImageView iv, View view,
+			int title, int drawable) {
 		TextView tv = (TextView) view.findViewById(R.id.tab_text);
 		tv.setText(title);
 		iv.setImageResource(drawable);
@@ -172,7 +190,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		// if we want customize action bar
-		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM |
+		// ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
 		// actionBar.setCustomView(R.layout.actionbar);
 		// actionBar.setDisplayUseLogoEnabled(false);
 		// actionBar.setIcon(R.color.transparent);

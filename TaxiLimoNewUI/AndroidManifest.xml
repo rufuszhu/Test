@@ -75,7 +75,7 @@
         </activity>
         <activity
             android:name="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity"
-            android:label="@string/title_activity_modify_address" 
+            android:label="@string/title_activity_pick_up" 
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>

@@ -24,13 +24,13 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_preference">PreferenceActivity</string>
     <string name="title_activity_about">AboutActivity</string>
-    <string name="title_activity_modify_address">ModifyAddressActivity</string>
+    <string name="title_activity_destination">Destination</string>
+    <string name="title_activity_pick_up">Pick up Location</string>
     <string name="empty_note">No Note</string>
-    <string name="title_activity_destination">DestinationActivity</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
     <!-- Map Messages -->
-
+	
 
     <!-- User interface labels and strings -->
 

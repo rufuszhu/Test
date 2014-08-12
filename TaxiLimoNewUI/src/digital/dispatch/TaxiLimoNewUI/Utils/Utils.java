@@ -62,7 +62,7 @@ public class Utils {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 	}
 
-	public static void setUpMessageDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
+	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
 		final EditText driverMessage;
 		final TextView textRemaining;
 		TextView ok;

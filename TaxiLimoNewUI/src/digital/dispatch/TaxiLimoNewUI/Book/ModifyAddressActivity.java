@@ -8,13 +8,23 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
@@ -25,24 +35,37 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.ContactExpandableListAdapter;
+import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
+import digital.dispatch.TaxiLimoNewUI.Book.BookFragment.GetAddressTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.view.View;
 
-public class ModifyAddressActivity extends ActionBarActivity {
+public class ModifyAddressActivity extends ActionBarActivity implements OnItemClickListener {
 	private static final String TAG = "DestinationasdsadActivity";
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private HashMap<String, List<MyAddress>> listDataChild;
 	private List<MyAddress> mContactList;
 	private ContactExpandableListAdapter listAdapter;
+	private Context _activity;
+	private boolean isDesitination;
 
 	private ImageLoader mImageLoader;
 
@@ -50,6 +73,16 @@ public class ModifyAddressActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_modify_address);
+		
+		_activity = this;
+		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
+		ActionBar ab = getActionBar();
+		if(isDesitination)
+			ab.setTitle(getString(R.string.title_activity_destination));
+		else
+			ab.setTitle(getString(R.string.title_activity_pick_up));
+		
+		
 		
         mImageLoader = new ImageLoader(this, getListPreferredItemHeight()) {
             @Override
@@ -101,6 +134,46 @@ public class ModifyAddressActivity extends ActionBarActivity {
                 return false;
             }
         });
+		
+		final AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
+	    autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
+	    autoCompView.setOnItemClickListener(this);
+	    
+	    ImageView clear = (ImageView) findViewById(R.id.clear_autocomplete);
+	    clear.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				autoCompView.setText("");
+			}
+		});
+	    
+	    TextView driver_note_btn = (TextView) findViewById(R.id.driver_note_btn);
+	    driver_note_btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Dialog messageDialog = new Dialog(_activity);
+				Utils.setUpDriverNoteDialog(_activity, messageDialog, null);
+			}
+		});
+	    
+	    LinearLayout save_btn = (LinearLayout) findViewById(R.id.save_btn);
+	    save_btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				String text = autoCompView.getText().toString();
+				if (text.equalsIgnoreCase("") || text == null) {
+					
+					Toast.makeText(_activity, "empty address show form validation", Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				new ValidateAddressTask(_activity).execute(autoCompView.getText().toString());
+			}
+		});
+	    
+	    LinearLayout favorite_btn = (LinearLayout) findViewById(R.id.favorite_btn);
+	    favorite_btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				
+			}
+		});
 	}
 	
     @Override
@@ -112,6 +185,13 @@ public class ModifyAddressActivity extends ActionBarActivity {
         mImageLoader.setPauseWork(false);
     }
     
+	@Override
+	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+		String str = (String) adapterView.getItemAtPosition(position);
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+		
+	}
+
     
     
 	
@@ -260,5 +340,96 @@ public class ModifyAddressActivity extends ActionBarActivity {
         // If the decoding failed, returns null
         return null;
     }
+    
+    protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
+
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public ValidateAddressTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected List<Address> doInBackground(String... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
+			 * that conform to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			String locationName = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocationName(locationName, 10);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				//return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				//return errorString;
+			}
+			return addresses;
+		}
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
+		 * UI thread.
+		 */
+		@Override
+		protected void onPostExecute(List<Address> addresses) {
+			if(addresses.size()>1){
+				//pop up list
+				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
+			}
+			else if(addresses.size()==1){
+				Intent returnIntent = new Intent();
+				returnIntent.putExtra(MBDefinition.ADDRESS,addresses.get(0));
+				setResult(RESULT_OK,returnIntent);
+				finish();
+			}
+			else{
+				Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+	}
+
 
 }

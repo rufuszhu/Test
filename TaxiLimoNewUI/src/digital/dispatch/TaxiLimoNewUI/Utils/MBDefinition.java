@@ -6,4 +6,5 @@ public class MBDefinition {
 	public final static String IS_DESTINATION= "IS_DESTINATION";
 	public final static float DEFAULT_ZOOM = 16.5f;
 	public final static int DRIVER_NOTE_MAX_LENGTH = 256;
+	public final static int REQUEST_ADDRESS_CODE = 2;
 }

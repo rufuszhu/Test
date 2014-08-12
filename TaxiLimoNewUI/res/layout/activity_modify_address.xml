@@ -9,14 +9,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".20"
-        android:orientation="vertical" >
+        android:layout_weight=".21"
+        android:orientation="vertical" 
+        android:padding="10px">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="5dp" >
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:orientation="horizontal" 
+            android:paddingBottom="5px">
 
             <EditText
                 android:id="@+id/tv_streetNumber"
@@ -25,6 +27,7 @@
                 android:layout_marginRight="5px"
                 android:paddingLeft="5px"
                 android:layout_weight=".4"
+                android:hint="Street Number"
                 android:background="@drawable/shape_textview_border"
                 android:ems="10"
                 android:inputType="number" >
@@ -40,6 +43,7 @@
                 android:layout_marginRight="10px"
                 android:layout_weight=".4"
                 android:paddingLeft="5px"
+                android:hint="Unit Number"
                 android:background="@drawable/shape_textview_border"
                 android:ems="10"
                 android:inputType="number" />
@@ -49,7 +53,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
-                android:paddingLeft="5px"
                 android:background="@drawable/white_button_selector"
                 android:clickable="true"
                 android:gravity="center"
@@ -58,18 +61,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="5px" >
+            android:paddingTop="5px" >
+            <FrameLayout  
+                        android:layout_width="fill_parent"  
+                        android:layout_height="fill_parent" >  
 
-            <EditText
-                android:id="@+id/tv_destination"
+            <AutoCompleteTextView
+                android:id="@+id/autocomplete"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:ems="10"
                 android:paddingLeft="5px"
-                android:background="@drawable/shape_textview_border"
-                android:ems="10" />
+                android:hint="Street Name"
+                android:background="@drawable/shape_textview_border"/>
+
+            <ImageView
+                android:id="@+id/clear_autocomplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="5px"
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+                      
+                    </FrameLayout>  
+
         </LinearLayout>
     </LinearLayout>
 
@@ -77,16 +97,19 @@
         android:id="@+id/lvExp"
         android:layout_width="match_parent"
         android:layout_height="0dp" 
-        android:layout_weight=".65">
+        android:layout_weight=".66"
+        android:isScrollContainer="false" >
     </ExpandableListView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal" 
-        android:layout_weight=".15">
+        android:layout_weight=".13"
+        android:baselineAligned="false">
 
         <LinearLayout
+            android:id="@+id/favorite_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
@@ -95,16 +118,14 @@
             android:gravity="center"
             android:background="@drawable/gray_button_selector">
             <ImageView
-                android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medium Text"
+                android:text="Add to Favorite"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             
@@ -112,6 +133,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/save_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="horizontal" 
@@ -121,16 +143,16 @@
             android:background="@drawable/gray_button_selector">
             
              <ImageView
-                android:id="@+id/imageView2"
+                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
 
             <TextView
-                android:id="@+id/textView2"
+                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medium Text"
+                android:text="Save"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
            

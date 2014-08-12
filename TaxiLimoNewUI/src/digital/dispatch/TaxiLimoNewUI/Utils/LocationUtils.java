@@ -16,6 +16,9 @@
 
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -120,5 +123,13 @@ public final class LocationUtils {
 	
 	public static LatLng locationToLatLng(Location location){
 		return new LatLng(location.getLatitude(),location.getLongitude());
+	}
+	
+	public static ArrayList<String> addressListToStringList(Context context, List<Address> addresses){
+		ArrayList<String> temp = new ArrayList<String>();
+		for(int i=0; i< addresses.size();i++){
+			temp.add(addressToString(context, addresses.get(i)));
+		}
+		return temp;
 	}
 }

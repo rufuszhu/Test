@@ -62,7 +62,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
-	private final int REQUEST_CODE = 2;
+	
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "Book";
 	private static final int DRIVER_NOTE_MAX_LENGTH = 256;
@@ -135,7 +135,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 					intent.putExtra(MBDefinition.CURRENT_LOCATION_EXTRA, mLocationClient.getLastLocation());
 				}
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
-				startActivityForResult(intent, REQUEST_CODE);
+				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_ADDRESS_CODE);
 			}
 		});
 
@@ -152,7 +152,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				//setUpMessageDialog();
 				Dialog messageDialog = new Dialog(getActivity());
 				
-				Utils.setUpMessageDialog(getActivity(),messageDialog,textNote);
+				Utils.setUpDriverNoteDialog(getActivity(),messageDialog,textNote);
 				
 			}
 		});
