@@ -36,7 +36,7 @@
 
 
     <!-- Address format -->
-    <string name="address_output_string">%1$s %2$s %3$s</string>
+    <string name="address_output_string">%1$s %2$s</string>
 
     <!-- Latitude, longitude format -->
     <string name="latitude_longitude">%1$.8f, %2$.8f</string>

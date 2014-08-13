@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -45,11 +46,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import digital.dispatch.TaxiLimoNewUI.DBAddress;
+import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
+import digital.dispatch.TaxiLimoNewUI.DaoMaster;
+import digital.dispatch.TaxiLimoNewUI.DaoMaster.DevOpenHelper;
+import digital.dispatch.TaxiLimoNewUI.DaoSession;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.ContactExpandableListAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment.GetAddressTask;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -58,7 +66,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.view.View;
 
 public class ModifyAddressActivity extends ActionBarActivity implements OnItemClickListener {
-	private static final String TAG = "DestinationasdsadActivity";
+	private static final String TAG = "ModifyAddressActivity";
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private HashMap<String, List<MyAddress>> listDataChild;
@@ -66,14 +74,38 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	private ContactExpandableListAdapter listAdapter;
 	private Context _activity;
 	private boolean isDesitination;
+	
+	private SQLiteDatabase db;
+	private DaoMaster daoMaster;
+    private DaoSession daoSession;
+    private DBAddressDao addressDao;
 
 	private ImageLoader mImageLoader;
+	
+	TextView tv_streetNumber;
+	TextView tv_unitNumber;
+	AutoCompleteTextView autoCompView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_modify_address);
 		
+		findViews();
+		
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "limo-db", null);
+        db = helper.getWritableDatabase();
+        daoMaster = new DaoMaster(db);
+        daoSession = daoMaster.newSession();
+        addressDao = daoSession.getDBAddressDao();
+        
+        List<DBAddress> dbaddress = addressDao.queryBuilder().list();
+        for(int i=0; i < dbaddress.size();i++){
+        	
+        	Logger.e(TAG,dbaddress.get(i).getHouseNumber() + " " + dbaddress.get(i).getStreetName());
+        	
+        }
+        
 		_activity = this;
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
 		ActionBar ab = getActionBar();
@@ -106,6 +138,8 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		prepareListData();
 
 		listAdapter = new ContactExpandableListAdapter(this, listDataHeader, listDataChild, mImageLoader);
+		
+		
 
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
@@ -135,9 +169,11 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
             }
         });
 		
-		final AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
-	    autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
+		
+	    autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item, tv_streetNumber));
 	    autoCompView.setOnItemClickListener(this);
+	    
+	    
 	    
 	    ImageView clear = (ImageView) findViewById(R.id.clear_autocomplete);
 	    clear.setOnClickListener(new View.OnClickListener() {
@@ -157,23 +193,39 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	    LinearLayout save_btn = (LinearLayout) findViewById(R.id.save_btn);
 	    save_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				String text = autoCompView.getText().toString();
-				if (text.equalsIgnoreCase("") || text == null) {
+				String streetName = autoCompView.getText().toString();
+				String streetNumber = tv_streetNumber.getText().toString();
+				if (streetName.equalsIgnoreCase("") || streetNumber.equalsIgnoreCase("")) {
 					
-					Toast.makeText(_activity, "empty address show form validation", Toast.LENGTH_LONG).show();
+					Toast.makeText(_activity, "empty address, show form validation", Toast.LENGTH_LONG).show();
 					return;
 				}
 
-				new ValidateAddressTask(_activity).execute(autoCompView.getText().toString());
+				new ValidateAddressTask(_activity).execute(streetNumber + " " + streetName);
 			}
 		});
 	    
 	    LinearLayout favorite_btn = (LinearLayout) findViewById(R.id.favorite_btn);
 	    favorite_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				String streetName = autoCompView.getText().toString();
+				String streetNumber = tv_streetNumber.getText().toString();
+				if (streetName.equalsIgnoreCase("") || streetNumber.equalsIgnoreCase("")) {
+					
+					Toast.makeText(_activity, "empty address, show form validation", Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				new addFavoriteTask(_activity).execute(streetNumber + " " + streetName);
 				
 			}
 		});
+	}
+	
+	private void findViews(){
+		tv_streetNumber = (TextView) findViewById(R.id.tv_streetNumber);
+		tv_unitNumber = (TextView) findViewById(R.id.tv_unitNumber);
+		autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
 	}
 	
     @Override
@@ -423,6 +475,93 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				returnIntent.putExtra(MBDefinition.ADDRESS,addresses.get(0));
 				setResult(RESULT_OK,returnIntent);
 				finish();
+			}
+			else{
+				Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+	}
+    
+    protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
+
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public addFavoriteTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected List<Address> doInBackground(String... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
+			 * that conform to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			String locationName = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocationName(locationName, 10);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				//return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				//return errorString;
+			}
+			return addresses;
+		}
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
+		 * UI thread.
+		 */
+		@Override
+		protected void onPostExecute(List<Address> addresses) {
+			if(addresses.size()>1){
+				//pop up list
+				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
+			}
+			else if(addresses.size()==1){
+				AddressDaoManager.addDaoAddressByAddress(addresses.get(0), tv_streetNumber.getText().toString(), false, addressDao);
 			}
 			else{
 				Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();

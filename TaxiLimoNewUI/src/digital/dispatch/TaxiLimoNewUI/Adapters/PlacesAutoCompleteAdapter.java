@@ -12,11 +12,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> resultList;
@@ -25,11 +29,16 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String OUT_JSON = "/json";
+    private static Context _context;
 
     private static final String API_KEY = "AIzaSyB-yx9i6UXvIObombR7xr1gQutmCBye2no";
+    private TextView _streetNumber;
 
-    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
+    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId, TextView streetNumber) {
         super(context, textViewResourceId);
+        _context=context;
+        
+        _streetNumber=streetNumber;
     }
 
     @Override
@@ -50,7 +59,8 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     // Retrieve the autocomplete results.
-                    resultList = autocomplete(constraint.toString());
+                	Logger.e(LOG_TAG, "Street number: " + _streetNumber.getText().toString());
+                    resultList = autocomplete(_streetNumber.getText().toString() + " " + constraint.toString());
 
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
@@ -79,7 +89,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
         try {
             StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
             sb.append("?key=" + API_KEY);
-            sb.append("&components=country:ca");
+            sb.append("&components=country:" + _context.getString(R.string.default_country_code));
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
             URL url = new URL(sb.toString());
