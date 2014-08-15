@@ -75,10 +75,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private String driverNoteString = "";
 	private TextView textNote;
 	private TextView address_bar_text;
-	private LatLng currentLatLng;
-	private String countryCode;
 
-	private Handler mHandler = new Handler();
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -132,7 +129,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
 				if (servicesConnected()) {
-					intent.putExtra(MBDefinition.CURRENT_LOCATION_EXTRA, mLocationClient.getLastLocation());
+					intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
 				}
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_ADDRESS_CODE);
@@ -259,63 +256,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			mLocationClient = new LocationClient(getActivity(), this, // ConnectionCallbacks
 					this); // OnConnectionFailedListener
 		}
-	}
-
-	private void setUpMessageDialog() {
-		final EditText driverMessage;
-		final TextView textRemaining;
-		TextView ok;
-		TextView clear;
-
-		messageDialog = new Dialog(getActivity());
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.message_dialog);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
-		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
-
-		driverMessage.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable note) {
-				textRemaining.setText(DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
-		});
-
-		driverMessage.setText(driverNoteString);
-		driverMessage.setSelection(driverNoteString.length());
-
-		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
-		ok.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverNoteString = driverMessage.getText().toString();
-
-				if (driverNoteString.length() > 10)
-					textNote.setText(driverNoteString.substring(0, 10) + "...");
-				else if (driverNoteString.length() == 0)
-					textNote.setText(getResources().getText(R.string.empty_note));
-				else
-					textNote.setText(driverNoteString);
-				messageDialog.dismiss();
-			}
-		});
-		clear = (TextView) messageDialog.getWindow().findViewById(R.id.clear);
-		clear.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverMessage.setText("");
-			}
-		});
-
-		messageDialog.show();
 	}
 
 	@Override
@@ -539,51 +479,9 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		 */
 		@Override
 		protected void onPostExecute(String address) {
-
-			// // Turn off the progress bar
-			// mActivityIndicator.setVisibility(View.GONE);
-			//
-			// // Set the address in the UI
 			address_bar_text.setText(address);
 		}
 	}
 
-	// public Location getLocationFromAddress(String strAddress){
-	//
-	// Geocoder coder = new Geocoder(getActivity());
-	// List<Address> address;
-	// GeoPoint p1 = null;
-	//
-	// try {
-	// address = coder.getFromLocationName(strAddress,1);
-	// if (address == null) {
-	// return null;
-	// }
-	// Address location = address.get(0);
-	// location.getLatitude();
-	// location.getLongitude();
-	//
-	// return location;
-	// }catch (IOException exception1) {
-	//
-	// // Log an error and return an error message
-	// Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-	//
-	// // print the stack trace
-	// exception1.printStackTrace();
-	//
-	//
-	// // Catch incorrect latitude or longitude values
-	// } catch (IllegalArgumentException exception2) {
-	//
-	// // Construct a message containing the invalid arguments
-	// String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
-	// // Log the error and print the stack trace
-	// Log.e(LocationUtils.APPTAG, errorString);
-	// exception2.printStackTrace();
-	//
-	//
-	// }
-	// }
 
 }

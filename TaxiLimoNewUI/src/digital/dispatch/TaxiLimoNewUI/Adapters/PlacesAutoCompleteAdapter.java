@@ -32,13 +32,14 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     private static Context _context;
 
     private static final String API_KEY = "AIzaSyB-yx9i6UXvIObombR7xr1gQutmCBye2no";
-    private TextView _streetNumber;
+//    private TextView _streetNumber;
 
-    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId, TextView streetNumber) {
+//    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId, TextView streetNumber) {
+    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
         _context=context;
         
-        _streetNumber=streetNumber;
+//        _streetNumber=streetNumber;
     }
 
     @Override
@@ -59,9 +60,9 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     // Retrieve the autocomplete results.
-                	Logger.e(LOG_TAG, "Street number: " + _streetNumber.getText().toString());
-                    resultList = autocomplete(_streetNumber.getText().toString() + " " + constraint.toString());
-
+//                	Logger.e(LOG_TAG, "Street number: " + _streetNumber.getText().toString());
+//                  resultList = autocomplete(_streetNumber.getText().toString() + " " + constraint.toString());
+                	resultList = autocomplete(constraint.toString());
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
                     filterResults.count = resultList.size();

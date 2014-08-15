@@ -1,5 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +34,11 @@ public class ContactExpandableListAdapter extends BaseExpandableListAdapter {
 		this._listDataChild = listChildData;
 		this.mImageLoader = mImageLoader;
 	}
+	
+	public void updateFavlist(ArrayList<MyAddress> ma){
+		_listDataChild.get("Favorites").clear();
+		_listDataChild.get("Favorites").addAll(ma);
+	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosititon) {
@@ -61,10 +67,14 @@ public class ContactExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
 		TextView tv_addr = (TextView) convertView.findViewById(R.id.tv_address);
 		ImageView profile = (ImageView) convertView.findViewById(R.id.profile_icon);
+		if(groupPosition==1){
+			
+			mImageLoader.loadImage(uri.toString()+"/photo", profile);
+		}
+		else{
+			mImageLoader.loadImage(null, profile);
+		}
 		
-		// Loads the thumbnail image pointed to by photoUri into the QuickContactBadge in a
-        // background worker thread
-        mImageLoader.loadImage(uri.toString()+"/photo", profile);
 
 		tv_name.setText(name);
 		tv_addr.setText(addr);

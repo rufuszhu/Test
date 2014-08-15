@@ -1,10 +1,8 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -22,48 +19,47 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
-import android.provider.ContactsContract.Contacts.Photo;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.Contacts.Photo;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.BuildConfig;
+import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoMaster;
 import digital.dispatch.TaxiLimoNewUI.DaoMaster.DevOpenHelper;
 import digital.dispatch.TaxiLimoNewUI.DaoSession;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.ContactExpandableListAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
-import digital.dispatch.TaxiLimoNewUI.Book.BookFragment.GetAddressTask;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import android.view.View;
 
 public class ModifyAddressActivity extends ActionBarActivity implements OnItemClickListener {
 	private static final String TAG = "ModifyAddressActivity";
@@ -74,195 +70,224 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	private ContactExpandableListAdapter listAdapter;
 	private Context _activity;
 	private boolean isDesitination;
-	
+
 	private SQLiteDatabase db;
 	private DaoMaster daoMaster;
-    private DaoSession daoSession;
-    private DBAddressDao addressDao;
+	private DaoSession daoSession;
+	private DBAddressDao addressDao;
+	private Cursor cursor;
 
 	private ImageLoader mImageLoader;
-	
+
 	TextView tv_streetNumber;
 	TextView tv_unitNumber;
 	AutoCompleteTextView autoCompView;
+	LinearLayout favorite_btn;
+	LinearLayout save_btn;
+	LinearLayout delete_btn;
+	LinearLayout select_btn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_modify_address);
-		
+
 		findViews();
-		
+
 		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "limo-db", null);
-        db = helper.getWritableDatabase();
-        daoMaster = new DaoMaster(db);
-        daoSession = daoMaster.newSession();
-        addressDao = daoSession.getDBAddressDao();
-        
-        List<DBAddress> dbaddress = addressDao.queryBuilder().list();
-        for(int i=0; i < dbaddress.size();i++){
-        	
-        	Logger.e(TAG,dbaddress.get(i).getHouseNumber() + " " + dbaddress.get(i).getStreetName());
-        	
-        }
-        
+		db = helper.getWritableDatabase();
+		daoMaster = new DaoMaster(db);
+		daoSession = daoMaster.newSession();
+		addressDao = daoSession.getDBAddressDao();
+
+//		String fullAddressColumn = DBAddressDao.Properties.FullAddress.columnName;
+//		String nickNameColumn = DBAddressDao.Properties.NickName.columnName;
+//		String[] cloumns = { DBAddressDao.Properties.Id.columnName, fullAddressColumn, nickNameColumn };
+//		String[] from = { fullAddressColumn, nickNameColumn };
+//		int[] to = { R.id.tv_address, R.id.tv_name };
+
+//		cursor = db.query(addressDao.getTablename(), cloumns, null, null, null, null, null);
+//		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_group, cursor, from, to, 0);
+//		adapter.setDropDownViewResource(R.layout.list_group_item);
+
+
 		_activity = this;
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
+
 		ActionBar ab = getActionBar();
-		if(isDesitination)
+		if (isDesitination)
 			ab.setTitle(getString(R.string.title_activity_destination));
 		else
 			ab.setTitle(getString(R.string.title_activity_pick_up));
-		
-		
-		
-        mImageLoader = new ImageLoader(this, getListPreferredItemHeight()) {
-            @Override
-            protected Bitmap processBitmap(Object data) {
-                // This gets called in a background thread and passed the data from
-                // ImageLoader.loadImage().
-                return loadContactPhotoThumbnail((String) data, getImageSize());
-            }
-        };
 
-        // Set a placeholder loading image for the image loader
-        mImageLoader.setLoadingImage(R.drawable.ic_contact_picture_holo_light);
 
-        // Add a cache to the image loader
-        mImageLoader.addImageCache(this.getSupportFragmentManager(), 0.1f);
-
-		// get the listview
-		expListView = (ExpandableListView) findViewById(R.id.lvExp);
-
-		// preparing list data
-		prepareListData();
-
-		listAdapter = new ContactExpandableListAdapter(this, listDataHeader, listDataChild, mImageLoader);
-		
+		setUpExpendableListView();
 		
 
-		// setting list adapter
-		expListView.setAdapter(listAdapter);
-		
-		expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                // Pause image loader to ensure smoother scrolling when flinging
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    mImageLoader.setPauseWork(true);
-                } else {
-                    mImageLoader.setPauseWork(false);
-                }
-            }
+		autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
+		autoCompView.setOnItemClickListener(this);
 
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {}
-        });
-		
-		expListView.setOnChildClickListener(new OnChildClickListener() {
-			 
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                    int groupPosition, int childPosition, long id) {
-             
-                return false;
-            }
-        });
-		
-		
-	    autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item, tv_streetNumber));
-	    autoCompView.setOnItemClickListener(this);
-	    
-	    
-	    
-	    ImageView clear = (ImageView) findViewById(R.id.clear_autocomplete);
-	    clear.setOnClickListener(new View.OnClickListener() {
+		ImageView clear = (ImageView) findViewById(R.id.clear_autocomplete);
+		clear.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				autoCompView.setText("");
 			}
 		});
-	    
-	    TextView driver_note_btn = (TextView) findViewById(R.id.driver_note_btn);
-	    driver_note_btn.setOnClickListener(new View.OnClickListener() {
+
+		TextView driver_note_btn = (TextView) findViewById(R.id.driver_note_btn);
+		driver_note_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Dialog messageDialog = new Dialog(_activity);
 				Utils.setUpDriverNoteDialog(_activity, messageDialog, null);
 			}
 		});
-	    
-	    LinearLayout save_btn = (LinearLayout) findViewById(R.id.save_btn);
-	    save_btn.setOnClickListener(new View.OnClickListener() {
+
+		
+		save_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String streetName = autoCompView.getText().toString();
 				String streetNumber = tv_streetNumber.getText().toString();
-				if (streetName.equalsIgnoreCase("") || streetNumber.equalsIgnoreCase("")) {
-					
-					Toast.makeText(_activity, "empty address, show form validation", Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				new ValidateAddressTask(_activity).execute(streetNumber + " " + streetName);
+				if (validateNotEmpty())
+					new ValidateAddressTask(_activity).execute(streetNumber + " " + streetName);
 			}
 		});
-	    
-	    LinearLayout favorite_btn = (LinearLayout) findViewById(R.id.favorite_btn);
-	    favorite_btn.setOnClickListener(new View.OnClickListener() {
+
+		
+		favorite_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String streetName = autoCompView.getText().toString();
 				String streetNumber = tv_streetNumber.getText().toString();
-				if (streetName.equalsIgnoreCase("") || streetNumber.equalsIgnoreCase("")) {
-					
-					Toast.makeText(_activity, "empty address, show form validation", Toast.LENGTH_LONG).show();
-					return;
-				}
+				if (validateNotEmpty())
+					new addFavoriteTask(_activity).execute(streetNumber + " " + streetName);
 
-				new addFavoriteTask(_activity).execute(streetNumber + " " + streetName);
-				
 			}
 		});
 	}
-	
-	private void findViews(){
+
+	private void findViews() {
+		save_btn = (LinearLayout) findViewById(R.id.save_btn);
+		favorite_btn = (LinearLayout) findViewById(R.id.favorite_btn);
+		delete_btn = (LinearLayout) findViewById(R.id.delete_btn);
+		select_btn = (LinearLayout) findViewById(R.id.select_btn);
 		tv_streetNumber = (TextView) findViewById(R.id.tv_streetNumber);
 		tv_unitNumber = (TextView) findViewById(R.id.tv_unitNumber);
 		autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
+		expListView = (ExpandableListView) findViewById(R.id.lvExp);
+		String str = getIntent().getStringExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA);
+		tv_streetNumber.setText(AddressDaoManager.getHouseNumberFromAddress(str));
+		autoCompView.setText(AddressDaoManager.getStreetNameFromAddress(str));
 	}
 	
-    @Override
-    public void onPause() {
-        super.onPause();
+	private void setUpExpendableListView(){
+		mImageLoader = new ImageLoader(this, getListPreferredItemHeight()) {
+			@Override
+			protected Bitmap processBitmap(Object data) {
+				// This gets called in a background thread and passed the data from
+				// ImageLoader.loadImage().
+				return loadContactPhotoThumbnail((String) data, getImageSize());
+			}
+		};
 
-        // In the case onPause() is called during a fling the image loader is
-        // un-paused to let any remaining background work complete.
-        mImageLoader.setPauseWork(false);
-    }
-    
+		// Set a placeholder loading image for the image loader
+		mImageLoader.setLoadingImage(R.drawable.ic_contact_picture_holo_light);
+
+		// Add a cache to the image loader
+		mImageLoader.addImageCache(this.getSupportFragmentManager(), 0.1f);
+		
+		// preparing list data
+		prepareListData();
+
+		listAdapter = new ContactExpandableListAdapter(this, listDataHeader, listDataChild, mImageLoader);
+
+		// setting list adapter
+		expListView.setAdapter(listAdapter);
+
+		expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+				// Pause image loader to ensure smoother scrolling when flinging
+				if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+					mImageLoader.setPauseWork(true);
+				} else {
+					mImageLoader.setPauseWork(false);
+				}
+			}
+
+			@Override
+			public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+			}
+		});
+		expListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+		expListView.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+				view.setSelected(true);
+				//favorite list can delete or select
+				if(groupPosition==0){
+					favorite_btn.setVisibility(View.GONE);
+					save_btn.setVisibility(View.GONE);
+					delete_btn.setVisibility(View.VISIBLE);
+					select_btn.setVisibility(View.VISIBLE);
+				}
+				//contact list can add fav or select
+				if(groupPosition==1){
+					favorite_btn.setVisibility(View.VISIBLE);
+					save_btn.setVisibility(View.GONE);
+					delete_btn.setVisibility(View.GONE);
+					select_btn.setVisibility(View.VISIBLE);
+				}
+				return true;
+				
+			}
+		});
+		
+		expListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+				//change the buttons on the buttom
+				favorite_btn.setVisibility(View.VISIBLE);
+				save_btn.setVisibility(View.VISIBLE);
+				delete_btn.setVisibility(View.GONE);
+				select_btn.setVisibility(View.GONE);
+			}
+         });
+	}
+
 	@Override
+	public void onPause() {
+		super.onPause();
+
+		// In the case onPause() is called during a fling the image loader is
+		// un-paused to let any remaining background work complete.
+		mImageLoader.setPauseWork(false);
+	}
+
+	@Override
+	//autocomlete field
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 		String str = (String) adapterView.getItemAtPosition(position);
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-		
+		Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+
 	}
 
-    
-    
-	
-    private int getListPreferredItemHeight() {
-        final TypedValue typedValue = new TypedValue();
+	private int getListPreferredItemHeight() {
+		final TypedValue typedValue = new TypedValue();
 
-        // Resolve list item preferred height theme attribute into typedValue
-        this.getTheme().resolveAttribute(
-                android.R.attr.listPreferredItemHeight, typedValue, true);
+		// Resolve list item preferred height theme attribute into typedValue
+		this.getTheme().resolveAttribute(android.R.attr.listPreferredItemHeight, typedValue, true);
 
-        // Create a new DisplayMetrics object
-        final DisplayMetrics metrics = new android.util.DisplayMetrics();
+		// Create a new DisplayMetrics object
+		final DisplayMetrics metrics = new android.util.DisplayMetrics();
 
-        // Populate the DisplayMetrics
-        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		// Populate the DisplayMetrics
+		this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        // Return theme value based on DisplayMetrics
-        return (int) typedValue.getDimension(metrics);
-    }
+		// Return theme value based on DisplayMetrics
+		return (int) typedValue.getDimension(metrics);
+	}
 
 	/*
 	 * Preparing the list data
@@ -276,9 +301,31 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		listDataHeader.add("Contacts");
 
 		readContacts();
-		// listDataChild.put(listDataHeader.get(0), null); // Header, Child data
-		if(!mContactList.isEmpty())
-		listDataChild.put(listDataHeader.get(1), mContactList);
+		listDataChild.put(listDataHeader.get(0), queryFavList()); // Header, Child data
+		if (!mContactList.isEmpty())
+			listDataChild.put(listDataHeader.get(1), mContactList);
+	}
+
+	private ArrayList<MyAddress> queryFavList() {
+		List<DBAddress> favList = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).list();
+		return AddressDaoManager.dbAddressListToMyAddressList(favList);
+	}
+
+	private boolean validateNotEmpty() {
+		String streetName = autoCompView.getText().toString();
+		String streetNumber = tv_streetNumber.getText().toString();
+
+		if (streetNumber.equalsIgnoreCase("")) {
+			tv_streetNumber.requestFocus();
+			((EditText) tv_streetNumber).setError(_activity.getString(R.string.empty_street_number));
+			if (streetName.equalsIgnoreCase("")) {
+				autoCompView.requestFocus();
+				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.empty_street_name));
+				return false;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	public void readContacts() {
@@ -289,7 +336,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		if (cur.getCount() > 0) {
 
 			while (cur.moveToNext()) {
-				
+
 				String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
 				String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				String street = "";
@@ -300,8 +347,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					System.out.println("name : " + name + ", ID : " + id);
 
 					// get the phone number
-					Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { id }, null);
+					Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { id }, null);
 					while (pCur.moveToNext()) {
 						String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 						System.out.println("phone" + phone);
@@ -317,83 +363,81 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 					// ImageView profile = (ImageView)findViewById(R.id.imageView1);
 					img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
-					
+
 					Logger.e("uri: " + img_uri);
-					
-					if(street!=null && !street.equalsIgnoreCase("")){
+
+					if (street != null && !street.equalsIgnoreCase("")) {
 						MyAddress maddr = new MyAddress(img_uri, name, street);
 						mContactList.add(maddr);
 					}
 				}
-				
+
 			}
 			cur.close();
 		}
 
 	}
-	
-    private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
-        // Instantiates an AssetFileDescriptor. Given a content Uri pointing to an image file, the
-        // ContentResolver can return an AssetFileDescriptor for the file.
-        AssetFileDescriptor afd = null;
+	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
-        // This "try" block catches an Exception if the file descriptor returned from the Contacts
-        // Provider doesn't point to an existing file.
-        try {
-            Uri thumbUri;
-            // If Android 3.0 or later, converts the Uri passed as a string to a Uri object.
-            if (Utils.hasHoneycomb()) {
-                thumbUri = Uri.parse(photoData);
-            } else {
-                // For versions prior to Android 3.0, appends the string argument to the content
-                // Uri for the Contacts table.
-                final Uri contactUri = Uri.withAppendedPath(Contacts.CONTENT_URI, photoData);
+		// Instantiates an AssetFileDescriptor. Given a content Uri pointing to an image file, the
+		// ContentResolver can return an AssetFileDescriptor for the file.
+		AssetFileDescriptor afd = null;
 
-                // Appends the content Uri for the Contacts.Photo table to the previously
-                // constructed contact Uri to yield a content URI for the thumbnail image
-                thumbUri = Uri.withAppendedPath(contactUri, Photo.CONTENT_DIRECTORY);
-            }
-            // Retrieves a file descriptor from the Contacts Provider. To learn more about this
-            // feature, read the reference documentation for
-            // ContentResolver#openAssetFileDescriptor.
-            afd = this.getContentResolver().openAssetFileDescriptor(thumbUri, "r");
+		// This "try" block catches an Exception if the file descriptor returned from the Contacts
+		// Provider doesn't point to an existing file.
+		try {
+			Uri thumbUri;
+			// If Android 3.0 or later, converts the Uri passed as a string to a Uri object.
+			if (Utils.hasHoneycomb()) {
+				thumbUri = Uri.parse(photoData);
+			} else {
+				// For versions prior to Android 3.0, appends the string argument to the content
+				// Uri for the Contacts table.
+				final Uri contactUri = Uri.withAppendedPath(Contacts.CONTENT_URI, photoData);
 
-            // Gets a FileDescriptor from the AssetFileDescriptor. A BitmapFactory object can
-            // decode the contents of a file pointed to by a FileDescriptor into a Bitmap.
-            FileDescriptor fileDescriptor = afd.getFileDescriptor();
+				// Appends the content Uri for the Contacts.Photo table to the previously
+				// constructed contact Uri to yield a content URI for the thumbnail image
+				thumbUri = Uri.withAppendedPath(contactUri, Photo.CONTENT_DIRECTORY);
+			}
+			// Retrieves a file descriptor from the Contacts Provider. To learn more about this
+			// feature, read the reference documentation for
+			// ContentResolver#openAssetFileDescriptor.
+			afd = this.getContentResolver().openAssetFileDescriptor(thumbUri, "r");
 
-            if (fileDescriptor != null) {
-                // Decodes a Bitmap from the image pointed to by the FileDescriptor, and scales it
-                // to the specified width and height
-                return ImageLoader.decodeSampledBitmapFromDescriptor(
-                        fileDescriptor, imageSize, imageSize);
-            }
-        } catch (FileNotFoundException e) {
-            // If the file pointed to by the thumbnail URI doesn't exist, or the file can't be
-            // opened in "read" mode, ContentResolver.openAssetFileDescriptor throws a
-            // FileNotFoundException.
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "Contact photo thumbnail not found for contact " + photoData
-                        + ": " + e.toString());
-            }
-        } finally {
-            // If an AssetFileDescriptor was returned, try to close it
-            if (afd != null) {
-                try {
-                    afd.close();
-                } catch (IOException e) {
-                    // Closing a file descriptor might cause an IOException if the file is
-                    // already closed. Nothing extra is needed to handle this.
-                }
-            }
-        }
+			// Gets a FileDescriptor from the AssetFileDescriptor. A BitmapFactory object can
+			// decode the contents of a file pointed to by a FileDescriptor into a Bitmap.
+			FileDescriptor fileDescriptor = afd.getFileDescriptor();
 
-        // If the decoding failed, returns null
-        return null;
-    }
-    
-    protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
+			if (fileDescriptor != null) {
+				// Decodes a Bitmap from the image pointed to by the FileDescriptor, and scales it
+				// to the specified width and height
+				return ImageLoader.decodeSampledBitmapFromDescriptor(fileDescriptor, imageSize, imageSize);
+			}
+		} catch (FileNotFoundException e) {
+			// If the file pointed to by the thumbnail URI doesn't exist, or the file can't be
+			// opened in "read" mode, ContentResolver.openAssetFileDescriptor throws a
+			// FileNotFoundException.
+			if (BuildConfig.DEBUG) {
+				Log.d(TAG, "Contact photo thumbnail not found for contact " + photoData + ": " + e.toString());
+			}
+		} finally {
+			// If an AssetFileDescriptor was returned, try to close it
+			if (afd != null) {
+				try {
+					afd.close();
+				} catch (IOException e) {
+					// Closing a file descriptor might cause an IOException if the file is
+					// already closed. Nothing extra is needed to handle this.
+				}
+			}
+		}
+
+		// If the decoding failed, returns null
+		return null;
+	}
+
+	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
@@ -414,8 +458,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		@Override
 		protected List<Address> doInBackground(String... params) {
 			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
-			 * that conform to address standards can also be used.
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
 			 */
 			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
 
@@ -443,7 +486,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				exception1.printStackTrace();
 
 				// Return an error message
-				//return (getString(R.string.IO_Exception_getFromLocation));
+				// return (getString(R.string.IO_Exception_getFromLocation));
 
 				// Catch incorrect latitude or longitude values
 			} catch (IllegalArgumentException exception2) {
@@ -455,35 +498,40 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				exception2.printStackTrace();
 
 				//
-				//return errorString;
+				// return errorString;
 			}
 			return addresses;
 		}
 
 		/**
-		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
-		 * UI thread.
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
-			if(addresses.size()>1){
-				//pop up list
+			if (addresses.size() > 1) {
+				// pop up list
 				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
-			}
-			else if(addresses.size()==1){
+			} else if (addresses.size() == 1) {
+				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
 				Intent returnIntent = new Intent();
-				returnIntent.putExtra(MBDefinition.ADDRESS,addresses.get(0));
-				setResult(RESULT_OK,returnIntent);
+				returnIntent.putExtra(MBDefinition.ADDRESS, addresses.get(0));
+				setResult(RESULT_OK, returnIntent);
 				finish();
+				}
+				else{
+					tv_streetNumber.requestFocus();
+					((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+				}
+			} else {
+				autoCompView.requestFocus();
+				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
 			}
-			else{
-				Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
-			}
-			
+
 		}
 	}
-    
-    protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
+
+	protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
@@ -504,8 +552,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		@Override
 		protected List<Address> doInBackground(String... params) {
 			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
-			 * that conform to address standards can also be used.
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
 			 */
 			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
 
@@ -533,7 +580,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				exception1.printStackTrace();
 
 				// Return an error message
-				//return (getString(R.string.IO_Exception_getFromLocation));
+				// return (getString(R.string.IO_Exception_getFromLocation));
 
 				// Catch incorrect latitude or longitude values
 			} catch (IllegalArgumentException exception2) {
@@ -545,30 +592,64 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				exception2.printStackTrace();
 
 				//
-				//return errorString;
+				// return errorString;
 			}
 			return addresses;
 		}
 
 		/**
-		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
-		 * UI thread.
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
 		 */
 		@Override
-		protected void onPostExecute(List<Address> addresses) {
-			if(addresses.size()>1){
-				//pop up list
+		protected void onPostExecute(final List<Address> addresses) {
+			if (addresses.size() > 1) {
+				// pop up list
 				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
+			} else if (addresses.size() == 1) {
+				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
+					final EditText nickname_edit;
+					TextView address_text;
+					TextView cancel;
+					TextView add;
+					final Dialog nicknameDialog = new Dialog(_activity);
+					nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					nicknameDialog.setContentView(R.layout.nickname_dialog);
+					nicknameDialog.setCanceledOnTouchOutside(true);
+
+					address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
+					nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
+					address_text.setText(LocationUtils.addressToString(_activity, addresses.get(0)));
+
+					cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
+					cancel.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							nicknameDialog.dismiss();
+						}
+					});
+					add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
+					add.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							String nickname = nickname_edit.getText().toString();
+							DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(addresses.get(0), tv_unitNumber.getText().toString(), nickname, true, addressDao);
+							listAdapter.updateFavlist(queryFavList());
+							Toast.makeText(_activity, dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
+							nicknameDialog.dismiss();
+						}
+					});
+
+					nicknameDialog.show();
+				} else {
+					// Toast.makeText(_activity, "invalid street number", Toast.LENGTH_SHORT).show();
+					tv_streetNumber.requestFocus();
+					((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+				}
+			} else {
+				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
+				autoCompView.requestFocus();
+				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.empty_street_name));
 			}
-			else if(addresses.size()==1){
-				AddressDaoManager.addDaoAddressByAddress(addresses.get(0), tv_streetNumber.getText().toString(), false, addressDao);
-			}
-			else{
-				Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
-			}
-			
+
 		}
 	}
-
 
 }

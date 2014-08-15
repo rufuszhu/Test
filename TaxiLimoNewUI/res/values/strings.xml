@@ -28,12 +28,18 @@
     <string name="title_activity_pick_up">Pick up Location</string>
     <string name="empty_note">No Note</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-
+    
+    <string name="street_number">Street Number</string>
+	<string name="street_name">Street Name</string>
+	<string name="unit_number">Unit Number</string>
     <!-- Map Messages -->
 	
 
-    <!-- User interface labels and strings -->
-
+    <!-- error messages -->
+	<string name="invalid_street_number">Street number is\ninvalid</string>
+	<string name="invalid_street_name">Address is invalid</string>
+	<string name="empty_street_number">Street number can\'t\nbe Empty</string>
+	<string name="empty_street_name">Street name can\'t be Empty</string>
 
     <!-- Address format -->
     <string name="address_output_string">%1$s %2$s</string>

@@ -32,9 +32,11 @@ public class LimoDaoGenerator {
         address.addStringProperty("district");
         address.addStringProperty("province");
         address.addStringProperty("country");
+        address.addStringProperty("nickName");
         address.addDoubleProperty("latitude");
         address.addDoubleProperty("longitude");
         address.addBooleanProperty("isFavoriate");
+        address.addStringProperty("fullAddress");
     }
 
 //    private static void addCustomerOrder(Schema schema) {

@@ -62,4 +62,24 @@ public class Logger {
         		Log.i(TAG, "null");
         }
     }
+
+
+    public static void d(String tag, String log) {
+        if(IS_OPEN) {
+        	if(log!=null)
+        		Log.d(tag, log);
+        	else
+        		Log.d(tag, "null");
+        }
+    }
+    
+    
+    public static void d(String log) {
+        if(IS_OPEN) {
+        	if(log!=null)
+        		Log.d(TAG, log);
+        	else
+        		Log.d(TAG, "null");
+        }
+    }
 }

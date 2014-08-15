@@ -182,5 +182,23 @@ public class Utils {
 	    catch (Exception e) { }
 	    return context.getString(R.string.default_country_code);
 	}
+	
+//	public static boolean isNumeric(String str)  
+//	{  
+//	  try  
+//	  {  
+//	    double d = Double.parseDouble(str);  
+//	  }  
+//	  catch(NumberFormatException nfe)  
+//	  {  
+//	    return false;  
+//	  }  
+//	  return true;  
+//	}
+	
+	public static boolean isNumeric(String str)
+	{
+	  return str.matches("-?\\d+(\\-\\d+)?");  //match a number with optional '-' in the middle.
+	}
 
 }

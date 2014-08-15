@@ -13,9 +13,11 @@ public class DBAddress {
     private String district;
     private String province;
     private String country;
+    private String nickName;
     private Double latitude;
     private Double longitude;
     private Boolean isFavoriate;
+    private String fullAddress;
 
     public DBAddress() {
     }
@@ -24,7 +26,7 @@ public class DBAddress {
         this.id = id;
     }
 
-    public DBAddress(Long id, String unit, String streetName, String houseNumber, String district, String province, String country, Double latitude, Double longitude, Boolean isFavoriate) {
+    public DBAddress(Long id, String unit, String streetName, String houseNumber, String district, String province, String country, String nickName, Double latitude, Double longitude, Boolean isFavoriate, String fullAddress) {
         this.id = id;
         this.unit = unit;
         this.streetName = streetName;
@@ -32,9 +34,11 @@ public class DBAddress {
         this.district = district;
         this.province = province;
         this.country = country;
+        this.nickName = nickName;
         this.latitude = latitude;
         this.longitude = longitude;
         this.isFavoriate = isFavoriate;
+        this.fullAddress = fullAddress;
     }
 
     public Long getId() {
@@ -93,6 +97,14 @@ public class DBAddress {
         this.country = country;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public Double getLatitude() {
         return latitude;
     }
@@ -115,6 +127,14 @@ public class DBAddress {
 
     public void setIsFavoriate(Boolean isFavoriate) {
         this.isFavoriate = isFavoriate;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
 }
