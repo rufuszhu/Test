@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -140,6 +141,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		pickTime.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				//TimePickerDialog.timepick(getActivity(), 1, 20);
+				TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
+				tpd.show();
 			}
 		});
 

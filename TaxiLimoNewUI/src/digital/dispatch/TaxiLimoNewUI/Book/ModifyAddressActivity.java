@@ -67,7 +67,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	private List<String> listDataHeader;
 	private HashMap<String, List<MyAddress>> listDataChild;
 	private List<MyAddress> mContactList;
-	private ContactExpandableListAdapter listAdapter;
+	private ContactExpandableListAdapter expListAdapter;
 	private Context _activity;
 	private boolean isDesitination;
 
@@ -83,6 +83,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	TextView tv_unitNumber;
 	AutoCompleteTextView autoCompView;
 	LinearLayout favorite_btn;
+	LinearLayout contact_favorite_btn;
 	LinearLayout save_btn;
 	LinearLayout delete_btn;
 	LinearLayout select_btn;
@@ -113,7 +114,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 		_activity = this;
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
-
+		
 		ActionBar ab = getActionBar();
 		if (isDesitination)
 			ab.setTitle(getString(R.string.title_activity_destination));
@@ -147,8 +148,9 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			public void onClick(View v) {
 				String streetName = autoCompView.getText().toString();
 				String streetNumber = tv_streetNumber.getText().toString();
+				boolean isFromContact = false;
 				if (validateNotEmpty())
-					new ValidateAddressTask(_activity).execute(streetNumber + " " + streetName);
+					new ValidateAddressTask(_activity,isFromContact).execute(streetNumber + " " + streetName);
 			}
 		});
 
@@ -157,9 +159,10 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			public void onClick(View v) {
 				String streetName = autoCompView.getText().toString();
 				String streetNumber = tv_streetNumber.getText().toString();
-				if (validateNotEmpty())
-					new addFavoriteTask(_activity).execute(streetNumber + " " + streetName);
-
+				if (validateNotEmpty()){
+					boolean isFromContact=false;
+					new addFavoriteTask(_activity,isFromContact).execute(streetNumber + " " + streetName);
+				}
 			}
 		});
 	}
@@ -169,13 +172,16 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		favorite_btn = (LinearLayout) findViewById(R.id.favorite_btn);
 		delete_btn = (LinearLayout) findViewById(R.id.delete_btn);
 		select_btn = (LinearLayout) findViewById(R.id.select_btn);
+		contact_favorite_btn = (LinearLayout) findViewById(R.id.contact_favorite_btn);
 		tv_streetNumber = (TextView) findViewById(R.id.tv_streetNumber);
 		tv_unitNumber = (TextView) findViewById(R.id.tv_unitNumber);
 		autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		String str = getIntent().getStringExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA);
-		tv_streetNumber.setText(AddressDaoManager.getHouseNumberFromAddress(str));
-		autoCompView.setText(AddressDaoManager.getStreetNameFromAddress(str));
+		if(str!=null && str.length()>0){
+			tv_streetNumber.setText(AddressDaoManager.getHouseNumberFromAddress(str));
+			autoCompView.setText(AddressDaoManager.getStreetNameFromAddress(str));
+		}
 	}
 	
 	private void setUpExpendableListView(){
@@ -197,10 +203,10 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		// preparing list data
 		prepareListData();
 
-		listAdapter = new ContactExpandableListAdapter(this, listDataHeader, listDataChild, mImageLoader);
-
+		expListAdapter = new ContactExpandableListAdapter(this, listDataHeader, listDataChild, mImageLoader);
+		queryFavList();
 		// setting list adapter
-		expListView.setAdapter(listAdapter);
+		expListView.setAdapter(expListAdapter);
 
 		expListView.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
@@ -230,13 +236,48 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					save_btn.setVisibility(View.GONE);
 					delete_btn.setVisibility(View.VISIBLE);
 					select_btn.setVisibility(View.VISIBLE);
+					contact_favorite_btn.setVisibility(View.GONE);
+					final boolean isFromContact=true;
+					
+					final MyAddress ma = (MyAddress) expListAdapter.getChild(groupPosition, childPosition);
+					delete_btn.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							addressDao.deleteByKey(ma.getId());
+							queryFavList();
+							expListAdapter.notifyDataSetChanged();
+						}
+					});
+					
+					select_btn.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							new ValidateAddressTask(_activity,isFromContact).execute(ma.getAddress());
+						}
+					});
 				}
-				//contact list can add fav or select
+				//contact list can add contact_fav or select
 				if(groupPosition==1){
-					favorite_btn.setVisibility(View.VISIBLE);
+					favorite_btn.setVisibility(View.GONE);
+					contact_favorite_btn.setVisibility(View.VISIBLE);
 					save_btn.setVisibility(View.GONE);
 					delete_btn.setVisibility(View.GONE);
 					select_btn.setVisibility(View.VISIBLE);
+					final boolean isFromContact=true;
+					final MyAddress ma = (MyAddress) expListAdapter.getChild(groupPosition, childPosition);
+					
+					contact_favorite_btn.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							
+							new addFavoriteTask(_activity, isFromContact).execute(ma.getAddress());
+						}
+					});
+					
+					select_btn.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							new ValidateAddressTask(_activity, isFromContact).execute(ma.getAddress());
+						}
+					});
+					
+					
 				}
 				return true;
 				
@@ -252,6 +293,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				save_btn.setVisibility(View.VISIBLE);
 				delete_btn.setVisibility(View.GONE);
 				select_btn.setVisibility(View.GONE);
+				contact_favorite_btn.setVisibility(View.GONE);
 			}
          });
 	}
@@ -301,14 +343,17 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		listDataHeader.add("Contacts");
 
 		readContacts();
-		listDataChild.put(listDataHeader.get(0), queryFavList()); // Header, Child data
+		List<MyAddress> empty = new ArrayList<MyAddress>();
+		listDataChild.put(listDataHeader.get(0), empty); // Header, Child data
+		
 		if (!mContactList.isEmpty())
 			listDataChild.put(listDataHeader.get(1), mContactList);
 	}
-
-	private ArrayList<MyAddress> queryFavList() {
+	//update the fav list in expListAdapter
+	private void queryFavList() {
 		List<DBAddress> favList = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).list();
-		return AddressDaoManager.dbAddressListToMyAddressList(favList);
+		ArrayList<MyAddress> maList = AddressDaoManager.dbAddressListToMyAddressList(favList);
+		expListAdapter.updateFavlist(maList);
 	}
 
 	private boolean validateNotEmpty() {
@@ -367,7 +412,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					Logger.e("uri: " + img_uri);
 
 					if (street != null && !street.equalsIgnoreCase("")) {
-						MyAddress maddr = new MyAddress(img_uri, name, street);
+						MyAddress maddr = new MyAddress(img_uri, name, street, (long) -1.0);
 						mContactList.add(maddr);
 					}
 				}
@@ -441,15 +486,16 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
-
+		boolean isFromContact;
 		// Constructor called by the system to instantiate the task
-		public ValidateAddressTask(Context context) {
+		public ValidateAddressTask(Context context, boolean isFromContact) {
 
 			// Required by the semantics of AsyncTask
 			super();
 
 			// Set a Context for the background task
 			localContext = context;
+			this.isFromContact = isFromContact;
 		}
 
 		/**
@@ -519,12 +565,22 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				finish();
 				}
 				else{
-					tv_streetNumber.requestFocus();
-					((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+					if(isFromContact){
+						Utils.showErrorDialog(_activity.getString(R.string.invalid_street_number), _activity);
+					}
+					else{
+						tv_streetNumber.requestFocus();
+						((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+					}
 				}
 			} else {
-				autoCompView.requestFocus();
-				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+				if(isFromContact){
+					Utils.showErrorDialog(_activity.getString(R.string.invalid_street_name), _activity);
+				}
+				else{
+					autoCompView.requestFocus();
+					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+				}
 				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
 			}
 
@@ -535,15 +591,17 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
+		boolean isFromContext;
 
 		// Constructor called by the system to instantiate the task
-		public addFavoriteTask(Context context) {
+		public addFavoriteTask(Context context, boolean isFromContact) {
 
 			// Required by the semantics of AsyncTask
 			super();
 
 			// Set a Context for the background task
 			localContext = context;
+			this.isFromContext = isFromContact;
 		}
 
 		/**
@@ -631,7 +689,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 						public void onClick(View v) {
 							String nickname = nickname_edit.getText().toString();
 							DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(addresses.get(0), tv_unitNumber.getText().toString(), nickname, true, addressDao);
-							listAdapter.updateFavlist(queryFavList());
+							queryFavList();
 							Toast.makeText(_activity, dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
 							nicknameDialog.dismiss();
 						}
@@ -640,13 +698,23 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					nicknameDialog.show();
 				} else {
 					// Toast.makeText(_activity, "invalid street number", Toast.LENGTH_SHORT).show();
-					tv_streetNumber.requestFocus();
-					((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+					if(isFromContext){
+						Utils.showErrorDialog(_activity.getString(R.string.invalid_street_number), _activity);
+					}
+					else{
+						tv_streetNumber.requestFocus();
+						((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+					}
 				}
 			} else {
 				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
-				autoCompView.requestFocus();
-				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.empty_street_name));
+				if(isFromContext){
+					Utils.showErrorDialog(_activity.getString(R.string.invalid_street_name), _activity);
+				}
+				else{
+					autoCompView.requestFocus();
+					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+				}
 			}
 
 		}

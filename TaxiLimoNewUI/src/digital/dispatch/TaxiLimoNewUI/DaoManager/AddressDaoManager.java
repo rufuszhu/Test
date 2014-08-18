@@ -104,7 +104,8 @@ public class AddressDaoManager {
 	public static ArrayList<MyAddress> dbAddressListToMyAddressList(List<DBAddress> dbAddresses){
 		ArrayList<MyAddress> temp = new ArrayList<MyAddress>();
 		for(int i=0 ; i< dbAddresses.size(); i++){
-			MyAddress ma = new MyAddress(null,dbAddresses.get(i).getNickName(),dbAddresses.get(i).getFullAddress());
+			DBAddress dba = dbAddresses.get(i);
+			MyAddress ma = new MyAddress(null,dba.getNickName(),dba.getFullAddress(), dba.getId());
 			temp.add(ma);
 		}
 		return temp;

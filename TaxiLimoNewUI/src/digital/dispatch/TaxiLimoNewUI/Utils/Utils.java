@@ -3,6 +3,8 @@ package digital.dispatch.TaxiLimoNewUI.Utils;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import digital.dispatch.TaxiLimoNewUI.R;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -11,6 +13,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -181,6 +185,40 @@ public class Utils {
 	    }
 	    catch (Exception e) { }
 	    return context.getString(R.string.default_country_code);
+	}
+	
+	public static void showErrorDialog(String error, Context context) {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(error)
+               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                	   dialog.dismiss();
+                   }
+               });
+
+		// Get the error dialog from Google Play services
+		Dialog errorDialog = builder.create();
+
+		// If Google Play services can provide an error dialog
+		if (errorDialog != null) {
+
+			// Create a new DialogFragment in which to show the error dialog
+			ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+
+			// Set the dialog in the DialogFragment
+			errorFragment.setDialog(errorDialog);
+			
+			try {
+				  FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+				// Show the error dialog in the DialogFragment
+					errorFragment.show(fragmentManager, LocationUtils.APPTAG);
+				} catch (ClassCastException e) {
+				  Logger.e("Can't get fragment manager");
+				}
+
+			
+		}
 	}
 	
 //	public static boolean isNumeric(String str)  

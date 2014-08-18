@@ -7,10 +7,12 @@ import android.net.Uri;
 public class MyAddress {
 	private String name, address;
 	private Uri img_URI;
-	public MyAddress(Uri imgURI, String name, String addr){
+	private long id;
+	public MyAddress(Uri imgURI, String name, String addr, long id){
 		this.img_URI=imgURI;
 		this.name=name;
 		this.address=addr;
+		this.id = id;
 	}
 
 	public String getName() {
@@ -32,6 +34,14 @@ public class MyAddress {
 
 	public void setImg_URI(Uri img_URI) {
 		this.img_URI = img_URI;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }
