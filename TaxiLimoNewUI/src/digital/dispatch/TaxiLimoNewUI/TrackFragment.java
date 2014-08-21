@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
-import digital.dispatch.TaxiLimoNewUI.Adapters.ListAdapter;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -68,7 +68,7 @@ public class TrackFragment extends ListFragment {
 	    
 	    
 	    
-	    ListAdapter adapter = new ListAdapter(getActivity(), values);
+	    BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 	    setListAdapter(adapter);  
 	    
 		return rootView;

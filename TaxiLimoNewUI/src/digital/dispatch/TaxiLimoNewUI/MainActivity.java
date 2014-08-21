@@ -19,6 +19,7 @@ import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
+import digital.dispatch.TaxiLimoNewUI.History.HistoryFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
@@ -32,7 +33,8 @@ public class MainActivity extends ActionBarActivity implements
 	 * navigation drawer.
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-	private Address mAddress;
+	private Address mPickupAddress;
+	private Address mDropoffAddress;
 
 	// Declare Tab Variable
 	private FragmentTabHost mTabHost;
@@ -79,16 +81,29 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Logger.e("onActivityResult");
 		Logger.e("requestCode: " + requestCode);
-		if (requestCode == MBDefinition.REQUEST_ADDRESS_CODE) {
+		if (requestCode == MBDefinition.REQUEST_PICKUPADDRESS_CODE) {
 			if (resultCode == RESULT_OK) {
 				// this address comes from modifyAddress activity, and it has
 				// been validated
 				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
 					// Logger.e("dataBundle address: " +
 					// dataBundle.getString(MBDefinition.ADDRESS));
-					setAddress((Address) data.getExtras().getParcelable(
+					setPickupAddress((Address) data.getExtras().getParcelable(
 							MBDefinition.ADDRESS));
-					Logger.e(getAddress().getAddressLine(0));
+					
+				}
+			}
+		}
+		else if(requestCode == MBDefinition.REQUEST_DROPOFFADDRESS_CODE){
+			if (resultCode == RESULT_OK) {
+				// this address comes from modifyAddress activity, and it has
+				// been validated
+				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
+					// Logger.e("dataBundle address: " +
+					// dataBundle.getString(MBDefinition.ADDRESS));
+					setDropoffAddress((Address) data.getExtras().getParcelable(
+							MBDefinition.ADDRESS));
+					
 				}
 			}
 		}
@@ -234,12 +249,18 @@ public class MainActivity extends ActionBarActivity implements
 		return mNavigationDrawerFragment;
 	}
 
-	public Address getAddress() {
-		return mAddress;
+	public Address getPickupAddress() {
+		return mPickupAddress;
+	}
+	public Address getDropoffAddress() {
+		return mDropoffAddress;
 	}
 
-	public void setAddress(Address mAddress) {
-		this.mAddress = mAddress;
+	public void setPickupAddress(Address mAddress) {
+		this.mPickupAddress = mAddress;
+	}
+	public void setDropoffAddress(Address mAddress) {
+		this.mDropoffAddress = mAddress;
 	}
 
 	// @Override

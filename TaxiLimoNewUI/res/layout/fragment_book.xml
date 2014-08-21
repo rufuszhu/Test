@@ -163,7 +163,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/attribute"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".4"
@@ -174,6 +173,7 @@
             android:paddingTop="@dimen/option_padding" >
 
             <LinearLayout
+                android:id="@+id/attribute"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="@dimen/map_alpha"

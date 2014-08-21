@@ -55,6 +55,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.ContactExpandableListAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -95,11 +96,9 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 		findViews();
 
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "limo-db", null);
-		db = helper.getWritableDatabase();
-		daoMaster = new DaoMaster(db);
-		daoSession = daoMaster.newSession();
-		addressDao = daoSession.getDBAddressDao();
+		DaoManager daoManager = DaoManager.getInstance(this);
+		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
+		
 
 //		String fullAddressColumn = DBAddressDao.Properties.FullAddress.columnName;
 //		String nickNameColumn = DBAddressDao.Properties.NickName.columnName;

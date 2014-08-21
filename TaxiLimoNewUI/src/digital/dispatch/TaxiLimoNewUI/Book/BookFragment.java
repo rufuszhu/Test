@@ -51,8 +51,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
+import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -63,20 +67,17 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
-	
+
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "Book";
-	private static final int DRIVER_NOTE_MAX_LENGTH = 256;
 	private static View view;
 
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
 
-	private Dialog messageDialog;
-	private String driverNoteString = "";
 	private TextView textNote;
 	private TextView address_bar_text;
-
+	private Address currentAddress;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -116,7 +117,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		Utils.setNoteIndication(getActivity(),textNote);
+		Utils.setNoteIndication(getActivity(), textNote);
 
 		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
 		button.setOnClickListener(new View.OnClickListener() {
@@ -133,14 +134,14 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 					intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
 				}
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
-				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_ADDRESS_CODE);
+				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_PICKUPADDRESS_CODE);
 			}
 		});
 
 		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
 		pickTime.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				//TimePickerDialog.timepick(getActivity(), 1, 20);
+				// TimePickerDialog.timepick(getActivity(), 1, 20);
 				TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
 				tpd.show();
 			}
@@ -149,11 +150,19 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		LinearLayout driverNote = (LinearLayout) view.findViewById(R.id.driverNote);
 		driverNote.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				//setUpMessageDialog();
+				// setUpMessageDialog();
 				Dialog messageDialog = new Dialog(getActivity());
-				
-				Utils.setUpDriverNoteDialog(getActivity(),messageDialog,textNote);
-				
+
+				Utils.setUpDriverNoteDialog(getActivity(), messageDialog, textNote);
+
+			}
+		});
+
+		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
+		attribute.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), AttributeActivity.class);
+				startActivity(intent);
 			}
 		});
 
@@ -167,14 +176,21 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				// startActivityForResult(intent,REQUEST_CODE);
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
 				intent.putExtra(MBDefinition.IS_DESTINATION, true);
-				startActivity(intent);
+				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_DROPOFFADDRESS_CODE);
 			}
 		});
 
 		TextView book_btn = (TextView) view.findViewById(R.id.book_button);
 		book_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// Logger.e(TAG, getUserCountry(getActivity()));
+				DBBooking mbook = new DBBooking();
+				mbook.setDestID("2");
+				mbook.setMulti_pay_allow(true);
+				setUpPickupAddress(mbook);
+				setUpDropoffAddress(mbook);
+				mbook.setSysId("102");
+				mbook.setRemarks(Utils.driverNoteString);
+				//new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		});
 
@@ -196,6 +212,25 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		Logger.e(TAG, "on PAUSE");
 		if (mLocationClient != null) {
 			mLocationClient.disconnect();
+		}
+	}
+
+	private void setUpPickupAddress(DBBooking mbook) {
+		mbook.setPickup_district(currentAddress.getLocality());
+		mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(currentAddress));
+		mbook.setPickup_latitude(currentAddress.getLatitude());
+		mbook.setPickup_longitude(currentAddress.getLongitude());
+		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(currentAddress));
+	}
+
+	private void setUpDropoffAddress(DBBooking mbook) {
+		Address ad = ((MainActivity) getActivity()).getDropoffAddress();
+		if (ad != null) {
+			mbook.setDropoff_district(ad.getLocality());
+			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
+			mbook.setDropoff_latitude(ad.getLatitude());
+			mbook.setDropoff_longitude(ad.getLongitude());
+			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
 		}
 	}
 
@@ -230,8 +265,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	/**
-	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google
-	 * Maps API.
+	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google Maps API.
 	 */
 	private boolean checkReady() {
 		if (mMap == null) {
@@ -265,7 +299,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public void onConnected(Bundle arg0) {
 		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
 
-		Address address = ((MainActivity) getActivity()).getAddress();
+		Address address = ((MainActivity) getActivity()).getPickupAddress();
 		if (address != null) {
 			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
 			if (checkReady()) {
@@ -273,8 +307,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		} else {
 			if (checkReady()) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()),
-						MBDefinition.DEFAULT_ZOOM));
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 			}
 		}
 	}
@@ -293,25 +326,22 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-		
+
 		// when should I reset this????
-		((MainActivity) getActivity()).setAddress(null);
-		//LatLng cameraTarget = mMap.getCameraPosition().target;
+		((MainActivity) getActivity()).setPickupAddress(null);
+		// LatLng cameraTarget = mMap.getCameraPosition().target;
 		Location location = new Location("");
 		location.setLatitude(cameraPosition.target.latitude);
 		location.setLongitude(cameraPosition.target.longitude);
-		
-		getAddress(location);
-			
 
-		
+		getAddress(location);
+
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		/*
-		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play
-		 * services activity that can resolve error.
+		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play services activity that can resolve error.
 		 */
 		if (connectionResult.hasResolution()) {
 			try {
@@ -344,8 +374,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 			// mCurrentLocation = currentLocation;
 
-			CameraPosition currentPosition = new CameraPosition.Builder().target(currLatLng).zoom(MBDefinition.DEFAULT_ZOOM).bearing(0).tilt(0)
-					.build();
+			CameraPosition currentPosition = new CameraPosition.Builder().target(currLatLng).zoom(MBDefinition.DEFAULT_ZOOM).bearing(0).tilt(0).build();
 			CameraUpdate locatoinUpdate = CameraUpdateFactory.newCameraPosition(currentPosition);
 			mMap.animateCamera(locatoinUpdate);
 			// A few more markers for good measure.
@@ -394,9 +423,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	/**
-	 * An AsyncTask that calls getFromLocation() in the background. The class uses the following generic types: Location - A
-	 * {@link android.location.Location} object containing the current location, passed as the input parameter to doInBackground() Void - indicates
-	 * that progress units are not used by this subclass String - An address passed to onPostExecute()
+	 * An AsyncTask that calls getFromLocation() in the background. The class uses the following generic types: Location - A {@link android.location.Location} object containing the current location,
+	 * passed as the input parameter to doInBackground() Void - indicates that progress units are not used by this subclass String - An address passed to onPostExecute()
 	 */
 	protected class GetAddressTask extends AsyncTask<Location, Void, String> {
 
@@ -419,8 +447,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		@Override
 		protected String doInBackground(Location... params) {
 			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders
-			 * that conform to address standards can also be used.
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
 			 */
 			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
 
@@ -467,7 +494,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 				// Get the first address
 				Address address = addresses.get(0);
-
+				currentAddress = address;
 				return LocationUtils.addressToString(getActivity(), address);
 
 				// If there aren't any addresses, post a message
@@ -477,14 +504,12 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		}
 
 		/**
-		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the
-		 * UI thread.
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
 		 */
 		@Override
 		protected void onPostExecute(String address) {
 			address_bar_text.setText(address);
 		}
 	}
-
 
 }

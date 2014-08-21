@@ -19,7 +19,7 @@ public class LimoDaoGenerator {
         Schema schema = new Schema(1000, "digital.dispatch.TaxiLimoNewUI");
 
         addAddress(schema);
-
+        addJob(schema);
         new DaoGenerator().generateAll(schema, "../TaxiLimoNewUI/src-gen");
     }
 
@@ -37,6 +37,57 @@ public class LimoDaoGenerator {
         address.addDoubleProperty("longitude");
         address.addBooleanProperty("isFavoriate");
         address.addStringProperty("fullAddress");
+    }
+    
+    private static void addJob(Schema schema) {
+        Entity booking = schema.addEntity("DBBooking");
+        booking.addIdProperty();
+        booking.addStringProperty("destID");
+        booking.addIntProperty("taxi_ride_id");
+        booking.addStringProperty("ride_id");
+        booking.addStringProperty("sysId");
+        booking.addBooleanProperty("asap");
+        
+        booking.addDoubleProperty("carLatitude");
+        booking.addDoubleProperty("carLongitude");
+        
+        booking.addStringProperty("dispatchedCar");
+        booking.addStringProperty("dispatchedTime");
+        
+        
+        booking.addStringProperty("pickup_house_number");
+        booking.addStringProperty("pickup_street_name");
+        booking.addStringProperty("pickup_district");
+        booking.addStringProperty("pickup_unit");
+        booking.addStringProperty("pickup_landmark");
+        booking.addDoubleProperty("pickup_longitude");
+        booking.addDoubleProperty("pickup_latitude");
+        
+        booking.addStringProperty("dropoff_house_number");
+        booking.addStringProperty("dropoff_street_name");
+        booking.addStringProperty("dropoff_district");
+        booking.addStringProperty("dropoff_unit");
+        booking.addStringProperty("dropoff_landmark");
+        booking.addDoubleProperty("dropoff_longitude");
+        booking.addDoubleProperty("dropoff_latitude");
+        
+        booking.addStringProperty("attributeList");
+        booking.addStringProperty("phonenum");
+        booking.addStringProperty("pickup_time");
+        booking.addStringProperty("remarks");
+        
+        booking.addStringProperty("tripCancelledTime");
+        booking.addStringProperty("tripCreationTime");
+        booking.addStringProperty("tripModificationTime"); 
+        booking.addStringProperty("tripCompletionTime");
+        
+        booking.addIntProperty("tripStatus");
+        
+        booking.addStringProperty("pickupAddress");
+        booking.addStringProperty("dropoffAddress");
+        booking.addBooleanProperty("already_paid");
+        booking.addBooleanProperty("multi_pay_allow");
+        
     }
 
 //    private static void addCustomerOrder(Schema schema) {

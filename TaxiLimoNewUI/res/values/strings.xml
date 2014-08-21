@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_country_code">ca</string>
-    
 
+    <!-- Variables -->
+    <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
+    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+    <string name="default_country_code">ca</string>
     <string name="clear"></string>
     <string name="app_name">TaxiLimo</string>
     <string name="profile">Profile</string>
@@ -28,18 +30,15 @@
     <string name="title_activity_pick_up">Pick up Location</string>
     <string name="empty_note">No Note</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    
     <string name="street_number">Street Number</string>
-	<string name="street_name">Street Name</string>
-	<string name="unit_number">Unit Number</string>
-    <!-- Map Messages -->
-	
+    <string name="street_name">Street Name</string>
+    <string name="unit_number">Unit Number</string>
 
     <!-- error messages -->
-	<string name="invalid_street_number">Street number is\ninvalid</string>
-	<string name="invalid_street_name">Address is invalid</string>
-	<string name="empty_street_number">Street number can\'t\nbe Empty</string>
-	<string name="empty_street_name">Street name can\'t be Empty</string>
+    <string name="invalid_street_number">Street number is\ninvalid</string>
+    <string name="invalid_street_name">Address is invalid</string>
+    <string name="empty_street_number">Street number can\'t\nbe Empty</string>
+    <string name="empty_street_name">Street name can\'t be Empty</string>
 
     <!-- Address format -->
     <string name="address_output_string">%1$s %2$s</string>
@@ -52,18 +51,15 @@
     <string name="disconnected">Client disconnected</string>
     <string name="get_address">Get Address</string>
     <string name="get_location">Get Location</string>
-    <string name="illegal_argument_exception">        Illegal arguments: Latitude %1$.8f Longitude %2$.8f
-</string>
+    <string name="illegal_argument_exception">        Illegal arguments: Latitude %1$.8f Longitude %2$.8f</string>
     <string name="invalid_action">Invalid intent action %1$s</string>
     <string name="invalid_integer_id">Invalid integer request ID: %1$s</string>
     <string name="IO_Exception_getFromLocation">IO Exception in Geocoder.getFromLocation()</string>
     <string name="location_requested">Periodic updates requested</string>
     <string name="location_updated">Location updated</string>
     <string name="location_update_error">Location update failed</string>
-    <string name="location_update_error_detail">        Location update error. code %1$d message %2$s
-</string>
-    <string name="location_update_missing_update">        Location update error. No incoming location.
-</string>
+    <string name="location_update_error_detail">        Location update error. code %1$d message %2$s</string>
+    <string name="location_update_missing_update">        Location update error. No incoming location.</string>
     <string name="location_updates_stopped">Periodic updates stopped</string>
     <string name="log_new_location">New location: %1$s</string>
     <string name="no_address_found">No address found for location</string>
@@ -74,12 +70,12 @@
     <string name="no_resolution">Google Play services: unable to resolve connection error.</string>
     <string name="periodic_update_stop">Stopping periodic updates</string>
     <string name="play_services_available">Google Play services is available</string>
-    <string name="request_location_updates_in_progress">        Can\'t request location updates, previous request hasn\'t finished
-</string>
+    <string name="request_location_updates_in_progress">        Can\'t request location updates, previous request hasn\'t finished</string>
     <string name="start_updates">Start Updates</string>
     <string name="stop_updates">Stop Updates</string>
     <string name="unknown">--Unknown--</string>
-    <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.
-</string>
+    <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.</string>
+    <string name="title_activity_attribute">Vehicle Attributes</string>
+    <string name="title_activity_trip_detail">Trip Detail</string>
 
 </resources>

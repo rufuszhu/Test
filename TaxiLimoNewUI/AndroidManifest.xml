@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,7 +16,6 @@
     <!-- My Location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- Maps API needs OpenGL ES 2.0. -->
     <uses-feature
@@ -74,10 +73,26 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity"
-            android:label="@string/title_activity_pick_up" 
+            android:name=".Book.ModifyAddressActivity"
+            android:label="@string/title_activity_pick_up"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".Book.AttributeActivity"
+            android:label="@string/title_activity_attribute"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
+        </activity>
+        <activity
+            android:name="digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity"
+            android:label="@string/title_activity_trip_detail"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
     </application>
 

@@ -1,6 +1,11 @@
 package com.digital.dispatch.TaxiLimoSoap.responses;
 
+import android.util.Log;
+
+
+
 public class CompanyItem {
+	private static final String TAG = "CompanyItem";
 	public String destID;
 	public String name;
 	public String logo;
@@ -36,6 +41,19 @@ public class CompanyItem {
 		baseRate = bRate;
 		ratePerDistance = rPerDist;
 		multiPay = cmultiPay;
-		
+	}
+	
+	public static void printCompanyItem(CompanyItem item){
+		Log.e(TAG, "destId: " + item.destID);
+		Log.e(TAG, "name: " + item.name);
+		Log.e(TAG, "logo: " + item.logo);
+		Log.e(TAG, "logoVersion: " + item.logoVersion);
+		Log.e(TAG, "description: " + item.description);
+		Log.e(TAG, "attributes: " + item.attributes);
+		Log.e(TAG, "systemID: " + item.systemID);
+		Log.e(TAG, "baseRate: " + item.baseRate);
+		Log.e(TAG, "ratePerDistance: " + item.ratePerDistance);
+		Log.e(TAG, "multiPay: " +  item.multiPay);
+		Log.e(TAG, "--------------------------------");
 	}
 }

@@ -18,13 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ListAdapter extends ArrayAdapter<MBBooking>{
+public class BookingListAdapter extends ArrayAdapter<MBBooking>{
 	
 	  private final Context context;
 	  private final List<MBBooking> values;
 
-	  public ListAdapter(Context context, List<MBBooking> values) {
-	    super(context, R.layout.list_item, values);
+	  public BookingListAdapter(Context context, List<MBBooking> values) {
+	    super(context, R.layout.booking_list_item, values);
 	    this.context = context;
 	    this.values = values;
 	  }
@@ -53,7 +53,7 @@ public class ListAdapter extends ArrayAdapter<MBBooking>{
 	    // reuse views
 	    if (rowView == null) {
 	    	
-	      rowView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
+	      rowView = LayoutInflater.from(getContext()).inflate(R.layout.booking_list_item, null);
 	      // configure view holder
 	      ViewHolder viewHolder = new ViewHolder();
 	      

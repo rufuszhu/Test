@@ -1,11 +1,18 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.History;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
-import digital.dispatch.TaxiLimoNewUI.Adapters.ListAdapter;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
+import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
+import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -50,13 +57,16 @@ public class HistoryFragment extends ListFragment {
 			values.add(mb);
 		}
 
-		ListAdapter adapter = new ListAdapter(getActivity(), values);
+		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		MBBooking item = (MBBooking) getListAdapter().getItem(position);
+		Intent intent = new Intent(getActivity(), TripDetailActivity.class);
+		//intent.putExtra(MBDefinition.MBBOOKING, item);
+		startActivity(intent);
 		Toast.makeText(getActivity(), position + " selected", Toast.LENGTH_LONG).show();
 	}
 
