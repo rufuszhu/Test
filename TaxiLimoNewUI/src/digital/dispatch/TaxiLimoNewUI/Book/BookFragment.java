@@ -1,6 +1,8 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,6 +78,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private LocationClient mLocationClient;
 
 	private TextView textNote;
+	private TextView text_pickup;
 	private TextView address_bar_text;
 	private Address currentAddress;
 
@@ -138,12 +141,14 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		});
 
+		text_pickup = (TextView) view.findViewById(R.id.text_pickup);
 		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
 		pickTime.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TimePickerDialog.timepick(getActivity(), 1, 20);
-				TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
-				tpd.show();
+				//TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
+				//tpd.show();
+				Utils.setUpTimeDialog(getActivity(), text_pickup);
 			}
 		});
 
@@ -190,6 +195,24 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				setUpDropoffAddress(mbook);
 				mbook.setSysId("102");
 				mbook.setRemarks(Utils.driverNoteString);
+				if(text_pickup.getText().toString().equalsIgnoreCase("now")){
+					Calendar cal = Calendar.getInstance();
+					SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss",Locale.US);
+					mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
+				}
+				else{
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+					SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss",Locale.US);
+					String date = dateFormat.format(Utils.pickupDate.getTime());
+					String time = timeFormat.format(Utils.pickupTime);
+					//Logger.e("date: " + date);
+					//Logger.e("time: " + time);
+					mbook.setPickup_time(date + " " + time);
+				}
+				
+				Logger.e(mbook.getPickup_time());
+				
+				
 				//new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		});
