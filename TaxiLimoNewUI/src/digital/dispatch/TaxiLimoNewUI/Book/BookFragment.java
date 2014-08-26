@@ -163,7 +163,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		});
 
-		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
+		TextView attribute = (TextView) view.findViewById(R.id.attribute);
 		attribute.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), AttributeActivity.class);
@@ -171,7 +171,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		});
 
-		TextView destination = (TextView) view.findViewById(R.id.destination_button);
+		LinearLayout destination = (LinearLayout) view.findViewById(R.id.destination_button);
 		destination.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
@@ -203,7 +203,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				else{
 					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
 					SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss",Locale.US);
-					String date = dateFormat.format(Utils.pickupDate.getTime());
+					String date = dateFormat.format(Utils.pickupDate);
 					String time = timeFormat.format(Utils.pickupTime);
 					//Logger.e("date: " + date);
 					//Logger.e("time: " + time);

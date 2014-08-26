@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     android:minWidth="300dp"
     android:orientation="vertical"
+    android:background="@color/background"
     android:padding="@dimen/normal_padding" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -40,13 +41,20 @@
                 android:text="Later" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
+ <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/normal_padding" >
+        
+   <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/normal_padding" >
+        >
+
+       
 
         <kankan.wheel.widget.WheelView
             android:id="@+id/dates"
@@ -62,7 +70,16 @@
             android:layout_gravity="center_vertical"
             android:layout_weight=".5" />
     </LinearLayout>
-
+    
+   <TextView
+           android:id="@+id/disable_view"
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:background="@color/background"
+           android:clickable="true"
+           android:alpha=".8"
+           android:visibility="gone"/>
+</FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"

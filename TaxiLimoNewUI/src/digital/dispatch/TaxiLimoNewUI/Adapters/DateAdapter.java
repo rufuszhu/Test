@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,53 +17,26 @@ import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
  * Adapter for countries
  */
 public class DateAdapter extends AbstractWheelTextAdapter {
-	private static final int FUTURE_BOOKING_RANGE = 14;
+	
 	// City names
-	final String dates[] = new String[FUTURE_BOOKING_RANGE+1];
-	private ArrayList<String> timeList;
-	public ArrayList<Calendar> dateListForReturn;
-	public ArrayList<Date> timeListForReturn;
+	//final String dates[] = new String[FUTURE_BOOKING_RANGE+1];
+	private ArrayList<Date> timeList;
+	private ArrayList<Date> dateList;
 	private boolean isDate;
 
 
 	/**
 	 * Constructor
 	 */
-	public DateAdapter(Context context, boolean misDate) {
+	public DateAdapter(Context context, boolean misDate, ArrayList<Date> list) {
 		super(context, R.layout.date_holo_layout, NO_RESOURCE);
 		setItemTextResource(R.id.date_text);
 		this.isDate = misDate;
 		if(isDate){
-			SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd",Locale.US);
-			dateListForReturn = new ArrayList<Calendar>();
-			Calendar cal = Calendar.getInstance();
-			dateListForReturn.add(cal);
-			dates[0]="Today";
-			for (int i = 1; i <= FUTURE_BOOKING_RANGE; i ++) {
-		    	
-		    	cal.add(Calendar.DATE, 1);
-		    	dateListForReturn.add(cal);
-		    	Date date = cal.getTime();
-		    	dates[i]=format.format(date);
-		    }
-			
+			dateList = list;
 		}
 		else{
-			timeList = new ArrayList<String>();
-			timeListForReturn = new ArrayList<Date>();
-			SimpleDateFormat format = new SimpleDateFormat("hh: mm a",Locale.US);
-			Calendar cal = Calendar.getInstance();
-			Calendar today = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			while(cal.get(Calendar.DATE)==today.get(Calendar.DATE)){
-				timeListForReturn.add(cal.getTime());
-				timeList.add(format.format(cal.getTime()));
-				cal.add(Calendar.MINUTE, 5);
-			}
-			
+			timeList = list;
 		}
 		
 	}
@@ -76,25 +50,54 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	@Override
 	public int getItemsCount() {
 		if(isDate)
-		return dates.length;
+			return dateList.size();
 		else
 			return timeList.size();
 	}
 
 	@Override
 	public CharSequence getItemText(int index) {
-		if(isDate)
-			return dates[index];
-		else
-			return timeList.get(index);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd",Locale.US);
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a",Locale.US);
+		if(isDate){
+			if(index==0)
+				return "Today";
+			else
+				return dateFormat.format(dateList.get(index).getTime());
+		}
+		else{
+			
+			return timeFormat.format(timeList.get(index).getTime());
+		}
 	}
 	
-	public Calendar getDate(int index){
-		return dateListForReturn.get(index);
+	public Date getDate(int index){
+		return dateList.get(index);
 	}
 	
 	public Date getTime(int index){
-		return timeListForReturn.get(index);
+		return timeList.get(index);
 	}
 	
+	public int getIndexOfTime(Date date){
+		if(date == null)
+			return 0;
+		for(int i=0;i<timeList.size();i++){
+			if(date.getMinutes()==timeList.get(i).getMinutes() && date.getHours() == timeList.get(i).getHours()){
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	public int getIndexOfDate(Date date){
+		if(date == null)
+			return 0;
+		for(int i=0;i<dateList.size();i++){
+			if(date.getDate()==dateList.get(i).getDate()){
+				return i;
+			}
+		}
+		return 0;
+	}
 }

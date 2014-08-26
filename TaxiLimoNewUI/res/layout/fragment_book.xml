@@ -173,7 +173,7 @@
             android:paddingTop="@dimen/option_padding" >
 
             <LinearLayout
-                android:id="@+id/attribute"
+                android:id="@+id/destination_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="@dimen/map_alpha"
@@ -198,7 +198,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".8"
                         android:gravity="center"
-                        android:text="Taxi of Your Choice" />
+                        android:text="Destination" />
                 </LinearLayout>
 
                 <View
@@ -212,42 +212,43 @@
                     android:layout_height="0dp"
                     android:layout_weight=".7"
                     android:gravity="center"
-                    android:text="Northshore Taxi Co." />
+                    android:text="Enter for fare estimate" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_button_height"
         android:layout_alignParentBottom="true"
         android:baselineAligned="false"
-        android:orientation="horizontal" >
+        android:orientation="vertical"
+        android:padding="@dimen/normal_padding" >
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:padding="@dimen/button_padding" >
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".4"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/destination_button"
+                android:id="@+id/attribute"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="@dimen/map_alpha"
-                android:background="@drawable/map_button_selector"
                 android:clickable="true"
                 android:gravity="center"
-                android:text="Destination" />
+                android:background="@color/white"
+                android:text="Company"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:padding="@dimen/button_padding" >
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".6"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/book_button"

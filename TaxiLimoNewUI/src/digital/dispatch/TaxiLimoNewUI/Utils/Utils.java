@@ -39,7 +39,7 @@ import android.widget.LinearLayout.LayoutParams;
 public class Utils {
 
 	public static String driverNoteString = "";
-	public static Calendar pickupDate;
+	public static Date pickupDate;
 	public static Date pickupTime;
 
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
@@ -51,7 +51,6 @@ public class Utils {
 		return titulos[posicao];
 	}
 
-	private static boolean isAnimating = false;
 
 	/**
 	 * Uses static final constants to detect if the device's platform version is Gingerbread or later.
@@ -100,64 +99,61 @@ public class Utils {
 		dates.setVisibleItems(5); // Number of items
 		dates.setWheelBackground(R.drawable.wheel_bg_holo);
 		dates.setWheelForeground(R.drawable.wheel_val_holo);
-		// dates.setShadowColor(0xFF000000, 0x88000000, 0x00000000);
 
 		dates.setShadowColor(transparent, transparent, transparent);
-		final DateAdapter dateAdapter = new DateAdapter(context, isDate);
-		dates.setViewAdapter(dateAdapter);
-		dates.setCurrentItem(0);
+		
+		
 
 		times.setVisibleItems(5); // Number of items
 		times.setWheelBackground(R.drawable.wheel_bg_holo);
 		times.setWheelForeground(R.drawable.wheel_val_holo);
-		// dates.setShadowColor(0xFF000000, 0x88000000, 0x00000000);
 		times.setShadowColor(transparent, transparent, transparent);
-		final DateAdapter timeAdapter = new DateAdapter(context, !isDate);
-		times.setViewAdapter(timeAdapter);
+		boolean isToday = true;
+		final DateAdapter dateAdapter = new DateAdapter(context, isDate, setupDateList());
+		final DateAdapter timeTodayAdapter = new DateAdapter(context, !isDate, setupTimeList(isToday));
+		final DateAdapter timeNotTodayAdapter = new DateAdapter(context, !isDate, setupTimeList(!isToday));
+		dates.setViewAdapter(dateAdapter);
+		dates.setCurrentItem(dateAdapter.getIndexOfDate(pickupDate));
+		//if today
+		if(pickupDate == null || pickupDate.getDate()== Calendar.getInstance().getTime().getDate()){
+			times.setViewAdapter(timeTodayAdapter);
+			times.setCurrentItem(timeTodayAdapter.getIndexOfTime(pickupTime));
+		}else{
+			times.setViewAdapter(timeNotTodayAdapter);
+			times.setCurrentItem(timeNotTodayAdapter.getIndexOfTime(pickupTime));
+		}
 
-		times.setCurrentItem(getCurrentTimeIndex());
 
 		final OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
 			@Override
 			public void onChanged(WheelView wheel, int oldValue, int newValue) {
-				if (now_btn.isChecked() && !isAnimating) {
-					later_btn.setChecked(true);
-					now_btn.setChecked(false);
+				if (newValue == 0) {
+					Date oldDate = timeNotTodayAdapter.getTime(times.getCurrentItem());
+					times.setViewAdapter(timeTodayAdapter);
+					times.setCurrentItem(timeTodayAdapter.getIndexOfTime(oldDate));
+				} else {
+					if (oldValue == 0) {
+						Date oldDate = timeTodayAdapter.getTime(times.getCurrentItem());
+						times.setViewAdapter(timeNotTodayAdapter);
+						times.setCurrentItem(timeNotTodayAdapter.getIndexOfTime(oldDate));
+					}
 				}
 			}
 		};
 
-		OnWheelScrollListener scrollListener = new OnWheelScrollListener() {
-			@Override
-			public void onScrollingStarted(WheelView wheel) {
-
-			}
-
-			@Override
-			public void onScrollingFinished(WheelView wheel) {
-				isAnimating = false;
-			}
-		};
 		now_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				int timeIndex = getCurrentTimeIndex();
-
-				if (times.getCurrentItem() != timeIndex) {
-					isAnimating = true;
-					times.setCurrentItem(timeIndex, true);
-				}
-				if (dates.getCurrentItem() != 0) {
-					isAnimating = true;
-					dates.setCurrentItem(0, true);
-				}
+				TextView disable_view = (TextView) timeDialog.getWindow().findViewById(R.id.disable_view);
+				disable_view.setVisibility(View.VISIBLE);
 				later_btn.setChecked(false);
 				now_btn.setChecked(true);
-
 			}
 		});
 
 		later_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				TextView disable_view = (TextView) timeDialog.getWindow().findViewById(R.id.disable_view);
+				disable_view.setVisibility(View.GONE);
 				later_btn.setChecked(true);
 				now_btn.setChecked(false);
 			}
@@ -165,13 +161,22 @@ public class Utils {
 
 		save.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if(now_btn.isChecked())
-					tv_time.setText("now");
-				else{
-						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeAdapter.getItemText(times.getCurrentItem()));
-						pickupDate = dateAdapter.dateListForReturn.get(dates.getCurrentItem());
-						pickupTime = timeAdapter.timeListForReturn.get(times.getCurrentItem());
+				if (now_btn.isChecked())
+					tv_time.setText("Now");
+				else {
+					int dateIndex = dates.getCurrentItem();
+					int timeIndex = times.getCurrentItem();
+					
+					if(dates.getCurrentItem()==0){
+						pickupTime = timeTodayAdapter.getTime(timeIndex);
+						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeTodayAdapter.getItemText(times.getCurrentItem()));
 					}
+					else{
+						pickupTime = timeNotTodayAdapter.getTime(timeIndex);
+						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeNotTodayAdapter.getItemText(times.getCurrentItem()));
+					}
+					pickupDate = dateAdapter.getDate(dateIndex);
+				}
 				timeDialog.dismiss();
 			}
 		});
@@ -182,11 +187,44 @@ public class Utils {
 		});
 
 		dates.addChangingListener(wheelListener);
-		times.addChangingListener(wheelListener);
-		dates.addScrollingListener(scrollListener);
-		times.addScrollingListener(scrollListener);
-
 		timeDialog.show();
+	}
+
+	private static ArrayList<Date> setupDateList() {
+		ArrayList<Date> dateList = new ArrayList<Date>();
+		Calendar cal = Calendar.getInstance();
+		for (int i = 0; i <= MBDefinition.FUTURE_BOOKING_RANGE; i++) {
+			Date temp = new Date();
+			temp = cal.getTime();
+			dateList.add(temp);
+			cal.add(Calendar.DATE, 1);
+		}
+		return dateList;
+	}
+
+	private static ArrayList<Date> setupTimeList(boolean isToday) {
+		ArrayList<Date> timeList = new ArrayList<Date>();
+		Calendar cal = Calendar.getInstance();
+		Calendar today = Calendar.getInstance();
+		if (isToday) {
+			int currentMin = cal.get(Calendar.MINUTE);
+			int roundMin = (int) (Math.ceil((double) currentMin / 5) * 5);
+			cal.set(Calendar.MINUTE, roundMin);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+		} else {
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+		}
+		while (cal.get(Calendar.DATE) == today.get(Calendar.DATE)) {
+			Date temp = new Date();
+			temp = cal.getTime();
+			timeList.add(temp);
+			cal.add(Calendar.MINUTE, 5);
+		}
+		return timeList;
 	}
 
 	private static int getCurrentTimeIndex() {
@@ -202,6 +240,7 @@ public class Utils {
 		}
 		return currentTimeIndex;
 	}
+	
 
 	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
 		final EditText driverMessage;
@@ -369,7 +408,7 @@ public class Utils {
 	// }
 
 	public static boolean isNumeric(String str) {
-		return str.matches("-?\\d+(\\-\\d+)?"); // match a number with optional '-' in the middle.
+		return str.matches("-?\\d+(\\-\\d+)?"); // match a number with optional '-' in the middle. this is for street number return by google Geo
 	}
 
 }

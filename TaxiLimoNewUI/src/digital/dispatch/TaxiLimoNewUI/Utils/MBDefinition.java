@@ -11,7 +11,7 @@ public class MBDefinition {
 	public final static int REQUEST_DROPOFFADDRESS_CODE = 3;
 	public static final String[] SPECIAL_CHAR_TO_REMOVE = new String[] {"%", "[", "]", "<", ">", "\\"};
 	
-	
+	public static final int FUTURE_BOOKING_RANGE = 14;
 	
 	public final static int MB_STATUS_BOOKED = 11;
 	public final static int MB_STATUS_ACCEPTED = 12;
