@@ -33,12 +33,12 @@
     <dimen name="option_padding">8dp</dimen>
     <dimen name="option_padding_inner">4dp</dimen>
 
-    
+    <dimen name="table_row_min_height">50dp</dimen>
     <dimen name="bot_button_height">70dp</dimen>
     
     
     
-        <dimen name="map_addressBar_height">50dp</dimen>
+    <dimen name="map_addressBar_height">50dp</dimen>
     <dimen name="map_option_height">80dp</dimen>
     <dimen name="map_button_height">80dp</dimen>
 

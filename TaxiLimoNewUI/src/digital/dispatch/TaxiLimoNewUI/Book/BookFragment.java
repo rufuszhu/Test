@@ -54,9 +54,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
@@ -146,8 +149,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		pickTime.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// TimePickerDialog.timepick(getActivity(), 1, 20);
-				//TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
-				//tpd.show();
+				// TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
+				// tpd.show();
 				Utils.setUpTimeDialog(getActivity(), text_pickup);
 			}
 		});
@@ -188,35 +191,40 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		TextView book_btn = (TextView) view.findViewById(R.id.book_button);
 		book_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				DBBooking mbook = new DBBooking();
-				mbook.setDestID("2");
-				mbook.setMulti_pay_allow(true);
-				setUpPickupAddress(mbook);
-				setUpDropoffAddress(mbook);
-				mbook.setSysId("102");
-				mbook.setRemarks(Utils.driverNoteString);
-				if(text_pickup.getText().toString().equalsIgnoreCase("now")){
-					Calendar cal = Calendar.getInstance();
-					SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss",Locale.US);
-					mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
+				DaoManager daoManager = DaoManager.getInstance(getActivity());
+				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+				if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0) {
+					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
+				} else {
+					DBBooking mbook = new DBBooking();
+					mbook.setDestID("2");
+					mbook.setMulti_pay_allow(true);
+					setUpPickupAddress(mbook);
+					setUpDropoffAddress(mbook);
+					mbook.setSysId("102");
+					mbook.setRemarks(Utils.driverNoteString);
+					//if pick up time not spcify,
+					if (text_pickup.getText().toString().equalsIgnoreCase("now") || Utils.pickupDate == null || Utils.pickupTime == null) {
+//						Calendar cal = Calendar.getInstance();
+//						SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+//						mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
+					} else {
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+						SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
+						String date = dateFormat.format(Utils.pickupDate);
+						String time = timeFormat.format(Utils.pickupTime);
+						// Logger.e("date: " + date);
+						// Logger.e("time: " + time);
+
+						mbook.setPickup_time(date + " " + time);
+					}
+
+					Logger.e(mbook.getPickup_time());
+
+					new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 				}
-				else{
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
-					SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss",Locale.US);
-					String date = dateFormat.format(Utils.pickupDate);
-					String time = timeFormat.format(Utils.pickupTime);
-					//Logger.e("date: " + date);
-					//Logger.e("time: " + time);
-					mbook.setPickup_time(date + " " + time);
-				}
-				
-				Logger.e(mbook.getPickup_time());
-				
-				
-				//new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		});
-
 		return view;
 	}
 
@@ -240,10 +248,15 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private void setUpPickupAddress(DBBooking mbook) {
 		mbook.setPickup_district(currentAddress.getLocality());
+
 		mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(currentAddress));
 		mbook.setPickup_latitude(currentAddress.getLatitude());
 		mbook.setPickup_longitude(currentAddress.getLongitude());
 		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(currentAddress));
+		mbook.setPickupAddress(LocationUtils.addressToString(getActivity(), currentAddress));
+		Logger.e("setPickup_district: " + currentAddress.getLocality());
+		Logger.e("Pickup_house_number: " + AddressDaoManager.getHouseNumberFromAddress(currentAddress));
+		Logger.e("Pickup_street_name: " + AddressDaoManager.getStreetNameFromAddress(currentAddress));
 	}
 
 	private void setUpDropoffAddress(DBBooking mbook) {
@@ -254,6 +267,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			mbook.setDropoff_latitude(ad.getLatitude());
 			mbook.setDropoff_longitude(ad.getLongitude());
 			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
+			mbook.setDropoffAddress(LocationUtils.addressToString(getActivity(), ad));
 		}
 	}
 

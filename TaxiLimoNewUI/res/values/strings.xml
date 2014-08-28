@@ -35,10 +35,22 @@
     <string name="unit_number">Unit Number</string>
 
     <!-- error messages -->
-    <string name="invalid_street_number">Street number is\ninvalid</string>
-    <string name="invalid_street_name">Address is invalid</string>
-    <string name="empty_street_number">Street number can\'t\nbe Empty</string>
-    <string name="empty_street_name">Street name can\'t be Empty</string>
+    <string name="err_invalid_street_number">Street number is\ninvalid</string>
+    <string name="err_invalid_street_name">Address is invalid</string>
+    <string name="err_empty_street_number">Street number can\'t\nbe Empty</string>
+    <string name="err_empty_street_name">Street name can\'t be Empty</string>
+    <string name="err_no_multiple_booking">You already have one active booking</string>
+    <string name="err_msg_book_req_area_not_bookable">
+        Address is not within the taxi company\'s service area. Please choose a different address.        
+    </string>
+    <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
+    <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
+    <string name="err_msg_no_response">Service unavailable, please try again later.</string>
+    
+    <!-- messages -->
+    <string name="message_cancel_successful">The job was successfully canceled</string>
+    <string name="message_book_successful">The job was successfully booked</string>
+    <string name="message_track_send_msg_success">Successfully sent message to driver</string>
 
     <!-- Address format -->
     <string name="address_output_string">%1$s %2$s</string>

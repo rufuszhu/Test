@@ -1,6 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBookJobResponseListener, IRequestTimerListener {
 	private static final String TAG = null;
@@ -67,20 +69,9 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 		String multiPay_allow = "";
 
 		bjReq.setTaxiCompanyID(mbook.getDestID() + "");
-
-		// format needed in OSP soap request server
-		SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-		if (mbook.getPickup_time() != null) {
-			long timeMilli = Long.parseLong(mbook.getPickup_time());
-			String timeStr = sdformat.format(new Date(timeMilli));
-			Logger.e("SOAP-request", "timeStr=" + timeStr);
-			bjReq.setPickUpTime(timeStr);
-		} else {
-			Time now = new Time();
-			now.setToNow();
-			now.format("yyyy-MM-dd HH:mm:ss");
-			bjReq.setPickUpTime(now.toString());
-		}
+		
+		bjReq.setPickUpTime(mbook.getPickup_time());
+		
 
 		if (mbook.getPickup_unit() != null) {
 			bjReq.setPickUpUnit(mbook.getPickup_unit());
@@ -151,13 +142,19 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Logger.v(TAG, "Taxi ride ID = " + response.getTRID());
 			mbook.setTaxi_ride_id(response.getTRID());
 			mbook.setTripStatus(MBDefinition.MB_STATUS_BOOKED);
+			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss",Locale.US);
+			mbook.setTripCreationTime(pickupTimeFormat.format(cal.getTime()));
+			
 			DaoManager daoManager = DaoManager.getInstance(_context);
 			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 			bookingDao.insert(mbook);
-			Logger.e("YEAH!!!!!!!!");
-			Logger.e("ride id: " + mbook.getTaxi_ride_id());
+			
+			Utils.showErrorDialog(_context.getString(R.string.message_book_successful), _context);
+			Logger.e(TAG, "ride id: " + mbook.getTaxi_ride_id());
+			Logger.e(TAG, "create time: " + mbook.getTripCreationTime());
 		} else {
-
 			Logger.i(TAG, "no response found");
 		}
 
@@ -173,7 +170,8 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			// .setPositiveButton(R.string.positive_button, null)
 			// .create()
 			// .show();
-			Logger.e(TAG, "1");
+			Utils.showErrorDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable), _context);
+			
 		} else {
 			switch (resWrapper.getErrCode()) {
 			case 12:
@@ -190,7 +188,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				// .create()
 				// .show();
 				// break;
-				Logger.e(TAG, "2");
+				Utils.showErrorDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable), _context);
 				break;
 			case 23:
 				// new AlertDialog.Builder(getActivity())
@@ -207,7 +205,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				// .create()
 				// .show();
 				// break;
-				Logger.e(TAG, "3");
+				Utils.showErrorDialog(_context.getString(R.string.err_msg_book_req_invalid_account), _context);
 				break;
 			case 36:
 			case 40:
@@ -222,6 +220,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				break;
 			default:
 				// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
+				Utils.showErrorDialog(_context.getString(R.string.booking_failed_generic_msg), _context);
 				Logger.e(TAG, "5");
 
 				break;
@@ -233,7 +232,8 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	public void onError() {
 		// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
-		// isDialogVisible = false;
+		Utils.showErrorDialog(_context.getString(R.string.booking_failed_generic_msg), _context);
+		
 	}
 
 	@Override

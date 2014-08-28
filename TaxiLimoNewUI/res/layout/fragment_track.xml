@@ -8,12 +8,384 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="digital.dispatch.TaxiLimoNewUI.MainActivity$PlaceholderFragment" >
 
-    <ListView
-        android:id="@android:id/list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:background="@color/white"
-        android:listSelector="@drawable/list_selector">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:padding="20dp" >
+
+        <TableLayout
+            android:id="@+id/trip_detail_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerPadding="@dimen/normal_padding" >
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Trip ID" />
+
+                <TextView
+                    android:id="@+id/tv_id"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Received" />
+
+                <TextView
+                    android:id="@+id/tv_receive"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Route" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/small_padding" >
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:src="@android:drawable/sym_def_app_icon" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/tv_pickup_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".5" />
+
+                        <TextView
+                            android:id="@+id/tv_dropoff_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight=".5" />
+                    </LinearLayout>
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Fleet" />
+
+                <TextView
+                    android:id="@+id/tv_fleet"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Options" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/vehicle_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Vehicle" />
+
+                <TextView
+                    android:id="@+id/tv_vehicle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/driver_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/table_row_min_height"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/extra_small_padding"
+                android:paddingTop="@dimen/extra_small_padding" 
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_weight=".2"
+                    android:background="@color/blue_light"
+                    android:padding="@dimen/small_padding"
+                    android:text="Driver" />
+
+                <TextView
+                    android:id="@+id/tv_driver"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".8"
+                    android:background="@color/blue_light"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/small_padding" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/received_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gray_button_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/stat_sys_upload" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Trip"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dispatched_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gray_button_selector"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/dispatched_cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_sys_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel Trip"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dispatched_track_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:background="@drawable/gray_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_sys_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/arrived_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gray_button_selector"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/arrived_cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_sys_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/arrived_track_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"
+            android:background="@drawable/gray_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_sys_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/arrived_pay_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".33"
+            android:background="@drawable/gray_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/stat_sys_upload" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

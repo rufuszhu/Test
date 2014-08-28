@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
@@ -45,17 +46,9 @@ public class HistoryFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		List<MBBooking> values = new ArrayList<MBBooking>();
+		List<DBBooking> values = new ArrayList<DBBooking>();
 
-		for (int i = 0; i < 10; i++) {
-			MBBooking mb = new MBBooking();
-			mb.setAttribute("11920 forge way");
-			if (i % 3 == 0)
-				mb.setDispatchedCar("Complete");
-			else
-				mb.setDispatchedCar("Canceled");
-			values.add(mb);
-		}
+
 
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
@@ -63,9 +56,9 @@ public class HistoryFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		MBBooking item = (MBBooking) getListAdapter().getItem(position);
+		DBBooking item = (DBBooking) getListAdapter().getItem(position);
 		Intent intent = new Intent(getActivity(), TripDetailActivity.class);
-		//intent.putExtra(MBDefinition.MBBOOKING, item);
+		intent.putExtra(MBDefinition.DBBOOKING_EXTRA, item);
 		startActivity(intent);
 		Toast.makeText(getActivity(), position + " selected", Toast.LENGTH_LONG).show();
 	}
