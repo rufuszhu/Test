@@ -37,4 +37,12 @@ public class MBDefinition {
 	public final static int MB_STATUS_IN_SERVICE = 14;
 	public final static int MB_STATUS_COMPLETED = 15;
 	public final static int MB_STATUS_CANCELLED = 16;
+	
+
+	public static String SHARE_SND_MSG_DRV = "C_MB_SND_MSG_DRV"; 
+	public static String SHARE_DROP_OFF_MANDATORY = "C_MB_DRP_OFF_MAND";
+	public static String SHARE_MULTI_BOOK_ALLOWED = "C_MB_MLT_BOOK_ALWD";
+	public static String SHARE_SAME_LOG_BOOK_ALLOWED = "C_MB_SAME_LOC_BK_ALW";
+	public static String SHARE_TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
+	public static String SHARE_PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
 }

@@ -17,7 +17,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 public class GetMBParamRequest extends Request {
 	private String systemID, systemPassword, taxiCompID;
 	private IMGParamResponseListener iResponseListener = null;
-	private static String TAG = "Soap-GetMBParams";
+	private static String TAG = "Soap-GetMBParam Request";
 	
 	public GetMBParamRequest(IMGParamResponseListener resListener, IRequestTimerListener timeListener) {
 		super(timeListener);

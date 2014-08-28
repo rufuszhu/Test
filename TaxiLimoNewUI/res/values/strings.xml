@@ -46,6 +46,7 @@
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
+    <string name="err_msg_get_param">Unable to connect to server. \nPlease try again in a few minutes.</string>
     
     <!-- messages -->
     <string name="message_cancel_successful">The job was successfully canceled</string>

@@ -6,10 +6,13 @@ import java.util.List;
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -45,8 +48,13 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-
-		List<DBBooking> values = new ArrayList<DBBooking>();
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+		List<DBBooking> values = bookingDao.queryBuilder()
+				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
+						 Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list();
+		
+		
 
 
 

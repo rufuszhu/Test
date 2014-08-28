@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class TripDetailActivity extends Activity {
 
@@ -22,7 +23,16 @@ public class TripDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_trip_detail);
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
+		TextView tv_id = (TextView) findViewById(R.id.tv_history_id);
+		TextView tv_receive = (TextView) findViewById(R.id.tv_history_receive);
+		TextView tv_from = (TextView) findViewById(R.id.tv_history_pickup_address);
+		TextView tv_to = (TextView) findViewById(R.id.tv_history_dropoff_address);
+
 		
+		tv_id.setText(dbBook.getTaxi_ride_id()+"");
+		tv_receive.setText(dbBook.getTripCreationTime());
+		tv_from.setText(dbBook.getPickupAddress());
+		tv_to.setText(dbBook.getDropoffAddress());
 	}
 
 	@Override
