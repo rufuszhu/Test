@@ -8,18 +8,266 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="digital.dispatch.TaxiLimoNewUI.MainActivity$PlaceholderFragment" >
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <LinearLayout
+        android:id="@+id/addressBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_addressBar_height"
+        android:layout_alignParentTop="true"
+        android:alpha="@dimen/map_alpha"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="8" >
+
+        <ImageView
+            android:id="@+id/image_myplace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_myplaces" />
+
+        <TextView
+            android:id="@+id/text_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageButton
+            android:id="@+id/image_currentLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha="1"
+            android:src="@android:drawable/ic_menu_mylocation" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_option_height"
+        android:layout_below="@+id/addressBar"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/option_padding"
+            android:paddingLeft="@dimen/option_padding"
+            android:paddingRight="@dimen/option_padding_inner"
+            android:paddingTop="@dimen/option_padding" >
+
+            <LinearLayout
+                android:id="@+id/pickupTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@dimen/map_alpha"
+                android:background="@drawable/map_option_selector"
+                android:clickable="true"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".3"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".2"
+                        android:src="@android:drawable/presence_away" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:text="PickupTime" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:id="@+id/text_pickup"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".7"
+                    android:gravity="center"
+                    android:text="Now" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/option_padding"
+            android:paddingLeft="@dimen/option_padding_inner"
+            android:paddingRight="@dimen/option_padding_inner"
+            android:paddingTop="@dimen/option_padding" >
+
+            <LinearLayout
+                android:id="@+id/driverNote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@dimen/map_alpha"
+                android:background="@drawable/map_option_selector"
+                android:clickable="true"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".3"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".2"
+                        android:src="@android:drawable/sym_action_chat" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="center"
+                        android:text="Driver Note" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:id="@+id/text_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".7"
+                    android:gravity="center"
+                    android:text="@string/empty_note" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".4"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/option_padding"
+            android:paddingLeft="@dimen/option_padding_inner"
+            android:paddingRight="@dimen/option_padding"
+            android:paddingTop="@dimen/option_padding" >
+
+            <LinearLayout
+                android:id="@+id/destination_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@dimen/map_alpha"
+                android:background="@drawable/map_option_selector"
+                android:clickable="true"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".3"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".2"
+                        android:src="@android:drawable/sym_action_chat" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".8"
+                        android:gravity="center"
+                        android:text="Destination" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <TextView
+                    android:id="@+id/company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".7"
+                    android:gravity="center"
+                    android:text="Enter for fare estimate" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_button_height"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:padding="@dimen/normal_padding" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".4"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/attribute"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@dimen/map_alpha"
+                android:clickable="true"
+                android:gravity="center"
+                android:background="@color/white"
+                android:text="Company"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".6"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/book_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="@dimen/map_alpha"
+                android:background="@drawable/map_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="Book" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Book"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:src="@android:drawable/presence_online" />
 
 </RelativeLayout>

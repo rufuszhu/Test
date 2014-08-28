@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SoapLibraryV2</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Job Item -->
+    <string-array name="job_item">
+        <item>passengerName</item>
+		<item>phoneNumber</item>
+		<item>phoneExtension</item>
+		<item>pickupStreetNumber</item>
+		<item>pickupStreetName</item>
+		<item>pickupRegion</item>
+		<item>pickupUnitNumber</item>
+		<item>pickupLandmark</item>
+		<item>dropoffStreetNumber</item>
+		<item>dropoffStreetName</item>
+		<item>dropoffRegion</item>
+		<item>dropoffUnitNumber</item>
+		<item>dropffLandmark</item>
+		<item>accountCode</item>
+		<item>accountName</item>
+		<item>pickupDate</item>
+		<item>pickupTime</item>
+		<item>repPickupTime</item>
+		<item>repPickupDays</item>
+		<item>repStart</item>
+		<item>repEnd</item>
+		<item>taxi_ride_id</item>
+		<item>bookingDateTime</item>
+		<item>tripStatus</item>
+		<item>adviseArrival</item>
+		<item>dispatchedCar</item>
+		<item>dispatchedDriver</item>
+		<item>carLongitude </item>
+		<item>carLatitude </item>
+		<item>tripStatusUniformCode</item>
+		<item>eta1</item>
+		<item>eta2</item>
+		<item>estimateDistance</item>
+    </string-array>
+    
+</resources>

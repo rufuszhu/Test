@@ -1,7 +1,14 @@
 package digital.dispatch.TaxiLimoNewUI;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
+
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +20,7 @@ import android.widget.Toast;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TrackFragment extends Fragment {
+public class TrackFragment extends ListFragment {
 
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private final String TAG = "Track";
@@ -45,7 +52,25 @@ public class TrackFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_track, container, false);
-		
+	    List<MBBooking> values = new ArrayList<MBBooking>();
+	    
+	    for(int i = 0; i < 2; i++)
+	    {
+	    	MBBooking mb = new MBBooking();
+	    	mb.setAttribute("11920 forge way");
+	    	if(i%2==0){
+	    		mb.setDispatchedCar("Booked");
+	    	}
+	    	else
+	    		mb.setDispatchedCar("Arrived");
+	    	values.add(mb);
+	    }
+	    
+	    
+	    
+	    BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
+	    setListAdapter(adapter);  
+	    
 		return rootView;
 	}
 	

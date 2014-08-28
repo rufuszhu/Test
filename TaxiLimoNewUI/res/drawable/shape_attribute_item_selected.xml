@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"   >
+
+    <solid
+        android:color="@color/red_light" >
+    </solid>
+
+    <padding
+        android:left="@dimen/oval_horizontal_padding"
+        android:top="@dimen/oval_vertical_padding"
+        android:right="@dimen/oval_horizontal_padding"
+        android:bottom="@dimen/oval_vertical_padding"    >
+    </padding>
+
+    <corners
+        android:radius="@dimen/oval_border_radius"   >
+    </corners>
+
+</shape>
