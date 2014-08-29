@@ -32,14 +32,20 @@ public class MGParam {
 		if (rPDistance != null) {
 			ratePerDistance = Integer.parseInt(rPDistance);
 		}
-		
-		tipButton1 = Integer.parseInt(tip1);
-		paymentTimeout = Integer.parseInt(pTimeOut);
-		ccPaymentEnabled = parseBool(ccPayEnabled);
-		msgToDriver = parseBool(msgDriver);
-		dropOffRequired = parseBool(doMand); 
-		multiBookAllowed = parseBool(multiBookAllow);
-		sameLocBookAllowed = parseBool(sameLocBookAllow);
+		if(tip1!=null)
+			tipButton1 = Integer.parseInt(tip1);
+		if(pTimeOut!=null)
+			paymentTimeout = Integer.parseInt(pTimeOut);
+		if(ccPayEnabled!=null)
+			ccPaymentEnabled = parseBool(ccPayEnabled);
+		if(msgDriver!=null)
+			msgToDriver = parseBool(msgDriver);
+		if(doMand!=null)
+			dropOffRequired = parseBool(doMand); 
+		if(multiBookAllow!=null)
+			multiBookAllowed = parseBool(multiBookAllow);
+		if(sameLocBookAllow!=null)
+			sameLocBookAllowed = parseBool(sameLocBookAllow);
 	}
 	
 	public int getUseAccPW() {

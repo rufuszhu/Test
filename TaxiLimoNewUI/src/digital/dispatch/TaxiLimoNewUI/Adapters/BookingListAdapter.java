@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 
 import android.content.Context;
@@ -18,12 +20,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class BookingListAdapter extends ArrayAdapter<MBBooking>{
+public class BookingListAdapter extends ArrayAdapter<DBBooking>{
 	
 	  private final Context context;
-	  private final List<MBBooking> values;
+	  private final List<DBBooking> values;
 
-	  public BookingListAdapter(Context context, List<MBBooking> values) {
+	  public BookingListAdapter(Context context, List<DBBooking> values) {
 	    super(context, R.layout.booking_list_item, values);
 	    this.context = context;
 	    this.values = values;
@@ -64,17 +66,20 @@ public class BookingListAdapter extends ArrayAdapter<MBBooking>{
 
 	    // fill data
 	    ViewHolder holder = (ViewHolder) rowView.getTag();
-	    holder.address.setText(values.get(position).getAttribute());
-	    if(values.get(position).getDispatchedCar().equalsIgnoreCase("Complete"))
+	    holder.address.setText(values.get(position).getPickupAddress());
+	    
+	    if(values.get(position).getTripStatus()==MBDefinition.MB_STATUS_COMPLETED)
 	    {
 	    	((GradientDrawable)holder.status.getBackground()).setColor(
 	    			context.getResources().getColor(R.color.orange_light));
+	    	holder.status.setText("Completed");
 	    }
 	    else{
 	    	((GradientDrawable)holder.status.getBackground()).setColor(
 	    			context.getResources().getColor(R.color.blue_light));
+	    	holder.status.setText("Canceled");
 	    }
-	    holder.status.setText(values.get(position).getDispatchedCar());
+	    
 
 	    return rowView;
 	  }

@@ -5,10 +5,14 @@ import java.util.List;
 
 import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -44,18 +48,15 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+		List<DBBooking> values = bookingDao.queryBuilder()
+				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
+						 Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list();
+		
+		
 
-		List<MBBooking> values = new ArrayList<MBBooking>();
 
-		for (int i = 0; i < 10; i++) {
-			MBBooking mb = new MBBooking();
-			mb.setAttribute("11920 forge way");
-			if (i % 3 == 0)
-				mb.setDispatchedCar("Complete");
-			else
-				mb.setDispatchedCar("Canceled");
-			values.add(mb);
-		}
 
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
@@ -63,9 +64,9 @@ public class HistoryFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		MBBooking item = (MBBooking) getListAdapter().getItem(position);
+		DBBooking item = (DBBooking) getListAdapter().getItem(position);
 		Intent intent = new Intent(getActivity(), TripDetailActivity.class);
-		//intent.putExtra(MBDefinition.MBBOOKING, item);
+		intent.putExtra(MBDefinition.DBBOOKING_EXTRA, item);
 		startActivity(intent);
 		Toast.makeText(getActivity(), position + " selected", Toast.LENGTH_LONG).show();
 	}

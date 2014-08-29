@@ -1,6 +1,10 @@
 package com.digital.dispatch.TaxiLimoSoap.responses;
 
+import android.util.Log;
+
+
 public class JobItem {
+	private static final String TAG = "JobItem";
 	public String passengerName;
 	public String phoneNumber;
 	public String phoneExtension;
@@ -117,5 +121,45 @@ public class JobItem {
 		eta2 = e2;
 		estimateDistance = eDis;
 		jobEndDateTime = jEndTime;
+	}
+
+	
+	public static void printJobItem(JobItem jobItem){
+		
+		Log.i(TAG,"passengerName: " +jobItem.passengerName);
+		Log.i(TAG,"phoneNumber: " +jobItem.phoneNumber);
+		Log.i(TAG,"phoneExtension: " + jobItem.phoneExtension);
+		Log.i(TAG,"pickupStreetNumber: " + jobItem.pickupStreetNumber);
+		Log.i(TAG,"pickupStreetName: " + jobItem.pickupStreetName);
+		Log.i(TAG,"pickupRegion: " + jobItem.pickupRegion); 
+		Log.i(TAG,"pickupUnitNumber: " + jobItem.pickupUnitNumber);
+		Log.i(TAG,"dropoffStreetNumber: " + jobItem.dropoffStreetNumber);
+		Log.i(TAG,"dropoffStreetName: " + jobItem.dropoffStreetName);
+		Log.i(TAG,"dropoffRegion: " + jobItem.dropoffRegion);
+		Log.i(TAG,"dropoffUnitNumber: " + jobItem.dropoffUnitNumber);
+		Log.i(TAG,"dropffLandmark: " + jobItem.dropffLandmark);
+		Log.i(TAG,"accountCode: " + jobItem.accountCode);
+		Log.i(TAG,"accountName: " + jobItem.accountName);
+		Log.i(TAG,"pickupDate: " + jobItem.pickupDate);
+		Log.i(TAG,"pickupTime: " + jobItem.pickupTime);	
+		Log.i(TAG,"repPickupTime: " + jobItem.repPickupTime);
+		Log.i(TAG,"repPickupDays: " + jobItem.repPickupDays);
+		Log.i(TAG,"repStart: " + jobItem.repStart);	
+		Log.i(TAG,"repEnd: " + jobItem.repEnd);
+		Log.i(TAG,"taxi_ride_id: " + jobItem.taxi_ride_id);
+		Log.i(TAG,"bookingDateTime: " + jobItem.bookingDateTime);
+		Log.i(TAG,"tripStatus: " + jobItem.tripStatus);
+		Log.i(TAG,"adviseArrival: " + jobItem.adviseArrival);
+		Log.i(TAG,"dispatchedCar: " + jobItem.dispatchedCar);
+		Log.i(TAG,"dispatchedDriver: " + jobItem.dispatchedDriver);
+		Log.i(TAG,"carLongitude: " + jobItem.carLongitude);
+		Log.i(TAG,"carLatitude: " + jobItem.carLatitude);	
+		Log.i(TAG,"tripStatusUniformCode: " + jobItem.tripStatusUniformCode);
+		Log.i(TAG,"detailTripStatusUniformCode: " + jobItem.detailTripStatusUniformCode);	
+		Log.i(TAG,"eta1: " + jobItem.eta1);
+		Log.i(TAG,"eta2: " + jobItem.eta2);
+		Log.i(TAG,"estimateDistance: " + jobItem.estimateDistance);
+		Log.i(TAG,"jobEndDateTime: " + jobItem.jobEndDateTime);
+		Log.i(TAG, "----------------------------------------------");
 	}
 }

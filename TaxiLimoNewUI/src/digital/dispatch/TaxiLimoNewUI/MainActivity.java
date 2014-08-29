@@ -20,6 +20,8 @@ import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.History.HistoryFragment;
+import digital.dispatch.TaxiLimoNewUI.Task.GetMBParamTask;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
@@ -60,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		Logger.d(TAG, "onCreate");
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -74,8 +76,16 @@ public class MainActivity extends ActionBarActivity implements
 		setupTab();
 
 		restoreActionBar();
+		
+		new GetMBParamTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 	}
+	@Override
+	protected void onResume(){
+		super.onResume();
+		Logger.d(TAG, "onReusme");
+	}
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

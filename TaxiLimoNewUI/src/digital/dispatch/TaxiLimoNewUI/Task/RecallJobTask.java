@@ -1,0 +1,114 @@
+package digital.dispatch.TaxiLimoNewUI.Task;
+
+import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest;
+import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
+import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
+import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
+
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implements IRecallJobsResponseListener, IRequestTimerListener {
+	private static final String TAG = null;
+	private RecallJobsRequest rjReq;
+	private Context _context;
+	private String jobList;
+
+	public RecallJobTask(Context context, String jobs) {
+		_context = context;
+		jobList = jobs;
+	}
+
+	// Before running code in separate thread
+	@Override
+	protected void onPreExecute() {
+
+	}
+
+	// The code to be executed in a background thread.
+	@Override
+	protected Boolean doInBackground(String... params) {
+		try {
+
+			rjReq = new RecallJobsRequest(this, this);
+			rjReq.setSysID(params[1]);
+			rjReq.setOspVersion(MBDefinition.OSP_VERSION);
+			rjReq.setCriteria("10"); // recall by TRID
+
+			rjReq.setTaxiCompanyID(params[0]);
+
+			rjReq.setJobList(jobList); // can just concatenate into one string
+			rjReq.sendRequest(_context.getResources().getString(R.string.name_space), _context.getResources().getString(R.string.url));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	@Override
+	protected void onPostExecute(Boolean isReqSent) {
+
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		// set the current progress of the progress dialog
+		// progressDialog.setProgress(values[0]);
+	}
+
+	@Override
+	public void onResponseReady(RecallJobsResponse response) {
+		JobItem[] jobArr= response.GetList();
+		for(int i=0;i<jobArr.length;i++){
+			JobItem.printJobItem(jobArr[i]);
+		}
+		
+		TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+		fragment.parseRecallJobResponse(jobArr); 
+	}
+
+	@Override
+	public void onErrorResponse(String errorString) {
+
+		// if (!isDialogVisible) {
+		// new AlertDialog.Builder(getActivity())
+		// .setTitle(R.string.err_error_response)
+		// .setMessage(R.string.err_msg_no_response) // TODO: change to more detail error msg when come up
+		// .setPositiveButton(R.string.positive_button, null)
+		// .show();
+		// }
+
+		Logger.v(TAG, "error response: " + errorString);
+
+	}
+
+	@Override
+	public void onError() {
+
+		// if (!isDialogVisible) {
+		// new AlertDialog.Builder(getActivity())
+		// .setTitle(R.string.err_no_response_error)
+		// .setMessage(R.string.err_msg_no_response)
+		// .setPositiveButton(R.string.positive_button, null)
+		// .show();
+		// }
+
+		Logger.v(TAG, "no response");
+
+	}
+
+	@Override
+	public void onProgressUpdate(int progress) {
+
+	}
+}

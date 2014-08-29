@@ -361,10 +361,10 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 		if (streetNumber.equalsIgnoreCase("")) {
 			tv_streetNumber.requestFocus();
-			((EditText) tv_streetNumber).setError(_activity.getString(R.string.empty_street_number));
+			((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_empty_street_number));
 			if (streetName.equalsIgnoreCase("")) {
 				autoCompView.requestFocus();
-				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.empty_street_name));
+				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_empty_street_name));
 				return false;
 			}
 			return false;
@@ -565,20 +565,20 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				}
 				else{
 					if(isFromContact){
-						Utils.showErrorDialog(_activity.getString(R.string.invalid_street_number), _activity);
+						Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_number), _activity);
 					}
 					else{
 						tv_streetNumber.requestFocus();
-						((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+						((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
 					}
 				}
 			} else {
 				if(isFromContact){
-					Utils.showErrorDialog(_activity.getString(R.string.invalid_street_name), _activity);
+					Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_name), _activity);
 				}
 				else{
 					autoCompView.requestFocus();
-					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
 				}
 				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
 			}
@@ -698,21 +698,21 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				} else {
 					// Toast.makeText(_activity, "invalid street number", Toast.LENGTH_SHORT).show();
 					if(isFromContext){
-						Utils.showErrorDialog(_activity.getString(R.string.invalid_street_number), _activity);
+						Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_number), _activity);
 					}
 					else{
 						tv_streetNumber.requestFocus();
-						((EditText) tv_streetNumber).setError(_activity.getString(R.string.invalid_street_number));
+						((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
 					}
 				}
 			} else {
 				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
 				if(isFromContext){
-					Utils.showErrorDialog(_activity.getString(R.string.invalid_street_name), _activity);
+					Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_name), _activity);
 				}
 				else{
 					autoCompView.requestFocus();
-					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.invalid_street_name));
+					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
 				}
 			}
 

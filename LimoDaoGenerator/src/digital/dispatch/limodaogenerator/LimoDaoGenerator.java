@@ -53,6 +53,7 @@ public class LimoDaoGenerator {
         
         booking.addStringProperty("dispatchedCar");
         booking.addStringProperty("dispatchedTime");
+        booking.addStringProperty("dispatchedDriver");
         
         
         booking.addStringProperty("pickup_house_number");
@@ -88,6 +89,11 @@ public class LimoDaoGenerator {
         booking.addBooleanProperty("already_paid");
         booking.addBooleanProperty("multi_pay_allow");
         
+        booking.addStringProperty("company_name");
+        booking.addStringProperty("company_description");
+        booking.addStringProperty("company_phone_number");
+        booking.addStringProperty("company_icon");
+        booking.addStringProperty("company_attribute_list");
     }
 
 //    private static void addCustomerOrder(Schema schema) {
