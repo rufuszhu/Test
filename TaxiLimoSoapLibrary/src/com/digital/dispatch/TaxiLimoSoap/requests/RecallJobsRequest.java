@@ -17,7 +17,7 @@ public class RecallJobsRequest extends Request {
 	private String systemID, taxi_company_id, passengerName, phoneNumber, ospVersion;
 	private String recallTripType, recallCriteria, fromTripRsvTime, taxi_ride_id, jobList;
 	private IRecallJobsResponseListener iResponseListener = null;
-	private static String TAG = "Soap-RecallJobs";
+	private static String TAG = "Soap-RecallJobsRequest";
 	
 	public RecallJobsRequest(IRecallJobsResponseListener resListener, IRequestTimerListener timeListener) {
 		super(timeListener);
@@ -107,6 +107,7 @@ public class RecallJobsRequest extends Request {
 				    			
 							if (GlobalVar.logEnable) {
 								Log.v(TAG, "Response Error: " + e.toString());
+								e.printStackTrace();
 							}
 						}
 					}

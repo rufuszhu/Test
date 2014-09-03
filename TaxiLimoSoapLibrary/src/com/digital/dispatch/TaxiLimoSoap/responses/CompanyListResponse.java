@@ -26,7 +26,7 @@ public class CompanyListResponse extends ResponseWrapper {
 			for (int i = 0; i < properties.size(); i ++) {
 				Object item = ((PropertyInfo)properties.elementAt(i)).getValue();
 				String objName = ((PropertyInfo)properties.elementAt(i)).getName();
-				String cDestID, cName, cLogo, cDesc, cAttr, multiPay;
+				String cDestID, cName, cLogo, cDesc, cAttr, multiPay, carFile, dupChkTime, ccPayEnable, phoneNr;
 				int cLogoVersion, cBaseRate, cRatePerDist, cSysID;
 
 				if (item instanceof SoapObject) {
@@ -37,20 +37,22 @@ public class CompanyListResponse extends ResponseWrapper {
 						cDesc = checkExistAndGet((SoapObject) item, "desc");
 						cSysID = Integer.parseInt(((SoapObject) item).getProperty("mbSystemID").toString());
 						multiPay = checkExistAndGet((SoapObject) item, "multiPay");
-						//cLogoVersion = ((SoapObject) item).getProperty("logoVersion").toString();
-						//cBaseRate = ((SoapObject) item).getProperty("baseRate").toString();
-						//cRatePerDist = ((SoapObject) item).getProperty("ratePerDist").toString();
+						
+						cLogoVersion = Integer.parseInt(checkExistAndGet((SoapObject) item, "logoVersion"));
+						cBaseRate = Integer.parseInt(checkExistAndGet((SoapObject) item, "baseRate"));
+						cRatePerDist = Integer.parseInt(checkExistAndGet((SoapObject) item, "ratePerDistance"));
 						cAttr = checkExistAndGet((SoapObject) item, "attributes");
-						cLogoVersion = 0;
-						cBaseRate = 0;
-						cRatePerDist = 0;
+						carFile = checkExistAndGet((SoapObject) item, "carFile");
+						dupChkTime = checkExistAndGet((SoapObject) item, "dupChkTime");
+						ccPayEnable = checkExistAndGet((SoapObject) item, "ccPayEnable");
+						phoneNr = checkExistAndGet((SoapObject) item, "phoneNr");
 						
 						if (GlobalVar.logEnable) {
 							Log.v(TAG, "destID=" + cDestID + ", SystemID=" + cSysID + ", name=" + cName + ", logo=" + cLogo 
 									+ "\n attributes=" + cAttr + ", description=" + cDesc);
 						}
 						
-						CompanyItem ci = new CompanyItem(cDestID, cName, cLogo, cLogoVersion, cDesc, cAttr, cSysID, cBaseRate, cRatePerDist, multiPay);
+						CompanyItem ci = new CompanyItem(cDestID, cName, cLogo, cLogoVersion, cDesc, cAttr, cSysID, cBaseRate, cRatePerDist, multiPay,carFile,dupChkTime,ccPayEnable, phoneNr);
 						listOfCompany[j] = ci;
 						j++;
 					}

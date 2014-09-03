@@ -1,7 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -11,24 +13,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class AttributeItemAdapter extends BaseAdapter {
 	private Context mContext;
+	private List<DBAttribute> attrList;
 
-	public AttributeItemAdapter(Context c) {
+	public AttributeItemAdapter(Context c, List<DBAttribute> attrList) {
 		mContext = c;
+		this.attrList = attrList;
 	}
 
 	@Override
 	public int getCount() {
-		return 10;
+		return attrList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return null;
+		return attrList.get(position);
 	}
 
 	@Override
@@ -39,15 +45,21 @@ public class AttributeItemAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, final ViewGroup parent) {
 		final View view;
-		final int pos = position;
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		if (convertView == null) { // reuse it if it already exists
-			view = (View) inflater.inflate(R.layout.attribute_item, null);
-
-		} else {
-			view = (View) convertView;
-		}
+		//not reusing cause it may cause issue when attribute list change
+//		if (convertView == null) { // reuse it if it already exists
+//			view = (View) inflater.inflate(R.layout.attribute_item, null);
+//			
+//		} else {
+//			view = (View) convertView;
+//		}
+		
+		view = (View) inflater.inflate(R.layout.attribute_item, null);
+		ImageView icon = (ImageView) view.findViewById(R.id.icon);
+		TextView name = (TextView) view.findViewById(R.id.name);
+		icon.setBackgroundResource(R.drawable.ic_action_about);
+		name.setText(attrList.get(position).getName());
 
 		ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton1);
 
@@ -58,11 +70,11 @@ public class AttributeItemAdapter extends BaseAdapter {
 				for(int i = 0; i < parent.getChildCount(); i++){
 					ToggleButton toggleButton = (ToggleButton) parent.getChildAt(i).findViewById(R.id.toggleButton1);
 					if(toggleButton.isChecked()){
-						positive_IDs.add(i); 
+						positive_IDs.add(Integer.valueOf(attrList.get(i).getAttributeId())); 
 					}
 				}
 				
-				((AttributeActivity)mContext).dothis(positive_IDs);
+				((AttributeActivity)mContext).filterCompany(positive_IDs);
 				
 			}
 		});

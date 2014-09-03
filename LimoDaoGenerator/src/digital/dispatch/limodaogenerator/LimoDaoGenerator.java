@@ -20,6 +20,7 @@ public class LimoDaoGenerator {
 
         addAddress(schema);
         addJob(schema);
+        addAttribute(schema);
         new DaoGenerator().generateAll(schema, "../TaxiLimoNewUI/src-gen");
     }
 
@@ -94,6 +95,14 @@ public class LimoDaoGenerator {
         booking.addStringProperty("company_phone_number");
         booking.addStringProperty("company_icon");
         booking.addStringProperty("company_attribute_list");
+    }
+    
+    private static void addAttribute(Schema schema) {
+        Entity address = schema.addEntity("DBAttribute");
+        address.addIdProperty();
+        address.addStringProperty("attributeId");
+        address.addStringProperty("name");
+        address.addStringProperty("iconId");
     }
 
 //    private static void addCustomerOrder(Schema schema) {

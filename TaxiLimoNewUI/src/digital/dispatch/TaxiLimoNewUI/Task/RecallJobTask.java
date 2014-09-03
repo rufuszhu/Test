@@ -17,7 +17,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implements IRecallJobsResponseListener, IRequestTimerListener {
-	private static final String TAG = null;
+	private static final String TAG = "RecallJobTask";
 	private RecallJobsRequest rjReq;
 	private Context _context;
 	private String jobList;

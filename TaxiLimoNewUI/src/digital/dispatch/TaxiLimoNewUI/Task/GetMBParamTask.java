@@ -9,6 +9,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.GetMBParamResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.MGParam;
 
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -35,9 +36,7 @@ public GetMBParamTask(Context context) {
 protected Void doInBackground(String... params)  
 {
 	gMBpReq = new GetMBParamRequest(this, this);
-		
 	gMBpReq.sendRequest(_context.getString(R.string.name_space), _context.getString(R.string.url));
-	
 	return null;  
 }
 
@@ -54,10 +53,11 @@ public void onResponseReady(GetMBParamResponse response) {
 	SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_SND_MSG_DRV, paramList.getMsgToDriver());
 	SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_TIP_BUTTON1, paramList.getTip1Btn());
 	
-	for(int i=0;i<attributeList.size();i++){
-		AttributeItem item = attributeList.get(i);
-		Logger.i("id: " + item.getId() + ", icon: " + item.getAppIcon() + ", name: " + item.getName());
-	}
+//	for(int i=0;i<attributeList.size();i++){
+//		AttributeItem item = attributeList.get(i);
+//		Logger.i("id: " + item.getId() + ", icon: " + item.getAppIcon() + ", name: " + item.getName());
+//	}
+	((MainActivity)_context).saveAttributeListToDB(attributeList);
 }
 
 @Override
@@ -91,7 +91,6 @@ public void onError() {
 //        	.setPositiveButton(R.string.positive_button, alertOffListener)
 //        	.show();
 //	}
-		
 	Utils.showErrorDialog(_context.getString(R.string.err_msg_get_param), _context);
 	Logger.e(TAG, "no response");
 }

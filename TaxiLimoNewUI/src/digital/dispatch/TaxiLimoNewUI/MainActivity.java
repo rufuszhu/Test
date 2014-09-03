@@ -1,10 +1,16 @@
 package digital.dispatch.TaxiLimoNewUI;
 
+import java.util.ArrayList;
+
+import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
+import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
@@ -24,6 +31,7 @@ import digital.dispatch.TaxiLimoNewUI.Task.GetMBParamTask;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -35,8 +43,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * navigation drawer.
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-	private Address mPickupAddress;
-	private Address mDropoffAddress;
+
 
 	// Declare Tab Variable
 	private FragmentTabHost mTabHost;
@@ -78,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements
 		restoreActionBar();
 		
 		new GetMBParamTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		
 
 	}
 	@Override
@@ -98,8 +106,8 @@ public class MainActivity extends ActionBarActivity implements
 				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
 					// Logger.e("dataBundle address: " +
 					// dataBundle.getString(MBDefinition.ADDRESS));
-					setPickupAddress((Address) data.getExtras().getParcelable(
-							MBDefinition.ADDRESS));
+					Utils.mPickupAddress = (Address) data.getExtras().getParcelable(
+							MBDefinition.ADDRESS);
 					
 				}
 			}
@@ -111,14 +119,48 @@ public class MainActivity extends ActionBarActivity implements
 				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
 					// Logger.e("dataBundle address: " +
 					// dataBundle.getString(MBDefinition.ADDRESS));
-					setDropoffAddress((Address) data.getExtras().getParcelable(
-							MBDefinition.ADDRESS));
+					Utils.mDropoffAddress = (Address) data.getExtras().getParcelable(
+							MBDefinition.ADDRESS);
 					
+				}
+			}
+		}
+		else if(requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE){
+			if (resultCode == RESULT_OK) {
+				if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
+					Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
+					Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
+				}
+//				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
+//					// Logger.e("dataBundle address: " +
+//					// dataBundle.getString(MBDefinition.ADDRESS));
+//					setPickupAddress((Address) data.getExtras().getParcelable(
+//							MBDefinition.ADDRESS));
+//					
+//				}
+				if (data.getExtras().get(MBDefinition.SELECTED_ATTRIBUTE) != null) {
+					// Logger.e("dataBundle address: " +
+					// dataBundle.getString(MBDefinition.ADDRESS));
+					Utils.selected_attribute = (ArrayList<Integer>) data.getExtras().get(MBDefinition.SELECTED_ATTRIBUTE);
 				}
 			}
 		}
 	}
 
+//	public void setSelectedAttribute(ArrayList<Integer> arrayList) {
+//		selected_attribute = arrayList;
+//		Logger.e(TAG, "setSelectedAttribute");
+//	}
+//	public ArrayList<Integer> getSelectedAttribute(){
+//		return selected_attribute;
+//	}
+//	public void setSelectedCompany(CompanyItem company) {
+//		mSelectedCompany = company;
+//	}
+//	
+//	public CompanyItem getSelectedCompany() {
+//		return mSelectedCompany;
+//	}
 	private void initView() {
 		bookTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
 		trackTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
@@ -259,18 +301,33 @@ public class MainActivity extends ActionBarActivity implements
 		return mNavigationDrawerFragment;
 	}
 
-	public Address getPickupAddress() {
-		return mPickupAddress;
-	}
-	public Address getDropoffAddress() {
-		return mDropoffAddress;
-	}
-
-	public void setPickupAddress(Address mAddress) {
-		this.mPickupAddress = mAddress;
-	}
-	public void setDropoffAddress(Address mAddress) {
-		this.mDropoffAddress = mAddress;
+//	public Address getPickupAddress() {
+//		return mPickupAddress;
+//	}
+//	public Address getDropoffAddress() {
+//		return mDropoffAddress;
+//	}
+//
+//	public void setPickupAddress(Address mAddress) {
+//		this.mPickupAddress = mAddress;
+//	}
+//	public void setDropoffAddress(Address mAddress) {
+//		this.mDropoffAddress = mAddress;
+//	}
+//	public ArrayList<AttributeItem> getAttributeList() {
+//		return attributeList;
+//	}
+	//called from getMBParamTask
+	public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
+		Utils.attributeList = attributeList;
+		DaoManager daoManager = DaoManager.getInstance(this);
+		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_WRITE);
+		attributeDao.deleteAll();
+		for(int i=0; i < attributeList.size();i++){
+			AttributeItem item = attributeList.get(i);
+			DBAttribute dbattr = new DBAttribute(null, item.getId(), item.getName(), item.getAppIcon());
+			attributeDao.insert(dbattr);
+		}
 	}
 
 	// @Override
