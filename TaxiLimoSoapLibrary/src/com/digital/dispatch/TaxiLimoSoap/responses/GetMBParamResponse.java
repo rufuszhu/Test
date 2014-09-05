@@ -39,7 +39,6 @@ public class GetMBParamResponse extends ResponseWrapper {
 		attributeList = new ArrayList<AttributeItem>();
 		try {
 			paramHM = new HashMap<String, String>();
-			//errCode = Integer.parseInt(this.getProperty("errorCode").toString());
 			for (int i = 0; i < properties.size(); i ++) {
 				Object item = ((PropertyInfo)properties.elementAt(i)).getValue();
 				String objName = ((PropertyInfo)properties.elementAt(i)).getName();
@@ -68,11 +67,9 @@ public class GetMBParamResponse extends ResponseWrapper {
 				}
 			}
 			
-			
 			params = new MGParam(null, null, paramHM.get(SND_MSG_DRV), 
 					paramHM.get(DROP_OFF_MANDATORY), paramHM.get(MULTI_BOOK_ALLOWED), paramHM.get(SAME_LOG_BOOK_ALLOWED),
 					null, null, paramHM.get(TIP_BUTTON1), paramHM.get(PAYMENT_TMOUT));	
-
 		}
 		catch (Exception e) {
 			if (GlobalVar.logEnable) {

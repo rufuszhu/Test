@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.DaoManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DaoMaster;
 import digital.dispatch.TaxiLimoNewUI.DaoSession;
@@ -44,6 +45,14 @@ public class DaoManager {
         DaoSession daoSession = daoMaster.newSession();
         DBBookingDao dbBookingDao = daoSession.getDBBookingDao();
         return dbBookingDao;
+    }
+    
+    public DBAttributeDao getDBAttributeDao(int type) {
+        SQLiteDatabase db = getDB(type);
+        DaoMaster daoMaster = new DaoMaster(db);
+        DaoSession daoSession = daoMaster.newSession();
+        DBAttributeDao dbAttributeDao = daoSession.getDBAttributeDao();
+        return dbAttributeDao;
     }
 
     public static synchronized DaoManager getInstance(Context context) {

@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- Maps API needs OpenGL ES 2.0. -->
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -87,8 +88,16 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name="digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity"
+            android:name=".History.TripDetailActivity"
             android:label="@string/title_activity_trip_detail"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
+        </activity>
+        <activity
+            android:name="digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity"
+            android:label="@string/title_activity_tracking_map"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

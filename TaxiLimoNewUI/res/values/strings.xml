@@ -40,14 +40,12 @@
     <string name="err_empty_street_number">Street number can\'t\nbe Empty</string>
     <string name="err_empty_street_name">Street name can\'t be Empty</string>
     <string name="err_no_multiple_booking">You already have one active booking</string>
-    <string name="err_msg_book_req_area_not_bookable">
-        Address is not within the taxi company\'s service area. Please choose a different address.        
-    </string>
+    <string name="err_msg_book_req_area_not_bookable">        Address is not within the taxi company\'s service area. Please choose a different address.        </string>
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
     <string name="err_msg_get_param">Unable to connect to server. \nPlease try again in a few minutes.</string>
-    
+
     <!-- messages -->
     <string name="message_cancel_successful">The job was successfully canceled</string>
     <string name="message_book_successful">The job was successfully booked</string>
@@ -90,5 +88,6 @@
     <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.</string>
     <string name="title_activity_attribute">Vehicle Attributes</string>
     <string name="title_activity_trip_detail">Trip Detail</string>
+    <string name="title_activity_tracking_map">TrackingMapActivity</string>
 
 </resources>

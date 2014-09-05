@@ -54,10 +54,6 @@ public class HistoryFragment extends ListFragment {
 				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
 						 Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list();
 		
-		
-
-
-
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
 	}

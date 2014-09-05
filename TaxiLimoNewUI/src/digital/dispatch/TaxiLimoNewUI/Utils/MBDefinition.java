@@ -1,10 +1,17 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
+
+import android.util.SparseIntArray;
+import digital.dispatch.TaxiLimoNewUI.R;
+
 //this class is for global constant
 public class MBDefinition {
 	
 	public final static String OSP_VERSION= "3.0";
 	
 	public final static String ADDRESS = "ADDRESS";
+	public final static String COMPANY_ITEM = "COMPANY_ITEM";
+	public final static String SELECTED_ATTRIBUTE = "SELECTED_ATTRIBUTE";
+	
 	public final static String ADDRESSBAR_TEXT_EXTRA= "ADDRESSBAR_TEXT_EXTRA";
 	public final static String IS_DESTINATION= "IS_DESTINATION";
 	public final static String DBBOOKING_EXTRA= "DBBOOKING";
@@ -12,6 +19,7 @@ public class MBDefinition {
 	public final static int DRIVER_NOTE_MAX_LENGTH = 256;
 	public final static int REQUEST_PICKUPADDRESS_CODE = 2;
 	public final static int REQUEST_DROPOFFADDRESS_CODE = 3;
+	public final static int REQUEST_COMPANYITEM_CODE = 4;
 	public static final String[] SPECIAL_CHAR_TO_REMOVE = new String[] {"%", "[", "]", "<", ">", "\\"};
 	
 	public static final int FUTURE_BOOKING_RANGE = 14;
@@ -45,4 +53,13 @@ public class MBDefinition {
 	public static String SHARE_SAME_LOG_BOOK_ALLOWED = "C_MB_SAME_LOC_BK_ALW";
 	public static String SHARE_TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
 	public static String SHARE_PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
+	
+	public static final SparseIntArray attrIconMap;
+    static {
+    	SparseIntArray  aMap = new SparseIntArray();
+        
+        aMap.put(1, R.drawable.attr_van);
+        aMap.put(2, R.drawable.attr_wheelchair);
+        attrIconMap = aMap;
+    }
 }

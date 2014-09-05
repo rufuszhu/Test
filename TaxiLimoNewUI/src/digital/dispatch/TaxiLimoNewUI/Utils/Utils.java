@@ -10,15 +10,20 @@ import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
 
+import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
+import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Address;
 import android.os.Build;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +37,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
@@ -41,6 +48,11 @@ public class Utils {
 	public static String driverNoteString = "";
 	public static Date pickupDate;
 	public static Date pickupTime;
+	public static Address mPickupAddress;
+	public static Address mDropoffAddress;
+	public static ArrayList<AttributeItem> attributeList;
+	public static CompanyItem mSelectedCompany;
+	public static ArrayList<Integer> selected_attribute;
 
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
 	public static int[] iconNavigation = new int[] { R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about };
@@ -50,7 +62,6 @@ public class Utils {
 		String[] titulos = context.getResources().getStringArray(R.array.nav_menu_items);
 		return titulos[posicao];
 	}
-
 
 	/**
 	 * Uses static final constants to detect if the device's platform version is Gingerbread or later.
@@ -101,8 +112,6 @@ public class Utils {
 		dates.setWheelForeground(R.drawable.wheel_val_holo);
 
 		dates.setShadowColor(transparent, transparent, transparent);
-		
-		
 
 		times.setVisibleItems(5); // Number of items
 		times.setWheelBackground(R.drawable.wheel_bg_holo);
@@ -114,15 +123,14 @@ public class Utils {
 		final DateAdapter timeNotTodayAdapter = new DateAdapter(context, !isDate, setupTimeList(!isToday));
 		dates.setViewAdapter(dateAdapter);
 		dates.setCurrentItem(dateAdapter.getIndexOfDate(pickupDate));
-		//if today
-		if(pickupDate == null || pickupDate.getDate()== Calendar.getInstance().getTime().getDate()){
+		// if today
+		if (pickupDate == null || pickupDate.getDate() == Calendar.getInstance().getTime().getDate()) {
 			times.setViewAdapter(timeTodayAdapter);
 			times.setCurrentItem(timeTodayAdapter.getIndexOfTime(pickupTime));
-		}else{
+		} else {
 			times.setViewAdapter(timeNotTodayAdapter);
 			times.setCurrentItem(timeNotTodayAdapter.getIndexOfTime(pickupTime));
 		}
-
 
 		final OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
 			@Override
@@ -166,12 +174,11 @@ public class Utils {
 				else {
 					int dateIndex = dates.getCurrentItem();
 					int timeIndex = times.getCurrentItem();
-					
-					if(dates.getCurrentItem()==0){
+
+					if (dates.getCurrentItem() == 0) {
 						pickupTime = timeTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeTodayAdapter.getItemText(times.getCurrentItem()));
-					}
-					else{
+					} else {
 						pickupTime = timeNotTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeNotTodayAdapter.getItemText(times.getCurrentItem()));
 					}
@@ -200,6 +207,29 @@ public class Utils {
 			cal.add(Calendar.DATE, 1);
 		}
 		return dateList;
+	}
+
+	public static void showOption(LinearLayout ll_attr, String[] attrs, Context context, int marginRight) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		ll_attr.removeAllViews();
+		for (int i = 0; i < attrs.length; i++) {
+			if (!attrs[i].equalsIgnoreCase("")) {
+				DaoManager daoManager = DaoManager.getInstance(context);
+				DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
+				String iconId = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attrs[i])).list().get(0).getIconId();
+				if (!iconId.equalsIgnoreCase("")) {
+					ImageView attr = new ImageView(context);
+					attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
+					int dimens = (int) (30 * scale + 0.5f);
+					int margin_right = (int) (marginRight * scale + 0.5f);
+					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
+					layoutParams.setMargins(0, 0, margin_right, 0);
+					// setting image position
+					attr.setLayoutParams(layoutParams);
+					ll_attr.addView(attr);
+				}
+			}
+		}
 	}
 
 	private static ArrayList<Date> setupTimeList(boolean isToday) {
@@ -240,7 +270,6 @@ public class Utils {
 		}
 		return currentTimeIndex;
 	}
-	
 
 	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
 		final EditText driverMessage;

@@ -2,6 +2,7 @@ package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -33,11 +34,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -53,6 +56,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
@@ -61,6 +65,7 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
+import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
@@ -83,7 +88,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private TextView textNote;
 	private TextView text_pickup;
 	private TextView address_bar_text;
-	private Address currentAddress;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -123,6 +127,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
+		setupCompany();
 		Utils.setNoteIndication(getActivity(), textNote);
 
 		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
@@ -166,14 +171,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		});
 
-		TextView attribute = (TextView) view.findViewById(R.id.attribute);
-		attribute.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), AttributeActivity.class);
-				startActivity(intent);
-			}
-		});
-
 		LinearLayout destination = (LinearLayout) view.findViewById(R.id.destination_button);
 		destination.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -193,21 +190,34 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			public void onClick(View v) {
 				DaoManager daoManager = DaoManager.getInstance(getActivity());
 				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+				CompanyItem selectedCompany = Utils.mSelectedCompany;
 				if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
+				} else if (selectedCompany == null) {
+					// get into select company page
 				} else {
 					DBBooking mbook = new DBBooking();
-					mbook.setDestID("2");
+
+					mbook.setCompany_attribute_list(selectedCompany.attributes);
+					mbook.setCompany_description(selectedCompany.description);
+					mbook.setCompany_icon(selectedCompany.logo);
+					mbook.setCompany_name(selectedCompany.name);
+					mbook.setCompany_phone_number(selectedCompany.phoneNr);
+					mbook.setDestID(selectedCompany.destID);
+					mbook.setSysId(String.valueOf(selectedCompany.systemID));
+					
+					
+					mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
+
 					mbook.setMulti_pay_allow(true);
 					setUpPickupAddress(mbook);
 					setUpDropoffAddress(mbook);
-					mbook.setSysId("102");
 					mbook.setRemarks(Utils.driverNoteString);
-					//if pick up time not spcify,
+					// if pick up time not spcify,
 					if (text_pickup.getText().toString().equalsIgnoreCase("now") || Utils.pickupDate == null || Utils.pickupTime == null) {
-//						Calendar cal = Calendar.getInstance();
-//						SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
-//						mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
+						// Calendar cal = Calendar.getInstance();
+						// SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+						// mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
 					} else {
 						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 						SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
@@ -219,13 +229,62 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 						mbook.setPickup_time(date + " " + time);
 					}
 
-					Logger.e(mbook.getPickup_time());
+					Logger.e(TAG, "pickup time: " + mbook.getPickup_time());
 
 					new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 				}
 			}
 		});
 		return view;
+	}
+
+	private String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
+		String temp = "";
+		for(int i =0 ; i< selectedAttribute.size() ;i++){
+			String attrid = selectedAttribute.get(i)+"";
+			temp += attrid + ",";
+		}
+		if (!temp.equalsIgnoreCase("")) {
+			temp = temp.substring(0, temp.length() - 1);
+		}
+		return temp;
+	}
+
+	private void setupCompany() {
+		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
+		LinearLayout attribute_not_selected = (LinearLayout) view.findViewById(R.id.attribute_not_selected);
+		if (Utils.mSelectedCompany != null) {
+			CompanyItem item = Utils.mSelectedCompany;
+			attribute.setVisibility(View.VISIBLE);
+			attribute_not_selected.setVisibility(View.GONE);
+			attribute.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(), AttributeActivity.class);
+					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+				}
+			});
+
+			ImageView iv_company_icon = (ImageView) view.findViewById(R.id.iv_company_icon);
+			TextView tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);
+			tv_company_name.setText(item.name);
+			String prefixURL = getActivity().getString(R.string.url);
+			prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+			// String[] locArray = item.logo.split("/");
+			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new DownloadImageTask(iv_company_icon).execute(prefixURL + item.logo);
+		}
+		// if no company selected, call getCompanyList Request
+		else {
+			attribute.setVisibility(View.GONE);
+			attribute_not_selected.setVisibility(View.VISIBLE);
+			attribute_not_selected.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(), AttributeActivity.class);
+					//intent.putExtra(MBDefinition.ADDRESS, currentAddress);
+					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+				}
+			});
+		}
 	}
 
 	@Override
@@ -235,6 +294,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		setUpMapIfNeeded();
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
+
+		setupCompany();
 	}
 
 	@Override
@@ -247,20 +308,17 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	private void setUpPickupAddress(DBBooking mbook) {
-		mbook.setPickup_district(currentAddress.getLocality());
+		mbook.setPickup_district(Utils.mPickupAddress.getLocality());
 
-		mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(currentAddress));
-		mbook.setPickup_latitude(currentAddress.getLatitude());
-		mbook.setPickup_longitude(currentAddress.getLongitude());
-		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(currentAddress));
-		mbook.setPickupAddress(LocationUtils.addressToString(getActivity(), currentAddress));
-		Logger.e("setPickup_district: " + currentAddress.getLocality());
-		Logger.e("Pickup_house_number: " + AddressDaoManager.getHouseNumberFromAddress(currentAddress));
-		Logger.e("Pickup_street_name: " + AddressDaoManager.getStreetNameFromAddress(currentAddress));
+		mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress));
+		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
+		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
+		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
+		mbook.setPickupAddress(LocationUtils.addressToString(getActivity(), Utils.mPickupAddress));
 	}
 
 	private void setUpDropoffAddress(DBBooking mbook) {
-		Address ad = ((MainActivity) getActivity()).getDropoffAddress();
+		Address ad = Utils.mDropoffAddress;
 		if (ad != null) {
 			mbook.setDropoff_district(ad.getLocality());
 			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
@@ -336,12 +394,15 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public void onConnected(Bundle arg0) {
 		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
 
-		Address address = ((MainActivity) getActivity()).getPickupAddress();
+		Address address = Utils.mPickupAddress;
 		if (address != null) {
 			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
 			}
+//			boolean isFromBooking = true;
+//			new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			setupCompany();
 		} else {
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
@@ -363,16 +424,14 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-
 		// when should I reset this????
-		((MainActivity) getActivity()).setPickupAddress(null);
+		//((MainActivity) getActivity()).setPickupAddress(null);
 		// LatLng cameraTarget = mMap.getCameraPosition().target;
 		Location location = new Location("");
 		location.setLatitude(cameraPosition.target.latitude);
 		location.setLongitude(cameraPosition.target.longitude);
 
 		getAddress(location);
-
 	}
 
 	@Override
@@ -531,7 +590,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 				// Get the first address
 				Address address = addresses.get(0);
-				currentAddress = address;
+				Utils.mPickupAddress = address;
 				return LocationUtils.addressToString(getActivity(), address);
 
 				// If there aren't any addresses, post a message

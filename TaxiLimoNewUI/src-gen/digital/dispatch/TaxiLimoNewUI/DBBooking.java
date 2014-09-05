@@ -6,13 +6,9 @@ import java.io.Serializable;
 /**
  * Entity mapped to table DBBOOKING.
  */
-public class DBBooking implements Serializable {
+public class DBBooking implements Serializable{
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6112202360439911976L;
-	private Long id;
+    private Long id;
     private String destID;
     private Integer taxi_ride_id;
     private String ride_id;

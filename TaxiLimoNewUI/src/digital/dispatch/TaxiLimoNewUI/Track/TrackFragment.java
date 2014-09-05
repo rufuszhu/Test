@@ -9,6 +9,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 
 import de.greenrobot.dao.query.CloseableListIterator;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
@@ -16,15 +17,20 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
+import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,7 +42,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -97,7 +106,6 @@ public class TrackFragment extends Fragment{
 	public void onPause() {
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
-
 	}
 
 	@Override
@@ -116,13 +124,14 @@ public class TrackFragment extends Fragment{
 	}
 
 	public void parseRecallJobResponse(JobItem[] jobArr) {
-		Logger.i("parseRecallJobResponse");
+		Logger.i(TAG, "parseRecallJobResponse");
 		JobItem job = jobArr[0];
 		final DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(job.taxi_ride_id)).list().get(0);
 		
 		View.OnClickListener cancelListener = new View.OnClickListener() {
 			public void onClick(View v) {
 				// change the status to cancelled in our database if no matter what
+				Logger.e(TAG,"cancel btn clicked");
 				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
 				dbBook.setTripCancelledTime(System.currentTimeMillis() + "");
 				
@@ -137,11 +146,13 @@ public class TrackFragment extends Fragment{
 		};
 		View.OnClickListener tracklListener = new View.OnClickListener() {
 			public void onClick(View v) {
-				
+				Intent intent = new Intent(getActivity(), TrackingMapActivity.class);
+				intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
+				startActivity(intent);
 			}
 		};
-
-		LinearLayout received_button = (LinearLayout) rootView.findViewById(R.id.received_buttons);
+		
+		LinearLayout received_cancel_button = (LinearLayout) rootView.findViewById(R.id.received_cancel_button);
 		LinearLayout dispatched_buttons = (LinearLayout) rootView.findViewById(R.id.dispatched_buttons);
 		LinearLayout arrived_buttons = (LinearLayout) rootView.findViewById(R.id.arrived_buttons);
 		
@@ -151,6 +162,7 @@ public class TrackFragment extends Fragment{
 		LinearLayout arrived_cancel_btn = (LinearLayout) rootView.findViewById(R.id.arrived_cancel_btn);
 		LinearLayout arrived_pay_btn = (LinearLayout) rootView.findViewById(R.id.arrived_pay_btn);
 		
+		
 		TableRow vehicle_row = (TableRow) rootView.findViewById(R.id.vehicle_row);
 		TableRow driver_row = (TableRow) rootView.findViewById(R.id.driver_row);
 		
@@ -159,25 +171,58 @@ public class TrackFragment extends Fragment{
 		TextView tv_from = (TextView) rootView.findViewById(R.id.tv_pickup_address);
 		TextView tv_to = (TextView) rootView.findViewById(R.id.tv_dropoff_address);
 		TextView tv_vehicle = (TextView) rootView.findViewById(R.id.tv_vehicle);
+		TextView tv_company_name = (TextView) rootView.findViewById(R.id.tv_company_name);
+		TextView tv_company_description = (TextView) rootView.findViewById(R.id.tv_company_description);
 		TextView tv_driver = (TextView) rootView.findViewById(R.id.tv_driver);
-
 		
+		Button call_btn = (Button) rootView.findViewById(R.id.call_btn);
+		call_btn.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + dbBook.getCompany_phone_number()));
+				startActivity(intent);
+			}
+			
+		});
+		
+		ImageView iv_company_icon = (ImageView) rootView.findViewById(R.id.iv_company_icon);
+		
+		tv_id.setText(dbBook.getTaxi_ride_id()+"");
+		tv_receive.setText(dbBook.getTripCreationTime());
+		tv_from.setText(dbBook.getPickupAddress());
+		
+		if(dbBook.getDropoffAddress()!= null && dbBook.getDropoffAddress().length()>0)
+			tv_to.setText(dbBook.getDropoffAddress());
+		else
+			tv_to.setText("Not Given");
+		
+		String prefixURL = getActivity().getString(R.string.url);
+		prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+		new DownloadImageTask(iv_company_icon).execute(prefixURL + dbBook.getCompany_icon());
+
+		tv_company_name.setText(dbBook.getCompany_name());
+		tv_company_description.setText(dbBook.getCompany_description());
+
+		LinearLayout ll_attr = (LinearLayout) rootView.findViewById(R.id.ll_attr);
+		if(dbBook.getAttributeList()!=null)
+			Utils.showOption(ll_attr,dbBook.getAttributeList().split(","), getActivity(), 0);
 
 		switch (Integer.parseInt(job.tripStatusUniformCode)) {
 			case MBDefinition.TRIP_STATUS_BOOKED:	
 			case MBDefinition.TRIP_STATUS_DISPATCHING:
-				received_button.setVisibility(View.VISIBLE);
+				received_cancel_button.setVisibility(View.VISIBLE);
 				dispatched_buttons.setVisibility(View.GONE);
 				arrived_buttons.setVisibility(View.GONE);
 				
-				received_button.setOnClickListener(cancelListener);
+				received_cancel_button.setOnClickListener(cancelListener);
 				
 				vehicle_row.setVisibility(View.GONE);
 				driver_row.setVisibility(View.GONE);
 				break;
 			case  MBDefinition.TRIP_STATUS_ACCEPTED:
 				dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
-				received_button.setVisibility(View.GONE);
+				received_cancel_button.setVisibility(View.GONE);
 				dispatched_buttons.setVisibility(View.VISIBLE);
 				arrived_buttons.setVisibility(View.GONE);	
 				
@@ -197,7 +242,7 @@ public class TrackFragment extends Fragment{
 				break;
 			case MBDefinition.TRIP_STATUS_ARRIVED:
 				dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
-				received_button.setVisibility(View.GONE);
+				received_cancel_button.setVisibility(View.GONE);
 				dispatched_buttons.setVisibility(View.GONE);
 				arrived_buttons.setVisibility(View.VISIBLE);
 				
@@ -216,24 +261,8 @@ public class TrackFragment extends Fragment{
 			 default:
 				 break;
 		}
-
-		
-		tv_id.setText(dbBook.getTaxi_ride_id()+"");
-		Logger.i(dbBook.getTaxi_ride_id()+"");
-		
-		tv_receive.setText(dbBook.getTripCreationTime());
-		Logger.i(dbBook.getTripCreationTime());
-		
-		tv_from.setText(dbBook.getPickupAddress());
-		
-		if(dbBook.getDropoffAddress()!= null && dbBook.getDropoffAddress().length()>0)
-			tv_to.setText(dbBook.getDropoffAddress());
-		else
-			tv_to.setText("Not Given");
-		
-		
 	}
-
+	
 	private void startRecallJobTask() {
 		ArrayList<Pair<String, String>> pairList = getUniqueActiveJobDestIdList();
 		for (int i = 0; i < pairList.size(); i++) {
@@ -241,7 +270,8 @@ public class TrackFragment extends Fragment{
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.e("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			new RecallJobTask(getActivity(), jobList).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
+			boolean isGetLatLngOnly = false;
+			new RecallJobTask(getActivity(), jobList, isGetLatLngOnly).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
 		}
 		if(pairList.size()==0){
 			LinearLayout trip_detail_table = (LinearLayout) rootView.findViewById(R.id.trip_detail_table);

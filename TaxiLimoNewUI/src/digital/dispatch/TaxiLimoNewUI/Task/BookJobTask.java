@@ -150,7 +150,13 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			DaoManager daoManager = DaoManager.getInstance(_context);
 			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 			bookingDao.insert(mbook);
-			
+			//clean up
+			Utils.driverNoteString = "";
+			Utils.pickupDate = null;
+			Utils.pickupTime = null;
+			Utils.mSelectedCompany = null;
+			Utils.mDropoffAddress = null;
+			Utils.mPickupAddress = null;
 			Utils.showErrorDialog(_context.getString(R.string.message_book_successful), _context);
 			Logger.e(TAG, "ride id: " + mbook.getTaxi_ride_id());
 			Logger.e(TAG, "create time: " + mbook.getTripCreationTime());
@@ -216,12 +222,10 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				// .create()
 				// .show();
 				// break;
-				Logger.e(TAG, "4");
 				break;
 			default:
 				// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
 				Utils.showErrorDialog(_context.getString(R.string.booking_failed_generic_msg), _context);
-				Logger.e(TAG, "5");
 
 				break;
 			}
