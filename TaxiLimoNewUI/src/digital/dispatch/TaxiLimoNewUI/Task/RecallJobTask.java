@@ -5,11 +5,13 @@ import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsR
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
+import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
@@ -21,10 +23,12 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	private RecallJobsRequest rjReq;
 	private Context _context;
 	private String jobList;
+	private Boolean getLatLngOnly;
 
-	public RecallJobTask(Context context, String jobs) {
+	public RecallJobTask(Context context, String jobs, Boolean getLatLngOnly) {
 		_context = context;
 		jobList = jobs;
+		this.getLatLngOnly = getLatLngOnly;
 	}
 
 	// Before running code in separate thread
@@ -72,9 +76,14 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		for(int i=0;i<jobArr.length;i++){
 			JobItem.printJobItem(jobArr[i]);
 		}
-		
-		TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
-		fragment.parseRecallJobResponse(jobArr); 
+		if(getLatLngOnly){
+			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
+			((TrackingMapActivity)_context).updateCarMarker(carLatLng);
+		}
+		else{
+			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+			fragment.parseRecallJobResponse(jobArr); 
+		}
 	}
 
 	@Override

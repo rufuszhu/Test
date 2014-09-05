@@ -47,9 +47,7 @@ public class AttributeActivity extends ActionBarActivity {
 		
 		//mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
 
-		DaoManager daoManager = DaoManager.getInstance(this);
-		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
+		
 
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
@@ -64,8 +62,7 @@ public class AttributeActivity extends ActionBarActivity {
 				finishWithData(position);
 			}
 		});
-		GridView gridview = (GridView) findViewById(R.id.gridview);
-		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+		
 
 //		gridview.setOnItemClickListener(new OnItemClickListener() {
 //			@Override
@@ -136,16 +133,22 @@ public class AttributeActivity extends ActionBarActivity {
 			lv_company.setAdapter(cp_adapter);
 		}
 	}
-
+	//called from getCompanyListResponse, load attribute grid here to prevent user filter before get company request is done
 	public void loadCompanyList(CompanyItem[] tempCompList) {
 		companyArr = tempCompList;
 
 		for (int i = 0; i < tempCompList.length; i++) {
 			CompanyItem.printCompanyItem(tempCompList[i]);
 		}
+		
+		DaoManager daoManager = DaoManager.getInstance(this);
+		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
+		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
+		
+		GridView gridview = (GridView) findViewById(R.id.gridview);
+		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+		
 		filterCompany(new ArrayList<Integer>());
-//		cp_adapter = new CompanyListAdapter(this, tempCompList);
-//		lv_company.setAdapter(cp_adapter);
 	}
 
 }

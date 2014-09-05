@@ -17,6 +17,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
@@ -105,7 +106,6 @@ public class TrackFragment extends Fragment{
 	public void onPause() {
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
-
 	}
 
 	@Override
@@ -146,7 +146,9 @@ public class TrackFragment extends Fragment{
 		};
 		View.OnClickListener tracklListener = new View.OnClickListener() {
 			public void onClick(View v) {
-				
+				Intent intent = new Intent(getActivity(), TrackingMapActivity.class);
+				intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
+				startActivity(intent);
 			}
 		};
 		
@@ -175,7 +177,6 @@ public class TrackFragment extends Fragment{
 		
 		Button call_btn = (Button) rootView.findViewById(R.id.call_btn);
 		call_btn.setOnClickListener(new OnClickListener(){
-
 			@Override
 			public void onClick(View arg0) {
 				
@@ -269,7 +270,8 @@ public class TrackFragment extends Fragment{
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.e("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			new RecallJobTask(getActivity(), jobList).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
+			boolean isGetLatLngOnly = false;
+			new RecallJobTask(getActivity(), jobList, isGetLatLngOnly).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
 		}
 		if(pairList.size()==0){
 			LinearLayout trip_detail_table = (LinearLayout) rootView.findViewById(R.id.trip_detail_table);

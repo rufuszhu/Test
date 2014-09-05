@@ -424,7 +424,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-
 		// when should I reset this????
 		//((MainActivity) getActivity()).setPickupAddress(null);
 		// LatLng cameraTarget = mMap.getCameraPosition().target;
@@ -433,7 +432,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		location.setLongitude(cameraPosition.target.longitude);
 
 		getAddress(location);
-
 	}
 
 	@Override

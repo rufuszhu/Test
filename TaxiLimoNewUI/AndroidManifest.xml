@@ -96,7 +96,7 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name=".TrackingMapActivity"
+            android:name="digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity"
             android:label="@string/title_activity_tracking_map"
             android:parentActivityName=".MainActivity" >
             <meta-data
