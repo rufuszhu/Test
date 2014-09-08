@@ -54,7 +54,7 @@ public class AttributeActivity extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //				Intent returnIntent = new Intent();
-//				Logger.e("selectinging company: " + cp_adapter.getCompanyItem(position).name);
+//				Logger.e("selecting company: " + cp_adapter.getCompanyItem(position).name);
 //				returnIntent.putExtra(MBDefinition.COMPANY_ITEM, cp_adapter.getCompanyItem(position));
 //				returnIntent.putExtra(MBDefinition.ADDRESS, mAddress);
 //				setResult(RESULT_OK, returnIntent);
@@ -85,7 +85,7 @@ public class AttributeActivity extends ActionBarActivity {
 	//override android back button
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK ) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
 	    	finishWithData(null);
 	    	return true;
 	    }

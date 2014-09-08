@@ -246,8 +246,6 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		pickupMarker = mMap.addMarker(new MarkerOptions()
         .position(pickupLatLng)
         .draggable(false));
-		
-		
 	}
 
 	@Override

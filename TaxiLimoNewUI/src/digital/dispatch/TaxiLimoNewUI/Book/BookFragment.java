@@ -88,6 +88,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private TextView textNote;
 	private TextView text_pickup;
 	private TextView address_bar_text;
+	
+	private String oldDistrict;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -127,7 +129,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		setupCompany();
+		//setupCompanyUI();
 		Utils.setNoteIndication(getActivity(), textNote);
 
 		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
@@ -250,7 +252,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		return temp;
 	}
 
-	private void setupCompany() {
+	private void setupCompanyUI() {
 		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
 		LinearLayout attribute_not_selected = (LinearLayout) view.findViewById(R.id.attribute_not_selected);
 		if (Utils.mSelectedCompany != null) {
@@ -295,7 +297,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
 
-		setupCompany();
+		setupCompanyUI();
 	}
 
 	@Override
@@ -402,7 +404,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 //			boolean isFromBooking = true;
 //			new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			setupCompany();
+			//setupCompanyUI();
 		} else {
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
@@ -591,6 +593,20 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
+				if(oldDistrict==null){
+					oldDistrict = address.getLocality();
+					boolean isFromBooking = true;
+					new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+				}
+				else{
+					//only call if district changes
+					if(!oldDistrict.equalsIgnoreCase(address.getLocality())){
+						Utils.mSelectedCompany = null;
+						oldDistrict= address.getLocality();
+						boolean isFromBooking = true;
+						new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+					}
+				}
 				return LocationUtils.addressToString(getActivity(), address);
 
 				// If there aren't any addresses, post a message
@@ -606,6 +622,24 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		protected void onPostExecute(String address) {
 			address_bar_text.setText(address);
 		}
+	}
+
+	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
+		if(tempCompList.length==0){
+			//show no available company;
+			Logger.e("No company available in " + city);
+			setupCompanyUI();
+		}
+		else if(tempCompList.length==1){
+			Utils.mSelectedCompany = tempCompList[0];
+			setupCompanyUI();
+		}
+		else{
+			//show please choose a company
+			Logger.e(tempCompList.length + " companies available in " + city);
+			setupCompanyUI();
+		}
+		
 	}
 
 }
