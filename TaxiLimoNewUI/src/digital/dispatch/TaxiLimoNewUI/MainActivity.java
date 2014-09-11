@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		restoreActionBar();
 		
-		new GetMBParamTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		
 		
 
 	}
@@ -167,8 +167,7 @@ public class MainActivity extends ActionBarActivity implements
 		historyTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
 		bookImageView = (ImageView) bookTabView.findViewById(R.id.tab_icon);
 		trackImageView = (ImageView) trackTabView.findViewById(R.id.tab_icon);
-		historyImageView = (ImageView) historyTabView
-				.findViewById(R.id.tab_icon);
+		historyImageView = (ImageView) historyTabView.findViewById(R.id.tab_icon);
 	}
 
 	private void setupTab() {
@@ -178,17 +177,17 @@ public class MainActivity extends ActionBarActivity implements
 		mTabHost.addTab(
 				mTabHost.newTabSpec(BOOK_TAB).setIndicator(
 						getTabIndicator(this, bookImageView, bookTabView,
-								R.string.book, R.drawable.ic_action_refresh)),
+								R.string.book, R.drawable.tab_book_icon_selected)),
 				BookFragment.class, null);
 		mTabHost.addTab(
 				mTabHost.newTabSpec(TRACK_TAB).setIndicator(
 						getTabIndicator(this, trackImageView, trackTabView,
-								R.string.track, R.drawable.ic_action_event)),
+								R.string.track, R.drawable.tab_track_icon)),
 				TrackFragment.class, null);
 		mTabHost.addTab(
 				mTabHost.newTabSpec(HISTORY_TAB).setIndicator(
 						getTabIndicator(this, historyImageView, historyTabView,
-								R.string.history, R.drawable.ic_action_event)),
+								R.string.history, R.drawable.tab_history_icon)),
 				HistoryFragment.class, null);
 		// mTabHost.setCurrentTab(currentTab);
 		mTabHost.setOnTabChangedListener(new FragmentTabHost.OnTabChangeListener() {
@@ -212,19 +211,19 @@ public class MainActivity extends ActionBarActivity implements
 	public void restoreTab() {
 		switch (mTabHost.getCurrentTab()) {
 		case 0:
-			bookImageView.setImageResource(R.drawable.ic_action_refresh);
-			trackImageView.setImageResource(R.drawable.ic_action_event);
-			historyImageView.setImageResource(R.drawable.ic_action_event);
+			bookImageView.setImageResource(R.drawable.tab_book_icon_selected);
+			trackImageView.setImageResource(R.drawable.tab_track_icon);
+			historyImageView.setImageResource(R.drawable.tab_history_icon);
 			break;
 		case 1:
-			bookImageView.setImageResource(R.drawable.ic_action_event);
-			trackImageView.setImageResource(R.drawable.ic_action_refresh);
-			historyImageView.setImageResource(R.drawable.ic_action_event);
+			bookImageView.setImageResource(R.drawable.tab_book_icon);
+			trackImageView.setImageResource(R.drawable.tab_track_icon_selected);
+			historyImageView.setImageResource(R.drawable.tab_history_icon);
 			break;
 		case 2:
-			bookImageView.setImageResource(R.drawable.ic_action_event);
-			trackImageView.setImageResource(R.drawable.ic_action_event);
-			historyImageView.setImageResource(R.drawable.ic_action_refresh);
+			bookImageView.setImageResource(R.drawable.tab_book_icon);
+			trackImageView.setImageResource(R.drawable.tab_track_icon);
+			historyImageView.setImageResource(R.drawable.tab_history_icon_selected);
 			break;
 		}
 	}
@@ -256,13 +255,14 @@ public class MainActivity extends ActionBarActivity implements
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
+		
 		// if we want customize action bar
-		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM |
-		// ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-		// actionBar.setCustomView(R.layout.actionbar);
-		// actionBar.setDisplayUseLogoEnabled(false);
-		// actionBar.setIcon(R.color.transparent);
-		// actionBar.setIcon(null);
+//		 actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM |
+//		 ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+//		 actionBar.setCustomView(R.layout.actionbar);
+//		 actionBar.setDisplayUseLogoEnabled(false);
+//		 actionBar.setIcon(R.color.transparent);
+//		 actionBar.setIcon(null);
 		switch (mTabHost.getCurrentTab()) {
 		case 0:
 			currentTab = 0;
@@ -318,17 +318,7 @@ public class MainActivity extends ActionBarActivity implements
 //		return attributeList;
 //	}
 	//called from getMBParamTask
-	public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
-		Utils.attributeList = attributeList;
-		DaoManager daoManager = DaoManager.getInstance(this);
-		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_WRITE);
-		attributeDao.deleteAll();
-		for(int i=0; i < attributeList.size();i++){
-			AttributeItem item = attributeList.get(i);
-			DBAttribute dbattr = new DBAttribute(null, item.getId(), item.getName(), item.getAppIcon());
-			attributeDao.insert(dbattr);
-		}
-	}
+
 
 	// @Override
 	// public boolean onOptionsItemSelected(MenuItem item) {

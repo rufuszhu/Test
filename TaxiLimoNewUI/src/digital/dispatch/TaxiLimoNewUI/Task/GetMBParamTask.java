@@ -9,8 +9,11 @@ import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.GetMBParamResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.MGParam;
 
+import digital.dispatch.TaxiLimoNewUI.DBAttribute;
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -57,7 +60,19 @@ public void onResponseReady(GetMBParamResponse response) {
 //		AttributeItem item = attributeList.get(i);
 //		Logger.i("id: " + item.getId() + ", icon: " + item.getAppIcon() + ", name: " + item.getName());
 //	}
-	((MainActivity)_context).saveAttributeListToDB(attributeList);
+	saveAttributeListToDB(attributeList);
+}
+
+public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
+	Utils.attributeList = attributeList;
+	DaoManager daoManager = DaoManager.getInstance(_context);
+	DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_WRITE);
+	attributeDao.deleteAll();
+	for(int i=0; i < attributeList.size();i++){
+		AttributeItem item = attributeList.get(i);
+		DBAttribute dbattr = new DBAttribute(null, item.getId(), item.getName(), item.getAppIcon());
+		attributeDao.insert(dbattr);
+	}
 }
 
 @Override

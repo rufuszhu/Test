@@ -53,9 +53,12 @@ public class Utils {
 	public static ArrayList<AttributeItem> attributeList;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
+	
+	private static final int DEFAULT_FONT_SIZE = 20;
+	private static final int VALUE_FONT_SIZE = 13;
 
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
-	public static int[] iconNavigation = new int[] { R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about };
+	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
 
 	// get title of the item navigation
 	public static String getTitleItem(Context context, int posicao) {
@@ -169,8 +172,11 @@ public class Utils {
 
 		save.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (now_btn.isChecked())
+				if (now_btn.isChecked()){
 					tv_time.setText("Now");
+					tv_time.setTextSize(DEFAULT_FONT_SIZE);
+					tv_time.setTextColor(context.getResources().getColor(R.color.gray_light));
+				}
 				else {
 					int dateIndex = dates.getCurrentItem();
 					int timeIndex = times.getCurrentItem();
@@ -178,9 +184,13 @@ public class Utils {
 					if (dates.getCurrentItem() == 0) {
 						pickupTime = timeTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeTodayAdapter.getItemText(times.getCurrentItem()));
+						tv_time.setTextSize(VALUE_FONT_SIZE);
+						tv_time.setTextColor(context.getResources().getColor(R.color.black));
 					} else {
 						pickupTime = timeNotTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeNotTodayAdapter.getItemText(times.getCurrentItem()));
+						tv_time.setTextSize(VALUE_FONT_SIZE);
+						tv_time.setTextColor(context.getResources().getColor(R.color.black));
 					}
 					pickupDate = dateAdapter.getDate(dateIndex);
 				}
@@ -257,19 +267,19 @@ public class Utils {
 		return timeList;
 	}
 
-	private static int getCurrentTimeIndex() {
-		int currentTimeIndex = 0;
-		Calendar today = Calendar.getInstance();
-		if (today.get(Calendar.HOUR) == 12) {
-			currentTimeIndex += Math.ceil((double) today.get(Calendar.MINUTE) / 5);
-		} else {
-			currentTimeIndex += 12 * today.get(Calendar.HOUR) + Math.ceil((double) today.get(Calendar.MINUTE) / 5);
-		}
-		if (today.get(Calendar.AM_PM) == Calendar.PM) {
-			currentTimeIndex += 144;
-		}
-		return currentTimeIndex;
-	}
+//	private static int getCurrentTimeIndex() {
+//		int currentTimeIndex = 0;
+//		Calendar today = Calendar.getInstance();
+//		if (today.get(Calendar.HOUR) == 12) {
+//			currentTimeIndex += Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+//		} else {
+//			currentTimeIndex += 12 * today.get(Calendar.HOUR) + Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+//		}
+//		if (today.get(Calendar.AM_PM) == Calendar.PM) {
+//			currentTimeIndex += 144;
+//		}
+//		return currentTimeIndex;
+//	}
 
 	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
 		final EditText driverMessage;
@@ -324,12 +334,21 @@ public class Utils {
 	}
 
 	public static void setNoteIndication(Context context, TextView textNote) {
-		if (driverNoteString.length() > 10)
+		if (driverNoteString.length() > 10){
+			textNote.setTextColor(context.getResources().getColor(R.color.black));
+			textNote.setTextSize(VALUE_FONT_SIZE);
 			textNote.setText(driverNoteString.substring(0, 10) + "...");
-		else if (driverNoteString.length() == 0)
+		}
+		else if (driverNoteString.length() == 0){
+			textNote.setTextColor(context.getResources().getColor(R.color.gray_light));
+			textNote.setTextSize(DEFAULT_FONT_SIZE);
 			textNote.setText(context.getString(R.string.empty_note));
-		else
+		}
+		else{
+			textNote.setTextColor(context.getResources().getColor(R.color.black));
+			textNote.setTextSize(VALUE_FONT_SIZE);
 			textNote.setText(driverNoteString);
+		}
 	}
 
 	public static void setUpListDialog(final Context context, ArrayList<String> addresses) {

@@ -28,11 +28,12 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_destination">Destination</string>
     <string name="title_activity_pick_up">Pick up Location</string>
-    <string name="empty_note">No Note</string>
+    <string name="empty_note">None</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="street_number">Street Number</string>
     <string name="street_name">Street Name</string>
     <string name="unit_number">Unit Number</string>
+    <string name="enter_for_fare">Enter for fare estimate</string>
 
     <!-- error messages -->
     <string name="err_invalid_street_number">Street number is\ninvalid</string>

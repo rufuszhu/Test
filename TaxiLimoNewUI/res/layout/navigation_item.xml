@@ -12,19 +12,20 @@
         
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
             android:contentDescription="@string/clear"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"/>        
+            android:layout_marginLeft="@dimen/big_margin"/>        
         
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"    
+            android:layout_marginLeft="@dimen/small_padding"    
             android:textSize="@dimen/drawer_font_size"   
             android:textColor="@color/white"     
+            android:textStyle="bold"
             android:layout_centerVertical="true"                        
             android:layout_toRightOf="@+id/icon"
             android:text="@string/app_name" />        

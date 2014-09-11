@@ -20,6 +20,14 @@
             android:orientation="horizontal"
             android:paddingBottom="@dimen/small_padding" >
 
+            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
             <EditText
                 android:id="@+id/tv_streetNumber"
                 android:layout_width="0dp"
@@ -29,7 +37,11 @@
                 android:ems="10"
                 android:hint="@string/street_number"
                 android:inputType="number"
-                android:paddingLeft="@dimen/editView_paddign" >
+                android:nextFocusLeft="@id/tv_streetNumber"
+                android:nextFocusUp="@id/tv_streetNumber"
+                android:paddingLeft="@dimen/editView_paddign"
+                android:selectAllOnFocus="true" 
+                android:imeOptions="actionDone">
             </EditText>
 
             <EditText
@@ -43,7 +55,8 @@
                 android:ems="10"
                 android:hint="@string/unit_number"
                 android:inputType="number"
-                android:paddingLeft="@dimen/editView_paddign" />
+                android:paddingLeft="@dimen/editView_paddign" 
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/driver_note_btn"
@@ -71,7 +84,9 @@
                 android:background="@drawable/shape_textview_border"
                 android:ems="10"
                 android:hint="@string/street_name"
-                android:paddingLeft="@dimen/editView_paddign" />
+                android:paddingLeft="@dimen/editView_paddign" 
+                android:imeOptions="actionDone"
+                android:inputType="textPostalAddress"/>
 
             <ImageView
                 android:id="@+id/clear_autocomplete"
@@ -125,7 +140,7 @@
                 android:text="Add to Favorite"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/contact_favorite_btn"
             android:layout_width="0dp"
@@ -134,8 +149,8 @@
             android:background="@drawable/gray_button_selector"
             android:clickable="true"
             android:gravity="center"
-            android:orientation="horizontal" 
-            android:visibility="gone">
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -147,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:text="Add to Favorite"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>        
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/delete_btn"

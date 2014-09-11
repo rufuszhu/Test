@@ -15,6 +15,7 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class HistoryFragment extends ListFragment {
 	 * The fragment argument representing the section number for this fragment.
 	 */
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	private static final String TAG = "HistoryFragment";
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -48,6 +50,13 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		Logger.e(TAG, "on RESUME");
 		DaoManager daoManager = DaoManager.getInstance(getActivity());
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		List<DBBooking> values = bookingDao.queryBuilder()

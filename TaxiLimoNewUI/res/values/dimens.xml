@@ -21,8 +21,9 @@
     <dimen name="tab_height">50dp</dimen>
     <dimen name="list_item_height">70dp</dimen>
     <dimen name="autocomplete_list_item_height">40dp</dimen>
-    <dimen name="drawer_item_height">50dp</dimen>
-    <dimen name="drawer_font_size">16sp</dimen>
+    <dimen name="drawer_item_height">60dp</dimen>
+    <dimen name="drawer_font_size">18sp</dimen>
+    <dimen name="drawer_icon_size">25dp</dimen>
     
     <dimen name="oval_horizontal_padding">10dp</dimen>
     <dimen name="oval_vertical_padding">3dp</dimen>
@@ -39,7 +40,12 @@
     
     
     <dimen name="map_addressBar_height">50dp</dimen>
-    <dimen name="map_option_height">80dp</dimen>
-    <dimen name="map_button_height">120dp</dimen>
+    <dimen name="address_bar_icon_size">50dp</dimen>
+    <dimen name="little_guy_icon_size">20dp</dimen>
+    <dimen name="map_option_height">69dp</dimen>
+    <dimen name="map_company_bar_height">50dp</dimen>
+    <dimen name="map_company_icon_height">35dp</dimen>
+    <dimen name="map_book_btn_height">61dp</dimen>
+    <dimen name="book_font_size">35sp</dimen>
 
 </resources>

@@ -81,13 +81,14 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "Book";
 	private static View view;
-
+	
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
 
 	private TextView textNote;
 	private TextView text_pickup;
 	private TextView address_bar_text;
+	private TextView tv_empty_comany_message;
 	
 	private String oldDistrict;
 
@@ -129,11 +130,13 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
+		tv_empty_comany_message = (TextView) view.findViewById(R.id.tv_empty_comany_message);
 		//setupCompanyUI();
 		Utils.setNoteIndication(getActivity(), textNote);
+		
 
-		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
-		button.setOnClickListener(new View.OnClickListener() {
+		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
+		current_location_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				onCurrentLocationClick();
 			}
@@ -230,9 +233,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 						mbook.setPickup_time(date + " " + time);
 					}
-
 					Logger.e(TAG, "pickup time: " + mbook.getPickup_time());
-
 					new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 				}
 			}
@@ -254,11 +255,11 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private void setupCompanyUI() {
 		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
-		LinearLayout attribute_not_selected = (LinearLayout) view.findViewById(R.id.attribute_not_selected);
+		LinearLayout ll_no_company_selected = (LinearLayout) view.findViewById(R.id.ll_no_company_selected);
 		if (Utils.mSelectedCompany != null) {
 			CompanyItem item = Utils.mSelectedCompany;
 			attribute.setVisibility(View.VISIBLE);
-			attribute_not_selected.setVisibility(View.GONE);
+			ll_no_company_selected.setVisibility(View.GONE);
 			attribute.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), AttributeActivity.class);
@@ -278,8 +279,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		// if no company selected, call getCompanyList Request
 		else {
 			attribute.setVisibility(View.GONE);
-			attribute_not_selected.setVisibility(View.VISIBLE);
-			attribute_not_selected.setOnClickListener(new View.OnClickListener() {
+			ll_no_company_selected.setVisibility(View.VISIBLE);
+			ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), AttributeActivity.class);
 					//intent.putExtra(MBDefinition.ADDRESS, currentAddress);
@@ -409,6 +410,16 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 			}
+		}
+		
+		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
+		if(Utils.mDropoffAddress != null){
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
+			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
+		}
+		else{
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+			tv_destination.setText(getActivity().getResources().getString(R.string.enter_for_fare));
 		}
 	}
 
@@ -625,9 +636,11 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
+		
 		if(tempCompList.length==0){
 			//show no available company;
 			Logger.e("No company available in " + city);
+			tv_empty_comany_message.setText("No company available in " + city);
 			setupCompanyUI();
 		}
 		else if(tempCompList.length==1){
@@ -637,9 +650,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		else{
 			//show please choose a company
 			Logger.e(tempCompList.length + " companies available in " + city);
+			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
 			setupCompanyUI();
 		}
-		
 	}
-
 }

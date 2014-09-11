@@ -186,7 +186,7 @@ public class TrackFragment extends Fragment{
 			
 		});
 		
-		ImageView iv_company_icon = (ImageView) rootView.findViewById(R.id.iv_company_icon);
+		ImageView iv_company_icon = (ImageView) rootView.findViewById(R.id.iv_tracking_company_icon);
 		
 		tv_id.setText(dbBook.getTaxi_ride_id()+"");
 		tv_receive.setText(dbBook.getTripCreationTime());
