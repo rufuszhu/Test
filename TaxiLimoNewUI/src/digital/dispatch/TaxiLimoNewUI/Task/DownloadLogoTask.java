@@ -4,16 +4,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-import com.digital.dispatch.TaxiLimoSQLDatabase.MBCompanyDBHandling;
-
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class DownloadLogoTask extends AsyncTask<Void, Integer, Bitmap> {
 	private Context ctx;

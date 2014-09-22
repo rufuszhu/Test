@@ -13,6 +13,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -71,6 +73,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class BookFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
@@ -81,7 +84,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "Book";
 	private static View view;
-	
+
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
 
@@ -89,7 +92,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private TextView text_pickup;
 	private TextView address_bar_text;
 	private TextView tv_empty_comany_message;
-	
+
 	private String oldDistrict;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
@@ -131,9 +134,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
 		tv_empty_comany_message = (TextView) view.findViewById(R.id.tv_empty_comany_message);
-		//setupCompanyUI();
+		// setupCompanyUI();
 		Utils.setNoteIndication(getActivity(), textNote);
-		
 
 		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
 		current_location_btn.setOnClickListener(new View.OnClickListener() {
@@ -196,8 +198,12 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				DaoManager daoManager = DaoManager.getInstance(getActivity());
 				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 				CompanyItem selectedCompany = Utils.mSelectedCompany;
-				if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0) {
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+				// check if allow multiple booking
+				if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0
+						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
+
 				} else if (selectedCompany == null) {
 					// get into select company page
 				} else {
@@ -210,8 +216,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 					mbook.setCompany_phone_number(selectedCompany.phoneNr);
 					mbook.setDestID(selectedCompany.destID);
 					mbook.setSysId(String.valueOf(selectedCompany.systemID));
-					
-					
+
 					mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
 
 					mbook.setMulti_pay_allow(true);
@@ -219,7 +224,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 					setUpDropoffAddress(mbook);
 					mbook.setRemarks(Utils.driverNoteString);
 					// if pick up time not spcify,
-					if (text_pickup.getText().toString().equalsIgnoreCase("now") || Utils.pickupDate == null || Utils.pickupTime == null) {
+					if (text_pickup.getText().toString().equalsIgnoreCase(getActivity().getString(R.string.now)) || Utils.pickupDate == null || Utils.pickupTime == null) {
 						// Calendar cal = Calendar.getInstance();
 						// SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
 						// mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
@@ -243,8 +248,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
 		String temp = "";
-		for(int i =0 ; i< selectedAttribute.size() ;i++){
-			String attrid = selectedAttribute.get(i)+"";
+		for (int i = 0; i < selectedAttribute.size(); i++) {
+			String attrid = selectedAttribute.get(i) + "";
 			temp += attrid + ",";
 		}
 		if (!temp.equalsIgnoreCase("")) {
@@ -262,8 +267,10 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			ll_no_company_selected.setVisibility(View.GONE);
 			attribute.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), AttributeActivity.class);
-					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					if (Utils.mPickupAddress != null) {
+						Intent intent = new Intent(getActivity(), AttributeActivity.class);
+						getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					}
 				}
 			});
 
@@ -282,9 +289,11 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			ll_no_company_selected.setVisibility(View.VISIBLE);
 			ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), AttributeActivity.class);
-					//intent.putExtra(MBDefinition.ADDRESS, currentAddress);
-					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					if (Utils.mPickupAddress != null) {
+						Intent intent = new Intent(getActivity(), AttributeActivity.class);
+						// intent.putExtra(MBDefinition.ADDRESS, currentAddress);
+						getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					}
 				}
 			});
 		}
@@ -403,21 +412,20 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
 			}
-//			boolean isFromBooking = true;
-//			new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			//setupCompanyUI();
+			// boolean isFromBooking = true;
+			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			// setupCompanyUI();
 		} else {
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 			}
 		}
-		
+
 		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
-		if(Utils.mDropoffAddress != null){
+		if (Utils.mDropoffAddress != null) {
 			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
 			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
-		}
-		else{
+		} else {
 			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
 			tv_destination.setText(getActivity().getResources().getString(R.string.enter_for_fare));
 		}
@@ -437,9 +445,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-		// when should I reset this????
-		//((MainActivity) getActivity()).setPickupAddress(null);
-		// LatLng cameraTarget = mMap.getCameraPosition().target;
 		Location location = new Location("");
 		location.setLatitude(cameraPosition.target.latitude);
 		location.setLongitude(cameraPosition.target.longitude);
@@ -604,16 +609,15 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
-				if(oldDistrict==null){
+				if (oldDistrict == null) {
 					oldDistrict = address.getLocality();
 					boolean isFromBooking = true;
 					new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-				}
-				else{
-					//only call if district changes
-					if(!oldDistrict.equalsIgnoreCase(address.getLocality())){
+				} else {
+					// only call if district changes
+					if (!oldDistrict.equalsIgnoreCase(address.getLocality())) {
 						Utils.mSelectedCompany = null;
-						oldDistrict= address.getLocality();
+						oldDistrict = address.getLocality();
 						boolean isFromBooking = true;
 						new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 					}
@@ -636,19 +640,17 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
-		
-		if(tempCompList.length==0){
-			//show no available company;
+
+		if (tempCompList.length == 0) {
+			// show no available company;
 			Logger.e("No company available in " + city);
 			tv_empty_comany_message.setText("No company available in " + city);
 			setupCompanyUI();
-		}
-		else if(tempCompList.length==1){
+		} else if (tempCompList.length == 1) {
 			Utils.mSelectedCompany = tempCompList[0];
 			setupCompanyUI();
-		}
-		else{
-			//show please choose a company
+		} else {
+			// show please choose a company
 			Logger.e(tempCompList.length + " companies available in " + city);
 			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
 			setupCompanyUI();

@@ -1,22 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.History;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
-
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -27,6 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class HistoryFragment extends ListFragment {
 	/**
@@ -50,7 +44,6 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		
 	}
 	
 	@Override
@@ -61,7 +54,7 @@ public class HistoryFragment extends ListFragment {
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		List<DBBooking> values = bookingDao.queryBuilder()
 				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
-						 Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list();
+						 Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED)).list();
 		
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);

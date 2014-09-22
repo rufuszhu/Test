@@ -6,12 +6,15 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.CancelJobResponse;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICancelResponseListener, IRequestTimerListener {
@@ -58,65 +61,22 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	@Override
 	public void onResponseReady(CancelJobResponse response) {
 
-		// String msg = getResources().getString(R.string.track_cancel_success) + " (Trip " + trID + ")";
-		//
-		// // no need to check response.getStatus() == 0, since if it's not it will be in onErrorResponse
-		// new AlertDialog.Builder(getActivity())
-		// .setTitle(R.string.cancel_job)
-		// .setMessage(msg)
-		// .setCancelable(false)
-		// .setPositiveButton(R.string.positive_button, null)
-		// .show();
-		//
-		// startGetTrackingInfo();
-		Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.v(TAG, "Cancel Job: " + response.getStatus() + " :: " + response.getErrorString());
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
-		// if (!noProgress) {
-		// isDialogVisible = true;
-		//
-		// new AlertDialog.Builder(getActivity())
-		// .setTitle(R.string.cancel_job)
-		// .setMessage(R.string.track_cancel_unsuccess)
-		// .setCancelable(false)
-		// .setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
-		// @Override
-		// public void onClick(DialogInterface dialog, int which) {
-		// isDialogVisible = false;
-		// }
-		// })
-		// .show();
-		//
-		// startGetTrackingInfo();
-		// isRefreshing = false;
-		// }
-		Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
 	}
 
 	@Override
 	public void onError() {
-		// if (!noProgress) {
-		// isDialogVisible = true;
-		//
-		// new AlertDialog.Builder(getActivity())
-		// .setTitle(R.string.err_no_response_error)
-		// .setMessage(R.string.track_cancel_unsuccess)
-		// .setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
-		// @Override
-		// public void onClick(DialogInterface dialog, int which) {
-		// isDialogVisible = false;
-		// }
-		// })
-		// .show();
-		//
-		// startGetTrackingInfo();
-		// isRefreshing = false;
-		// }
-		Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.v(TAG, "cancelJob: Error");
 	}
 
@@ -124,4 +84,6 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	public void onProgressUpdate(int progress) {
 
 	}
+	
+
 }

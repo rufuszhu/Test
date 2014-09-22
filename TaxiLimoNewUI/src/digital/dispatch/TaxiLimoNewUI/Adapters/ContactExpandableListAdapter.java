@@ -104,12 +104,22 @@ public class ContactExpandableListAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = infalInflater.inflate(R.layout.list_group, null);
+			
 		}
 
 		TextView lblListHeader = (TextView) convertView.findViewById(R.id.list_group_text);
+		ImageView list_group_icon = (ImageView) convertView.findViewById(R.id.list_group_icon);
 		lblListHeader.setTypeface(null, Typeface.BOLD);
 		lblListHeader.setText(headerTitle);
+		
+		if(groupPosition==0){
+			list_group_icon.setBackground(_context.getResources().getDrawable(R.drawable.icon_favorite));
+		}
+		else{
+			list_group_icon.setBackground(_context.getResources().getDrawable(R.drawable.icon_contact));
+		}
 
+		
 		return convertView;
 	}
 

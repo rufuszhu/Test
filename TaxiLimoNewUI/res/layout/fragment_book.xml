@@ -86,8 +86,9 @@
                     android:layout_height="0dp"
                     android:layout_weight=".35"
                     android:gravity="center"
-                    android:text="Pickup Time"
+                    android:text="PICKUP TIME"
                     android:textColor="@color/blue_text"
+                    android:textSize="@dimen/map_option_title_font"
                     android:textStyle="bold" />
 
                 <TextView
@@ -96,7 +97,7 @@
                     android:layout_height="0dp"
                     android:layout_weight=".65"
                     android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/small_padding"
+                    android:paddingLeft="@dimen/normal_padding"
                     android:text="Now"
                     android:textColor="@color/gray_light"
                     android:textSize="20sp" />
@@ -116,8 +117,9 @@
                     android:layout_height="0dp"
                     android:layout_weight=".35"
                     android:gravity="center"
-                    android:text="Driver Note"
+                    android:text="DRIVER NOTE"
                     android:textColor="@color/blue_text"
+                    android:textSize="@dimen/map_option_title_font"
                     android:textStyle="bold" />
 
                 <TextView
@@ -129,6 +131,7 @@
                     android:paddingLeft="@dimen/normal_padding"
                     android:text="@string/empty_note"
                     android:textColor="@color/gray_light"
+                    android:maxLines="2"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -147,8 +150,9 @@
                     android:layout_weight=".35"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/normal_padding"
-                    android:text="Destination"
+                    android:text="DESTINATION"
                     android:textColor="@color/blue_text"
+                    android:textSize="@dimen/map_option_title_font"
                     android:textStyle="bold" />
 
                 <TextView
@@ -265,10 +269,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
             android:layout_weight=".55"
-            android:background="@drawable/book_btn"
+            android:background="@drawable/book_btn_selector"
             android:clickable="true"
             android:gravity="center"
-            android:text="Book"
+            android:text="@string/book"
+            style="@style/TextDropShadow"
             android:textColor="@color/white"
             android:textSize="@dimen/book_font_size"
             android:textStyle="bold" />

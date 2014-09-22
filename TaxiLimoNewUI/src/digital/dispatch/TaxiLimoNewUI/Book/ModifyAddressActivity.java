@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -41,6 +43,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -557,7 +560,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		protected void onPostExecute(List<Address> addresses) {
 			if (addresses.size() > 1) {
 				// pop up list
-				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
+				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses);
 			} else if (addresses.size() == 1) {
 				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
 					Intent returnIntent = new Intent();
@@ -661,7 +664,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		protected void onPostExecute(final List<Address> addresses) {
 			if (addresses.size() > 1) {
 				// pop up list
-				Utils.setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses));
+				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses);
 			} else if (addresses.size() == 1) {
 				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
 					final EditText nickname_edit;
@@ -715,6 +718,31 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			}
 
 		}
+	}
+
+	private void setUpListDialog(final Context context, ArrayList<String> addresses, final List<Address> addressesObj) {
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+		// builderSingle.setIcon(R.drawable.ic_launcher);
+		builderSingle.setTitle("Please be more specific");
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.autocomplete_list_item);
+		arrayAdapter.addAll(addresses);
+		builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent returnIntent = new Intent();
+				returnIntent.putExtra(MBDefinition.ADDRESS, addressesObj.get(which));
+				setResult(RESULT_OK, returnIntent);
+				finish();
+			}
+		});
+		builderSingle.show();
 	}
 
 }

@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.text.format.Time;
 
-import com.digital.dispatch.TaxiLimoSQLDatabase.MBRoute;
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest.IBookJobResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
@@ -158,10 +157,10 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Utils.mDropoffAddress = null;
 			Utils.mPickupAddress = null;
 			Utils.showErrorDialog(_context.getString(R.string.message_book_successful), _context);
-			Logger.e(TAG, "ride id: " + mbook.getTaxi_ride_id());
-			Logger.e(TAG, "create time: " + mbook.getTripCreationTime());
+			Logger.d(TAG, "ride id: " + mbook.getTaxi_ride_id());
+			Logger.d(TAG, "create time: " + mbook.getTripCreationTime());
 		} else {
-			Logger.i(TAG, "no response found");
+			Logger.e(TAG, "no response found");
 		}
 
 		// bookResponseDialog(MBDefinition.MB_BOOK_SUCCESS);

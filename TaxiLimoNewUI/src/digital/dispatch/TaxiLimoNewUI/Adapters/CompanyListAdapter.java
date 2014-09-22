@@ -1,32 +1,18 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
-import java.io.InputStream;
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.digital.dispatch.TaxiLimoSQLDatabase.MBBooking;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter.ViewHolder;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
-import digital.dispatch.TaxiLimoNewUI.Task.DownloadLogoTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {

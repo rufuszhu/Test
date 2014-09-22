@@ -15,7 +15,7 @@ public class MBDefinition {
 	public final static String ADDRESSBAR_TEXT_EXTRA= "ADDRESSBAR_TEXT_EXTRA";
 	public final static String IS_DESTINATION= "IS_DESTINATION";
 	public final static String DBBOOKING_EXTRA= "DBBOOKING";
-	public final static float DEFAULT_ZOOM = 16.5f;
+	public final static float DEFAULT_ZOOM = 15.5f;
 	public final static int DRIVER_NOTE_MAX_LENGTH = 256;
 	public final static int REQUEST_PICKUPADDRESS_CODE = 2;
 	public final static int REQUEST_DROPOFFADDRESS_CODE = 3;
@@ -45,6 +45,10 @@ public class MBDefinition {
 	public final static int MB_STATUS_IN_SERVICE = 14;
 	public final static int MB_STATUS_COMPLETED = 15;
 	public final static int MB_STATUS_CANCELLED = 16;
+	
+	public final static int IS_FOR_MAP = 1;
+	public final static int IS_FOR_ONE_JOB = 2;
+	public final static int IS_FOR_LIST = 3;
 	
 
 	public static String SHARE_SND_MSG_DRV = "C_MB_SND_MSG_DRV"; 

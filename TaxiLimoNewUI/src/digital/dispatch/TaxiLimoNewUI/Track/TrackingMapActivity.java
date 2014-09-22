@@ -94,8 +94,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		{
 		     @Override 
 		     public void run() {
-		    	 boolean getLatLngOnly = true;
-		    	  new RecallJobTask(_context, dbBook.getTaxi_ride_id()+"", getLatLngOnly).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
+		    	  new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
 		    	  Toast.makeText(_context, "Updating Car Location" , Toast.LENGTH_LONG).show();
 		          mHandler.postDelayed(mHandlerTask, INTERVAL);
 		     }
@@ -139,7 +138,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 					
 					LatLngBounds bounds = builder.build();
 					
-					int padding = 200; // offset from edges of the map in pixels
+					int padding = 100; // offset from edges of the map in pixels
 					CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 					mMap.moveCamera(cu);
 				}

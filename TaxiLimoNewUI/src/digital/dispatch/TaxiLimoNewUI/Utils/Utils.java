@@ -53,6 +53,7 @@ public class Utils {
 	public static ArrayList<AttributeItem> attributeList;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
+	public static int currentTab = 0;
 	
 	private static final int DEFAULT_FONT_SIZE = 20;
 	private static final int VALUE_FONT_SIZE = 13;
@@ -173,7 +174,7 @@ public class Utils {
 		save.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (now_btn.isChecked()){
-					tv_time.setText("Now");
+					tv_time.setText(context.getString(R.string.now));
 					tv_time.setTextSize(DEFAULT_FONT_SIZE);
 					tv_time.setTextColor(context.getResources().getColor(R.color.gray_light));
 				}
@@ -334,10 +335,10 @@ public class Utils {
 	}
 
 	public static void setNoteIndication(Context context, TextView textNote) {
-		if (driverNoteString.length() > 10){
+		if (driverNoteString.length() > 20){
 			textNote.setTextColor(context.getResources().getColor(R.color.black));
 			textNote.setTextSize(VALUE_FONT_SIZE);
-			textNote.setText(driverNoteString.substring(0, 10) + "...");
+			textNote.setText(driverNoteString.substring(0, 20) + "...");
 		}
 		else if (driverNoteString.length() == 0){
 			textNote.setTextColor(context.getResources().getColor(R.color.gray_light));
@@ -351,40 +352,7 @@ public class Utils {
 		}
 	}
 
-	public static void setUpListDialog(final Context context, ArrayList<String> addresses) {
-		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
-		builderSingle.setIcon(R.drawable.ic_launcher);
-		builderSingle.setTitle("Select One Name:-");
-		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_singlechoice);
-		arrayAdapter.addAll(addresses);
-		builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-
-		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				String strName = arrayAdapter.getItem(which);
-				AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
-				builderInner.setMessage(strName);
-				builderInner.setTitle("Your Selected Item is");
-				builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				builderInner.show();
-			}
-		});
-		builderSingle.show();
-	}
 
 	/**
 	 * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
