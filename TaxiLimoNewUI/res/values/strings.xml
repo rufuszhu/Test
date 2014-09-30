@@ -18,6 +18,13 @@
     <string name="store_const_is_am_pm">IsAmPm</string>
     <string name="store_const_preferred_company">PreferredCompany</string>
 
+    <!-- register -->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="re_enter_email">Re-Enter Email</string>
+    <string name="phone_number">Phone Number</string>
+
     <!-- trip detail table -->
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
@@ -201,6 +208,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
+    <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try again later</string>
     <string name="err_invalid_street_number">Street number is\ninvalid</string>
     <string name="err_invalid_street_name">Address is invalid</string>
     <string name="err_empty_street_number">Street number can\'t\nbe Empty</string>

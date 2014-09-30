@@ -29,40 +29,72 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/first_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/edit_text_height"
             android:ems="10"
+            android:hint="@string/first_name"
+            android:background="@drawable/shape_textview_border"
+            android:paddingLeft="@dimen/normal_padding"
+            android:layout_marginTop="@dimen/normal_padding"
             android:inputType="textPersonName" >
         </EditText>
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/last_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/edit_text_height"
             android:ems="10"
+            android:hint="@string/last_name"
+            android:paddingLeft="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:layout_marginTop="@dimen/normal_padding"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/edit_text_height"
             android:ems="10"
+            android:paddingLeft="@dimen/normal_padding"
+            android:hint="@string/email"
+            android:background="@drawable/shape_textview_border"
+            android:layout_marginTop="@dimen/normal_padding"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/re_enter_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/edit_text_height"
             android:ems="10"
+            android:paddingLeft="@dimen/normal_padding"
+            android:hint="@string/re_enter_email"
+            android:background="@drawable/shape_textview_border"
+            android:layout_marginTop="@dimen/normal_padding"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/phone_number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/edit_text_height"
             android:ems="10"
+            android:hint="@string/phone_number"
+            android:background="@drawable/shape_textview_border"
+            android:paddingLeft="@dimen/normal_padding"
+            android:layout_marginTop="@dimen/normal_padding"
             android:inputType="phone" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/white_button_selector"
+        android:gravity="center"
+        android:textSize="@dimen/next_size"
+        android:text="Next" />
 
 </RelativeLayout>

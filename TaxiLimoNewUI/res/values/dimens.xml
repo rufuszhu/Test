@@ -12,6 +12,8 @@
     -->
     
     <!-- common -->
+    <dimen name="edit_text_height">40dp</dimen>
+    
     <dimen name="gray_btn_icon_size">30dp</dimen>
     
     <dimen name="editView_paddign">10dp</dimen>
@@ -68,6 +70,9 @@
 	
 	<dimen name="pay_table_row_height">50dp</dimen>
 	
+	
+	<!-- attribute -->
+	<dimen name="next_size">20sp</dimen>
 	
 	<!-- dialog -->
 	<dimen name="dialog_font_size">20sp</dimen>

@@ -545,7 +545,10 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
-			if (addresses.size() > 1) {
+			if(addresses==null){
+				Utils.showMessageDialog(_activity.getString(R.string.cannot_get_address_from_google), _activity);
+			}
+			else if (addresses.size() > 1) {
 				// pop up list
 				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses);
 			} else if (addresses.size() == 1) {
