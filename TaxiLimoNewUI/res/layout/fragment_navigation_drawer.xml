@@ -2,10 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/navigation_items"
+    android:background="@color/drawer_normal"
     android:choiceMode="singleChoice"
-    android:divider="@color/gray"
+    android:divider="@drawable/drawer_divider"
     android:listSelector="@drawable/drawer_selector"
+    style="@style/TextDropShadow"
     android:dividerHeight="1dp"
     tools:context="digital.dispatch.TaxiLimoNewUI.NavigationDrawerFragment" />
 

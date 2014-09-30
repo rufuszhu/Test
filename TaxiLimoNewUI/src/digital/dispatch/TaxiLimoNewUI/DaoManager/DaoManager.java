@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
 import digital.dispatch.TaxiLimoNewUI.DaoMaster;
 import digital.dispatch.TaxiLimoNewUI.DaoSession;
 
@@ -53,6 +54,14 @@ public class DaoManager {
         DaoSession daoSession = daoMaster.newSession();
         DBAttributeDao dbAttributeDao = daoSession.getDBAttributeDao();
         return dbAttributeDao;
+    }
+    
+    public DBCreditCardDao getDBCreditCardDao(int type) {
+        SQLiteDatabase db = getDB(type);
+        DaoMaster daoMaster = new DaoMaster(db);
+        DaoSession daoSession = daoMaster.newSession();
+        DBCreditCardDao dbCreditCardDao = daoSession.getDBCreditCardDao();
+        return dbCreditCardDao;
     }
 
     public static synchronized DaoManager getInstance(Context context) {

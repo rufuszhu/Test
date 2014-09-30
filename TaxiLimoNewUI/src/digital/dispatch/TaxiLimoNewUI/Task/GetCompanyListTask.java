@@ -13,8 +13,11 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyListResponse;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 
 public class GetCompanyListTask extends AsyncTask<String, Integer, Void> implements ICompResponseListener, IRequestTimerListener {
@@ -59,10 +62,11 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 
 	@Override
 	public void onResponseReady(CompanyListResponse response) {
+		CompanyItem[] tempCompList = response.GetList();
 		if(isFromBooking){
-			
-		}else{
-			CompanyItem[] tempCompList = response.GetList();
+			BookFragment fragment = (BookFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("book"); 
+			fragment.handleGetCompanyListResponse(tempCompList, mAddress.getLocality());
+		}else{	
 			((AttributeActivity)_context).loadCompanyList(tempCompList);	
 		}
 	}

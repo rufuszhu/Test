@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/credit_card_item_height"
+    android:minHeight="@dimen/credit_card_item_height"
+    android:orientation="horizontal" 
+    android:gravity="center_vertical">
+
+    
+
+    <ImageView
+        android:layout_width="@dimen/credit_card_icon_size"
+        android:layout_height="@dimen/credit_card_icon_size"
+        android:contentDescription="@null"
+        android:layout_marginLeft="@dimen/normal_padding"
+        android:src="@drawable/icon_credit_card" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_padding"
+        android:textColor="@color/blue_text"
+        android:text="@string/credit_card" />
+    
+    <TextView
+        android:id="@+id/tv_card_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_padding"/>
+    
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/normal_padding"
+        android:textColor="@color/gray_circle"/>
+    
+
+</LinearLayout>

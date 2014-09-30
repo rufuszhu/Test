@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity" >
 
     <LinearLayout
@@ -20,6 +21,14 @@
             android:orientation="horizontal"
             android:paddingBottom="@dimen/small_padding" >
 
+            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
             <EditText
                 android:id="@+id/tv_streetNumber"
                 android:layout_width="0dp"
@@ -29,7 +38,11 @@
                 android:ems="10"
                 android:hint="@string/street_number"
                 android:inputType="number"
-                android:paddingLeft="@dimen/editView_paddign" >
+                android:nextFocusLeft="@id/tv_streetNumber"
+                android:nextFocusUp="@id/tv_streetNumber"
+                android:paddingLeft="@dimen/editView_paddign"
+                android:selectAllOnFocus="true" 
+                android:imeOptions="actionDone">
             </EditText>
 
             <EditText
@@ -43,17 +56,17 @@
                 android:ems="10"
                 android:hint="@string/unit_number"
                 android:inputType="number"
-                android:paddingLeft="@dimen/editView_paddign" />
+                android:paddingLeft="@dimen/editView_paddign" 
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/driver_note_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
-                android:background="@drawable/white_button_selector"
+                android:background="@drawable/driver_note_btn"
                 android:clickable="true"
-                android:gravity="center"
-                android:text="Driver Note" />
+                />
         </LinearLayout>
 
         <FrameLayout
@@ -61,6 +74,7 @@
             android:layout_height="0dp"
             android:layout_weight=".5"
             android:gravity="center"
+            
             android:orientation="horizontal"
             android:paddingTop="@dimen/small_padding" >
 
@@ -71,16 +85,21 @@
                 android:background="@drawable/shape_textview_border"
                 android:ems="10"
                 android:hint="@string/street_name"
-                android:paddingLeft="@dimen/editView_paddign" />
+                android:paddingLeft="@dimen/editView_paddign" 
+                android:paddingRight="32dp"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:inputType="textPostalAddress"/>
 
             <ImageView
                 android:id="@+id/clear_autocomplete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="@dimen/big_margin"
+                android:layout_marginRight="@dimen/normal_padding"
+                android:layout_marginLeft="@dimen/normal_padding"
                 android:clickable="true"
-                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+                android:src="@drawable/icon_clearinput" />
         </FrameLayout>
     </LinearLayout>
 
@@ -115,17 +134,17 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
-
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_add_favorite" />
+            
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add to Favorite"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/add_to_favorite"
+                style="@style/BlueBtnText" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/contact_favorite_btn"
             android:layout_width="0dp"
@@ -134,20 +153,20 @@
             android:background="@drawable/gray_button_selector"
             android:clickable="true"
             android:gravity="center"
-            android:orientation="horizontal" 
-            android:visibility="gone">
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_add_favorite" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add to Favorite"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>        
+                android:text="@string/add_to_favorite"
+                style="@style/BlueBtnText" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/delete_btn"
@@ -161,15 +180,15 @@
             android:visibility="gone" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_remove" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delete"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/remove"
+                style="@style/RedBtnText" />
         </LinearLayout>
 
         <LinearLayout
@@ -183,15 +202,15 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_save" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/save"
+                style="@style/GreenBtnText" />
         </LinearLayout>
 
         <LinearLayout
@@ -206,15 +225,15 @@
             android:visibility="gone" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_save" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/select"
+                style="@style/GreenBtnText" />
         </LinearLayout>
     </LinearLayout>
 

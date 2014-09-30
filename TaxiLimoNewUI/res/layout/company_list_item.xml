@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:minHeight="80dp"
+    android:layout_height="@dimen/company_list_item_height"
+    android:minHeight="@dimen/company_list_item_height"
+    android:background="@color/white"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:minHeight="50dp"
-        android:orientation="horizontal" >
+        android:layout_height="60dp"
+        android:minHeight="60dp"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/normal_padding" >
 
         <ImageView
             android:id="@+id/company_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_marginLeft="@dimen/normal_padding"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:layout_marginLeft="@dimen/normal_padding"
+             >
 
             <TextView
                 android:id="@+id/tv_name"
@@ -34,6 +38,9 @@
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray"
+                android:textStyle="italic"
                 android:text="TextView" />
         </LinearLayout>
 
@@ -42,12 +49,19 @@
             android:layout_height="match_parent"
             android:gravity="right"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:paddingTop="@dimen/small_padding" 
+            android:paddingRight="@dimen/normal_padding">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_oval"
+                android:id="@+id/tv_round_btn"
+                android:layout_width="@dimen/selection_btn_width"
+                android:layout_height="@dimen/selection_btn_height"
+                android:gravity="center"
+                android:background="@drawable/shape_round_button"
+                style="@style/TextDropShadowWhite"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/selection_btn_font_size"
+                android:textStyle="bold"
                 android:text="Select" />
         </LinearLayout>
     </LinearLayout>
@@ -55,9 +69,11 @@
     <LinearLayout
         android:id="@+id/ll_attr"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:orientation="horizontal"
-        android:paddingLeft="53dp" >
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/normal_padding"
+        android:paddingLeft="75dp" >
     </LinearLayout>
 
 </LinearLayout>

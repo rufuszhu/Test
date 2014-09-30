@@ -7,12 +7,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import kankan.wheel.widget.WheelView;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,8 +25,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.InflateException;
@@ -29,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -71,6 +79,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class BookFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
@@ -88,6 +97,10 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private TextView textNote;
 	private TextView text_pickup;
 	private TextView address_bar_text;
+	private TextView tv_empty_comany_message;
+	private TextView book_btn;
+
+	private String oldDistrict;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -127,11 +140,12 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		setupCompany();
+		tv_empty_comany_message = (TextView) view.findViewById(R.id.tv_empty_comany_message);
+		// setupCompanyUI();
 		Utils.setNoteIndication(getActivity(), textNote);
 
-		ImageButton button = (ImageButton) view.findViewById(R.id.image_currentLocation);
-		button.setOnClickListener(new View.OnClickListener() {
+		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
+		current_location_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				onCurrentLocationClick();
 			}
@@ -150,6 +164,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		});
 
 		text_pickup = (TextView) view.findViewById(R.id.text_pickup);
+		setTimeText(text_pickup);
 		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
 		pickTime.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -185,82 +200,149 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			}
 		});
 
-		TextView book_btn = (TextView) view.findViewById(R.id.book_button);
+		book_btn = (TextView) view.findViewById(R.id.book_button);
 		book_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				DaoManager daoManager = DaoManager.getInstance(getActivity());
 				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 				CompanyItem selectedCompany = Utils.mSelectedCompany;
-				if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0) {
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+				if (!validateHasHouseNumber()) {
+					showEnterHouseNumberDialog();
+				}
+				else if(!validateHouseNumberHasNoRange()){
+					Address address = Utils.mPickupAddress;
+					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
+					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
+				}
+				// check if allow multiple booking
+				else if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0
+						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
+
 				} else if (selectedCompany == null) {
 					// get into select company page
+					Intent intent = new Intent(getActivity(), AttributeActivity.class);
+					intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
+					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
 				} else {
-					DBBooking mbook = new DBBooking();
-
-					mbook.setCompany_attribute_list(selectedCompany.attributes);
-					mbook.setCompany_description(selectedCompany.description);
-					mbook.setCompany_icon(selectedCompany.logo);
-					mbook.setCompany_name(selectedCompany.name);
-					mbook.setCompany_phone_number(selectedCompany.phoneNr);
-					mbook.setDestID(selectedCompany.destID);
-					mbook.setSysId(String.valueOf(selectedCompany.systemID));
-					
-					
-					mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
-
-					mbook.setMulti_pay_allow(true);
-					setUpPickupAddress(mbook);
-					setUpDropoffAddress(mbook);
-					mbook.setRemarks(Utils.driverNoteString);
-					// if pick up time not spcify,
-					if (text_pickup.getText().toString().equalsIgnoreCase("now") || Utils.pickupDate == null || Utils.pickupTime == null) {
-						// Calendar cal = Calendar.getInstance();
-						// SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
-						// mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
-					} else {
-						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-						SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
-						String date = dateFormat.format(Utils.pickupDate);
-						String time = timeFormat.format(Utils.pickupTime);
-						// Logger.e("date: " + date);
-						// Logger.e("time: " + time);
-
-						mbook.setPickup_time(date + " " + time);
-					}
-
-					Logger.e(TAG, "pickup time: " + mbook.getPickup_time());
-
-					new BookJobTask(getActivity(), mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+					Utils.bookJob(selectedCompany, getActivity());
 				}
 			}
 		});
 		return view;
 	}
 
-	private String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
-		String temp = "";
-		for(int i =0 ; i< selectedAttribute.size() ;i++){
-			String attrid = selectedAttribute.get(i)+"";
-			temp += attrid + ",";
-		}
-		if (!temp.equalsIgnoreCase("")) {
-			temp = temp.substring(0, temp.length() - 1);
-		}
-		return temp;
+	private boolean validateHasHouseNumber() {
+		Address address = Utils.mPickupAddress;
+
+		String ad = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
+		String[] strArray = TextUtils.split(ad, " ");
+
+		if (!Utils.isNumeric(strArray[0]) && Utils.pickupHouseNumber.equals("")) {
+			
+			return false;
+		} else
+			return true;
 	}
 
-	private void setupCompany() {
+	private boolean validateHouseNumberHasNoRange() {
+		Address address = Utils.mPickupAddress;
+		String ad = AddressDaoManager.getHouseNumberFromAddress(address);
+		if (ad.contains("-") && Utils.pickupHouseNumber.equals("")) {
+			return false;
+		} else
+			return true;
+	}
+
+	private void showEnterHouseNumberDialog() {
+		final Dialog enterHouseNumDialog = new Dialog(getActivity());
+		enterHouseNumDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		enterHouseNumDialog.setContentView(R.layout.dialog_enter_street_number);
+		TextView tv_house_num = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.tv_street_address);
+		final EditText et_house_num = (EditText) enterHouseNumDialog.getWindow().findViewById(R.id.et_street_number);
+		TextView ok = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.ok);
+		TextView cancel = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.cancel);
+
+		tv_house_num.setText(LocationUtils.addressToString(getActivity(), Utils.mPickupAddress));
+		ok.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (et_house_num.getText().toString().equals("")) {				
+					et_house_num.setError("Pleace enter a street number for pick up");
+				}
+				else if(et_house_num.getText().toString().length() > MBDefinition.STREET_NUMBER_MAX_LENGTH)
+					et_house_num.setError("Street number too long");
+				else {
+					Utils.pickupHouseNumber = et_house_num.getText().toString();
+					enterHouseNumDialog.dismiss();
+					book_btn.callOnClick();
+				}
+			}
+		});
+
+		cancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				enterHouseNumDialog.dismiss();
+			}
+		});
+		enterHouseNumDialog.setCanceledOnTouchOutside(true);
+		enterHouseNumDialog.show();
+	}
+
+	private void showHouseRangeDialog(final String start, final String end) {
+		final Dialog houseNumRangeDialog = new Dialog(getActivity());
+	houseNumRangeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	houseNumRangeDialog.setContentView(R.layout.dialog_enter_street_number_range);
+	TextView tv_range_message = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.tv_range_message);
+	final EditText et_house_num = (EditText) houseNumRangeDialog.getWindow().findViewById(R.id.et_street_number);
+	TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);
+	TextView cancel = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.cancel);
+
+	tv_range_message.setText(start + " and " + end);
+	ok.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View arg0) {
+			if (et_house_num.getText().toString().equals("")) {
+				et_house_num.setError("Pleace enter a street number for pick up");
+			}
+			else if(Integer.parseInt(et_house_num.getText().toString()) > Integer.parseInt(end)
+					|| Integer.parseInt(et_house_num.getText().toString()) < Integer.parseInt(start))
+				et_house_num.setError("Street number not in range");
+			else {
+				Utils.pickupHouseNumber = et_house_num.getText().toString();
+				houseNumRangeDialog.dismiss();
+				book_btn.callOnClick();
+			}
+		}
+	});
+
+	cancel.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View arg0) {
+			houseNumRangeDialog.dismiss();
+		}
+	});
+	houseNumRangeDialog.setCanceledOnTouchOutside(true);
+	houseNumRangeDialog.show();
+	}
+
+	private void setupCompanyUI() {
 		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
-		LinearLayout attribute_not_selected = (LinearLayout) view.findViewById(R.id.attribute_not_selected);
+		LinearLayout ll_no_company_selected = (LinearLayout) view.findViewById(R.id.ll_no_company_selected);
 		if (Utils.mSelectedCompany != null) {
 			CompanyItem item = Utils.mSelectedCompany;
 			attribute.setVisibility(View.VISIBLE);
-			attribute_not_selected.setVisibility(View.GONE);
+			ll_no_company_selected.setVisibility(View.GONE);
 			attribute.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), AttributeActivity.class);
-					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					if (Utils.mPickupAddress != null) {
+						Intent intent = new Intent(getActivity(), AttributeActivity.class);
+						intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
+						startActivity(intent);
+						// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					}
 				}
 			});
 
@@ -273,15 +355,18 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new DownloadImageTask(iv_company_icon).execute(prefixURL + item.logo);
 		}
-		// if no company selected, call getCompanyList Request
+		// if no company selected
 		else {
 			attribute.setVisibility(View.GONE);
-			attribute_not_selected.setVisibility(View.VISIBLE);
-			attribute_not_selected.setOnClickListener(new View.OnClickListener() {
+			ll_no_company_selected.setVisibility(View.VISIBLE);
+			ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), AttributeActivity.class);
-					//intent.putExtra(MBDefinition.ADDRESS, currentAddress);
-					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+					if (Utils.mPickupAddress != null) {
+						Intent intent = new Intent(getActivity(), AttributeActivity.class);
+						intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
+						// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+						startActivity(intent);
+					}
 				}
 			});
 		}
@@ -295,7 +380,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
 
-		setupCompany();
+		setupCompanyUI();
 	}
 
 	@Override
@@ -307,25 +392,24 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		}
 	}
 
-	private void setUpPickupAddress(DBBooking mbook) {
-		mbook.setPickup_district(Utils.mPickupAddress.getLocality());
+	private void setTimeText(TextView tv_time) {
+		if (Utils.pickupDate == null || Utils.pickupTime == null) {
+			tv_time.setText(getActivity().getResources().getString(R.string.now));
+			tv_time.setTextSize(20);
+			tv_time.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+		} else {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
+			String date = dateFormat.format(Utils.pickupDate);
+			String time = timeFormat.format(Utils.pickupTime);
+			Calendar cal = Calendar.getInstance();
 
-		mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress));
-		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
-		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
-		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
-		mbook.setPickupAddress(LocationUtils.addressToString(getActivity(), Utils.mPickupAddress));
-	}
-
-	private void setUpDropoffAddress(DBBooking mbook) {
-		Address ad = Utils.mDropoffAddress;
-		if (ad != null) {
-			mbook.setDropoff_district(ad.getLocality());
-			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
-			mbook.setDropoff_latitude(ad.getLatitude());
-			mbook.setDropoff_longitude(ad.getLongitude());
-			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
-			mbook.setDropoffAddress(LocationUtils.addressToString(getActivity(), ad));
+			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
+				tv_time.setText("Today" + "\n" + time);
+			} else
+				tv_time.setText(date + "\n" + time);
+			tv_time.setTextSize(13);
+			tv_time.setTextColor(getActivity().getResources().getColor(R.color.black));
 		}
 	}
 
@@ -400,13 +484,22 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
 			}
-//			boolean isFromBooking = true;
-//			new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			setupCompany();
+			// boolean isFromBooking = true;
+			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			// setupCompanyUI();
 		} else {
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 			}
+		}
+
+		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
+		if (Utils.mDropoffAddress != null) {
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
+			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
+		} else {
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+			tv_destination.setText(getActivity().getResources().getString(R.string.enter_for_fare));
 		}
 	}
 
@@ -424,14 +517,12 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-		// when should I reset this????
-		//((MainActivity) getActivity()).setPickupAddress(null);
-		// LatLng cameraTarget = mMap.getCameraPosition().target;
 		Location location = new Location("");
 		location.setLatitude(cameraPosition.target.latitude);
 		location.setLongitude(cameraPosition.target.longitude);
 
 		getAddress(location);
+		Utils.pickupHouseNumber="";
 	}
 
 	@Override
@@ -591,6 +682,19 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
+				if (oldDistrict == null) {
+					oldDistrict = address.getLocality();
+					boolean isFromBooking = true;
+					new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+				} else {
+					// only call if district changes
+					if (!oldDistrict.equalsIgnoreCase(address.getLocality())) {
+						Utils.mSelectedCompany = null;
+						oldDistrict = address.getLocality();
+						boolean isFromBooking = true;
+						new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+					}
+				}
 				return LocationUtils.addressToString(getActivity(), address);
 
 				// If there aren't any addresses, post a message
@@ -608,4 +712,21 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		}
 	}
 
+	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
+
+		if (tempCompList.length == 0) {
+			// show no available company;
+			Logger.e("No company available in " + city);
+			tv_empty_comany_message.setText("No company available in " + city);
+			setupCompanyUI();
+		} else if (tempCompList.length == 1) {
+			Utils.mSelectedCompany = tempCompList[0];
+			setupCompanyUI();
+		} else {
+			// show please choose a company
+			Logger.e(tempCompList.length + " companies available in " + city);
+			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
+			setupCompanyUI();
+		}
+	}
 }

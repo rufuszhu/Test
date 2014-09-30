@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/normal_padding" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/enter_street_number" 
+        android:textSize="@dimen/dialog_font_size"
+        android:paddingBottom="@dimen/small_padding"/>
+
+    <TextView
+        android:id="@+id/tv_street_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center"
+        android:textColor="@color/blue_text"
+        android:textSize="@dimen/dialog_font_size"
+        android:paddingBottom="@dimen/small_padding"/>
+
+    <EditText
+        android:id="@+id/et_street_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:inputType="number">
+
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp" 
+        android:layout_marginTop="@dimen/normal_padding">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight=".5"
+            android:background="@drawable/white_button_selector"
+            android:gravity="center"
+            android:text="@string/negative_button"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/ok"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight=".5"
+            android:background="@drawable/white_button_selector"
+            android:gravity="center"
+            android:text="@string/positive_button"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+</LinearLayout>

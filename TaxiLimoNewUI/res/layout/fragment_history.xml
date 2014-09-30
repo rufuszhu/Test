@@ -13,7 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:listSelector="@drawable/list_selector">
+        android:listSelector="@drawable/list_selector" >
     </ListView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/white_line"
+        android:background="@color/gray_light" />
+
+    <View
+        android:id="@+id/white_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" />
 
 </RelativeLayout>

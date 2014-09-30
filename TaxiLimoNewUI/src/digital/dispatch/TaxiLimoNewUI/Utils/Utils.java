@@ -15,15 +15,22 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
@@ -53,9 +60,16 @@ public class Utils {
 	public static ArrayList<AttributeItem> attributeList;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
+	public static int currentTab = 0;
+	public static boolean mainActivityIsActivated = true;
+	private static Dialog progressDialog;
+
+	private static final int DEFAULT_FONT_SIZE = 20;
+	private static final int VALUE_FONT_SIZE = 13;
 
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
-	public static int[] iconNavigation = new int[] { R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about, R.drawable.ic_action_about };
+	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
+	public static String pickupHouseNumber = "";
 
 	// get title of the item navigation
 	public static String getTitleItem(Context context, int posicao) {
@@ -169,18 +183,24 @@ public class Utils {
 
 		save.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (now_btn.isChecked())
-					tv_time.setText("Now");
-				else {
+				if (now_btn.isChecked()) {
+					tv_time.setText(context.getString(R.string.now));
+					tv_time.setTextSize(DEFAULT_FONT_SIZE);
+					tv_time.setTextColor(context.getResources().getColor(R.color.gray_light));
+				} else {
 					int dateIndex = dates.getCurrentItem();
 					int timeIndex = times.getCurrentItem();
 
 					if (dates.getCurrentItem() == 0) {
 						pickupTime = timeTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeTodayAdapter.getItemText(times.getCurrentItem()));
+						tv_time.setTextSize(VALUE_FONT_SIZE);
+						tv_time.setTextColor(context.getResources().getColor(R.color.black));
 					} else {
 						pickupTime = timeNotTodayAdapter.getTime(timeIndex);
 						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeNotTodayAdapter.getItemText(times.getCurrentItem()));
+						tv_time.setTextSize(VALUE_FONT_SIZE);
+						tv_time.setTextColor(context.getResources().getColor(R.color.black));
 					}
 					pickupDate = dateAdapter.getDate(dateIndex);
 				}
@@ -257,18 +277,99 @@ public class Utils {
 		return timeList;
 	}
 
-	private static int getCurrentTimeIndex() {
-		int currentTimeIndex = 0;
-		Calendar today = Calendar.getInstance();
-		if (today.get(Calendar.HOUR) == 12) {
-			currentTimeIndex += Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+	// private static int getCurrentTimeIndex() {
+	// int currentTimeIndex = 0;
+	// Calendar today = Calendar.getInstance();
+	// if (today.get(Calendar.HOUR) == 12) {
+	// currentTimeIndex += Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+	// } else {
+	// currentTimeIndex += 12 * today.get(Calendar.HOUR) + Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+	// }
+	// if (today.get(Calendar.AM_PM) == Calendar.PM) {
+	// currentTimeIndex += 144;
+	// }
+	// return currentTimeIndex;
+	// }
+
+	private static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
+		String temp = "";
+		if (selectedAttribute == null)
+			return temp;
+		for (int i = 0; i < selectedAttribute.size(); i++) {
+			String attrid = selectedAttribute.get(i) + "";
+			temp += attrid + ",";
+		}
+		if (!temp.equalsIgnoreCase("")) {
+			temp = temp.substring(0, temp.length() - 1);
+		}
+		return temp;
+	}
+
+	private static void setUpPickupAddress(DBBooking mbook, Context context) {
+		mbook.setPickup_district(Utils.mPickupAddress.getLocality());
+		if (pickupHouseNumber.equals("")){
+			mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress));
+			mbook.setPickupAddress(LocationUtils.addressToString(context, Utils.mPickupAddress));
+		}
+		else{
+			mbook.setPickup_house_number(pickupHouseNumber);
+			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));	
+		}
+		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
+		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
+		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
+		
+	}
+
+	private static void setUpDropoffAddress(DBBooking mbook, Context context) {
+		Address ad = Utils.mDropoffAddress;
+		if (ad != null) {
+			mbook.setDropoff_district(ad.getLocality());
+			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
+			mbook.setDropoff_latitude(ad.getLatitude());
+			mbook.setDropoff_longitude(ad.getLongitude());
+			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
+			mbook.setDropoffAddress(LocationUtils.addressToString(context, ad));
+		}
+	}
+
+	public static void bookJob(CompanyItem selectedCompany, Context context) {
+		DBBooking mbook = new DBBooking();
+
+		mbook.setCompany_attribute_list(selectedCompany.attributes);
+		mbook.setCompany_description(selectedCompany.description);
+		mbook.setCompany_icon(selectedCompany.logo);
+		mbook.setCompany_name(selectedCompany.name);
+		mbook.setCompany_phone_number(selectedCompany.phoneNr);
+		mbook.setDestID(selectedCompany.destID);
+		mbook.setSysId(String.valueOf(selectedCompany.systemID));
+
+		mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
+
+		if (selectedCompany.multiPay.equalsIgnoreCase("Y"))
+			mbook.setMulti_pay_allow(true);
+		else
+			mbook.setMulti_pay_allow(false);
+
+		setUpPickupAddress(mbook, context);
+		setUpDropoffAddress(mbook, context);
+		mbook.setRemarks(Utils.driverNoteString);
+		// if pick up time not spcify,
+		if (Utils.pickupDate == null || Utils.pickupTime == null) {
+			// Calendar cal = Calendar.getInstance();
+			// SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+			// mbook.setPickup_time(pickupTimeFormat.format(cal.getTime()));
 		} else {
-			currentTimeIndex += 12 * today.get(Calendar.HOUR) + Math.ceil((double) today.get(Calendar.MINUTE) / 5);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
+			String date = dateFormat.format(Utils.pickupDate);
+			String time = timeFormat.format(Utils.pickupTime);
+			// Logger.e("date: " + date);
+			// Logger.e("time: " + time);
+
+			mbook.setPickup_time(date + " " + time);
 		}
-		if (today.get(Calendar.AM_PM) == Calendar.PM) {
-			currentTimeIndex += 144;
-		}
-		return currentTimeIndex;
+		new BookJobTask(context, mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
@@ -324,47 +425,19 @@ public class Utils {
 	}
 
 	public static void setNoteIndication(Context context, TextView textNote) {
-		if (driverNoteString.length() > 10)
-			textNote.setText(driverNoteString.substring(0, 10) + "...");
-		else if (driverNoteString.length() == 0)
+		if (driverNoteString.length() > 20) {
+			textNote.setTextColor(context.getResources().getColor(R.color.black));
+			textNote.setTextSize(VALUE_FONT_SIZE);
+			textNote.setText(driverNoteString.substring(0, 20) + "...");
+		} else if (driverNoteString.length() == 0) {
+			textNote.setTextColor(context.getResources().getColor(R.color.gray_light));
+			textNote.setTextSize(DEFAULT_FONT_SIZE);
 			textNote.setText(context.getString(R.string.empty_note));
-		else
+		} else {
+			textNote.setTextColor(context.getResources().getColor(R.color.black));
+			textNote.setTextSize(VALUE_FONT_SIZE);
 			textNote.setText(driverNoteString);
-	}
-
-	public static void setUpListDialog(final Context context, ArrayList<String> addresses) {
-		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
-		builderSingle.setIcon(R.drawable.ic_launcher);
-		builderSingle.setTitle("Select One Name:-");
-		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_singlechoice);
-		arrayAdapter.addAll(addresses);
-		builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-
-		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				String strName = arrayAdapter.getItem(which);
-				AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
-				builderInner.setMessage(strName);
-				builderInner.setTitle("Your Selected Item is");
-				builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				builderInner.show();
-			}
-		});
-		builderSingle.show();
+		}
 	}
 
 	/**
@@ -419,8 +492,45 @@ public class Utils {
 			} catch (ClassCastException e) {
 				Logger.e("Can't get fragment manager");
 			}
-
 		}
+	}
+
+	public static void showProcessingDialog(Context _context) {
+
+		progressDialog = new Dialog(_context);
+		progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		Drawable d = new ColorDrawable(Color.BLACK);
+		d.setAlpha(0);
+		progressDialog.getWindow().setBackgroundDrawable(d);
+		progressDialog.setContentView(R.layout.custom_dialog);
+		// This dialog can't be cancelled by pressing the back key
+		progressDialog.setCancelable(false);
+
+		DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+
+			}
+		};
+
+		progressDialog.setOnCancelListener(cancelListener);
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
+	}
+
+	public static void stopProcessingDialog(Context _context) {
+		progressDialog.dismiss();
+	}
+
+	public static void showMessageDialog(String message, Context _context) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+
+		builder.show();
 	}
 
 	// public static boolean isNumeric(String str)
@@ -437,7 +547,10 @@ public class Utils {
 	// }
 
 	public static boolean isNumeric(String str) {
-		return str.matches("-?\\d+(\\-\\d+)?"); // match a number with optional '-' in the middle. this is for street number return by google Geo
+		// match a number with optional '-'(or '.') in the middle. this is for street number return by google Geo
+		return str.matches("-?\\d+(\\-\\d+)?") || str.matches("-?\\d+(\\.\\d+)?"); 
 	}
+	
+	
 
 }

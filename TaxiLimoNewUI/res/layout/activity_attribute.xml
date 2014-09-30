@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity" >
 
     <GridView
@@ -12,48 +12,29 @@
         android:layout_height="wrap_content"
         android:columnCount="3"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
+        android:horizontalSpacing="@dimen/small_padding"
         android:numColumns="3"
+        android:padding="@dimen/normal_padding"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" >
+        android:verticalSpacing="@dimen/small_padding" >
     </GridView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/TextDropShadowWhite"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="@string/please_select_one_company"
+        android:textStyle="bold"
+        android:textColor="@color/blue_text"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:textSize="@dimen/select_company_font_size" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight=".1" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight=".2"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Availabe Companies"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight=".2"
-            android:background="@android:color/darker_gray" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight=".1" />
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_extra_light" />
 
     <ListView
         android:id="@+id/lv_company"

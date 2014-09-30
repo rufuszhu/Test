@@ -21,6 +21,7 @@ public class LimoDaoGenerator {
         addAddress(schema);
         addJob(schema);
         addAttribute(schema);
+        addCreditCard(schema);
         new DaoGenerator().generateAll(schema, "../TaxiLimoNewUI/src-gen");
     }
 
@@ -38,6 +39,20 @@ public class LimoDaoGenerator {
         address.addDoubleProperty("longitude");
         address.addBooleanProperty("isFavoriate");
         address.addStringProperty("fullAddress");
+    }
+    
+    private static void addCreditCard(Schema schema) {
+        Entity cc = schema.addEntity("DBCreditCard");
+        cc.addIdProperty();
+        cc.addStringProperty("first4CardNum");
+        cc.addStringProperty("last4CardNum");
+        cc.addStringProperty("holderName");
+        cc.addStringProperty("expiryMonth");
+        cc.addStringProperty("expiryYear");
+        cc.addStringProperty("zip");
+        cc.addStringProperty("nickName");
+        cc.addStringProperty("token");
+        cc.addStringProperty("cardBrand");
     }
     
     private static void addJob(Schema schema) {

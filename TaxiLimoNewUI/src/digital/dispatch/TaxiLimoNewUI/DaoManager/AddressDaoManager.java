@@ -101,6 +101,8 @@ public class AddressDaoManager {
 			return "";
 	}
 	
+	
+	
 	public static ArrayList<MyAddress> dbAddressListToMyAddressList(List<DBAddress> dbAddresses){
 		ArrayList<MyAddress> temp = new ArrayList<MyAddress>();
 		for(int i=0 ; i< dbAddresses.size(); i++){

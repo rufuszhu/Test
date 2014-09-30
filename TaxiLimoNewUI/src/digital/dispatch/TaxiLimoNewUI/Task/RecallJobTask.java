@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -23,12 +24,12 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	private RecallJobsRequest rjReq;
 	private Context _context;
 	private String jobList;
-	private Boolean getLatLngOnly;
+	private int which;
 
-	public RecallJobTask(Context context, String jobs, Boolean getLatLngOnly) {
+	public RecallJobTask(Context context, String jobs, int which) {
 		_context = context;
 		jobList = jobs;
-		this.getLatLngOnly = getLatLngOnly;
+		this.which = which;
 	}
 
 	// Before running code in separate thread
@@ -41,7 +42,6 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	@Override
 	protected Boolean doInBackground(String... params) {
 		try {
-
 			rjReq = new RecallJobsRequest(this, this);
 			rjReq.setSysID(params[1]);
 			rjReq.setOspVersion(MBDefinition.OSP_VERSION);
@@ -51,7 +51,6 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 
 			rjReq.setJobList(jobList); // can just concatenate into one string
 			rjReq.sendRequest(_context.getResources().getString(R.string.name_space), _context.getResources().getString(R.string.url));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,19 +75,21 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		for(int i=0;i<jobArr.length;i++){
 			JobItem.printJobItem(jobArr[i]);
 		}
-		if(getLatLngOnly){
+		if(which==MBDefinition.IS_FOR_MAP){
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
 			((TrackingMapActivity)_context).updateCarMarker(carLatLng);
 		}
-		else{
+		else if(which==MBDefinition.IS_FOR_ONE_JOB){
+			((TrackDetailActivity)_context).parseRecallJobResponse(jobArr); 
+		}
+		else if(which==MBDefinition.IS_FOR_LIST){
 			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
-			fragment.parseRecallJobResponse(jobArr); 
+			fragment.updateStatus(jobArr);
 		}
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
-
 		// if (!isDialogVisible) {
 		// new AlertDialog.Builder(getActivity())
 		// .setTitle(R.string.err_error_response)
@@ -96,14 +97,18 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		// .setPositiveButton(R.string.positive_button, null)
 		// .show();
 		// }
-
+		if(which==MBDefinition.IS_FOR_ONE_JOB){
+			((TrackDetailActivity)_context).stopUpdateAnimation(); 
+		}
+		else if(which==MBDefinition.IS_FOR_LIST){
+			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+			fragment.stopUpdateAnimation();
+		}
 		Logger.v(TAG, "error response: " + errorString);
-
 	}
 
 	@Override
 	public void onError() {
-
 		// if (!isDialogVisible) {
 		// new AlertDialog.Builder(getActivity())
 		// .setTitle(R.string.err_no_response_error)
@@ -111,9 +116,15 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		// .setPositiveButton(R.string.positive_button, null)
 		// .show();
 		// }
-
+		if(which==MBDefinition.IS_FOR_ONE_JOB){
+			((TrackDetailActivity)_context).stopUpdateAnimation(); 
+		}
+		else if(which==MBDefinition.IS_FOR_LIST){
+			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+			if(fragment!=null)
+				fragment.stopUpdateAnimation();
+		}
 		Logger.v(TAG, "no response");
-
 	}
 
 	@Override

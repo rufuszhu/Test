@@ -1,14 +1,18 @@
 package com.digital.dispatch.TaxiLimoSoap.responses;
 
+import java.util.ArrayList;
+
 import android.util.Log;
 
 import com.digital.dispatch.TaxiLimoSoap.GlobalVar;
 import com.digital.dispatch.TaxiLimoSoap.serialization.PropertyInfo;
 import com.digital.dispatch.TaxiLimoSoap.serialization.SoapObject;
 
+
 public class RecallJobsResponse extends ResponseWrapper {
 	private int numOfJobs = 0;
 	private JobItem[] listOfJobs;
+	//private ArrayList<DBBooking> bookingList;
 	private static String TAG = "Soap-RecallJobsRes";
 
 	public RecallJobsResponse() {
@@ -21,6 +25,7 @@ public class RecallJobsResponse extends ResponseWrapper {
 		try {
 			numOfJobs = Integer.parseInt(this.getProperty("nofJobs").toString());
 			listOfJobs = new JobItem[numOfJobs];
+			//bookingList = new ArrayList<DBBooking>();
 
 			int j = 0;
 			for (int i = 0; i < properties.size(); i++) {
@@ -30,8 +35,20 @@ public class RecallJobsResponse extends ResponseWrapper {
 				String aCode, aName, pDate, pTime, repPTime, repPDays, repSt, repEn, trID, bDateTime, tStatus;
 				String aArrival, dCar, dDriver, cLongitude, cLatitude, tStatCode, dStatCode, e1, e2, eDis;
 				String pStreetNum, pUnitNum, dStreetNum, dUnitNum, jobEndDateTime;
-
+				//DBBooking dbBook = new DBBooking();
+				
 				if ((item instanceof SoapObject) && (objName.equalsIgnoreCase("listOfJobs"))) {
+//					dbBook.setPickup_unit(checkExistAndGet((SoapObject) item, "pickupUnitNumber"));
+//					dbBook.setPickup_house_number(checkExistAndGet((SoapObject) item, "pickupStreetNumber"));
+//					dbBook.setDropoff_unit(dropoff_unit);
+//					dbBook.setDropoff_house_number(dropoff_house_number);
+//					dbBook.setPickup_street_name(pickup_street_name);
+//					dbBook.setPickup_district(pickup_district);
+//					dbBook.setPickup_landmark(pickup_landmark);
+//					dbBook.setDropoff_street_name(dropoff_street_name);
+//					dbBook.setDropoff_district(dropoff_district);
+//					dbBook.setDropoff_landmark(dropoff_landmark);
+					
 					pUnitNum = checkExistAndGet((SoapObject) item, "pickupUnitNumber");
 					pStreetNum = checkExistAndGet((SoapObject) item, "pickupStreetNumber");
 					dUnitNum = checkExistAndGet((SoapObject) item, "dropoffUnitNumber");
@@ -45,6 +62,7 @@ public class RecallJobsResponse extends ResponseWrapper {
 					dStreetName = checkExistAndGet((SoapObject) item, "dropoffStreetName");
 					dRegion = checkExistAndGet((SoapObject) item, "dropoffRegion");
 					dLandmark = checkExistAndGet((SoapObject) item, "dropffLandmark");
+					
 					aName = checkExistAndGet((SoapObject) item, "accountName");
 					aCode = checkExistAndGet((SoapObject) item, "accountCode");
 					pDate = checkExistAndGet((SoapObject) item, "pickupDate");
@@ -71,6 +89,8 @@ public class RecallJobsResponse extends ResponseWrapper {
 					JobItem ji = new JobItem(pName, phoneNum, phoneExt, pStreetNum, pStreetName, pRegion, pUnitNum, pLandmark, dStreetNum, dStreetName, dRegion, dUnitNum, dLandmark, aCode, aName,
 							pDate, pTime, repPTime, repPDays, repSt, repEn, trID, bDateTime, tStatus, aArrival, dCar, dDriver, cLongitude, cLatitude, tStatCode, dStatCode, e1, e2, eDis,
 							jobEndDateTime);
+					
+					
 					listOfJobs[j] = ji;
 					j++;
 				}
