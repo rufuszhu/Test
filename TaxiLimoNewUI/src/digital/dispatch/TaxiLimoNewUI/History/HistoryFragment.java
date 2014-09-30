@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
@@ -66,7 +65,6 @@ public class HistoryFragment extends ListFragment {
 		Intent intent = new Intent(getActivity(), TripDetailActivity.class);
 		intent.putExtra(MBDefinition.DBBOOKING_EXTRA, item);
 		startActivity(intent);
-		Toast.makeText(getActivity(), position + " selected", Toast.LENGTH_LONG).show();
 	}
 
 	@Override

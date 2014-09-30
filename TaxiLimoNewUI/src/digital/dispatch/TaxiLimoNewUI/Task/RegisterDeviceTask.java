@@ -8,21 +8,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.widget.Toast;
 
-import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
-import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 
 import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> implements IRegDevResponseListener, IRequestTimerListener {
 	private static final String TAG = "RegisterDeviceTask";
@@ -48,7 +42,6 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 				e.printStackTrace();
 			}
 
-			// Toast.makeText(_context.getApplicationContext(), R.string.reg_device_start, Toast.LENGTH_SHORT).show();
 			Logger.e(TAG, _context.getString(R.string.reg_device_start));
 			rdReq.setToken(GCMRegisterID);
 			// rdReq.setPhoneNum(UserAccount.phoneNum(getApplicationContext()));
@@ -109,8 +102,6 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	public void onResponseReady(RegDevResponse response) {
 		String str = "";
 		str = response.getStatus() + " :: " + response.getErrorString();
-
-		// Toast.makeText(_context.getApplicationContext(), R.string.reg_device_success, Toast.LENGTH_SHORT).show();
 
 		Logger.e(TAG, "RegDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 

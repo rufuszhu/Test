@@ -49,10 +49,10 @@ public class UserConfig {
 	    prefEditor.commit();
 	}
 	
-	public static void setLastCreditCard(Context context, int lastCreditID) {
+	public static void setLastCreditCard(Context context, long lastCreditID) {
 		SharedPreferences sharedPref = context.getSharedPreferences("mobile_booker", 0);
 		SharedPreferences.Editor prefEditor = sharedPref.edit();
-	    prefEditor.putInt(context.getResources().getString(R.string.store_const_last_credit_card), lastCreditID);
+	    prefEditor.putLong(context.getResources().getString(R.string.store_const_last_credit_card), lastCreditID);
 	    prefEditor.commit();
 	}
 	

@@ -2,21 +2,21 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle" >
 
-    <solid android:color="@color/gray_light" >
+    <solid android:color="#bcbcbc" >
     </solid>
 
-    <padding
-        android:bottom="@dimen/oval_vertical_padding"
-        android:left="@dimen/oval_horizontal_padding"
-        android:right="@dimen/oval_horizontal_padding"
-        android:top="@dimen/oval_vertical_padding" >
-    </padding>
+    <gradient
+        android:angle="90"
+        android:endColor="#b0b0b0"
+        android:startColor="#c4c4c4"
+        android:type="linear" />
+
+    <stroke
+        android:width="0.5dp"
+        android:color="@color/gray_light" />
 
     <corners android:radius="@dimen/button_border_radius" >
     </corners>
 
-    <stroke
-        android:width="1dp"
-        android:color="@color/gray" />
 
 </shape>

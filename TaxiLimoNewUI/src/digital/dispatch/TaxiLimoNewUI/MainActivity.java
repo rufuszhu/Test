@@ -1,7 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.AlertDialog;
@@ -29,7 +28,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -141,14 +139,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		checkPlayServices();
 		CommonUtilities.checkLateTrip(this, -1);
 	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Logger.d(TAG, "onPause");
+		if (locBCManager != null) {
+			locBCManager.unregisterReceiver(mHandleMessageReceiver);
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
 		Logger.d(TAG, "onDestroy");
 
-		if (locBCManager != null) {
-			locBCManager.unregisterReceiver(mHandleMessageReceiver);
-		}
+		
 
 		super.onDestroy();
 	}
@@ -197,24 +202,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 				}
 			}
-		} else if (requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE) {
+		} 
+//		else if (requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE) {
+//			if (resultCode == RESULT_OK) {
+//				if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
+//					Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
+//					Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
+//				}
+//			}
+//		} 
+		else if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
 			if (resultCode == RESULT_OK) {
-				if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
-					Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
-					Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
-				}
-				// if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
-				// // Logger.e("dataBundle address: " +
-				// // dataBundle.getString(MBDefinition.ADDRESS));
-				// setPickupAddress((Address) data.getExtras().getParcelable(
-				// MBDefinition.ADDRESS));
-				//
-				// }
-				if (data.getExtras().get(MBDefinition.SELECTED_ATTRIBUTE) != null) {
-					// Logger.e("dataBundle address: " +
-					// dataBundle.getString(MBDefinition.ADDRESS));
-					Utils.selected_attribute = (ArrayList<Integer>) data.getExtras().get(MBDefinition.SELECTED_ATTRIBUTE);
-				}
+				Utils.bookJob(Utils.mSelectedCompany, _context);
 			}
 		}
 	}
@@ -254,7 +253,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		mTabHost.addTab(mTabHost.newTabSpec(TRACK_TAB).setIndicator(getTabIndicator(this, trackImageView, trackTabView, R.string.track, R.drawable.tab_track_icon)), TrackFragment.class, null);
 		mTabHost.addTab(mTabHost.newTabSpec(HISTORY_TAB).setIndicator(getTabIndicator(this, historyImageView, historyTabView, R.string.history, R.drawable.tab_history_icon)), HistoryFragment.class,
 				null);
-		
+
 		mTabHost.setOnTabChangedListener(new FragmentTabHost.OnTabChangeListener() {
 			@Override
 			public void onTabChanged(String tabId) {
@@ -264,8 +263,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		});
 		mTabHost.getTabWidget().setDividerDrawable(null);
 		booktab_indicator.setVisibility(View.VISIBLE);
-		
+
 		mTabHost.setCurrentTab(Utils.currentTab);
+	}
+	
+	public void switchToTrackTab(){
+		Utils.currentTab = 1;
+		mTabHost.setCurrentTab(1);
 	}
 
 	private View getTabIndicator(Context context, ImageView iv, View view, int title, int drawable) {
@@ -406,7 +410,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	// int id = item.getItemId();
 	//
 	// if (id == R.id.action_refresh) {
-	// Toast.makeText(this, "Refreshingasdfasf", Toast.LENGTH_SHORT).show();
 	// return true;
 	// }
 	//
@@ -444,6 +447,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 									NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 									if (gcmID != -1) {
 										notificationManager.cancel(gcmID);
+									}
+									if(Utils.currentTab==1){
+										TrackFragment fragment = (TrackFragment) getSupportFragmentManager().findFragmentByTag("track");
+										fragment.startRecallJobTask();
 									}
 								}
 							}).show();

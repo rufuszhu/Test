@@ -317,7 +317,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		this.carLatLng = carLatLng;
 		if(carMarker!=null)
 			carMarker.remove();
-		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.attr_van);
+		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_drop_off);
 		carMarker = mMap.addMarker(new MarkerOptions()
         .position(carLatLng)
         .draggable(false).icon(icon));

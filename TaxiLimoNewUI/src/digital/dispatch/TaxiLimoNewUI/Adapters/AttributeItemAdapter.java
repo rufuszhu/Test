@@ -3,10 +3,6 @@ package digital.dispatch.TaxiLimoNewUI.Adapters;
 import java.util.ArrayList;
 import java.util.List;
 
-import digital.dispatch.TaxiLimoNewUI.DBAttribute;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
+import digital.dispatch.TaxiLimoNewUI.DBAttribute;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class AttributeItemAdapter extends BaseAdapter {
 	private Context mContext;
@@ -58,7 +57,7 @@ public class AttributeItemAdapter extends BaseAdapter {
 		view = (View) inflater.inflate(R.layout.attribute_item, null);
 		ImageView icon = (ImageView) view.findViewById(R.id.icon);
 		TextView name = (TextView) view.findViewById(R.id.name);
-		icon.setBackgroundResource(R.drawable.ic_action_about);
+		icon.setBackgroundResource(MBDefinition.attrBtnMap.get(Integer.parseInt(attrList.get(position).getIconId()),R.drawable.ic_action_about));
 		name.setText(attrList.get(position).getName());
 
 		ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton1);

@@ -121,7 +121,8 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		}
 		else if(which==MBDefinition.IS_FOR_LIST){
 			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
-			fragment.stopUpdateAnimation();
+			if(fragment!=null)
+				fragment.stopUpdateAnimation();
 		}
 		Logger.v(TAG, "no response");
 	}

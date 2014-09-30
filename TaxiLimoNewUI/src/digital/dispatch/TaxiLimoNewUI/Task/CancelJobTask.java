@@ -30,13 +30,14 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	@Override
 	protected void onPreExecute() {
-
+		Utils.showProcessingDialog(_context);
 	}
 
 	// The code to be executed in a background thread.
 	@Override
 	protected Void doInBackground(Void... params) {
 		try {
+			
 			cjReq = new CancelJobRequest(this, this);
 			cjReq.setSysID(dbBook.getSysId() + "");
 			cjReq.setDestID(dbBook.getDestID() + "");
@@ -60,14 +61,15 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	@Override
 	public void onResponseReady(CancelJobResponse response) {
-
 		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		Utils.stopProcessingDialog(_context);
 		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.v(TAG, "Cancel Job: " + response.getStatus() + " :: " + response.getErrorString());
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
+		Utils.stopProcessingDialog(_context);
 		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
 		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
@@ -75,6 +77,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	@Override
 	public void onError() {
+		Utils.stopProcessingDialog(_context);
 		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
 		((TrackDetailActivity)_context).showCancelDialog();
 		Logger.v(TAG, "cancelJob: Error");

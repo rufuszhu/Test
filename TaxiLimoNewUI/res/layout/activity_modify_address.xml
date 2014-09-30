@@ -74,6 +74,7 @@
             android:layout_height="0dp"
             android:layout_weight=".5"
             android:gravity="center"
+            
             android:orientation="horizontal"
             android:paddingTop="@dimen/small_padding" >
 
@@ -85,8 +86,8 @@
                 android:ems="10"
                 android:hint="@string/street_name"
                 android:paddingLeft="@dimen/editView_paddign" 
+                android:paddingRight="32dp"
                 android:imeOptions="actionDone"
-                android:maxLength="35"
                 android:singleLine="true"
                 android:inputType="textPostalAddress"/>
 

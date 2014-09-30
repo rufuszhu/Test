@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/background"
     tools:context="digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity" >
 
     <LinearLayout
@@ -224,9 +224,9 @@
 
                         <TextView
                             android:id="@+id/tv_pickup_address"
-                            android:layout_marginLeft="@dimen/normal_padding"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/normal_padding" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -243,9 +243,9 @@
 
                         <TextView
                             android:id="@+id/tv_dropoff_address"
-                            android:layout_marginLeft="@dimen/normal_padding"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/normal_padding" />
                     </LinearLayout>
                 </LinearLayout>
             </TableRow>
@@ -273,8 +273,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight=".5"
                         android:layout_marginLeft="@dimen/normal_padding"
+                        android:layout_weight=".5"
                         android:orientation="vertical" >
 
                         <TextView
@@ -297,10 +297,10 @@
                         android:id="@+id/call_btn"
                         android:layout_width="66.9dp"
                         android:layout_height="33.6dp"
-                        android:layout_marginRight="@dimen/normal_padding"
                         android:layout_gravity="center_vertical|right"
-                        android:gravity="right"
-                        android:background="@drawable/call_btn" />
+                        android:layout_marginRight="@dimen/normal_padding"
+                        android:background="@drawable/call_btn"
+                        android:gravity="right" />
                 </LinearLayout>
             </TableRow>
 
@@ -325,8 +325,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/table_row_min_height"
-                android:visibility="gone"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     style="@style/TripTableTitleColumn"
@@ -342,8 +342,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/table_row_min_height"
-                android:visibility="gone"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     style="@style/TripTableTitleColumn"
@@ -528,6 +528,95 @@
                 android:layout_height="wrap_content"
                 android:text="@string/pay" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/inService_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gray_button_selector"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/inService_pay_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:background="@drawable/gray_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_pay" />
+
+            <Space
+                android:layout_width="@dimen/normal_padding"
+                android:layout_height="match_parent" />
+
+            <TextView
+                style="@style/GreenBtnText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pay" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/inService_track_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:background="@drawable/gray_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_track" />
+
+            <Space
+                android:layout_width="@dimen/normal_padding"
+                android:layout_height="match_parent" />
+
+            <TextView
+                style="@style/BlueBtnText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/track" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/completed_pay_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gray_button_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal" 
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/gray_btn_icon_size"
+            android:layout_height="@dimen/gray_btn_icon_size"
+            android:src="@drawable/icon_pay" />
+
+        <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
+
+        <TextView
+            style="@style/GreenBtnText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -6,5 +6,4 @@
     <!-- pressed state. -->
     <item android:drawable="@drawable/book_btn_selected" android:state_pressed="true"/>
 
-
 </selector>

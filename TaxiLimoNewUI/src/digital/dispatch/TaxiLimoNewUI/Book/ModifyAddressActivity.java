@@ -38,12 +38,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +53,6 @@ import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoMaster;
-import digital.dispatch.TaxiLimoNewUI.DaoMaster.DevOpenHelper;
 import digital.dispatch.TaxiLimoNewUI.DaoSession;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.ContactExpandableListAdapter;
@@ -103,20 +102,11 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		DaoManager daoManager = DaoManager.getInstance(this);
 		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
 
-		// String fullAddressColumn = DBAddressDao.Properties.FullAddress.columnName;
-		// String nickNameColumn = DBAddressDao.Properties.NickName.columnName;
-		// String[] cloumns = { DBAddressDao.Properties.Id.columnName, fullAddressColumn, nickNameColumn };
-		// String[] from = { fullAddressColumn, nickNameColumn };
-		// int[] to = { R.id.tv_address, R.id.tv_name };
-
-		// cursor = db.query(addressDao.getTablename(), cloumns, null, null, null, null, null);
-		// SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_group, cursor, from, to, 0);
-		// adapter.setDropDownViewResource(R.layout.list_group_item);
-
 		_activity = this;
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
 
 		ActionBar ab = getActionBar();
+		
 		if (isDesitination) {
 			Address destination = Utils.mDropoffAddress;
 			if (destination != null) {
@@ -185,7 +175,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		tv_unitNumber = (TextView) findViewById(R.id.tv_unitNumber);
 		autoCompView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
-
 	}
 
 	private void setUpExpendableListView() {
@@ -270,7 +259,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 
 					contact_favorite_btn.setOnClickListener(new View.OnClickListener() {
 						public void onClick(View v) {
-
 							new addFavoriteTask(_activity, isFromContact).execute(ma.getAddress());
 						}
 					});
@@ -304,7 +292,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	@Override
 	public void onPause() {
 		super.onPause();
-
 		// In the case onPause() is called during a fling the image loader is
 		// un-paused to let any remaining background work complete.
 		mImageLoader.setPauseWork(false);

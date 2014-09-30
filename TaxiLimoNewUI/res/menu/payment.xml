@@ -4,9 +4,9 @@
     tools:context="digital.dispatch.TaxiLimoNewUI.PaymentActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/action_add"
+        android:title="@string/add_credit_card"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom"/>
 
 </menu>

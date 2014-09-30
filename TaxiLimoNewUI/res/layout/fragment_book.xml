@@ -52,11 +52,11 @@
                 android:id="@+id/my_location_btn"
                 android:layout_width="@dimen/address_bar_icon_size"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/normal_padding"
-                android:paddingRight="@dimen/normal_padding"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/normal_padding"
+                android:paddingRight="@dimen/normal_padding" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -128,10 +128,10 @@
                     android:layout_height="0dp"
                     android:layout_weight=".65"
                     android:gravity="center_vertical"
+                    android:maxLines="2"
                     android:paddingLeft="@dimen/normal_padding"
                     android:text="@string/empty_note"
                     android:textColor="@color/gray_light"
-                    android:maxLines="2"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -162,10 +162,10 @@
                     android:layout_weight=".65"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/normal_padding"
+                    android:singleLine="true"
                     android:text="@string/enter_for_fare"
                     android:textColor="@color/gray_light"
-                    android:textSize="17sp" 
-                    android:singleLine="true"/>
+                    android:textSize="17sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -264,6 +264,7 @@
 
         <TextView
             android:id="@+id/book_button"
+            style="@style/TextDropShadow"
             android:layout_width="match_parent"
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
@@ -273,7 +274,6 @@
             android:clickable="true"
             android:gravity="center"
             android:text="@string/book"
-            style="@style/TextDropShadow"
             android:textColor="@color/white"
             android:textSize="@dimen/book_font_size"
             android:textStyle="bold" />
@@ -285,5 +285,18 @@
             android:layout_centerVertical="true"
             android:src="@drawable/pin_blue" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/white_line"
+        android:background="@color/gray_light" />
+
+    <View
+        android:id="@+id/white_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" />
 
 </RelativeLayout>

@@ -66,8 +66,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 		if(isFromBooking){
 			BookFragment fragment = (BookFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("book"); 
 			fragment.handleGetCompanyListResponse(tempCompList, mAddress.getLocality());
-		}else{
-			
+		}else{	
 			((AttributeActivity)_context).loadCompanyList(tempCompList);	
 		}
 	}

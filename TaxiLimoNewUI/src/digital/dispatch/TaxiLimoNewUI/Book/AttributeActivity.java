@@ -1,7 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,10 +27,12 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -40,40 +44,37 @@ public class AttributeActivity extends Activity {
 	private ListView lv_company;
 	private CompanyListAdapter cp_adapter;
 	// private Address mAddress;
-	private ArrayList<Integer> selected_attributes;
+	// private ArrayList<Integer> selected_attributes;
 	private MenuItem refresh_icon;
 	private boolean refreshing;
+	private boolean shouldBookRightAfter;
+	private Context _context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_attribute);
-
+		_context = this;
 		// mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
-
+		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// Intent returnIntent = new Intent();
-				// Logger.e("selecting company: " + cp_adapter.getCompanyItem(position).name);
-				// returnIntent.putExtra(MBDefinition.COMPANY_ITEM, cp_adapter.getCompanyItem(position));
-				// returnIntent.putExtra(MBDefinition.ADDRESS, mAddress);
-				// setResult(RESULT_OK, returnIntent);
-				// finish();
-				finishWithData(position);
+				if (shouldBookRightAfter) {
+					Utils.mSelectedCompany = cp_adapter.getCompanyItem(position);
+					Intent returnIntent = new Intent();
+					setResult(RESULT_OK, returnIntent);
+					finish();
+				} else {
+					Utils.mSelectedCompany = cp_adapter.getCompanyItem(position);
+					finish();
+				}
 			}
 		});
 
-		// gridview.setOnItemClickListener(new OnItemClickListener() {
-		// @Override
-		// public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		// Toast.makeText(AttributeActivity.this, "aabbcc" + position, Toast.LENGTH_SHORT).show();
-		// }
-		// });
-
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -85,15 +86,12 @@ public class AttributeActivity extends Activity {
 		Logger.e(TAG, "onCreateOptionsMenu");
 		getMenuInflater().inflate(R.menu.attribute, menu);
 		refresh_icon = menu.findItem(R.id.action_refresh);
-		if(refreshing){
+		if (refreshing) {
 			boolean isFromBooking = false;
 			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			startUpdateAnimation(refresh_icon);
-			
-		}
-		else{
+		} else {
 			refresh_icon.setVisible(false);
-			
 		}
 		return true;
 	}
@@ -103,7 +101,7 @@ public class AttributeActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finishWithData(null);
+			finish();
 		}
 		return true;
 	}
@@ -134,27 +132,18 @@ public class AttributeActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			finishWithData(null);
+			finish();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void finishWithData(Integer position) {
-		Intent returnIntent = new Intent();
-		if (position != null)
-			returnIntent.putExtra(MBDefinition.COMPANY_ITEM, cp_adapter.getCompanyItem(position));
-		returnIntent.putExtra(MBDefinition.SELECTED_ATTRIBUTE, selected_attributes);
-		// returnIntent.putExtra(MBDefinition.ADDRESS, mAddress);
-		setResult(RESULT_OK, returnIntent);
-		finish();
-	}
-
 	// call from AttributeItemAdapter
 	public void filterCompany(ArrayList<Integer> positive_attribute_IDs) {
-		selected_attributes = positive_attribute_IDs;
+		// selected_attributes = positive_attribute_IDs;
+		Utils.selected_attribute = positive_attribute_IDs;
 		if (positive_attribute_IDs.size() == 0) {
-			cp_adapter = new CompanyListAdapter(this, companyArr);
+			cp_adapter = new CompanyListAdapter(this, companyArr, shouldBookRightAfter);
 			lv_company.setAdapter(cp_adapter);
 		} else {
 			ArrayList<CompanyItem> temp = new ArrayList<CompanyItem>();
@@ -177,7 +166,7 @@ public class AttributeActivity extends Activity {
 				compArr[i] = temp.get(i);
 			}
 
-			cp_adapter = new CompanyListAdapter(this, compArr);
+			cp_adapter = new CompanyListAdapter(this, compArr, shouldBookRightAfter);
 			lv_company.setAdapter(cp_adapter);
 		}
 	}

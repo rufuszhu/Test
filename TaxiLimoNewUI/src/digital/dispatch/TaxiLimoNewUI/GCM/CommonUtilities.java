@@ -21,6 +21,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -138,7 +139,7 @@ public final class CommonUtilities {
 		return false;
     }
     
-    public static BroadcastReceiver getGenericReceiver(final Context ctx) {
+    public static BroadcastReceiver getGenericReceiver(final Context ctx, final boolean isTrackDetail) {
 	    final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
@@ -169,6 +170,7 @@ public final class CommonUtilities {
 	        				@Override
 	        				public void onClick(DialogInterface dialog, int which) {
 	        					removeNotification(gcmID, ctx);
+	        								
 	        				}
 	        	    	})
 	        	    	.setNegativeButton(R.string.late_trip_no_wait, new DialogInterface.OnClickListener() {
@@ -187,6 +189,8 @@ public final class CommonUtilities {
 							@Override
 							public void onClick(DialogInterface arg0, int arg1) {
 								removeNotification(gcmID, ctx);
+								if(isTrackDetail)
+	        						((TrackDetailActivity)ctx).startRecallJobTask(); 
 							}
 		    			});
 	        		}

@@ -41,7 +41,7 @@
     <dimen name="bot_button_height">70dp</dimen>
     
     
-    
+    <!-- book -->
     <dimen name="map_addressBar_height">50dp</dimen>
     <dimen name="address_bar_icon_size">50dp</dimen>
     <dimen name="little_guy_icon_size">20dp</dimen>
@@ -57,4 +57,22 @@
 	<dimen name="track_circle_size">20dp</dimen>
 	<dimen name="track_circle_holo_size">20dp</dimen>
 	
+	<!-- attribute -->
+	<dimen name="select_company_font_size">20sp</dimen>
+	<dimen name="attr_font_size">14sp</dimen>
+	<dimen name="company_list_item_height">100dp</dimen>
+	<dimen name="selection_btn_font_size">17sp</dimen>
+	<dimen name="selection_btn_height">35dp</dimen>
+	<dimen name="selection_btn_width">75dp</dimen>
+	<dimen name="toggle_btn_icon_size">20dp</dimen>
+	
+	<dimen name="pay_table_row_height">50dp</dimen>
+	
+	
+	<!-- dialog -->
+	<dimen name="dialog_font_size">20sp</dimen>
+	
+	<dimen name="credit_card_item_height">50dp</dimen>
+	<dimen name="credit_card_icon_size">30dp</dimen>
+	<dimen name="cardit_card_form_lable_width">130dp</dimen>
 </resources>

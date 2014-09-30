@@ -25,6 +25,14 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 	public void setValues(List<DBBooking> values) {
 		this.values = values;
 	}
+	
+	public void updateValues(DBBooking dbBook){
+		int trid = dbBook.getTaxi_ride_id();
+		for(int i=0;i<values.size();i++){
+			if(values.get(i).getTaxi_ride_id()==trid)
+				values.set(i, dbBook);
+		}
+	}
 
 	public BookingListAdapter(Context context, List<DBBooking> values) {
 		super(context, R.layout.booking_list_item, values);

@@ -28,9 +28,9 @@
 
     <style name="TextDropShadowWhite">
         <item name="android:shadowColor">@color/white</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">-1</item>
-        <item name="android:shadowRadius">0.5</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
     </style>
 
     <style name="TripTableTitleColumn">
