@@ -316,6 +316,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_attr"
+                    android:gravity="center_vertical"
                     style="@style/TripTableValueColumn" >
                 </LinearLayout>
             </TableRow>
@@ -474,7 +475,7 @@
                 style="@style/RedBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel_trip" />
+                android:text="@string/cancel" />
         </LinearLayout>
 
         <LinearLayout

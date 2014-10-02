@@ -66,6 +66,8 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         public final static Property Company_phone_number = new Property(40, String.class, "company_phone_number", false, "COMPANY_PHONE_NUMBER");
         public final static Property Company_icon = new Property(41, String.class, "company_icon", false, "COMPANY_ICON");
         public final static Property Company_attribute_list = new Property(42, String.class, "company_attribute_list", false, "COMPANY_ATTRIBUTE_LIST");
+        public final static Property AuthCode = new Property(43, String.class, "authCode", false, "AUTH_CODE");
+        public final static Property PaidAmount = new Property(44, String.class, "paidAmount", false, "PAID_AMOUNT");
     };
 
 
@@ -123,7 +125,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
                 "'COMPANY_DESCRIPTION' TEXT," + // 39: company_description
                 "'COMPANY_PHONE_NUMBER' TEXT," + // 40: company_phone_number
                 "'COMPANY_ICON' TEXT," + // 41: company_icon
-                "'COMPANY_ATTRIBUTE_LIST' TEXT);"); // 42: company_attribute_list
+                "'COMPANY_ATTRIBUTE_LIST' TEXT," + // 42: company_attribute_list
+                "'AUTH_CODE' TEXT," + // 43: authCode
+                "'PAID_AMOUNT' TEXT);"); // 44: paidAmount
     }
 
     /** Drops the underlying database table. */
@@ -351,6 +355,16 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         if (company_attribute_list != null) {
             stmt.bindString(43, company_attribute_list);
         }
+ 
+        String authCode = entity.getAuthCode();
+        if (authCode != null) {
+            stmt.bindString(44, authCode);
+        }
+ 
+        String paidAmount = entity.getPaidAmount();
+        if (paidAmount != null) {
+            stmt.bindString(45, paidAmount);
+        }
     }
 
     /** @inheritdoc */
@@ -405,7 +419,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // company_description
             cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // company_phone_number
             cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // company_icon
-            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42) // company_attribute_list
+            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // company_attribute_list
+            cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // authCode
+            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44) // paidAmount
         );
         return entity;
     }
@@ -456,6 +472,8 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         entity.setCompany_phone_number(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
         entity.setCompany_icon(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
         entity.setCompany_attribute_list(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
+        entity.setAuthCode(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
+        entity.setPaidAmount(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
      }
     
     /** @inheritdoc */

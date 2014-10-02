@@ -28,10 +28,13 @@ import android.widget.TextView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.PayActivity;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.EditCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.RegisterCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
@@ -101,10 +104,11 @@ public class TrackDetailActivity extends Activity {
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
-		boolean isTrackDetail=true;
-		bcReceiver = CommonUtilities.getGenericReceiver(_context,isTrackDetail);
+		
+		findView();
+		fillTable();
+		initListener();
 		isRefreshing = false;
-		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 	}
 	
 	@Override
@@ -113,10 +117,23 @@ public class TrackDetailActivity extends Activity {
 		Logger.e(TAG, "on RESUME");
 		daoManager = DaoManager.getInstance(_context);
 		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-			
-		findView();
-		fillTable();
-		initListener();
+		boolean isTrackDetail=true;
+		bcReceiver = CommonUtilities.getGenericReceiver(_context,isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Logger.e("onActivityResult");
+		Logger.e("requestCode: " + requestCode);
+		if (requestCode == MBDefinition.REQUEST_REGISTER_CC) {
+			if (resultCode == RESULT_OK) {
+				if (data.getExtras().getParcelable(MBDefinition.EXTRA_BOOKING) != null) {
+					dbBook = (DBBooking) data.getExtras().getSerializable(MBDefinition.EXTRA_BOOKING);
+					arrived_pay_btn.callOnClick();
+				}
+			}
+		}
 	}
 
 
@@ -195,8 +212,10 @@ public class TrackDetailActivity extends Activity {
 		tv_company_name.setText(dbBook.getCompany_name());
 		tv_company_description.setText(dbBook.getCompany_description());
 
-		if (dbBook.getAttributeList() != null)
-			Utils.showOption(ll_attr, dbBook.getAttributeList().split(","), _context, 0);
+		if (dbBook.getAttributeList() != null){
+			int margin_right = 10;
+			Utils.showOption(ll_attr, dbBook.getAttributeList().split(","), _context, margin_right);
+		}
 
 	}
 
@@ -229,10 +248,29 @@ public class TrackDetailActivity extends Activity {
 
 		payListener = new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(_context, PayActivity.class);
-				intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
-				startActivityForResult(intent, MBDefinition.REQUEST_PAYMENT);
-				finish();
+				DBCreditCardDao creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_READ);
+				if(creditCardDao.queryBuilder().list().size()==0){
+					AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+					builder.setMessage(R.string.ask_register_cc).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							Intent intent = new Intent(_context, EditCreditCardActivity.class);
+							intent.putExtra(MBDefinition.EXTRA_BOOKING, dbBook);
+							startActivityForResult(intent,MBDefinition.REQUEST_REGISTER_CC);
+						}
+					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss(); 
+						}
+					});
+					builder.show();
+				}
+				else{
+					Intent intent = new Intent(_context, PayActivity.class);
+					intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
+					startActivity(intent);
+					overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+					finish();
+				}
 			}
 		};
 

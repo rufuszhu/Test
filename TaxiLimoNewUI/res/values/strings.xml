@@ -2,8 +2,12 @@
 <resources>
 
     <!-- UI -->
-    <string name="positive_button">OK</string>
-    <string name="negative_button">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="string_continue">Continue</string>
+    <string name="important">IMPORTANT!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- share -->
     <string name="store_const_user_name">UserName</string>
@@ -17,6 +21,7 @@
     <string name="store_const_last_credit_card">LastCreditCard</string>
     <string name="store_const_is_am_pm">IsAmPm</string>
     <string name="store_const_preferred_company">PreferredCompany</string>
+    
 
     <!-- register -->
     <string name="first_name">First Name</string>
@@ -24,7 +29,27 @@
     <string name="email">Email</string>
     <string name="re_enter_email">Re-Enter Email</string>
     <string name="phone_number">Phone Number</string>
-
+    <string name="personal_info">Personal Info</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="cc_nick_name">Credit Card Nickname</string>
+    <string name="cc_holder_name">Credit Card Holder Name</string>
+    <string name="pin_hint">PIN (4-digit)</string>
+    <string name="re_enter_pin_hint">Re-enter PIN (4-digit)</string>
+    <string name="cc_number">Credit Card Number</string>
+    <string name="pin_checkbox_text">User PIN protection for payment</string>
+    <string name="empty_first_name">Please enter your First Name</string>
+    <string name="empty_last_name">Please enter your Last Name</string>
+    <string name="empty_phone_number">Please enter your Phone Number</string>
+    <string name="email_not_matching">Emails not matching</string>
+    <string name="phone_number_too_long">Phone number is too long</string>
+    <string name="empty_pin">Please Enter 4 digit Pin</string>
+	<string name="invalid_pin_length">Pin Length must be 4</string>
+	<string name="pin_not_matching">Pin not matching</string>
+	<string name="pin_warning">Without PIN, payment can be used by anyone having access to this phone.\n\nAre you sure you want to continue?</string>
+	<string name="warning">WARNING</string>
+	<string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
+	
     <!-- trip detail table -->
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
@@ -39,12 +64,13 @@
     <string name="completed">Completed</string>
     <string name="cancel_trip">Cancel Trip</string>
     <string name="pay">Pay</string>
-    <string name="cancel">Cancel</string>
+
     <string name="trip_cancled">Trip Canceled</string>
     <string name="trip_completed">Trip Completed</string>
     <string name="book_again">Book Again</string>
     <string name="remove">Remove</string>
-
+    <string name="ask_register_cc">There is no registered credit card. Do you want to register a credit card now?</string>
+	<string name="auth_code">Auth Code</string>
     <!-- modify address -->
     <string name="contacts">Contacts</string>
     <string name="favorite">Favorite</string>
@@ -62,7 +88,7 @@
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>
     <string name="clear"></string>
-    <string name="app_name">TaxiLimo</string>
+    <string name="app_name">Zoro_DEV</string>
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>
@@ -249,7 +275,7 @@
     <string name="illegal_argument_exception">        Illegal arguments: Latitude %1$.8f Longitude %2$.8f</string>
     <string name="invalid_action">Invalid intent action %1$s</string>
     <string name="invalid_integer_id">Invalid integer request ID: %1$s</string>
-    <string name="IO_Exception_getFromLocation">IO Exception in Geocoder.getFromLocation()</string>
+    <string name="IO_Exception_getFromLocation">Cannot get current Location</string>
     <string name="location_requested">Periodic updates requested</string>
     <string name="location_updated">Location updated</string>
     <string name="location_update_error">Location update failed</string>
@@ -270,13 +296,13 @@
     <string name="stop_updates">Stop Updates</string>
     <string name="unknown">--Unknown--</string>
     <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.</string>
-    <string name="title_activity_attribute">Vehicle Attributes</string>
+    <string name="title_activity_attribute">Attributes</string>
     <string name="title_activity_trip_detail">Trip Detail</string>
-    <string name="title_activity_tracking_map">TrackingMapActivity</string>
+    <string name="title_activity_tracking_map">Track Your Taxi</string>
     <string name="title_activity_track_detail">Trip Detail</string>
     <string name="title_activity_edit_credit_card">Edit Credit Card</string>
     <string name="title_activity_register_credit_card">Register Credit Card</string>
-    <string name="title_activity_pay">PayActivity</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_pay">Pay</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>

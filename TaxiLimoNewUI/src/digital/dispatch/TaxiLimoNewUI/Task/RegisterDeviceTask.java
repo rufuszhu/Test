@@ -4,10 +4,12 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
@@ -17,6 +19,8 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 
 public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> implements IRegDevResponseListener, IRequestTimerListener {
 	private static final String TAG = "RegisterDeviceTask";
@@ -46,9 +50,12 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 			rdReq.setToken(GCMRegisterID);
 			// rdReq.setPhoneNum(UserAccount.phoneNum(getApplicationContext()));
 			// rdReq.setName(UserAccount.userName(getApplicationContext()));
-
-			rdReq.setPhoneNum("7788594684");
-			rdReq.setName("Rufus Zhu");
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
+			String firstName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME);
+			String lastName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME);
+			rdReq.setPhoneNum(phone);
+			rdReq.setName(firstName + " " + lastName);
 
 			if (Locale.getDefault().getLanguage().compareToIgnoreCase("de") == 0) {
 				rdReq.setLocale("de-DE");
@@ -78,7 +85,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	@Override
 	public void onErrorResponse(String errorString) {
 
-		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.positive_button, null).show();
+		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 
 		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
 
@@ -88,10 +95,10 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	public void onError() {
 
 		if (checkConnection()) {
-			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.positive_button, null)
+			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null)
 					.show();
 		} else {
-			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_internet).setCancelable(false).setPositiveButton(R.string.positive_button, null)
+			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_internet).setCancelable(false).setPositiveButton(R.string.ok, null)
 					.show();
 		}
 

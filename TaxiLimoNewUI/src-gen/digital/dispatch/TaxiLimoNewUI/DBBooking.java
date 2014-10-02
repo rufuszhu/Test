@@ -51,6 +51,8 @@ public class DBBooking implements Serializable{
     private String company_phone_number;
     private String company_icon;
     private String company_attribute_list;
+    private String authCode;
+    private String paidAmount;
 
     public DBBooking() {
     }
@@ -59,7 +61,7 @@ public class DBBooking implements Serializable{
         this.id = id;
     }
 
-    public DBBooking(Long id, String destID, Integer taxi_ride_id, String ride_id, String sysId, Boolean asap, Double carLatitude, Double carLongitude, String dispatchedCar, String dispatchedTime, String dispatchedDriver, String pickup_house_number, String pickup_street_name, String pickup_district, String pickup_unit, String pickup_landmark, Double pickup_longitude, Double pickup_latitude, String dropoff_house_number, String dropoff_street_name, String dropoff_district, String dropoff_unit, String dropoff_landmark, Double dropoff_longitude, Double dropoff_latitude, String attributeList, String phonenum, String pickup_time, String remarks, String tripCancelledTime, String tripCreationTime, String tripModificationTime, String tripCompletionTime, Integer tripStatus, String pickupAddress, String dropoffAddress, Boolean already_paid, Boolean multi_pay_allow, String company_name, String company_description, String company_phone_number, String company_icon, String company_attribute_list) {
+    public DBBooking(Long id, String destID, Integer taxi_ride_id, String ride_id, String sysId, Boolean asap, Double carLatitude, Double carLongitude, String dispatchedCar, String dispatchedTime, String dispatchedDriver, String pickup_house_number, String pickup_street_name, String pickup_district, String pickup_unit, String pickup_landmark, Double pickup_longitude, Double pickup_latitude, String dropoff_house_number, String dropoff_street_name, String dropoff_district, String dropoff_unit, String dropoff_landmark, Double dropoff_longitude, Double dropoff_latitude, String attributeList, String phonenum, String pickup_time, String remarks, String tripCancelledTime, String tripCreationTime, String tripModificationTime, String tripCompletionTime, Integer tripStatus, String pickupAddress, String dropoffAddress, Boolean already_paid, Boolean multi_pay_allow, String company_name, String company_description, String company_phone_number, String company_icon, String company_attribute_list, String authCode, String paidAmount) {
         this.id = id;
         this.destID = destID;
         this.taxi_ride_id = taxi_ride_id;
@@ -103,6 +105,8 @@ public class DBBooking implements Serializable{
         this.company_phone_number = company_phone_number;
         this.company_icon = company_icon;
         this.company_attribute_list = company_attribute_list;
+        this.authCode = authCode;
+        this.paidAmount = paidAmount;
     }
 
     public Long getId() {
@@ -447,6 +451,22 @@ public class DBBooking implements Serializable{
 
     public void setCompany_attribute_list(String company_attribute_list) {
         this.company_attribute_list = company_attribute_list;
+    }
+
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
+
+    public String getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(String paidAmount) {
+        this.paidAmount = paidAmount;
     }
 
 }

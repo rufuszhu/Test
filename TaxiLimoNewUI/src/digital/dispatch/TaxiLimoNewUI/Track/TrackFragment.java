@@ -62,8 +62,17 @@ public class TrackFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		isRefreshing=false;
+		isRefreshing = false;
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		Logger.d(TAG, "onActivityCreated");
 		setHasOptionsMenu(true);
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
@@ -102,22 +111,21 @@ public class TrackFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
-		DaoManager daoManager = DaoManager.getInstance(getActivity());
-		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+		Logger.d(TAG, "on RESUME");
 		List<DBBooking> values = bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
 				.orderDesc(Properties.TripCreationTime).list();
 		adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
+		adapter.notifyDataSetChanged();
 
-		if (refresh_icon != null) {
+		if (refresh_icon != null && !isRefreshing) {
 			startRecallJobTask();
 		}
 	}
 
 	private void startUpdateAnimation(MenuItem item) {
 		// Do animation start
-		isRefreshing=true;
+		isRefreshing = true;
 		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		ImageView iv = (ImageView) inflater.inflate(R.layout.iv_refresh, null);
 		Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_refresh);
@@ -127,7 +135,7 @@ public class TrackFragment extends ListFragment {
 	}
 
 	public void stopUpdateAnimation() {
-		isRefreshing=false;
+		isRefreshing = false;
 		// Get our refresh item from the menu
 		if (refresh_icon.getActionView() != null) {
 			// Remove the animation.
@@ -153,8 +161,8 @@ public class TrackFragment extends ListFragment {
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.d("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			if(!isRefreshing)
-			startUpdateAnimation(refresh_icon);
+			if (!isRefreshing)
+				startUpdateAnimation(refresh_icon);
 			new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
 		}
 		// if (pairList.size() == 0) {
@@ -192,6 +200,11 @@ public class TrackFragment extends ListFragment {
 		while (iterator.hasNext()) {
 			DBBooking book = iterator.next();
 			rideIdList += book.getTaxi_ride_id() + ",";
+		}
+		try {
+			iterator.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		// get rid off the last ","
 		if (rideIdList.endsWith(","))

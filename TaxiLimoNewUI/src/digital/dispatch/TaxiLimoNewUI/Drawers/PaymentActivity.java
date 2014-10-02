@@ -39,6 +39,7 @@ public class PaymentActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_payment);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
@@ -50,6 +51,7 @@ public class PaymentActivity extends ActionBarActivity {
 				Intent intent = new Intent(context, EditCreditCardActivity.class);
 				intent.putExtra(MBDefinition.EXTRA_CREDIT_CARD, cardList.get(position));
 				startActivity(intent);
+				overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			}
 		});
 		
@@ -74,6 +76,17 @@ public class PaymentActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.payment, menu);
 		return true;
 	}
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+    }
+    
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -84,6 +97,7 @@ public class PaymentActivity extends ActionBarActivity {
 		if (id == R.id.action_add) {
 			Intent intent = new Intent(this, EditCreditCardActivity.class);
 			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

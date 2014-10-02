@@ -1,5 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
+import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -21,7 +22,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
@@ -44,10 +49,14 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,117 +64,110 @@ import android.widget.Toast;
 public class TrackingMapActivity extends android.support.v4.app.FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
-	
+
 	private ImageView iv_company_logo;
 	private TextView tv_company_name;
 	private TextView tv_car_num;
 	private TextView tv_driver_id;
+	private TextView tv_status;
 	private ImageView zoom_btn;
-	private ImageView info_btn;
-	
+
 	private DBBooking dbBook;
 	private LatLng pickupLatLng;
 	private LatLng carLatLng;
 	private Marker pickupMarker;
 	private Marker carMarker;
-	
+
 	private Runnable mHandlerTask;
 	private Handler mHandler;
 	private Context _context;
+	private DBBookingDao bookingDao;
+	private boolean isRefreshing;
+	private MenuItem refresh_icon;
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000) // 5 seconds
-				.setFastestInterval(16) // 16ms = 60fps
-				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+			.setFastestInterval(16) // 16ms = 60fps
+			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 	private static final String TAG = "TrackingMapActivity";
-	private final static int INTERVAL = 1000 * 10; //10 second
+	private final static int INTERVAL = 1000 * 30; // 30 second
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tracking_map);
 		_context = this;
+		isRefreshing = false;
 		findView();
 		bindView();
 		bindEvent();
-		pickupLatLng = new LatLng(dbBook.getPickup_latitude(),dbBook.getPickup_longitude());
+		pickupLatLng = new LatLng(dbBook.getPickup_latitude(), dbBook.getPickup_longitude());
 		mHandler = new Handler();
-		mHandlerTask = new Runnable()
-		{
-		     @Override 
-		     public void run() {
-		    	  new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
-		    	  Toast.makeText(_context, "Updating Car Location" , Toast.LENGTH_LONG).show();
-		          mHandler.postDelayed(mHandlerTask, INTERVAL);
-		     }
+		mHandlerTask = new Runnable() {
+			@Override
+			public void run() {
+				startRecallJobTask();
+				mHandler.postDelayed(mHandlerTask, INTERVAL);
+			}
 		};
+		DaoManager daoManager = DaoManager.getInstance(_context);
+		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 
 	}
 
 	private void findView() {
 		iv_company_logo = (ImageView) findViewById(R.id.iv_company_logo);
 		tv_company_name = (TextView) findViewById(R.id.tv_company_name);
+		tv_status = (TextView) findViewById(R.id.tv_status);
 		tv_car_num = (TextView) findViewById(R.id.tv_car_num);
 		tv_driver_id = (TextView) findViewById(R.id.tv_driver_id);
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
-		info_btn = (ImageView) findViewById(R.id.info_btn);
 	}
-	
+
 	private void bindView() {
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
-		//download company logo
+		// download company logo
 		String prefixURL = this.getString(R.string.url);
 		prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
 		new DownloadImageTask(iv_company_logo).execute(prefixURL + dbBook.getCompany_icon());
-		
+
 		tv_company_name.setText(dbBook.getCompany_name());
 		tv_car_num.setText(dbBook.getDispatchedCar());
 		tv_driver_id.setText(dbBook.getDispatchedDriver());
+		tv_status.setText("(" + dbBook.getTripStatus() + ")");
 	}
-	
+
 	private void bindEvent() {
-		zoom_btn.setOnClickListener(new OnClickListener(){
+		zoom_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				if(checkReady() && mMap.getCameraPosition().zoom != MBDefinition.DEFAULT_ZOOM){
+				if (checkReady() && mMap.getCameraPosition().zoom != MBDefinition.DEFAULT_ZOOM) {
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
-				}	
-				else if(checkReady() && carMarker!=null && pickupMarker!=null){
+				} else if (checkReady() && carMarker != null && pickupMarker != null) {
 					LatLngBounds.Builder builder = new LatLngBounds.Builder();
-					
+
 					builder.include(carMarker.getPosition());
 					builder.include(pickupMarker.getPosition());
-					
+
 					LatLngBounds bounds = builder.build();
-					
-					int padding = 100; // offset from edges of the map in pixels
+
+					int padding = 150; // offset from edges of the map in pixels
 					CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 					mMap.moveCamera(cu);
 				}
 			}
 		});
-		
-		info_btn.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-	}
-	
-	private void startRepeatingTask()
-	{
-	    mHandlerTask.run(); 
+
 	}
 
-	private void stopRepeatingTask()
-	{
-	    mHandler.removeCallbacks(mHandlerTask);
+	private void startRepeatingTask() {
+		mHandlerTask.run();
 	}
-	
+
+	private void stopRepeatingTask() {
+		mHandler.removeCallbacks(mHandlerTask);
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -173,8 +175,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		setUpMapIfNeeded();
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
-		
-		
+
 		startRepeatingTask();
 
 	}
@@ -191,8 +192,11 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.tracking_map, menu);
+		Logger.e(TAG, "onCreateOptionsMenu");
+		getMenuInflater().inflate(R.menu.track_detail, menu);
+		refresh_icon = menu.findItem(R.id.action_refresh);
+		startRecallJobTask();
+
 		return true;
 	}
 
@@ -202,12 +206,19 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_refresh) {
+			startRecallJobTask();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
+	private void startRecallJobTask() {
+		if (refresh_icon != null && !isRefreshing)
+			startUpdateAnimation(refresh_icon);
+		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
+	}
+
 	/**
 	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google Maps API.
 	 */
@@ -242,9 +253,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	public void onConnected(Bundle arg0) {
 		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
-		pickupMarker = mMap.addMarker(new MarkerOptions()
-        .position(pickupLatLng)
-        .draggable(false));
+		pickupMarker = mMap.addMarker(new MarkerOptions().position(pickupLatLng).draggable(false));
 	}
 
 	@Override
@@ -291,6 +300,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		}
 
 	}
+
 	/**
 	 * Show a dialog returned by Google Play services for the connection error code
 	 * 
@@ -308,18 +318,110 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 			errorDialog.show();
 		}
 	}
-	//get called from recall job task
+
+	// get called from recall job task
 	public void updateCarMarker(LatLng carLatLng) {
-		
-		if (checkReady() && this.carLatLng==null) {
+		stopUpdateAnimation();
+		if (carLatLng == null) {
+			Toast.makeText(_context, "Car Location not availabe", Toast.LENGTH_LONG).show();
+		}
+
+		if (checkReady() && this.carLatLng == null) {
 			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
 		}
+
 		this.carLatLng = carLatLng;
-		if(carMarker!=null)
+		if (carMarker != null)
 			carMarker.remove();
-		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_drop_off);
-		carMarker = mMap.addMarker(new MarkerOptions()
-        .position(carLatLng)
-        .draggable(false).icon(icon));
+		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_taxi);
+		carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+		
+	}
+
+	public void updateStatus(JobItem[] jobArr) {
+		stopUpdateAnimation();
+		JobItem job = jobArr[0];
+		switch (Integer.parseInt(job.tripStatusUniformCode)) {
+		case MBDefinition.TRIP_STATUS_BOOKED:
+		case MBDefinition.TRIP_STATUS_DISPATCHING:
+			break;
+		case MBDefinition.TRIP_STATUS_ACCEPTED:
+			dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
+			bookingDao.update(dbBook);
+			break;
+		case MBDefinition.TRIP_STATUS_ARRIVED:
+			dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
+			bookingDao.update(dbBook);
+			break;
+		case MBDefinition.TRIP_STATUS_COMPLETE:
+			switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
+
+			case MBDefinition.DETAIL_STATUS_IN_SERVICE:
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+				bookingDao.update(dbBook);
+				break;
+			case MBDefinition.DETAIL_STATUS_COMPLETE:
+
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
+				bookingDao.update(dbBook);
+
+				break;
+			case MBDefinition.DETAIL_STATUS_CANCEL:
+
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+				bookingDao.update(dbBook);
+				break;
+			// special complete: no show, force complete etc. set as "Cancelled" to user
+			case MBDefinition.DETAIL_STATUS_NO_SHOW:
+			case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
+
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+				bookingDao.update(dbBook);
+				break;
+			// other unimportant intermediate status, just ignore
+			case MBDefinition.DETAIL_OTHER_IGNORE:
+
+			default:
+				break;
+			}
+			break;
+
+		}
+		
+		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
+			tv_status.setText("(Completed)");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
+			tv_status.setText("(Canceled)");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
+			tv_status.setText("(Accepted)");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
+			tv_status.setText("(Arrived)");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
+			tv_status.setText("(Booked)");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
+			tv_status.setText("(In Service)");
+		}
+		
+	}
+
+	private void startUpdateAnimation(MenuItem item) {
+		// Do animation start
+		isRefreshing = true;
+		LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		ImageView iv = (ImageView) inflater.inflate(R.layout.iv_refresh, null);
+		Animation rotation = AnimationUtils.loadAnimation(_context, R.anim.rotate_refresh);
+		rotation.setRepeatCount(Animation.INFINITE);
+		iv.startAnimation(rotation);
+		item.setActionView(iv);
+	}
+
+	public void stopUpdateAnimation() {
+		isRefreshing = false;
+		// Get our refresh item from the menu
+		if (refresh_icon.getActionView() != null) {
+			// Remove the animation.
+			refresh_icon.getActionView().clearAnimation();
+			refresh_icon.setActionView(null);
+		}
 	}
 }

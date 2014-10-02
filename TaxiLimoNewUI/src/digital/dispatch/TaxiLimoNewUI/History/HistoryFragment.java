@@ -53,7 +53,7 @@ public class HistoryFragment extends ListFragment {
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		List<DBBooking> values = bookingDao.queryBuilder()
 				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
-						 Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED)).list();
+						 Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED)).orderDesc(Properties.TripCreationTime).list();
 		
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);

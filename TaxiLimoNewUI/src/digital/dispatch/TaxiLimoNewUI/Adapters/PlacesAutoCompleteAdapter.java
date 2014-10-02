@@ -38,8 +38,6 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
         _context=context;
-        
-//        _streetNumber=streetNumber;
     }
 
     @Override
