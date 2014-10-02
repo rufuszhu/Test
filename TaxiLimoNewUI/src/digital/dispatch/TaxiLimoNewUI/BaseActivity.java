@@ -35,25 +35,13 @@ public class BaseActivity extends Activity {
         overridePendingTransition(activityAnimEnter, activityAnimExit);
     }
     
-    /**
-     * @author WangJun
-     * @since 2014å¹´6æœˆ28æ—¥
-     * @throws æ— 
-     * @see android.app.Activity#onBackPressed()
-     *
-     */
+
     @Override
     public void onBackPressed() {
         finish();
     }
     
-    /**
-     * @author WangJun
-     * @since 2014å¹´6æœˆ28æ—¥
-     * @throws æ— 
-     * @see android.app.Activity#finish()
-     *
-     */
+
     @Override
     public void finish() {
         super.finish();

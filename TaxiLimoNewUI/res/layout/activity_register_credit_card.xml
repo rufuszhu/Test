@@ -1,0 +1,186 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/normal_padding"
+    tools:context="digital.dispatch.TaxiLimoNewUI.RegisterCreditCardActivity" >
+
+    <TextView
+        android:id="@+id/register_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/payment_method"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/ll_enter_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_title"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pin_checkbox_text" />
+
+        <EditText
+            android:id="@+id/enter_pin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/pin_hint"
+            android:inputType="numberPassword"
+            android:paddingLeft="@dimen/normal_padding" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/re_enter_pin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/re_enter_pin_hint"
+            android:inputType="numberPassword"
+            android:paddingLeft="@dimen/normal_padding" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_payment_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_title"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <EditText
+            android:id="@+id/cc_nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/cc_nick_name"
+            android:inputType="textPersonName"
+            android:paddingLeft="@dimen/normal_padding" />
+
+        <EditText
+            android:id="@+id/cc_holder_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/cc_holder_name"
+            android:inputType="textPersonName"
+            android:paddingLeft="@dimen/normal_padding" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/cc_number"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/cc_number"
+            android:inputType="phone"
+            android:paddingLeft="@dimen/normal_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/cc_mm"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/edit_text_height"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:layout_weight=".5"
+                android:background="@drawable/shape_textview_border"
+                android:layout_marginRight="@dimen/normal_padding"
+                android:ems="10"
+                android:hint="MM"
+                android:inputType="number"
+                android:paddingLeft="@dimen/normal_padding" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/cc_yy"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/edit_text_height"
+                
+                android:layout_marginTop="@dimen/normal_padding"
+                android:layout_weight=".5"
+                android:background="@drawable/shape_textview_border"
+                android:ems="10"
+                android:hint="YY"
+                android:inputType="number"
+                android:paddingLeft="@dimen/normal_padding" >
+            </EditText>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/cc_zip"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/zip_code"
+            android:inputType="textPostalAddress"
+            android:paddingLeft="@dimen/normal_padding" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_pay_btns"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/skip_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/normal_padding"
+            android:layout_weight=".5"
+            android:background="@drawable/white_button_selector"
+            android:gravity="center"
+            android:text="Skip"
+            android:textSize="@dimen/next_size" />
+
+        <TextView
+            android:id="@+id/next_btn_pay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:background="@drawable/white_button_selector"
+            android:gravity="center"
+            android:text="Next"
+            android:textSize="@dimen/next_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/next_btn_pin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/white_button_selector"
+        android:gravity="center"
+        android:text="Next"
+        android:textSize="@dimen/next_size"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -42,7 +43,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 	public static class ViewHolder {
 		public TextView address;
-		public TextView status;
+		public ImageView status;
 	}
 
 	// @Override
@@ -69,7 +70,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 			ViewHolder viewHolder = new ViewHolder();
 
 			viewHolder.address = (TextView) rowView.findViewById(R.id.text_address);
-			viewHolder.status = (TextView) rowView.findViewById(R.id.text_status);
+			viewHolder.status = (ImageView) rowView.findViewById(R.id.text_status);
 			rowView.setTag(viewHolder);
 		}
 
@@ -78,23 +79,17 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		holder.address.setText(values.get(position).getPickupAddress());
 
 		if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.orange_light));
-			holder.status.setText("Completed");
+			holder.status.setImageResource(R.drawable.tag_completed);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.blue_light));
-			holder.status.setText("Canceled");
+			holder.status.setImageResource(R.drawable.tag_canceled);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.blue_light));
-			holder.status.setText("Accepted");
+			holder.status.setImageResource(R.drawable.tag_dispatched);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.blue_light));
-			holder.status.setText("Arrived");
+			holder.status.setImageResource(R.drawable.tag_arrived);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.blue_light));
-			holder.status.setText("Booked");
+			holder.status.setImageResource(R.drawable.tag_accepted);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			((GradientDrawable) holder.status.getBackground()).setColor(context.getResources().getColor(R.color.blue_light));
-			holder.status.setText("In Service");
+			holder.status.setImageResource(R.drawable.tag_in_service);
 		}
 
 		return rowView;

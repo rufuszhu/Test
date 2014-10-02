@@ -185,7 +185,7 @@ public final class CommonUtilities {
 		        	    prefEditor.commit();
 	        		}
 	        		else {
-	        			builder.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
+	        			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface arg0, int arg1) {
 								removeNotification(gcmID, ctx);
@@ -194,8 +194,12 @@ public final class CommonUtilities {
 							}
 		    			});
 	        		}
-	        		
-	        		builder.create().show();
+	        		try{
+	        			builder.create().show();
+	        		}
+	        		catch (Exception e){
+	        			e.printStackTrace();
+	        		}
 	        	}
 	        }
 	    };

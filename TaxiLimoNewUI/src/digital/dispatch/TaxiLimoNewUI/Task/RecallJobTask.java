@@ -78,6 +78,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		if(which==MBDefinition.IS_FOR_MAP){
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
 			((TrackingMapActivity)_context).updateCarMarker(carLatLng);
+			((TrackingMapActivity)_context).updateStatus(jobArr);
 		}
 		else if(which==MBDefinition.IS_FOR_ONE_JOB){
 			((TrackDetailActivity)_context).parseRecallJobResponse(jobArr); 

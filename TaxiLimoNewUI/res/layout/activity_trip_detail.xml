@@ -14,6 +14,7 @@
         android:paddingRight="@dimen/normal_padding" >
 
         <TextView
+            android:id="@+id/tv_trip_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -21,6 +22,8 @@
             android:gravity="center"
             android:padding="@dimen/small_padding"
             android:text="@string/trip_cancled"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
 
@@ -180,12 +183,13 @@
 
                 <LinearLayout
                     android:id="@+id/ll_attr"
+                    android:gravity="center_vertical"
                     style="@style/TripTableValueColumn" >
                 </LinearLayout>
             </TableRow>
 
             <TableRow
-                android:id="@+id/vehicle_row"
+                android:id="@+id/payment_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/table_row_min_height"
@@ -193,15 +197,15 @@
 
                 <TextView
                     style="@style/TripTableTitleColumn"
-                    android:text="@string/vehicle" />
+                    android:text="@string/payment" />
 
                 <TextView
-                    android:id="@+id/tv_vehicle"
+                    android:id="@+id/tv_payment"
                     style="@style/TripTableValueColumn" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/driver_row"
+                android:id="@+id/auth_code_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/table_row_min_height"
@@ -209,10 +213,10 @@
 
                 <TextView
                     style="@style/TripTableTitleColumn"
-                    android:text="@string/driver" />
+                    android:text="@string/auth_code" />
 
                 <TextView
-                    android:id="@+id/tv_driver"
+                    android:id="@+id/tv_auth_code"
                     style="@style/TripTableValueColumn" />
             </TableRow>
         </TableLayout>
@@ -234,15 +238,19 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/stat_sys_upload" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_book_again" />
+            
+            <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/book_again"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                style="@style/GreenBtnText" />
         </LinearLayout>
 
         <LinearLayout
@@ -255,15 +263,19 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/stat_sys_upload" />
+                android:layout_width="@dimen/gray_btn_icon_size"
+                android:layout_height="@dimen/gray_btn_icon_size"
+                android:src="@drawable/icon_remove" />
+            
+            <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/remove"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                style="@style/RedBtnText"/>
         </LinearLayout>
     </LinearLayout>
 

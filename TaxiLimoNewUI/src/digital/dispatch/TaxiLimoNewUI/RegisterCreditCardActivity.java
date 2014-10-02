@@ -6,7 +6,6 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Calendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,21 +15,6 @@ import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest.IKeyExchangeResponseListener;
-import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
-import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizationResponseListener;
-import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
-import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
-
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.DeleteCreditCardTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -45,20 +29,36 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class EditCreditCardActivity extends BaseActivity implements TextWatcher, OnFocusChangeListener {
-	private EditText edtCardNum, edtHolderName, edtExpiryMonth, edtExpiryYear, edtZip, edtNickname;
-	private TextView btnSave;
+import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest;
+import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest.IKeyExchangeResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest;
+import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizationResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
+import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
+
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
+
+public class RegisterCreditCardActivity extends BaseActivity implements TextWatcher, OnFocusChangeListener {
+
+	private EditText cc_number, cc_holder_name, cc_mm, cc_yy, cc_zip, cc_nick_name, enter_pin, re_enter_pin;
+	private TextView next_btn_pay, skip_btn, next_btn_pin;
 	private final String prime = "11684510167982206765990851851544155388252758257075719142008344429621708996" + "506416490173644860944227986735266303324043629151480087265000441195390936848807913";
 	private final String base = "5";
 	private final String CARD_INFO_SEPARATOR = " ";
@@ -71,12 +71,15 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	private final int MIN_SECRET_KEY_LENGTH = 24;
 	private boolean isAddingSpace = false;
 	private byte[] tripleDESKey = null;
-	private String keyTimeStamp, ccToken, paymentTripID, paymentSysID, paymentDestID;
+	private String keyTimeStamp, ccToken;
+	private CheckBox check_box;
 	private boolean notInScreen = false; // check if this activity screen still live
 
 	private DaoManager daoManager;
 	private DBCreditCardDao creditCardDao;
 	private Context context;
+
+	private LinearLayout ll_enter_pin, ll_payment_form, ll_pay_btns;
 
 	// data format {total_length, insert_space_number, first_space_position, second...}
 	private static final int[][] CARD_FORMAT = { { 16, 3, 4, 8, 12, 0, 0 }, // VISA
@@ -96,67 +99,139 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	};
 
 	private static final String CARD_NUM_SEPARATOR = " ";
-	private static final String TAG = "EditCreditCardActivity";
+	private static final String TAG = "RegisterCreditCardActivity";
 	private static final int MAX_CARD_NUM_LEN = 19;
 	private static final int MIN_CARD_NUM_LEN = 13;
 	private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
-	private DBCreditCard cardToEdit;
-	private DBBooking dbBook;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_edit_credit_card);
+		setContentView(R.layout.activity_register_credit_card);
 		
-		if(getIntent().getExtras()!=null)
-			dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.EXTRA_BOOKING);
-		else
-			dbBook = null;
-		
-		findView();
-		cardToEdit = (DBCreditCard) getIntent().getSerializableExtra(MBDefinition.EXTRA_CREDIT_CARD);
-		if (cardToEdit == null)
-			getActionBar().setTitle(getResources().getString(R.string.title_activity_register_credit_card));
-		else{
-			getActionBar().setTitle(getResources().getString(R.string.title_activity_edit_credit_card));
-			setupEditView(cardToEdit);
-		}
 		context = this;
-		
+		findView();
+		ll_payment_form.setVisibility(View.VISIBLE);
+		ll_pay_btns.setVisibility(View.VISIBLE);
+		ll_enter_pin.setVisibility(View.GONE);
+		next_btn_pin.setVisibility(View.GONE);
 
 	}
 
 	private void findView() {
-		edtCardNum = (EditText) findViewById(R.id.et_card_number);
-		edtHolderName = (EditText) findViewById(R.id.et_holder_name);
-		edtExpiryMonth = (EditText) findViewById(R.id.et_mm);
-		edtExpiryYear = (EditText) findViewById(R.id.et_yy);
-		edtZip = (EditText) findViewById(R.id.et_zip);
-		edtNickname = (EditText) findViewById(R.id.et_nickname);
-		btnSave = (TextView) findViewById(R.id.save_btn);
+		ll_enter_pin = (LinearLayout) findViewById(R.id.ll_enter_pin);
+		ll_payment_form = (LinearLayout) findViewById(R.id.ll_payment_form);
+		ll_pay_btns = (LinearLayout) findViewById(R.id.ll_pay_btns);
 
-		btnSave.setOnClickListener(new OnClickListener() {
+		cc_number = (EditText) findViewById(R.id.cc_number);
+		cc_holder_name = (EditText) findViewById(R.id.cc_holder_name);
+		cc_mm = (EditText) findViewById(R.id.cc_mm);
+		cc_yy = (EditText) findViewById(R.id.cc_yy);
+		cc_zip = (EditText) findViewById(R.id.cc_zip);
+		cc_nick_name = (EditText) findViewById(R.id.cc_nick_name);
+		next_btn_pay = (TextView) findViewById(R.id.next_btn_pay);
+		skip_btn = (TextView) findViewById(R.id.skip_btn);
+		next_btn_pin = (TextView) findViewById(R.id.next_btn_pin);
+
+		check_box = (CheckBox) findViewById(R.id.check_box);
+		enter_pin = (EditText) findViewById(R.id.enter_pin);
+		re_enter_pin = (EditText) findViewById(R.id.re_enter_pin);
+
+		next_btn_pay.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (cardToEdit == null)
-					addCreditCard();
-				else {
-					cardToEdit.setNickName(edtNickname.getText().toString());
-					creditCardDao.update(cardToEdit);
+				addCreditCard();
+			}
+		});
+
+		skip_btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// TODO:go to eula, but for demo we just go to main activity
+				Intent intent = new Intent(context, MainActivity.class);
+				startActivity(intent);
+
+			}
+		});
+
+		next_btn_pin.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// TODO:go to eula, but for demo we just go to main activity
+				if (!check_box.isChecked()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setMessage(R.string.pin_warning).setTitle(R.string.warning).setPositiveButton(R.string.string_continue, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							Intent intent = new Intent(context, MainActivity.class);
+							startActivity(intent);
+						}
+					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
+
+					builder.show();
+				} else if (validatePin() && validateReEnterPin()) {
+					// TODO:add pin
+					Intent intent = new Intent(context, MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		});
+		
+		check_box.setChecked(true);
+
+		check_box.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (!isChecked) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setMessage(R.string.pin_warning).setTitle(R.string.warning).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+							disalbePinEditText();
+						}
+					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							check_box.setChecked(true);
+						}
+					});
+
+					builder.show();
+				} else {
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setTitle(R.string.important).setMessage(R.string.pin_cannot_reset).setCancelable(true);
+					builder.show();
+					enablePinEditText();
+				}
+			}
+		});
+		
+	}
+
+	private void disalbePinEditText() {
+		enter_pin.setFocusable(false);
+		re_enter_pin.setFocusable(false);
+		enter_pin.setText("");
+		re_enter_pin.setText("");
+	}
+
+	private void enablePinEditText() {
+		enter_pin.setFocusableInTouchMode(true);
+		enter_pin.setFocusable(true);
+		re_enter_pin.setFocusableInTouchMode(true);
+		re_enter_pin.setFocusable(true);
 	}
 
 	@Override
 	public void onResume() {
-		edtCardNum.setOnFocusChangeListener(this);
-		edtHolderName.setOnFocusChangeListener(this);
-		edtExpiryMonth.setOnFocusChangeListener(this);
-		edtExpiryYear.setOnFocusChangeListener(this);
-		edtZip.setOnFocusChangeListener(this);
+		cc_number.setOnFocusChangeListener(this);
+		cc_holder_name.setOnFocusChangeListener(this);
+		cc_mm.setOnFocusChangeListener(this);
+		cc_yy.setOnFocusChangeListener(this);
+		cc_zip.setOnFocusChangeListener(this);
+		enter_pin.setOnFocusChangeListener(this);
+		re_enter_pin.setOnFocusChangeListener(this);
 
-		edtCardNum.addTextChangedListener(this);
+		cc_number.addTextChangedListener(this);
 
 		daoManager = DaoManager.getInstance(this);
 		creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_WRITE);
@@ -170,44 +245,43 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		if (cardToEdit != null)
-			getMenuInflater().inflate(R.menu.edit_credit_card, menu);
+	public void onFocusChange(View v, boolean hasFocus) {
+		EditText target = (EditText) v;
+		if (!hasFocus) {
+
+			if (target == enter_pin) {
+				validatePin();
+			} else if (target == re_enter_pin) {
+				validateReEnterPin();
+			} else {
+				validate((EditText) v);
+			}
+		}
+	}
+
+	private boolean validatePin() {
+		if (enter_pin.getText().toString().length() == 0) {
+			enter_pin.setError(context.getString(R.string.empty_pin));
+			return false;
+		} else if (enter_pin.getText().toString().length() == 4) {
+			return true;
+		} else {
+			enter_pin.setError(context.getString(R.string.invalid_pin_length));
+			return false;
+		}
+	}
+
+	private boolean validateReEnterPin() {
+		if (!re_enter_pin.getText().toString().equals(enter_pin.getText().toString().length())) {
+			re_enter_pin.setError(context.getString(R.string.pin_not_matching));
+			return false;
+		}
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_delete_credit_card) {
-			new AlertDialog.Builder(context).setTitle("Confirm Delete Credit Card").setMessage("Are you sure you want to delete?")
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							new DeleteCreditCardTask(context).execute(cardToEdit.getToken());
-							creditCardDao.delete(cardToEdit);
-							finish();
-						}
-					}).setNegativeButton(R.string.cancel, null).show();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onFocusChange(View v, boolean hasFocus) {
-		if (!hasFocus) {
-			validate((EditText) v);
-		}
-	}
-
-	@Override
 	public void afterTextChanged(Editable arg0) {
-		if (arg0 == edtCardNum.getEditableText()) {
+		if (arg0 == cc_number.getEditableText()) {
 			// set space for card #
 			if (!isAddingSpace) {
 				if (arg0.toString().length() > 4) {
@@ -236,8 +310,8 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 							}
 
 							isAddingSpace = true;
-							edtCardNum.setText(tempCardNum);
-							edtCardNum.setSelection(edtCardNum.length());
+							cc_number.setText(tempCardNum);
+							cc_number.setSelection(cc_number.length());
 
 							break;
 						}
@@ -258,44 +332,20 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 
 	}
-	
-	private void setupEditView(DBCreditCard card) {
-		edtCardNum.setText("..." + card.getLast4CardNum());
-		edtHolderName.setText(card.getHolderName());
-		edtZip.setText(card.getZip());
-		edtNickname.setText(card.getNickName());
-		
-		
-		edtExpiryMonth.setText(card.getExpiryMonth());
-		edtExpiryYear.setText(card.getExpiryYear());
-		
-		ccToken = card.getToken();
-		
-		setUnEditable(edtCardNum);
-		setUnEditable(edtHolderName);
-		setUnEditable(edtZip);
-		setUnEditable(edtExpiryMonth);
-		setUnEditable(edtExpiryYear);
-	}
-	
-	private void setUnEditable(EditText target) {
-		target.setFocusable(false);
-		target.setTextColor(getResources().getColor(R.color.gray_light));
-	}
 
 	private boolean validate(EditText target) {
 		boolean isValid = true;
 
 		if (target != null) {
-			if (target == edtCardNum) {
+			if (target == cc_number) {
 				return validateCardNum();
-			} else if (target == edtHolderName) {
+			} else if (target == cc_holder_name) {
 				return validateHolderName();
-			} else if (target == edtExpiryMonth) {
+			} else if (target == cc_mm) {
 				return validateExMonth();
-			} else if (target == edtExpiryYear) {
+			} else if (target == cc_yy) {
 				return validateExYear();
-			} else if (target == edtZip) {
+			} else if (target == cc_zip) {
 				return validateAddress();
 			} else {
 				Logger.e(TAG, "target doesn't fit any category");
@@ -328,19 +378,18 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	// Card Number
 	private boolean validateCardNum() {
 		boolean isValid = true;
-		String editCardNum = edtCardNum.getText().toString().trim();
+		String editCardNum = cc_number.getText().toString().trim();
 		int cardNumLen = editCardNum.length();
 
 		if (cardNumLen < MIN_CARD_NUM_LEN) {
-			edtCardNum.setError(getResources().getString(R.string.credit_card_ccnum_too_short));
+			cc_number.setError(getResources().getString(R.string.credit_card_ccnum_too_short));
 			isValid = false;
 		} else if (cardNumLen > MAX_CARD_NUM_LEN) {
-			edtCardNum.setError(getResources().getString(R.string.credit_card_ccnum_too_long));
+			cc_number.setError(getResources().getString(R.string.credit_card_ccnum_too_long));
 			isValid = false;
 		} else {
-			edtCardNum.setError(null);
+			cc_number.setError(null);
 		}
-
 		return isValid;
 	}
 
@@ -348,11 +397,11 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	private boolean validateHolderName() {
 		boolean isValid = true;
 
-		if (edtHolderName.getText().toString().equalsIgnoreCase("")) {
-			edtHolderName.setError(getResources().getString(R.string.credit_card_empty_holder_name));
+		if (cc_holder_name.getText().toString().equalsIgnoreCase("")) {
+			cc_holder_name.setError(getResources().getString(R.string.credit_card_empty_holder_name));
 			isValid = false;
 		} else {
-			edtHolderName.setError(null);
+			cc_holder_name.setError(null);
 		}
 
 		return isValid;
@@ -362,19 +411,19 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	private boolean validateExMonth() {
 		boolean isValid = true;
 
-		if (edtExpiryMonth.getText().toString().equalsIgnoreCase("")) {
-			edtExpiryMonth.setError(getResources().getString(R.string.credit_card_month_invalid));
+		if (cc_mm.getText().toString().equalsIgnoreCase("")) {
+			cc_mm.setError(getResources().getString(R.string.credit_card_month_invalid));
 			isValid = false;
-		} else if (edtExpiryMonth.getText().toString().length() != 2) {
-			edtExpiryMonth.setError(getResources().getString(R.string.credit_card_month_too_short));
+		} else if (cc_mm.getText().toString().length() != 2) {
+			cc_mm.setError(getResources().getString(R.string.credit_card_month_too_short));
 			isValid = false;
 		} else {
-			int exMonth = Integer.parseInt(edtExpiryMonth.getText().toString());
+			int exMonth = Integer.parseInt(cc_mm.getText().toString());
 
 			if (exMonth <= 12 && exMonth >= 1) {
-				edtExpiryMonth.setError(null);
+				cc_mm.setError(null);
 			} else {
-				edtExpiryMonth.setError(getResources().getString(R.string.credit_card_month_invalid));
+				cc_mm.setError(getResources().getString(R.string.credit_card_month_invalid));
 				isValid = false;
 			}
 		}
@@ -386,21 +435,21 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	private boolean validateExYear() {
 		boolean isValid = true;
 
-		if (edtExpiryYear.getText().toString().equalsIgnoreCase("")) {
-			edtExpiryYear.setError(getResources().getString(R.string.credit_card_year_invalid));
+		if (cc_yy.getText().toString().equalsIgnoreCase("")) {
+			cc_yy.setError(getResources().getString(R.string.credit_card_year_invalid));
 			isValid = false;
-		} else if (edtExpiryYear.getText().toString().length() != 2) {
-			edtExpiryYear.setError(getResources().getString(R.string.credit_card_year_too_short));
+		} else if (cc_yy.getText().toString().length() != 2) {
+			cc_yy.setError(getResources().getString(R.string.credit_card_year_too_short));
 			isValid = false;
 		} else {
-			int exYear = Integer.parseInt(edtExpiryYear.getText().toString());
+			int exYear = Integer.parseInt(cc_yy.getText().toString());
 			int curYear = Integer.parseInt(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)).substring(2));
 
 			// compare if the entered year is greater or equal to current year
 			if (exYear >= curYear) {
-				edtExpiryYear.setError(null);
+				cc_yy.setError(null);
 			} else {
-				edtExpiryYear.setError(getResources().getString(R.string.credit_card_year_invalid));
+				cc_yy.setError(getResources().getString(R.string.credit_card_year_invalid));
 				isValid = false;
 			}
 		}
@@ -413,17 +462,17 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		boolean isValid = true;
 		int curYear = Calendar.getInstance().get(Calendar.YEAR);
 		int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		int exYear = Integer.parseInt(edtExpiryYear.getText().toString()) + curYear - (curYear % 100);
-		int exMonth = Integer.parseInt(edtExpiryMonth.getText().toString()) - 1;
+		int exYear = Integer.parseInt(cc_yy.getText().toString()) + curYear - (curYear % 100);
+		int exMonth = Integer.parseInt(cc_mm.getText().toString()) - 1;
 
 		// set the expiring date to year and month on the card with today's day
 		Calendar exCal = Calendar.getInstance();
 		exCal.set(exYear, exMonth, curDay);
 
 		if (exCal.compareTo(Calendar.getInstance()) >= 0) {
-			edtExpiryYear.setError(null);
+			cc_yy.setError(null);
 		} else {
-			edtExpiryMonth.setError(getResources().getString(R.string.credit_card_expired_date));
+			cc_mm.setError(getResources().getString(R.string.credit_card_expired_date));
 			isValid = false;
 		}
 
@@ -434,13 +483,12 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	private boolean validateAddress() {
 		boolean isValid = true;
 
-		if (edtZip.getText().toString().equalsIgnoreCase("")) {
-			edtZip.setError(getResources().getString(R.string.credit_card_empty_zip));
+		if (cc_zip.getText().toString().equalsIgnoreCase("")) {
+			cc_zip.setError(getResources().getString(R.string.credit_card_empty_zip));
 			isValid = false;
 		} else {
-			edtZip.setError(null);
+			cc_zip.setError(null);
 		}
-
 		return isValid;
 	}
 
@@ -452,41 +500,13 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		}
 
 		if (validate(null)) {
-			if (registerCardCheck()) {
-				if (tripleDESKey != null) {
-					new RegisterCreditCardTask().execute(ccRequestType.AddCard.toString());
-				} else {
-					new GetKeyTask(true).execute(ccRequestType.AddCard.toString());
-				}
+			if (tripleDESKey != null) {
+				new RegisterCreditCardTask().execute(ccRequestType.AddCard.toString());
 			} else {
-				new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.err).setMessage(R.string.err_msg_duplicated_card).setPositiveButton(R.string.ok, null).show();
+				new GetKeyTask(true).execute(ccRequestType.AddCard.toString());
 			}
+
 		}
-	}
-
-	private void saveEditedCC() {
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-		if (getCurrentFocus() != null) {
-			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-		}
-
-		new RegisterCreditCardTask().execute(ccRequestType.EditCard.toString());
-
-	}
-
-	private boolean registerCardCheck() {
-
-		List<DBCreditCard> cardList = creditCardDao.queryBuilder().list();
-		for (DBCreditCard card : cardList) {
-			String cardNum = edtCardNum.getText().toString();
-			// check no duplicated card
-			if (card.getLast4CardNum().equalsIgnoreCase(cardNum.substring(cardNum.length() - 4, cardNum.length())) && card.getFirst4CardNum().equalsIgnoreCase(cardNum.substring(0, 4))) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	private class GetKeyTask extends AsyncTask<String, Integer, Void> implements IKeyExchangeResponseListener, IRequestTimerListener {
@@ -504,7 +524,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		// Before running code in separate thread
 		@Override
 		protected void onPreExecute() {
-			progressDialog = new Dialog(EditCreditCardActivity.this);
+			progressDialog = new Dialog(context);
 			progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			Drawable d = new ColorDrawable(Color.BLACK);
 			d.setAlpha(0);
@@ -538,7 +558,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 				}
 
 				kExReq = new KeyExchangeRequest(this, this);
-				kExReq.setDeviceID(Installation.id(EditCreditCardActivity.this));
+				kExReq.setDeviceID(Installation.id(context));
 
 				PublicKey pubKey;
 				byte[] tmpMyPublicKeyBytes = null;
@@ -561,7 +581,6 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			return null;
 		}
 
@@ -624,8 +643,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		public void onErrorResponse(String errorString) {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null)
-						.show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "error response: " + errorString);
@@ -635,8 +653,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		public void onError() {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response)
-						.setPositiveButton(R.string.ok, null).show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "no response");
@@ -659,7 +676,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		// Before running code in separate thread
 		@Override
 		protected void onPreExecute() {
-			progressDialog = new Dialog(EditCreditCardActivity.this);
+			progressDialog = new Dialog(context);
 			progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			Drawable d = new ColorDrawable(Color.BLACK);
 			d.setAlpha(0);
@@ -689,12 +706,12 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 				Integer sequenceNum = Integer.valueOf((int) (Math.random() * (MBDefinition.MDT_MAX_SEQUENCE_NUM + 1)));
 
 				tokenReq = new TokenizationRequest(this, this);
-				tokenReq.setDeviceID(Installation.id(EditCreditCardActivity.this));
+				tokenReq.setDeviceID(Installation.id(context));
 				tokenReq.setSequenceNum(sequenceNum.toString());
 				tokenReq.setReqType(params[0]);
 
-				String cardNumHex = stringAsHex(edtCardNum.getText().toString().replace(CARD_NUM_SEPARATOR, ""));
-				String expiryHex = stringAsHex(edtExpiryMonth.getText().toString() + edtExpiryYear.getText().toString());
+				String cardNumHex = stringAsHex(cc_number.getText().toString().replace(CARD_NUM_SEPARATOR, ""));
+				String expiryHex = stringAsHex(cc_mm.getText().toString() + cc_yy.getText().toString());
 
 				for (int i = cardNumHex.length(); i < CARD_NUM_PADDING_LENGTH * 2; i++) {
 					cardNumHex += CARD_INFO_PADDING_CHAR;
@@ -710,7 +727,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 
 				// Add Card
 				if (params[0].equalsIgnoreCase(ccRequestType.AddCard.toString())) {
-					String zipHex = stringAsHex(edtZip.getText().toString());
+					String zipHex = stringAsHex(cc_zip.getText().toString());
 
 					for (int i = zipHex.length(); i < ZIP_PADDING_LENGTH; i++) {
 						zipHex += CARD_INFO_PADDING_CHAR;
@@ -718,7 +735,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 
 					tokenReq.setDESTimeStamp(keyTimeStamp);
 					tokenReq.setCardNumAndExDate(encryptedCardInfo);
-					tokenReq.setCardHolderName(edtHolderName.getText().toString());
+					tokenReq.setCardHolderName(cc_holder_name.getText().toString());
 					tokenReq.setZip(encrypt3DES(zipHex));
 					SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 					String email = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
@@ -729,7 +746,6 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 					tokenReq.setToken(ccToken);
 				} else {
 					Logger.v(TAG, "some unrecognized request type");
-
 				}
 
 				tokenReq.sendRequest(getResources().getString(R.string.name_space), getResources().getString(R.string.url));
@@ -754,34 +770,32 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 			String cardNum = response.GetLast4Digit();
 			String token = response.GetToken();
 			String brand = response.GetCardBrand();
-			// MBCreditCard card = new MBCreditCard(cardNum, edtHolderName.getText().toString(), edtExpiryMonth.getText().toString() + "/" + edtExpiryYear.getText().toString(), edtZip.getText()
-			// .toString(), edtEmail.getText().toString(), edtNickname.getText().toString(), token, brand, edtCardNum.getText().toString().substring(0, 4));
+			// MBCreditCard card = new MBCreditCard(cardNum, cc_holder_name.getText().toString(), cc_mm.getText().toString() + "/" + cc_yy.getText().toString(), cc_zip.getText()
+			// .toString(), edtEmail.getText().toString(), cc_nick_name.getText().toString(), token, brand, cc_number.getText().toString().substring(0, 4));
 			DBCreditCard card = new DBCreditCard();
 			card.setCardBrand(brand);
-			card.setExpiryMonth(edtExpiryMonth.getText().toString());
-			card.setExpiryYear(edtExpiryYear.getText().toString());
-			card.setFirst4CardNum(edtCardNum.getText().toString().substring(0, 4));
-			card.setHolderName(edtHolderName.getText().toString());
+			card.setExpiryMonth(cc_mm.getText().toString());
+			card.setExpiryYear(cc_yy.getText().toString());
+			card.setFirst4CardNum(cc_number.getText().toString().substring(0, 4));
+			card.setHolderName(cc_holder_name.getText().toString());
 			card.setLast4CardNum(cardNum);
-			card.setNickName(edtNickname.getText().toString());
+			card.setNickName(cc_nick_name.getText().toString());
 			card.setToken(token);
-			card.setZip(edtZip.getText().toString());
+			card.setZip(cc_zip.getText().toString());
 			creditCardDao.insert(card);
 
 			Logger.v(TAG, "Done cc - Approve");
 
-			new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.register_success).setMessage(R.string.credit_card_registration_approved)
+			new AlertDialog.Builder(context).setTitle(R.string.register_success).setMessage(R.string.credit_card_registration_approved)
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							 if (dbBook!=null) {
-							 Intent ccIntent = new Intent();
-							 	ccIntent.putExtra(MBDefinition.EXTRA_BOOKING, dbBook);
-							 	setResult(RESULT_OK, ccIntent);
-							 }
-
-							finish();
+							ll_payment_form.setVisibility(View.GONE);
+							ll_pay_btns.setVisibility(View.GONE);
+							ll_enter_pin.setVisibility(View.VISIBLE);
+							next_btn_pin.setVisibility(View.VISIBLE);
 						}
+
 					}).show();
 		}
 
@@ -840,8 +854,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		public void onError() {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response)
-						.setPositiveButton(R.string.ok, null).show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "no response");
@@ -858,7 +871,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 	}
 
 	private void notApproveAlert(int msgID) {
-		new AlertDialog.Builder(EditCreditCardActivity.this).setTitle(R.string.register_unsuccess).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+		new AlertDialog.Builder(context).setTitle(R.string.register_unsuccess).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 	}
 
 	public String encrypt3DES(String input) throws Exception {

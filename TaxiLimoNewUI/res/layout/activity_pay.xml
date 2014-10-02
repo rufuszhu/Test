@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/big_margin"
-    tools:context="digital.dispatch.TaxiLimoNewUI.PayActivity" >
+    tools:context="digital.dispatch.TaxiLimoNewUI.Track.PayActivity" >
 
     <Spinner
         android:id="@+id/credit_card_spinner"

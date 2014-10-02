@@ -110,6 +110,9 @@ public class LimoDaoGenerator {
         booking.addStringProperty("company_phone_number");
         booking.addStringProperty("company_icon");
         booking.addStringProperty("company_attribute_list");
+        
+        booking.addStringProperty("authCode");
+        booking.addStringProperty("paidAmount");
     }
     
     private static void addAttribute(Schema schema) {

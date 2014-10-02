@@ -12,12 +12,12 @@
         android:layout_alignParentTop="true" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Personal Info"
+            android:text="@string/personal_info"
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </RelativeLayout>
 
@@ -26,67 +26,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_title"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
             android:ems="10"
             android:hint="@string/first_name"
-            android:background="@drawable/shape_textview_border"
-            android:paddingLeft="@dimen/normal_padding"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:inputType="textPersonName" >
+            android:inputType="textPersonName"
+            android:paddingLeft="@dimen/normal_padding" >
         </EditText>
 
         <EditText
             android:id="@+id/last_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
             android:ems="10"
             android:hint="@string/last_name"
-            android:paddingLeft="@dimen/normal_padding"
-            android:background="@drawable/shape_textview_border"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:paddingLeft="@dimen/normal_padding" />
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
-            android:ems="10"
-            android:paddingLeft="@dimen/normal_padding"
-            android:hint="@string/email"
-            android:background="@drawable/shape_textview_border"
             android:layout_marginTop="@dimen/normal_padding"
-            android:inputType="textEmailAddress" />
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="@dimen/normal_padding" />
 
         <EditText
             android:id="@+id/re_enter_email"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
-            android:ems="10"
-            android:paddingLeft="@dimen/normal_padding"
-            android:hint="@string/re_enter_email"
-            android:background="@drawable/shape_textview_border"
             android:layout_marginTop="@dimen/normal_padding"
-            android:inputType="textEmailAddress" />
+            android:background="@drawable/shape_textview_border"
+            android:ems="10"
+            android:hint="@string/re_enter_email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="@dimen/normal_padding" />
 
         <EditText
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="@drawable/shape_textview_border"
             android:ems="10"
             android:hint="@string/phone_number"
-            android:background="@drawable/shape_textview_border"
-            android:paddingLeft="@dimen/normal_padding"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:paddingLeft="@dimen/normal_padding" />
     </LinearLayout>
 
+    
+
+
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/next_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/edit_text_height"
         android:layout_alignParentBottom="true"
@@ -94,7 +98,9 @@
         android:layout_marginBottom="40dp"
         android:background="@drawable/white_button_selector"
         android:gravity="center"
-        android:textSize="@dimen/next_size"
-        android:text="Next" />
+        android:text="Next"
+        android:textSize="@dimen/next_size"/>
+
+    
 
 </RelativeLayout>

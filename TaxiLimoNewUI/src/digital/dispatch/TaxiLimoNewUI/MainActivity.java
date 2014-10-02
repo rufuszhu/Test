@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 		setContentView(R.layout.activity_main);
 		Logger.d(TAG, "onCreate");
 
@@ -152,9 +153,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	@Override
 	protected void onDestroy() {
 		Logger.d(TAG, "onDestroy");
-
-		
-
 		super.onDestroy();
 	}
 
@@ -188,7 +186,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 					// Logger.e("dataBundle address: " +
 					// dataBundle.getString(MBDefinition.ADDRESS));
 					Utils.mPickupAddress = (Address) data.getExtras().getParcelable(MBDefinition.ADDRESS);
-
 				}
 			}
 		} else if (requestCode == MBDefinition.REQUEST_DROPOFFADDRESS_CODE) {
@@ -199,7 +196,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 					// Logger.e("dataBundle address: " +
 					// dataBundle.getString(MBDefinition.ADDRESS));
 					Utils.mDropoffAddress = (Address) data.getExtras().getParcelable(MBDefinition.ADDRESS);
-
 				}
 			}
 		} 
@@ -318,18 +314,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		case 0:
 			intent = new Intent(this, ProfileActivity.class);
 			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		case 1:
 			intent = new Intent(this, PaymentActivity.class);
 			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		case 2:
 			intent = new Intent(this, PreferenceActivity.class);
 			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		case 3:
 			intent = new Intent(this, AboutActivity.class);
 			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		}
 	}
@@ -441,7 +441,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 				// if (isForeGround) {
 				if (!CommonUtilities.checkLateTrip(MainActivity.this, gcmID)) {
 					new AlertDialog.Builder(MainActivity.this).setTitle(R.string.gcm).setMessage(newMessage).setCancelable(false)
-							.setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
+							.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface arg0, int arg1) {
 									NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

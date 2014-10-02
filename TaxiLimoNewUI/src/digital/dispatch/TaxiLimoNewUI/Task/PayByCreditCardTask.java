@@ -6,10 +6,12 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.PayByTokenResponse;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
 import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.PayActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Track.PayActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -95,7 +97,12 @@ public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implemen
 			if (response.GetEmailSent()) {
 				msg += "\n" + _context.getString(R.string.payment_cc_approve_email_sent) + "\n" + response.GetEmail();
 			}
-			
+			DaoManager daoManager = DaoManager.getInstance(_context);
+			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+			dbBook.setAlready_paid(true);
+			dbBook.setPaidAmount(totalAmount);
+			dbBook.setAuthCode(response.GetAuthorizationCode());
+			bookingDao.update(dbBook);
 			((PayActivity)_context).showPaySuccessDialog(msg); 
 	}
 
@@ -146,7 +153,7 @@ public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implemen
 	@Override
 	public void onError() {
 		Utils.stopProcessingDialog(_context);
-		new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.positive_button, null).show();
+		new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
 
 		Logger.e(TAG, "no response");
 	}
@@ -156,6 +163,6 @@ public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implemen
 	}
 
 	private void notApproveAlert(int msgID) {
-		new AlertDialog.Builder(_context).setTitle(R.string.payment_not_approve).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.positive_button, null).show();
+		new AlertDialog.Builder(_context).setTitle(R.string.payment_not_approve).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 	}
 }

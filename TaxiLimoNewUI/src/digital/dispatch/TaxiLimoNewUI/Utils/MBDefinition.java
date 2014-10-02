@@ -19,6 +19,7 @@ public class MBDefinition {
 	public final static String EXTRA_SHOULD_BOOK_RIGHT_AFTER= "EXTRA_SHOULD_BOOK_RIGHT_AFTER";
 	public static final String EXTRA_RETURN_SHOULD_BOOK_RIGHT_AFTER = "EXTRA_SHOULD_BOOK_RIGHT_AFTER";
 	public final static String IS_DESTINATION= "IS_DESTINATION";
+	public static final String EXTRA_BOOKING = "EXTRA_BOOKING";
 	public final static String DBBOOKING_EXTRA= "DBBOOKING";
 	public final static float DEFAULT_ZOOM = 15.5f;
 	
@@ -27,6 +28,7 @@ public class MBDefinition {
 	public final static int REQUEST_COMPANYITEM_CODE = 4;
 	public final static int REQUEST_SELECT_COMPANY_TO_BOOK = 5;
 	public static final int REQUEST_PAYMENT = 6;
+	public static final int REQUEST_REGISTER_CC = 7;
 	public static final String[] SPECIAL_CHAR_TO_REMOVE = new String[] {"%", "[", "]", "<", ">", "\\"};
 	
 	public static final int FUTURE_BOOKING_RANGE = 14;
@@ -58,12 +60,17 @@ public class MBDefinition {
 	public final static int IS_FOR_LIST = 3;
 	
 
-	public static String SHARE_SND_MSG_DRV = "C_MB_SND_MSG_DRV"; 
-	public static String SHARE_DROP_OFF_MANDATORY = "C_MB_DRP_OFF_MAND";
-	public static String SHARE_MULTI_BOOK_ALLOWED = "C_MB_MLT_BOOK_ALWD";
-	public static String SHARE_SAME_LOG_BOOK_ALLOWED = "C_MB_SAME_LOC_BK_ALW";
-	public static String SHARE_TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
-	public static String SHARE_PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
+	public static final String SHARE_SND_MSG_DRV = "C_MB_SND_MSG_DRV"; 
+	public static final String SHARE_DROP_OFF_MANDATORY = "C_MB_DRP_OFF_MAND";
+	public static final String SHARE_MULTI_BOOK_ALLOWED = "C_MB_MLT_BOOK_ALWD";
+	public static final String SHARE_SAME_LOG_BOOK_ALLOWED = "C_MB_SAME_LOC_BK_ALW";
+	public static final String SHARE_TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
+	public static final String SHARE_PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
+	public static final String SHARE_FIRST_NAME = "SHARE_FIRST_NAME";
+	public static final String SHARE_LAST_NAME = "SHARE_LAST_NAME";
+	public static final String SHARE_EMAIL = "SHARE_EMAIL";
+	public static final String SHARE_PHONE_NUMBER = "SHARE_PHONE_NUMBER";
+	public static final String SHARE_ALREADY_REGISTER = "SHARE_ALREADY_REGISTER";
 	
 	public static final int MDT_MAX_SEQUENCE_NUM = 255;
 	
@@ -81,9 +88,6 @@ public class MBDefinition {
     
     public static final SparseIntArray attrBtnMap;
 	public static final String EXTRA_CREDIT_CARD = "EXTRA_CREDIT_CARD";
-	
-	
-
 	
     static {
     	SparseIntArray  aMap = new SparseIntArray();

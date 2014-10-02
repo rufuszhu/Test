@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
     android:minHeight="@dimen/list_item_height">
 
     <TextView
@@ -9,19 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="27dp"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_marginLeft="@dimen/normal_padding"
+        android:paddingRight="100dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
+    <ImageView
         android:id="@+id/text_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/shape_oval"
-        android:text="Medium Text"
+        android:layout_marginRight="@dimen/big_margin"
+        android:src="@drawable/tag_dispatched"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

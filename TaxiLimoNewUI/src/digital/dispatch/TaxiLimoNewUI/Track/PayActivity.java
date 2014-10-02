@@ -1,13 +1,23 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.Track;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R.array;
+import digital.dispatch.TaxiLimoNewUI.R.color;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
+import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.R.string;
 import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -91,6 +101,7 @@ public class PayActivity extends Activity {
 
 		setupTextLinstner();
 	}
+
 
 	private void setupTextLinstner() {
 		et_fare_amount.addTextChangedListener(new TextWatcher() {
@@ -340,7 +351,7 @@ public class PayActivity extends Activity {
 	}
 
 	public void showPaySuccessDialog(String msg) {
-		new AlertDialog.Builder(context).setTitle(R.string.payment_approve).setMessage(msg).setCancelable(false).setPositiveButton(R.string.positive_button, new DialogInterface.OnClickListener() {
+		new AlertDialog.Builder(context).setTitle(R.string.payment_approve).setMessage(msg).setCancelable(false).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dbBook.setAlready_paid(true);

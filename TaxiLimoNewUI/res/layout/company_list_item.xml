@@ -57,7 +57,7 @@
                 android:layout_width="@dimen/selection_btn_width"
                 android:layout_height="@dimen/selection_btn_height"
                 android:gravity="center"
-                android:background="@drawable/shape_round_button"
+                android:background="@drawable/shape_white_button"
                 style="@style/TextDropShadowWhite"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/selection_btn_font_size"

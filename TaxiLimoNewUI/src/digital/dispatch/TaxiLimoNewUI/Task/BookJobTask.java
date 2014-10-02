@@ -8,7 +8,9 @@ import java.util.Locale;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.text.format.Time;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest;
@@ -28,6 +30,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBookJobResponseListener, IRequestTimerListener {
@@ -57,8 +60,12 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 		bjReq.setSysID(mbook.getSysId() + "");
 		bjReq.setReqType("1");
 
-		bjReq.setPhoneNum("7788594684");
-		bjReq.setPassengerName("Rufus Zhu");
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+		String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
+		String firstName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME);
+		String lastName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME);
+		bjReq.setPhoneNum(phone);
+		bjReq.setPassengerName(firstName + " " + lastName);
 		bjReq.setNumOfPassenger("1");
 		bjReq.setNumOfTaxi("1");
 		bjReq.setAdviseArrival("1");
@@ -147,6 +154,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss",Locale.US);
 			mbook.setTripCreationTime(pickupTimeFormat.format(cal.getTime()));
+			mbook.setAlready_paid(false);
 			
 			DaoManager daoManager = DaoManager.getInstance(_context);
 			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
