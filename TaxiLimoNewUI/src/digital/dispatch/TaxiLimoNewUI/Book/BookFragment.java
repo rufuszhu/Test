@@ -235,7 +235,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private boolean validateHasHouseNumber() {
 		Address address = Utils.mPickupAddress;
-
+		if(address==null)
+			return false;
 		String ad = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
 		String[] strArray = TextUtils.split(ad, " ");
 

@@ -316,8 +316,14 @@
 
                 <LinearLayout
                     android:id="@+id/ll_attr"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".7"
+                    android:background="@drawable/shape_table_cell"
+                    android:minHeight="@dimen/table_row_min_height"
                     android:gravity="center_vertical"
-                    style="@style/TripTableValueColumn" >
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/normal_margin" >
                 </LinearLayout>
             </TableRow>
 
@@ -601,8 +607,8 @@
         android:background="@drawable/gray_button_selector"
         android:clickable="true"
         android:gravity="center"
-        android:orientation="horizontal" 
-        android:visibility="gone">
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:layout_width="@dimen/gray_btn_icon_size"

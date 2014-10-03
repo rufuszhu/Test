@@ -177,7 +177,6 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		mLocationClient.connect();
 
 		startRepeatingTask();
-
 	}
 
 	@Override
@@ -314,7 +313,6 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 
 		// If Google Play services can provide an error dialog
 		if (errorDialog != null) {
-
 			errorDialog.show();
 		}
 	}
@@ -333,7 +331,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		this.carLatLng = carLatLng;
 		if (carMarker != null)
 			carMarker.remove();
-		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_taxi);
+		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi);
 		carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
 		
 	}
