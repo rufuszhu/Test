@@ -60,8 +60,9 @@ public class Utils {
 	public static ArrayList<AttributeItem> attributeList;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
+	public static String selected_attribute_from_bookAgain;
 	public static int currentTab = 0;
-	public static boolean mainActivityIsActivated = true;
+	//public static boolean mainActivityIsActivated = true;
 	private static Dialog progressDialog;
 
 	private static final int DEFAULT_FONT_SIZE = 20;
@@ -244,6 +245,7 @@ public class Utils {
 					int margin_right = (int) (marginRight * scale + 0.5f);
 					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
 					layoutParams.setMargins(0, 0, margin_right, 0);
+					
 					// setting image position
 					attr.setLayoutParams(layoutParams);
 					ll_attr.addView(attr);
@@ -344,7 +346,11 @@ public class Utils {
 		mbook.setDestID(selectedCompany.destID);
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
 
-		mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
+		if(selected_attribute_from_bookAgain==null)
+			mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
+		else{
+			mbook.setAttributeList(selected_attribute_from_bookAgain);
+		}
 
 		if (selectedCompany.multiPay.equalsIgnoreCase("Y"))
 			mbook.setMulti_pay_allow(true);

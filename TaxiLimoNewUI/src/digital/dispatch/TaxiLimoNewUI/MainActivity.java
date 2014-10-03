@@ -139,6 +139,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		Logger.d(TAG, "onReusme");
 		checkPlayServices();
 		CommonUtilities.checkLateTrip(this, -1);
+		mTabHost.setCurrentTab(Utils.currentTab);
 	}
 	
 	@Override
@@ -266,6 +267,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	public void switchToTrackTab(){
 		Utils.currentTab = 1;
 		mTabHost.setCurrentTab(1);
+	}
+	
+	public void switchToBookTab(){
+		Utils.currentTab = 0;
+		mTabHost.setCurrentTab(0);
 	}
 
 	private View getTabIndicator(Context context, ImageView iv, View view, int title, int drawable) {
