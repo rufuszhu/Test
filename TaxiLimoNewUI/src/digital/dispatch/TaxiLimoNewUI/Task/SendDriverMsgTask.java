@@ -1,19 +1,10 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.Window;
 
-import com.digital.dispatch.TaxiLimoSoap.requests.SendDriverMsgRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.SendDriverMsgRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.SendDriverMsgRequest.ISendDriverMsgResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.SendDriverMsgResponse;
 
@@ -84,7 +75,7 @@ public class SendDriverMsgTask extends AsyncTask<Void, Integer, Void> implements
 //    	.setMessage(R.string.track_send_msg_success) // TODO: change to more detail error msg when come up
 //    	.setPositiveButton(R.string.positive_button, null)
 //    	.show();
-    	Utils.showErrorDialog(_context.getString(R.string.message_track_send_msg_success), _context);
+    	Utils.showMessageDialog(_context.getString(R.string.message_track_send_msg_success), _context);
     }
 
 	@Override
@@ -96,7 +87,7 @@ public class SendDriverMsgTask extends AsyncTask<Void, Integer, Void> implements
 //        	.setPositiveButton(R.string.positive_button, null)
 //        	.show();
 		
-		Utils.showErrorDialog(_context.getString(R.string.err_msg_no_response), _context);
+		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 			Logger.v(TAG, "error response: " + errorString);
 	}
 
@@ -109,7 +100,7 @@ public class SendDriverMsgTask extends AsyncTask<Void, Integer, Void> implements
 //        	.setPositiveButton(R.string.positive_button, null)
 //        	.show();
 		
-		Utils.showErrorDialog(_context.getString(R.string.err_msg_no_response), _context);
+		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 			Logger.v(TAG, "no response");
 	}
 	

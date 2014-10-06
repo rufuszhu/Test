@@ -16,6 +16,7 @@ import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -74,11 +75,13 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	@Override
 	public void onErrorResponse(String errorString) {
 			Log.v(TAG, "ResponseError - " + errorString);
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 	}
 
 	@Override
 	public void onError() {
 			Log.v(TAG, "Error");
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 	}
 
 	@Override

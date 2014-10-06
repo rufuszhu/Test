@@ -10,7 +10,7 @@ public class SharedPreferencesManager {
 	}
 	
 	public static String loadStringPreferences(SharedPreferences sharedPreferences, String key) {
-		return sharedPreferences.getString(key,null);
+		return sharedPreferences.getString(key,"");
 	}
 
     public static int loadIntPreferences(SharedPreferences sharedPreferences, String key, int defaultValue) {

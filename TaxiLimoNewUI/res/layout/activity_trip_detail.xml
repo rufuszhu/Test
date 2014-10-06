@@ -25,7 +25,7 @@
             android:text="@string/trip_cancled"
             android:layout_marginTop="@dimen/normal_padding"
             android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
         <TableLayout

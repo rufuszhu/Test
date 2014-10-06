@@ -390,39 +390,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		return mNavigationDrawerFragment;
 	}
 
-	// public Address getPickupAddress() {
-	// return mPickupAddress;
-	// }
-	// public Address getDropoffAddress() {
-	// return mDropoffAddress;
-	// }
-	//
-	// public void setPickupAddress(Address mAddress) {
-	// this.mPickupAddress = mAddress;
-	// }
-	// public void setDropoffAddress(Address mAddress) {
-	// this.mDropoffAddress = mAddress;
-	// }
-	// public ArrayList<AttributeItem> getAttributeList() {
-	// return attributeList;
-	// }
-	// called from getMBParamTask
-
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// // Handle action bar item clicks here. The action bar will
-	// // automatically handle clicks on the Home/Up button, so long
-	// // as you specify a parent activity in AndroidManifest.xml.
-	// int id = item.getItemId();
-	//
-	// if (id == R.id.action_refresh) {
-	// return true;
-	// }
-	//
-	// return super.onOptionsItemSelected(item);
-	// }
 	private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Logger.v(TAG, "GCM intent received");
@@ -461,7 +429,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 								}
 							}).show();
 				}
-				// }
 			} else if (intent.filterEquals(new Intent(gcmType.deletedMsg.toString()))) {
 				Logger.v(TAG, "GCM Deleted Msg");
 			} else if (intent.filterEquals(new Intent(gcmType.error.toString()))) {
@@ -583,6 +550,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// This sample app persists the registration ID in shared preferences, but
 		// how you store the regID in your app is up to you.
 		return getSharedPreferences(MainActivity.class.getSimpleName(), Context.MODE_PRIVATE);
+	}
+	
+	public void showMessageDialog(int id) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		builder.setMessage(getResources().getString(id)).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		}).setTitle(R.string.err_error_response);
+
+		builder.show();
 	}
 
 }

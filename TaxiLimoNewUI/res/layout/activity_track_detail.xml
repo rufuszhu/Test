@@ -295,8 +295,8 @@
 
                     <Button
                         android:id="@+id/call_btn"
-                        android:layout_width="66.9dp"
-                        android:layout_height="33.6dp"
+                        android:layout_width="70dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center_vertical|right"
                         android:layout_marginRight="@dimen/normal_padding"
                         android:background="@drawable/call_btn"
@@ -320,8 +320,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".7"
                     android:background="@drawable/shape_table_cell"
-                    android:minHeight="@dimen/table_row_min_height"
                     android:gravity="center_vertical"
+                    android:minHeight="@dimen/table_row_min_height"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/normal_margin" >
                 </LinearLayout>
@@ -349,16 +349,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal"
-                android:visibility="gone" >
+                android:orientation="horizontal" 
+                android:visibility="gone">
 
                 <TextView
                     style="@style/TripTableTitleColumn"
                     android:text="@string/driver" />
 
-                <TextView
-                    android:id="@+id/tv_driver"
-                    style="@style/TripTableValueColumn" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".7"
+                    android:background="@drawable/shape_table_cell"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/normal_padding"
+                    android:paddingLeft="@dimen/normal_margin"
+                    android:paddingTop="@dimen/normal_margin" >
+
+                    <TextView
+                        android:id="@+id/tv_driver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/msg_btn"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@drawable/icon_msg_driver" />
+                </RelativeLayout>
             </TableRow>
         </TableLayout>
     </LinearLayout>
