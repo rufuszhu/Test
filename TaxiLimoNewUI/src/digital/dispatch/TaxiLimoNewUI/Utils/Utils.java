@@ -391,7 +391,7 @@ public class Utils {
 		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
 		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
-
+		driverMessage.setHint("Buzzer #");
 		driverMessage.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable note) {

@@ -101,6 +101,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private TextView book_btn;
 
 	private String oldDistrict;
+	private boolean noCompanyAvailable = false;
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
@@ -126,6 +127,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "on CREATEVIEW");
+
 		// View rootView = inflater.inflate(R.layout.fragment_book, container, false);
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
@@ -207,10 +209,20 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 				CompanyItem selectedCompany = Utils.mSelectedCompany;
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-				if (!validateHasHouseNumber()) {
-					showEnterHouseNumberDialog();
+				//pick up address not available
+				if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
+					Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
 				}
-				else if(!validateHouseNumberHasNoRange()){
+				//no taxi company found in current city
+				else if(noCompanyAvailable){
+					Utils.showMessageDialog(getActivity().getString(R.string.err_no_company_found) + " " + Utils.mPickupAddress.getLocality(), getActivity());
+				}
+				//no house number in pickup address
+				else if (!validateHasHouseNumber()) {
+					showEnterHouseNumberDialog();
+				} 
+				//house number return by Google has a range
+				else if (!validateHouseNumberHasNoRange()) {
 					Address address = Utils.mPickupAddress;
 					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
 					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
@@ -220,12 +232,16 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
 
-				} else if (selectedCompany == null) {
+				} 
+				//no selected company
+				else if (selectedCompany == null) {
 					// get into select company page
 					Intent intent = new Intent(getActivity(), AttributeActivity.class);
 					intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
 					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
-				} else {
+				} 
+				//finally we can book job
+				else {
 					Utils.bookJob(selectedCompany, getActivity());
 				}
 			}
@@ -235,13 +251,13 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private boolean validateHasHouseNumber() {
 		Address address = Utils.mPickupAddress;
-		if(address==null)
+		if (address == null)
 			return false;
 		String ad = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
 		String[] strArray = TextUtils.split(ad, " ");
 
 		if (!Utils.isNumeric(strArray[0]) && Utils.pickupHouseNumber.equals("")) {
-			
+
 			return false;
 		} else
 			return true;
@@ -269,10 +285,9 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		ok.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				if (et_house_num.getText().toString().equals("")) {				
+				if (et_house_num.getText().toString().equals("")) {
 					et_house_num.setError("Pleace enter a street number for pick up");
-				}
-				else if(et_house_num.getText().toString().length() > MBDefinition.STREET_NUMBER_MAX_LENGTH)
+				} else if (et_house_num.getText().toString().length() > MBDefinition.STREET_NUMBER_MAX_LENGTH)
 					et_house_num.setError("Street number too long");
 				else {
 					Utils.pickupHouseNumber = et_house_num.getText().toString();
@@ -294,39 +309,37 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 
 	private void showHouseRangeDialog(final String start, final String end) {
 		final Dialog houseNumRangeDialog = new Dialog(getActivity());
-	houseNumRangeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	houseNumRangeDialog.setContentView(R.layout.dialog_enter_street_number_range);
-	TextView tv_range_message = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.tv_range_message);
-	final EditText et_house_num = (EditText) houseNumRangeDialog.getWindow().findViewById(R.id.et_street_number);
-	TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);
-	TextView cancel = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.cancel);
+		houseNumRangeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		houseNumRangeDialog.setContentView(R.layout.dialog_enter_street_number_range);
+		TextView tv_range_message = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.tv_range_message);
+		final EditText et_house_num = (EditText) houseNumRangeDialog.getWindow().findViewById(R.id.et_street_number);
+		TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);
+		TextView cancel = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.cancel);
 
-	tv_range_message.setText(start + " and " + end);
-	ok.setOnClickListener(new OnClickListener() {
-		@Override
-		public void onClick(View arg0) {
-			if (et_house_num.getText().toString().equals("")) {
-				et_house_num.setError("Pleace enter a street number for pick up");
+		tv_range_message.setText(start + " and " + end);
+		ok.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (et_house_num.getText().toString().equals("")) {
+					et_house_num.setError("Pleace enter a street number for pick up");
+				} else if (Integer.parseInt(et_house_num.getText().toString()) > Integer.parseInt(end) || Integer.parseInt(et_house_num.getText().toString()) < Integer.parseInt(start))
+					et_house_num.setError("Street number not in range");
+				else {
+					Utils.pickupHouseNumber = et_house_num.getText().toString();
+					houseNumRangeDialog.dismiss();
+					book_btn.callOnClick();
+				}
 			}
-			else if(Integer.parseInt(et_house_num.getText().toString()) > Integer.parseInt(end)
-					|| Integer.parseInt(et_house_num.getText().toString()) < Integer.parseInt(start))
-				et_house_num.setError("Street number not in range");
-			else {
-				Utils.pickupHouseNumber = et_house_num.getText().toString();
+		});
+
+		cancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
 				houseNumRangeDialog.dismiss();
-				book_btn.callOnClick();
 			}
-		}
-	});
-
-	cancel.setOnClickListener(new OnClickListener() {
-		@Override
-		public void onClick(View arg0) {
-			houseNumRangeDialog.dismiss();
-		}
-	});
-	houseNumRangeDialog.setCanceledOnTouchOutside(true);
-	houseNumRangeDialog.show();
+		});
+		houseNumRangeDialog.setCanceledOnTouchOutside(true);
+		houseNumRangeDialog.show();
 	}
 
 	private void setupCompanyUI() {
@@ -360,16 +373,20 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		else {
 			attribute.setVisibility(View.GONE);
 			ll_no_company_selected.setVisibility(View.VISIBLE);
-			ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					if (Utils.mPickupAddress != null) {
-						Intent intent = new Intent(getActivity(), AttributeActivity.class);
-						intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
-						// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
-						startActivity(intent);
+			if (noCompanyAvailable)
+				ll_no_company_selected.setOnClickListener(null);
+			else {
+				ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						if (Utils.mPickupAddress != null) {
+							Intent intent = new Intent(getActivity(), AttributeActivity.class);
+							intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
+							// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+							startActivity(intent);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
@@ -523,7 +540,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		location.setLongitude(cameraPosition.target.longitude);
 
 		getAddress(location);
-		Utils.pickupHouseNumber="";
+		Utils.pickupHouseNumber = "";
 	}
 
 	@Override
@@ -657,7 +674,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			} catch (IOException exception1) {
 
 				// Log an error and return an error message
-				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+				// Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
 
 				// print the stack trace
 				exception1.printStackTrace();
@@ -716,14 +733,17 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
 
 		if (tempCompList.length == 0) {
+			noCompanyAvailable = true;
 			// show no available company;
 			Logger.e("No company available in " + city);
 			tv_empty_comany_message.setText("No company available in " + city);
 			setupCompanyUI();
 		} else if (tempCompList.length == 1) {
+			noCompanyAvailable = false;
 			Utils.mSelectedCompany = tempCompList[0];
 			setupCompanyUI();
 		} else {
+			noCompanyAvailable = false;
 			// show please choose a company
 			Logger.e(tempCompList.length + " companies available in " + city);
 			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);

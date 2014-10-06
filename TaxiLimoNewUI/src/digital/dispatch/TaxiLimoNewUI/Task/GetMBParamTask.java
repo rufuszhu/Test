@@ -77,36 +77,15 @@ public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
 
 @Override
 public void onErrorResponse(String errorString) {
-//	if (isForeGround && !haveAlert) {
-//		haveAlert = true;
-//		noParamRes = true;
-//		
-//		new AlertDialog.Builder(MainActivity.this)
-//    		.setTitle(R.string.err_error_response)
-//    		.setMessage(R.string.err_msg_get_param)
-//    		.setCancelable(false)
-//    		.setPositiveButton(R.string.positive_button, alertOffListener)
-//    		.show();
-//	}
-	Utils.showErrorDialog(_context.getString(R.string.err_msg_get_param), _context);
 
+	//((MainActivity)_context).showMessageDialog(R.string.err_msg_get_param);
 	Logger.e(TAG, "error response: " + errorString);
 }
 
 @Override
 public void onError() {
-//	if (isForeGround && !haveAlert) {
-//		haveAlert = true;
-//		noParamRes = true; 
-//		
-//		new AlertDialog.Builder(MainActivity.this)
-//        	.setTitle(R.string.err_no_response_error)
-//        	.setMessage(R.string.err_msg_get_param)
-//        	.setCancelable(false)
-//        	.setPositiveButton(R.string.positive_button, alertOffListener)
-//        	.show();
-//	}
-	Utils.showErrorDialog(_context.getString(R.string.err_msg_get_param), _context);
+
+	//((MainActivity)_context).showMessageDialog(R.string.err_msg_get_param);
 	Logger.e(TAG, "no response");
 }
 

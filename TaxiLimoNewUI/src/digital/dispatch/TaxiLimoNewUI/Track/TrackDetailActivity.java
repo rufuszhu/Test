@@ -2,6 +2,7 @@ package digital.dispatch.TaxiLimoNewUI.Track;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,18 +14,24 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 
@@ -41,6 +48,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
+import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -80,6 +88,7 @@ public class TrackDetailActivity extends Activity {
 	private TextView tv_company_description;
 	private TextView tv_driver;
 	private Button call_btn;
+	private Button msg_btn;
 	private ImageView iv_company_icon;
 	private LinearLayout ll_attr;
 
@@ -181,6 +190,7 @@ public class TrackDetailActivity extends Activity {
 		tv_driver = (TextView) findViewById(R.id.tv_driver);
 
 		call_btn = (Button) findViewById(R.id.call_btn);
+		msg_btn = (Button) findViewById(R.id.msg_btn);
 		iv_company_icon = (ImageView) findViewById(R.id.iv_tracking_company_icon);
 		ll_attr = (LinearLayout) findViewById(R.id.ll_attr);
 
@@ -287,6 +297,13 @@ public class TrackDetailActivity extends Activity {
 			public void onClick(View arg0) {
 				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + dbBook.getCompany_phone_number()));
 				startActivity(intent);
+			}
+		});
+		
+		msg_btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				setUpDriverNoteDialog();
 			}
 		});
 
@@ -598,6 +615,54 @@ public class TrackDetailActivity extends Activity {
 			}
 		});
 		builder.show();
+	}
+	
+	public void setUpDriverNoteDialog() {
+		final EditText driverMessage;
+		final TextView textRemaining;
+		TextView ok;
+		TextView clear;
+		final Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.message_dialog);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
+		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
+
+		driverMessage.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void afterTextChanged(Editable note) {
+				textRemaining.setText(MBDefinition.DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+			}
+		});
+
+
+		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
+		ok.setText("Send");
+		ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				new SendDriverMsgTask(dbBook.getTaxi_ride_id()+"", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context).execute();
+				messageDialog.dismiss();
+			}
+		});
+		clear = (TextView) messageDialog.getWindow().findViewById(R.id.clear);
+		clear.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				driverMessage.setText("");
+			}
+		});
+
+		messageDialog.show();
 	}
 
 }

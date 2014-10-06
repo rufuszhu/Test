@@ -84,6 +84,10 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+
+<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+	<!-- QA -->
+<!--     <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>
@@ -244,6 +248,8 @@
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
+    <string name="err_no_pickup_address">Still trying to get the pickup address from Google</string>
+    <string name="err_no_company_found">Sorry, currently no taxi company is avaliable in </string>
     <string name="err_msg_get_param">Unable to connect to server. \nPlease try again in a few minutes.</string>
     <string name="err_error_response">Error Response</string>
     <string name="err_no_response_error">No Response Error</string>

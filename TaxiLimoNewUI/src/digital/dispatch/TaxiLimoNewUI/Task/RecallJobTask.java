@@ -15,6 +15,7 @@ import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -105,6 +106,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
 			fragment.stopUpdateAnimation();
 		}
+		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 		Logger.v(TAG, "error response: " + errorString);
 	}
 
@@ -125,6 +127,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			if(fragment!=null)
 				fragment.stopUpdateAnimation();
 		}
+		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 		Logger.v(TAG, "no response");
 	}
 

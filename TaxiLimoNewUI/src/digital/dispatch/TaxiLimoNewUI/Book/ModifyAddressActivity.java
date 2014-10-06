@@ -575,7 +575,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				}
 				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
 			}
-
 		}
 	}
 
@@ -706,7 +705,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
 				}
 			}
-
 		}
 	}
 
