@@ -56,6 +56,13 @@ public class AttributeActivity extends Activity {
 		setContentView(R.layout.activity_attribute);
 		_context = this;
 		// mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
+		DaoManager daoManager = DaoManager.getInstance(this);
+		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
+		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
+
+		GridView gridview = (GridView) findViewById(R.id.gridview);
+		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+		
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
@@ -179,13 +186,6 @@ public class AttributeActivity extends Activity {
 		for (int i = 0; i < tempCompList.length; i++) {
 			CompanyItem.printCompanyItem(tempCompList[i]);
 		}
-
-		DaoManager daoManager = DaoManager.getInstance(this);
-		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
-
-		GridView gridview = (GridView) findViewById(R.id.gridview);
-		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
 
 		filterCompany(new ArrayList<Integer>());
 	}

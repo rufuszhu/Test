@@ -1,5 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
@@ -7,9 +11,13 @@ import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
@@ -72,22 +80,79 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 
 	@Override
 	public void onResponseReady(RecallJobsResponse response) {
-		JobItem[] jobArr= response.GetList();
-		for(int i=0;i<jobArr.length;i++){
+		JobItem[] jobArr = response.GetList();
+		for (int i = 0; i < jobArr.length; i++) {
 			JobItem.printJobItem(jobArr[i]);
 		}
-		if(which==MBDefinition.IS_FOR_MAP){
+		
+		DBBooking dbBook = updateDBJobs(jobArr);
+		
+		if (which == MBDefinition.IS_FOR_MAP) {
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
-			((TrackingMapActivity)_context).updateCarMarker(carLatLng);
-			((TrackingMapActivity)_context).updateStatus(jobArr);
-		}
-		else if(which==MBDefinition.IS_FOR_ONE_JOB){
-			((TrackDetailActivity)_context).parseRecallJobResponse(jobArr); 
-		}
-		else if(which==MBDefinition.IS_FOR_LIST){
-			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+			((TrackingMapActivity) _context).updateCarMarker(carLatLng);
+		} else if (which == MBDefinition.IS_FOR_ONE_JOB) {
+			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
+		} else if (which == MBDefinition.IS_FOR_LIST) {
+			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
 			fragment.updateStatus(jobArr);
 		}
+	}
+
+	private DBBooking updateDBJobs(JobItem[] jobArr) {
+		DaoManager daoManager = DaoManager.getInstance(_context);
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+		DBBooking dbBook = new DBBooking();
+		for (int i = 0; i < jobArr.length; i++) {
+			dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(jobArr[i].taxi_ride_id)).list().get(0);
+			JobItem job = jobArr[i];
+			switch (Integer.parseInt(job.tripStatusUniformCode)) {
+			case MBDefinition.TRIP_STATUS_BOOKED:
+			case MBDefinition.TRIP_STATUS_DISPATCHING:
+				break;
+			case MBDefinition.TRIP_STATUS_ACCEPTED:
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
+				break;
+			case MBDefinition.TRIP_STATUS_ARRIVED:
+				dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
+				break;
+			case MBDefinition.TRIP_STATUS_COMPLETE:
+				switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
+				case MBDefinition.DETAIL_STATUS_IN_SERVICE:
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+					break;
+				case MBDefinition.DETAIL_STATUS_COMPLETE:
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
+					break;
+				case MBDefinition.DETAIL_STATUS_CANCEL:
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+					break;
+				// special complete: no show, force complete etc. set as "Cancelled" to user
+				case MBDefinition.DETAIL_STATUS_NO_SHOW:
+				case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
+					if(dbBook.getTripCompletionTime().length()==0){
+						Calendar cal = Calendar.getInstance();
+						SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+						dbBook.setTripCompletionTime(pickupTimeFormat.format(cal.getTime()));
+					}
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+					
+					break;
+				// other unimportant intermediate status, just ignore
+				case MBDefinition.DETAIL_OTHER_IGNORE:
+				default:
+					break;
+				}
+				break;
+			default:
+				break;
+			}
+			dbBook.setCarLatitude(Double.parseDouble(job.carLatitude));
+			dbBook.setCarLongitude(Double.parseDouble(job.carLongitude));
+			dbBook.setDispatchedCar(job.dispatchedCar);
+			dbBook.setDispatchedDriver(job.dispatchedDriver);
+			bookingDao.update(dbBook);
+		}
+		return dbBook;
 	}
 
 	@Override
@@ -99,14 +164,17 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		// .setPositiveButton(R.string.positive_button, null)
 		// .show();
 		// }
-		if(which==MBDefinition.IS_FOR_ONE_JOB){
-			((TrackDetailActivity)_context).stopUpdateAnimation(); 
-		}
-		else if(which==MBDefinition.IS_FOR_LIST){
-			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
+		if (which == MBDefinition.IS_FOR_ONE_JOB) {
+			((TrackDetailActivity) _context).stopUpdateAnimation();
+		} else if (which == MBDefinition.IS_FOR_LIST) {
+			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
 			fragment.stopUpdateAnimation();
 		}
-		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+		try {
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Logger.v(TAG, "error response: " + errorString);
 	}
 
@@ -119,15 +187,18 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		// .setPositiveButton(R.string.positive_button, null)
 		// .show();
 		// }
-		if(which==MBDefinition.IS_FOR_ONE_JOB){
-			((TrackDetailActivity)_context).stopUpdateAnimation(); 
-		}
-		else if(which==MBDefinition.IS_FOR_LIST){
-			TrackFragment fragment = (TrackFragment) ((MainActivity)_context).getSupportFragmentManager().findFragmentByTag("track"); 
-			if(fragment!=null)
+		if (which == MBDefinition.IS_FOR_ONE_JOB) {
+			((TrackDetailActivity) _context).stopUpdateAnimation();
+		} else if (which == MBDefinition.IS_FOR_LIST) {
+			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
+			if (fragment != null)
 				fragment.stopUpdateAnimation();
 		}
-		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+		try {
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Logger.v(TAG, "no response");
 	}
 

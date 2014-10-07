@@ -8,12 +8,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
@@ -59,6 +63,15 @@ public class TripDetailActivity extends Activity {
 		
 		TableRow auth_code_row =(TableRow) findViewById(R.id.auth_code_row);
 		TableRow payment_row =(TableRow) findViewById(R.id.payment_row);
+		
+		Button call_btn = (Button) findViewById(R.id.call_btn);
+		call_btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + dbBook.getCompany_phone_number()));
+				startActivity(intent);
+			}
+		});
 		
 		LinearLayout ll_bookAgain_btn = (LinearLayout) findViewById(R.id.ll_bookAgain_btn);
 		LinearLayout ll_remove_btn = (LinearLayout) findViewById(R.id.ll_remove_btn);
@@ -140,7 +153,7 @@ public class TripDetailActivity extends Activity {
 		if(dbBook.getAlready_paid()){
 			auth_code_row.setVisibility(View.VISIBLE);
 			payment_row.setVisibility(View.VISIBLE);
-			tv_payment.setText(dbBook.getPaidAmount());
+			tv_payment.setText("$ " + dbBook.getPaidAmount());
 			tv_auth_code.setText(dbBook.getAuthCode());
 		}
 		else{

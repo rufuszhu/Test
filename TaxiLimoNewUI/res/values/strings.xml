@@ -83,7 +83,8 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
-    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+<!--     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string> -->
+     <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string>
 
 <!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
 	<!-- QA -->
@@ -92,7 +93,7 @@
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>
     <string name="clear"></string>
-    <string name="app_name">Zoro_DEV</string>
+    <string name="app_name">Zoro_Internal</string>
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>

@@ -393,7 +393,8 @@
         android:background="@drawable/gray_button_selector"
         android:clickable="true"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="@dimen/gray_btn_icon_size"

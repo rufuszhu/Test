@@ -85,7 +85,13 @@ public class PayActivity extends Activity {
 		pay_btn = (TextView) findViewById(R.id.pay_btn);
 		pay_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+				String total = tv_total.getText().toString();
+				if(total.equals("") || total.equals(DEFAULT_TOTAL)){
+					Utils.showMessageDialog("Cannot pay with 0.00 amount", context);
+				}
+				else{
+					new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+				}
 			}
 		});
 		cancel_btn = (TextView) findViewById(R.id.cancel_btn);

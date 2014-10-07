@@ -125,6 +125,7 @@
                 android:background="@drawable/shape_textview_border"
                 android:hint="A0A 0A0"
                 android:padding="@dimen/normal_padding" 
+                android:singleLine="true"
                 android:layout_weight="1">
             </EditText>
         </TableRow>
