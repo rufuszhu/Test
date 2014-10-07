@@ -21,6 +21,8 @@ public class AboutActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.about, menu);
+		for(int i = 0; i< menu.size(); i++)
+			menu.getItem(i).setVisible(false);
 		return true;
 	}
 

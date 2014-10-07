@@ -6,11 +6,99 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="digital.dispatch.TaxiLimoNewUI.AboutActivity" >
+    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity" >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
+        android:id="@+id/tvVersion"
+        style="@style/TextView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/version"
+        android:paddingLeft="@dimen/big_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue" />
+    
+    <TextView
+        android:id="@+id/tvVersionNum"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"      
+        android:text="@string/versionNum"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="@dimen/big_margin"
+        android:layout_below="@+id/tvVersion"
+        android:textColor="@color/black" 
+        style="@style/TextView"/>
+    
+    <TextView
+        android:id="@+id/tvContact"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"      
+        android:text="@string/contact"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue" 
+        android:layout_below="@+id/tvVersionNum"
+        android:paddingLeft="@dimen/big_margin"
+        style="@style/TextView"/>
+    
+     <TextView
+         android:id="@+id/tvContactNum"
+         style="@style/TextView"
+         android:layout_width="215dp"
+         android:layout_height="60dp"
+         android:layout_below="@+id/tvContact"
+         android:gravity="center_vertical|left"
+         android:paddingLeft="@dimen/big_margin"
+         android:text="@string/contactNum"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:textColor="@color/black" />
+     
+     <Button
+          android:id="@+id/about_call_btn"
+          android:layout_width="100dp"
+          android:layout_height="60dp"
+          android:layout_gravity="center_vertical|right"
+          android:layout_marginRight="@dimen/normal_padding"
+          android:paddingLeft="@dimen/big_margin"
+          android:background="@drawable/call_btn"
+          android:gravity="right" 
+          android:layout_alignTop="@+id/tvContactNum"
+          android:layout_toRightOf="@+id/tvContactNum"/>
+     
+     <TextView
+         android:id="@+id/tvContactEmail"
+         style="@style/TextView"
+         android:layout_width="215dp"
+         android:layout_height="60dp"
+         android:layout_below="@+id/tvContactNum"
+         android:gravity="center_vertical|left"
+         android:paddingLeft="@dimen/big_margin"
+         android:text="@string/contactEmail"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:textColor="@color/black" />
+     
+     <Button
+         android:id="@+id/about_email_btn"
+         android:layout_width="100dp"
+         android:layout_height="60dp"
+         android:layout_alignTop="@+id/tvContactEmail"        
+         android:layout_marginRight="@dimen/normal_padding"
+         android:layout_toRightOf="@+id/tvContactEmail"
+         android:paddingLeft="@dimen/big_margin"
+         android:gravity="center_vertical|center_horizontal"
+         android:text="Email"
+         tools:ignore="HardcodedText"/>
+     
+     <TextView
+         android:id="@+id/tvAboutFooter"
+         style="@style/TextView"
+         android:layout_width="match_parent"
+         android:layout_height="60dp"
+         android:layout_alignParentBottom="true"
+         android:paddingLeft="@dimen/big_margin"
+         android:gravity="center_vertical|center_horizontal"
+         android:text="@string/aboutFooter"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:textColor="@color/gray_light"
+         android:textSize="16sp" />
+     
 </RelativeLayout>
