@@ -50,6 +50,14 @@
 	<string name="warning">WARNING</string>
 	<string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
 	
+	<!-- Profile -->
+    <string name="phone">PHONE</string>
+    <string name="name">NAME</string>
+    <string name="profile_email">EMAIL</string>
+    <string name="profile_empty_email">Please enter an email for profile</string>
+    <string name="profile_email_invalid">Please enter a valid email</string>
+    <string name="profile_empty_name">Please enter your Name</string>
+	
     <!-- trip detail table -->
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
@@ -257,6 +265,8 @@
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
 
+    
+    
     <!-- successful messages -->
     <string name="message_cancel_successful">The job was successfully canceled</string>
     <string name="message_book_successful">The job was successfully booked</string>

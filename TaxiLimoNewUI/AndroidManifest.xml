@@ -92,7 +92,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".Drawers.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >

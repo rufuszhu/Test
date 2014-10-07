@@ -1,5 +1,9 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.Drawers;
 
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
+import digital.dispatch.TaxiLimoNewUI.R.menu;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
