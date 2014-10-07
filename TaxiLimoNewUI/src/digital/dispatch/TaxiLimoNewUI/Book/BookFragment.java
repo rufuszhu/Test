@@ -517,7 +517,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
 		} else {
 			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
-			tv_destination.setText(getActivity().getResources().getString(R.string.enter_for_fare));
+			tv_destination.setText(getActivity().getResources().getString(R.string.empty_note));
 		}
 	}
 

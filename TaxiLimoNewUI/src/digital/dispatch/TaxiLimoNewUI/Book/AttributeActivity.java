@@ -1,9 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,12 +25,10 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -56,6 +52,13 @@ public class AttributeActivity extends Activity {
 		setContentView(R.layout.activity_attribute);
 		_context = this;
 		// mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
+		DaoManager daoManager = DaoManager.getInstance(this);
+		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
+		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
+
+		GridView gridview = (GridView) findViewById(R.id.gridview);
+		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+		
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
@@ -179,13 +182,6 @@ public class AttributeActivity extends Activity {
 		for (int i = 0; i < tempCompList.length; i++) {
 			CompanyItem.printCompanyItem(tempCompList[i]);
 		}
-
-		DaoManager daoManager = DaoManager.getInstance(this);
-		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
-
-		GridView gridview = (GridView) findViewById(R.id.gridview);
-		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
 
 		filterCompany(new ArrayList<Integer>());
 	}

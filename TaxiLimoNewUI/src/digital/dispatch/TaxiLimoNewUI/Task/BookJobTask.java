@@ -168,6 +168,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Utils.mPickupAddress = null;
 			Utils.pickupHouseNumber="";
 			Utils.selected_attribute_from_bookAgain=null;
+			Utils.selected_attribute=null;
 			Utils.showMessageDialog(_context.getString(R.string.message_book_successful), _context);
 			((MainActivity)_context).switchToTrackTab();
 			Logger.d(TAG, "ride id: " + mbook.getTaxi_ride_id());

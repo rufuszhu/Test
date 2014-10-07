@@ -101,9 +101,9 @@ public class TrackDetailActivity extends Activity {
 	private ImageView completed_circle;
 	private ImageView inservice_circle;
 	private ImageView dispatched_circle;
-	
+
 	private BroadcastReceiver bcReceiver;
-	
+
 	private boolean isRefreshing;
 
 	@Override
@@ -113,24 +113,24 @@ public class TrackDetailActivity extends Activity {
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
-		
+
 		findView();
 		fillTable();
 		initListener();
 		isRefreshing = false;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
 		daoManager = DaoManager.getInstance(_context);
 		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-		boolean isTrackDetail=true;
-		bcReceiver = CommonUtilities.getGenericReceiver(_context,isTrackDetail);
+		boolean isTrackDetail = true;
+		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Logger.e("onActivityResult");
@@ -145,21 +145,17 @@ public class TrackDetailActivity extends Activity {
 		}
 	}
 
-
 	@Override
 	public void onPause() {
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
 	}
-	
-	
+
 	@Override
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onDestroy();
 	}
-	
-	
 
 	private void findView() {
 		received_cancel_button = (LinearLayout) findViewById(R.id.received_cancel_button);
@@ -167,7 +163,7 @@ public class TrackDetailActivity extends Activity {
 		arrived_buttons = (LinearLayout) findViewById(R.id.arrived_buttons);
 		inService_buttons = (LinearLayout) findViewById(R.id.inService_buttons);
 		completed_pay_btn = (LinearLayout) findViewById(R.id.completed_pay_button);
-		
+
 		dispatched_cancel_btn = (LinearLayout) findViewById(R.id.dispatched_cancel_btn);
 		dispatched_track_btn = (LinearLayout) findViewById(R.id.dispatched_track_btn);
 		arrived_track_btn = (LinearLayout) findViewById(R.id.arrived_track_btn);
@@ -175,7 +171,6 @@ public class TrackDetailActivity extends Activity {
 		arrived_pay_btn = (LinearLayout) findViewById(R.id.arrived_pay_btn);
 		inService_pay_btn = (LinearLayout) findViewById(R.id.inService_pay_btn);
 		inService_track_btn = (LinearLayout) findViewById(R.id.inService_track_btn);
-		
 
 		vehicle_row = (TableRow) findViewById(R.id.vehicle_row);
 		driver_row = (TableRow) findViewById(R.id.driver_row);
@@ -222,7 +217,7 @@ public class TrackDetailActivity extends Activity {
 		tv_company_name.setText(dbBook.getCompany_name());
 		tv_company_description.setText(dbBook.getCompany_description());
 
-		if (dbBook.getAttributeList() != null){
+		if (dbBook.getAttributeList() != null) {
 			int margin_right = 10;
 			Utils.showOption(ll_attr, dbBook.getAttributeList().split(","), _context, margin_right);
 		}
@@ -259,22 +254,21 @@ public class TrackDetailActivity extends Activity {
 		payListener = new View.OnClickListener() {
 			public void onClick(View v) {
 				DBCreditCardDao creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_READ);
-				if(creditCardDao.queryBuilder().list().size()==0){
+				if (creditCardDao.queryBuilder().list().size() == 0) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(_context);
 					builder.setMessage(R.string.ask_register_cc).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							Intent intent = new Intent(_context, EditCreditCardActivity.class);
 							intent.putExtra(MBDefinition.EXTRA_BOOKING, dbBook);
-							startActivityForResult(intent,MBDefinition.REQUEST_REGISTER_CC);
+							startActivityForResult(intent, MBDefinition.REQUEST_REGISTER_CC);
 						}
 					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							dialog.dismiss(); 
+							dialog.dismiss();
 						}
 					});
 					builder.show();
-				}
-				else{
+				} else {
 					Intent intent = new Intent(_context, PayActivity.class);
 					intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
 					startActivity(intent);
@@ -299,7 +293,7 @@ public class TrackDetailActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-		
+
 		msg_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -324,7 +318,7 @@ public class TrackDetailActivity extends Activity {
 		getMenuInflater().inflate(R.menu.track_detail, menu);
 		refresh_icon = menu.findItem(R.id.action_refresh);
 		startRecallJobTask();
-		
+
 		return true;
 	}
 
@@ -341,13 +335,9 @@ public class TrackDetailActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
-	
-	
-
 	public void startUpdateAnimation(MenuItem item) {
 		// Do animation start
-		isRefreshing=true;
+		isRefreshing = true;
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		ImageView iv = (ImageView) inflater.inflate(R.layout.iv_refresh, null);
 		Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
@@ -357,7 +347,7 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	public void stopUpdateAnimation() {
-		isRefreshing=false;
+		isRefreshing = false;
 		// Get our refresh item from the menu
 		if (refresh_icon.getActionView() != null) {
 			// Remove the animation.
@@ -366,59 +356,34 @@ public class TrackDetailActivity extends Activity {
 		}
 	}
 
-	public void parseRecallJobResponse(JobItem[] jobArr) {
+	public void parseRecallJobResponse(DBBooking dbBook1) {
 		Logger.i(TAG, "parseRecallJobResponse");
 		stopUpdateAnimation();
-		JobItem job = jobArr[0];
 
-		// final DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(job.taxi_ride_id)).list().get(0);
-
-		switch (Integer.parseInt(job.tripStatusUniformCode)) {
-		case MBDefinition.TRIP_STATUS_BOOKED:
-		case MBDefinition.TRIP_STATUS_DISPATCHING:
+		this.dbBook = dbBook1;
+		switch (dbBook.getTripStatus()) {
+		case MBDefinition.MB_STATUS_BOOKED:
 			setupBookedUI();
 			break;
-		case MBDefinition.TRIP_STATUS_ACCEPTED:
-			dbBook.setDispatchedCar(job.dispatchedCar);
-			dbBook.setDispatchedDriver(job.dispatchedDriver);
-			dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
+		case MBDefinition.MB_STATUS_ACCEPTED:
 			setUpAcceptedUI();
 			break;
-		case MBDefinition.TRIP_STATUS_ARRIVED:
-			dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
+		case MBDefinition.MB_STATUS_ARRIVED:
 			setUpArrivedUI();
 			break;
-		case MBDefinition.TRIP_STATUS_COMPLETE:
-			switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
-			case MBDefinition.DETAIL_STATUS_IN_SERVICE:
-				setUpInServiceUI();
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
-				break;
-			case MBDefinition.DETAIL_STATUS_COMPLETE:
-				setUpInCompletedUI();
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
-				break;
-			case MBDefinition.DETAIL_STATUS_CANCEL:
-				setUpCanceledUI();
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-				break;
-			// special complete: no show, force complete etc. set as "Cancelled" to user
-			case MBDefinition.DETAIL_STATUS_NO_SHOW:
-			case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-				setUpCanceledUI();
-				break;
-			// other unimportant intermediate status, just ignore
-			case MBDefinition.DETAIL_OTHER_IGNORE:
-
-			default:
-				break;
-			}
+		case MBDefinition.MB_STATUS_IN_SERVICE:
+			setUpInServiceUI();
+			break;
+		case MBDefinition.MB_STATUS_COMPLETED:
+			setUpInCompletedUI();
+			break;
+		case MBDefinition.MB_STATUS_CANCELLED:
+			setUpCanceledUI();
 			break;
 		default:
 			break;
 		}
-		bookingDao.update(dbBook);
+
 	}
 
 	private void setUpCanceledUI() {
@@ -512,7 +477,7 @@ public class TrackDetailActivity extends Activity {
 
 		vehicle_row.setVisibility(View.VISIBLE);
 		driver_row.setVisibility(View.VISIBLE);
-		
+
 		tv_vehicle.setText(dbBook.getDispatchedCar());
 		tv_driver.setText(dbBook.getDispatchedDriver());
 
@@ -538,10 +503,10 @@ public class TrackDetailActivity extends Activity {
 		arrived_buttons.setVisibility(View.GONE);
 		inService_buttons.setVisibility(View.VISIBLE);
 		completed_pay_btn.setVisibility(View.GONE);
-		
+
 		vehicle_row.setVisibility(View.VISIBLE);
 		driver_row.setVisibility(View.VISIBLE);
-		
+
 		tv_vehicle.setText(dbBook.getDispatchedCar());
 		tv_driver.setText(dbBook.getDispatchedDriver());
 
@@ -553,7 +518,7 @@ public class TrackDetailActivity extends Activity {
 		driver_row.setVisibility(View.VISIBLE);
 		tv_vehicle.setText(dbBook.getDispatchedCar());
 		tv_driver.setText(dbBook.getDispatchedDriver());
-		
+
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -569,20 +534,20 @@ public class TrackDetailActivity extends Activity {
 		inservice_circle.setImageResource(R.drawable.shape_solid_circle);
 		completed_circle.setImageResource(R.drawable.shape_holo_circle);
 	}
-	
+
 	private void setUpInCompletedUI() {
 		received_cancel_button.setVisibility(View.GONE);
 		dispatched_buttons.setVisibility(View.GONE);
 		arrived_buttons.setVisibility(View.GONE);
 		inService_buttons.setVisibility(View.GONE);
 		completed_pay_btn.setVisibility(View.VISIBLE);
-		
+
 		vehicle_row.setVisibility(View.VISIBLE);
 		driver_row.setVisibility(View.VISIBLE);
-		
+
 		tv_vehicle.setText(dbBook.getDispatchedCar());
 		tv_driver.setText(dbBook.getDispatchedDriver());
-		
+
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -597,11 +562,11 @@ public class TrackDetailActivity extends Activity {
 		arrived_circle.setImageResource(R.drawable.shape_solid_circle);
 		inservice_circle.setImageResource(R.drawable.shape_solid_circle);
 		completed_circle.setImageResource(R.drawable.shape_solid_circle);
-		
+
 	}
 
 	public void startRecallJobTask() {
-		if(refresh_icon!=null && !isRefreshing)
+		if (refresh_icon != null && !isRefreshing)
 			startUpdateAnimation(refresh_icon);
 		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_ONE_JOB).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
 	}
@@ -616,7 +581,7 @@ public class TrackDetailActivity extends Activity {
 		});
 		builder.show();
 	}
-	
+
 	public void setUpDriverNoteDialog() {
 		final EditText driverMessage;
 		final TextView textRemaining;
@@ -646,13 +611,16 @@ public class TrackDetailActivity extends Activity {
 			}
 		});
 
-
 		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
 		ok.setText("Send");
 		ok.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				new SendDriverMsgTask(dbBook.getTaxi_ride_id()+"", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context).execute();
-				messageDialog.dismiss();
+				if (driverMessage.getText().toString().length() == 0) {
+					Utils.showErrorDialog("Cannot send empty message", _context);
+				} else {
+					new SendDriverMsgTask(dbBook.getTaxi_ride_id() + "", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context).execute();
+					messageDialog.dismiss();
+				}
 			}
 		});
 		clear = (TextView) messageDialog.getWindow().findViewById(R.id.clear);

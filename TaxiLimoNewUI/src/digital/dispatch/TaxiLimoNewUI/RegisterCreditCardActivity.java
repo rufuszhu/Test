@@ -26,6 +26,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,16 +51,20 @@ import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
 
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Track.PayActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
+import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
 
 public class RegisterCreditCardActivity extends BaseActivity implements TextWatcher, OnFocusChangeListener {
 
 	private EditText cc_number, cc_holder_name, cc_mm, cc_yy, cc_zip, cc_nick_name, enter_pin, re_enter_pin;
 	private TextView next_btn_pay, skip_btn, next_btn_pin;
-	private final String prime = "11684510167982206765990851851544155388252758257075719142008344429621708996" + "506416490173644860944227986735266303324043629151480087265000441195390936848807913";
+	private final String prime = "11684510167982206765990851851544155388252758257075719142008344429621708996"
+			+ "506416490173644860944227986735266303324043629151480087265000441195390936848807913";
 	private final String base = "5";
 	private final String CARD_INFO_SEPARATOR = " ";
 	private final String CARD_INFO_PADDING_CHAR = "0";
@@ -104,11 +109,14 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 	private static final int MIN_CARD_NUM_LEN = 13;
 	private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
+	private boolean isSaving = false;
+	private boolean isEdit = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register_credit_card);
-		
+
 		context = this;
 		findView();
 		ll_payment_form.setVisibility(View.VISIBLE);
@@ -146,8 +154,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		skip_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// TODO:go to eula, but for demo we just go to main activity
-				Intent intent = new Intent(context, MainActivity.class);
-				startActivity(intent);
+				showWelcomeDialog();
 
 			}
 		});
@@ -157,26 +164,24 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 				// TODO:go to eula, but for demo we just go to main activity
 				if (!check_box.isChecked()) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					builder.setMessage(R.string.pin_warning).setTitle(R.string.warning).setPositiveButton(R.string.string_continue, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							Intent intent = new Intent(context, MainActivity.class);
-							startActivity(intent);
-						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.dismiss();
-						}
-					});
+					builder.setMessage(R.string.pin_warning).setTitle(R.string.warning)
+							.setPositiveButton(R.string.string_continue, new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									showWelcomeDialog();
+								}
+							}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									dialog.dismiss();
+								}
+							});
 
 					builder.show();
 				} else if (validatePin() && validateReEnterPin()) {
-					// TODO:add pin
-					Intent intent = new Intent(context, MainActivity.class);
-					startActivity(intent);
+					new SavePINTask().execute(enter_pin.getText().toString(), "");
 				}
 			}
 		});
-		
+
 		check_box.setChecked(true);
 
 		check_box.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -204,7 +209,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 				}
 			}
 		});
-		
+
 	}
 
 	private void disalbePinEditText() {
@@ -272,7 +277,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 	}
 
 	private boolean validateReEnterPin() {
-		if (!re_enter_pin.getText().toString().equals(enter_pin.getText().toString().length())) {
+		if (!re_enter_pin.getText().toString().equals(enter_pin.getText().toString())) {
 			re_enter_pin.setError(context.getString(R.string.pin_not_matching));
 			return false;
 		}
@@ -305,7 +310,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 							for (int j = 2; j < 2 + CARD_FORMAT[i][1]; j++) {
 								if (noSpaceCardNum.length() > CARD_FORMAT[i][j]) {
 									int occurrenceCount = tempCardNum.toString().length() - tempCardNum.toString().replace(CARD_NUM_SEPARATOR, "").length();
-									tempCardNum = tempCardNum.substring(0, CARD_FORMAT[i][j] + occurrenceCount) + CARD_NUM_SEPARATOR + tempCardNum.substring(CARD_FORMAT[i][j] + occurrenceCount);
+									tempCardNum = tempCardNum.substring(0, CARD_FORMAT[i][j] + occurrenceCount) + CARD_NUM_SEPARATOR
+											+ tempCardNum.substring(CARD_FORMAT[i][j] + occurrenceCount);
 								}
 							}
 
@@ -643,7 +649,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		public void onErrorResponse(String errorString) {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response)
+						.setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "error response: " + errorString);
@@ -653,7 +660,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		public void onError() {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response)
+						.setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "no response");
@@ -770,7 +778,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 			String cardNum = response.GetLast4Digit();
 			String token = response.GetToken();
 			String brand = response.GetCardBrand();
-			// MBCreditCard card = new MBCreditCard(cardNum, cc_holder_name.getText().toString(), cc_mm.getText().toString() + "/" + cc_yy.getText().toString(), cc_zip.getText()
+			// MBCreditCard card = new MBCreditCard(cardNum, cc_holder_name.getText().toString(), cc_mm.getText().toString() + "/" + cc_yy.getText().toString(),
+			// cc_zip.getText()
 			// .toString(), edtEmail.getText().toString(), cc_nick_name.getText().toString(), token, brand, cc_number.getText().toString().substring(0, 4));
 			DBCreditCard card = new DBCreditCard();
 			card.setCardBrand(brand);
@@ -854,7 +863,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		public void onError() {
 			progressDialog.dismiss();
 			if (!notInScreen) {
-				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setPositiveButton(R.string.ok, null).show();
+				new AlertDialog.Builder(context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response)
+						.setPositiveButton(R.string.ok, null).show();
 			}
 
 			Logger.v(TAG, "no response");
@@ -871,7 +881,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 	}
 
 	private void notApproveAlert(int msgID) {
-		new AlertDialog.Builder(context).setTitle(R.string.register_unsuccess).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+		new AlertDialog.Builder(context).setTitle(R.string.register_unsuccess).setMessage(msgID).setCancelable(false).setPositiveButton(R.string.ok, null)
+				.show();
 	}
 
 	public String encrypt3DES(String input) throws Exception {
@@ -942,6 +953,88 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		}
 
 		return new String(chars);
+	}
+
+	private class SavePINTask extends AsyncTask<String, Integer, Integer> {
+		// The code to be executed in a background thread.
+		@Override
+		protected Integer doInBackground(String... params) {
+			if (isSaving) {
+				return 3;
+			} else {
+				isSaving = true;
+				Integer isSuccess = 1;
+
+				if (isEdit) {
+					if (params[1] != null) {
+						try {
+							boolean isPass = PIN.check(params[1], UserAccount.ccPIN(context));
+
+							if (!isPass) {
+								return 2;
+							}
+						} catch (Exception e) {
+							Logger.e(TAG, "Check PIN error: " + e.toString());
+							return 1;
+						}
+					}
+				}
+
+				if (params[0].length() == 0) {
+					UserAccount.setCreditCardPIN(context, "");
+					isSuccess = 0;
+				} else {
+					try {
+						String passwordHash = PIN.getSaltedHash(params[0]);
+						UserAccount.setCreditCardPIN(context, passwordHash);
+						isSuccess = 0;
+					} catch (Exception e) {
+						Logger.e(TAG, "Save PIN error: " + e.toString());
+					}
+				}
+
+				return isSuccess;
+			}
+		}
+
+		// 0 = success, 1 = saving fail, 2 = old PIN is wrong, 3 = no action taken
+		@Override
+		protected void onPostExecute(Integer flag) {
+			if (!notInScreen) {
+				if (flag == 1) {
+					new AlertDialog.Builder(context).setTitle(R.string.err).setMessage(R.string.pin_not_save).setCancelable(false)
+							.setPositiveButton(R.string.ok, null).show();
+
+					isSaving = false;
+				} else if (flag == 2) {
+					new AlertDialog.Builder(context).setTitle(R.string.err).setMessage(R.string.pin_not_correct).setCancelable(false)
+							.setPositiveButton(R.string.ok, null).show();
+
+					isSaving = false;
+				} else if (flag == 0) {
+					showWelcomeDialog();
+				}
+			}
+		}
+	}
+
+	private void showWelcomeDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context).setMessage(R.string.welcome_message).setCancelable(true);
+		final AlertDialog dialog = builder.create();
+		dialog.show();
+		new CountDownTimer(3000, 3000) {
+			public void onTick(long millisUntilFinished) {
+				
+			}
+
+			public void onFinish() {
+				dialog.dismiss();
+				Intent intent = new Intent(context, MainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		}.start();
+
 	}
 
 }

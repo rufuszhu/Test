@@ -61,7 +61,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TrackingMapActivity extends android.support.v4.app.FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
+public class TrackingMapActivity extends android.support.v4.app.FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener,
+		OnCameraChangeListener {
 	private GoogleMap mMap;
 	private LocationClient mLocationClient;
 
@@ -106,6 +107,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		mHandlerTask = new Runnable() {
 			@Override
 			public void run() {
+				//Toast.makeText(_context, "getting location", Toast.LENGTH_SHORT).show();
 				startRecallJobTask();
 				mHandler.postDelayed(mHandlerTask, INTERVAL);
 			}
@@ -117,7 +119,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 
 	private void findView() {
 		iv_company_logo = (ImageView) findViewById(R.id.iv_company_logo);
-		tv_company_name = (TextView) findViewById(R.id.tv_company_name);
+		// tv_company_name = (TextView) findViewById(R.id.tv_company_name);
 		tv_status = (TextView) findViewById(R.id.tv_status);
 		tv_car_num = (TextView) findViewById(R.id.tv_car_num);
 		tv_driver_id = (TextView) findViewById(R.id.tv_driver_id);
@@ -131,10 +133,10 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
 		new DownloadImageTask(iv_company_logo).execute(prefixURL + dbBook.getCompany_icon());
 
-		tv_company_name.setText(dbBook.getCompany_name());
+		// tv_company_name.setText(dbBook.getCompany_name());
 		tv_car_num.setText(dbBook.getDispatchedCar());
 		tv_driver_id.setText(dbBook.getDispatchedDriver());
-		tv_status.setText("(" + dbBook.getTripStatus() + ")");
+		tv_status.setText("Status: " + dbBook.getTripStatus());
 	}
 
 	private void bindEvent() {
@@ -215,7 +217,8 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	private void startRecallJobTask() {
 		if (refresh_icon != null && !isRefreshing)
 			startUpdateAnimation(refresh_icon);
-		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
+		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				dbBook.getDestID(), dbBook.getSysId());
 	}
 
 	/**
@@ -275,7 +278,8 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		/*
-		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play services activity that can resolve error.
+		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play services
+		 * activity that can resolve error.
 		 */
 		if (connectionResult.hasResolution()) {
 			try {
@@ -318,12 +322,13 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	// get called from recall job task
-	public void updateCarMarker(LatLng carLatLng) {
+	public void updateCarMarker(LatLng carLatLng, DBBooking book) {
 		stopUpdateAnimation();
+		this.dbBook = book;
 		if (carLatLng == null) {
 			Toast.makeText(_context, "Car Location not availabe", Toast.LENGTH_LONG).show();
 		}
-
+		// first time, set up zoom level and camera location
 		if (checkReady() && this.carLatLng == null) {
 			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
 		}
@@ -331,75 +336,30 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 		this.carLatLng = carLatLng;
 		if (carMarker != null)
 			carMarker.remove();
-		BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi);
-		carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
-		
+		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED
+				|| dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
+			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi);
+			carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+		}
+		updateStatus();
 	}
 
-	public void updateStatus(JobItem[] jobArr) {
-		stopUpdateAnimation();
-		JobItem job = jobArr[0];
-		switch (Integer.parseInt(job.tripStatusUniformCode)) {
-		case MBDefinition.TRIP_STATUS_BOOKED:
-		case MBDefinition.TRIP_STATUS_DISPATCHING:
-			break;
-		case MBDefinition.TRIP_STATUS_ACCEPTED:
-			dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
-			bookingDao.update(dbBook);
-			break;
-		case MBDefinition.TRIP_STATUS_ARRIVED:
-			dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
-			bookingDao.update(dbBook);
-			break;
-		case MBDefinition.TRIP_STATUS_COMPLETE:
-			switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
+	private void updateStatus() {
 
-			case MBDefinition.DETAIL_STATUS_IN_SERVICE:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
-				bookingDao.update(dbBook);
-				break;
-			case MBDefinition.DETAIL_STATUS_COMPLETE:
-
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
-				bookingDao.update(dbBook);
-
-				break;
-			case MBDefinition.DETAIL_STATUS_CANCEL:
-
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-				bookingDao.update(dbBook);
-				break;
-			// special complete: no show, force complete etc. set as "Cancelled" to user
-			case MBDefinition.DETAIL_STATUS_NO_SHOW:
-			case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
-
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-				bookingDao.update(dbBook);
-				break;
-			// other unimportant intermediate status, just ignore
-			case MBDefinition.DETAIL_OTHER_IGNORE:
-
-			default:
-				break;
-			}
-			break;
-
-		}
-		
 		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
-			tv_status.setText("(Completed)");
+			tv_status.setText("Status: Completed");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-			tv_status.setText("(Canceled)");
+			tv_status.setText("Status: Canceled");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
-			tv_status.setText("(Accepted)");
+			tv_status.setText("Status: Accepted");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
-			tv_status.setText("(Arrived)");
+			tv_status.setText("Status: Arrived");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			tv_status.setText("(Booked)");
+			tv_status.setText("Status: Booked");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			tv_status.setText("(In Service)");
+			tv_status.setText("Status: In Service");
 		}
-		
+
 	}
 
 	private void startUpdateAnimation(MenuItem item) {

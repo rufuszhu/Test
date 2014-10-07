@@ -163,9 +163,9 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/normal_padding"
                     android:singleLine="true"
-                    android:text="@string/enter_for_fare"
+                    android:text="@string/empty_note"
                     android:textColor="@color/gray_light"
-                    android:textSize="17sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
 
