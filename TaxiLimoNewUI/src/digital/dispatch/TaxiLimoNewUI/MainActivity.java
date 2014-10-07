@@ -33,6 +33,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
+import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
