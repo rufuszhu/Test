@@ -57,6 +57,15 @@
     <string name="profile_empty_email">Please enter an email for profile</string>
     <string name="profile_email_invalid">Please enter a valid email</string>
     <string name="profile_empty_name">Please enter your Name</string>
+    
+    <!-- About -->
+	<string name="version">VERSION</string>
+	<string name="versionNum">1.0.2.3 Your app is up to date.</string>
+	<string name="contact">CONTACT</string>
+	<string name="contactNum">1&#8211;800&#8211;111&#8211;2345</string>
+	<string name="contactEmail">support@taxilimo.com</string>
+	<string name="aboutFooter">&#169;2014 DDS Wireless International Inc.</string>
+	<string name="action_edit">Edit</string>
 	
     <!-- trip detail table -->
     <string name="trip_id">TRIP ID</string>
@@ -257,7 +266,7 @@
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
     <string name="err_no_pickup_address">Still trying to get the pickup address from Google</string>
-    <string name="err_no_company_found">Sorry, currently no taxi company is avaliable in </string>
+    <string name="err_no_company_found">Sorry, currently no taxi company is available in </string>
     <string name="err_msg_get_param">Unable to connect to server. \nPlease try again in a few minutes.</string>
     <string name="err_error_response">Error Response</string>
     <string name="err_no_response_error">No Response Error</string>

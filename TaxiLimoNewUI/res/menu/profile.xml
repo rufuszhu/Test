@@ -4,9 +4,9 @@
     tools:context="digital.dispatch.TaxiLimoNewUI.ProfileActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_action_edit"
+        android:title="@string/action_edit"
+        app:showAsAction="withText|ifRoom"/>
 
 </menu>
