@@ -64,7 +64,7 @@ public class TrackFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		isRefreshing = false;
 		DaoManager daoManager = DaoManager.getInstance(getActivity());
-		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 
 	}
 
@@ -216,55 +216,6 @@ public class TrackFragment extends ListFragment {
 		stopUpdateAnimation();
 		for (int i = 0; i < jobArr.length; i++) {
 			DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(jobArr[i].taxi_ride_id)).list().get(0);
-			JobItem job = jobArr[i];
-			switch (Integer.parseInt(job.tripStatusUniformCode)) {
-			case MBDefinition.TRIP_STATUS_BOOKED:
-			case MBDefinition.TRIP_STATUS_DISPATCHING:
-				break;
-			case MBDefinition.TRIP_STATUS_ACCEPTED:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
-				bookingDao.update(dbBook);
-				break;
-			case MBDefinition.TRIP_STATUS_ARRIVED:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
-				bookingDao.update(dbBook);
-				break;
-			case MBDefinition.TRIP_STATUS_COMPLETE:
-				switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
-
-				case MBDefinition.DETAIL_STATUS_IN_SERVICE:
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
-					bookingDao.update(dbBook);
-					break;
-				case MBDefinition.DETAIL_STATUS_COMPLETE:
-
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
-					bookingDao.update(dbBook);
-
-					break;
-				case MBDefinition.DETAIL_STATUS_CANCEL:
-
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-					bookingDao.update(dbBook);
-					break;
-				// special complete: no show, force complete etc. set as "Cancelled" to user
-				case MBDefinition.DETAIL_STATUS_NO_SHOW:
-				case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
-
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-					bookingDao.update(dbBook);
-					break;
-				// other unimportant intermediate status, just ignore
-				case MBDefinition.DETAIL_OTHER_IGNORE:
-
-				default:
-					break;
-
-				}
-				break;
-			default:
-				break;
-			}
 			adapter.updateValues(dbBook);
 		}
 		adapter.notifyDataSetChanged();

@@ -75,13 +75,23 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	@Override
 	public void onErrorResponse(String errorString) {
 			Log.v(TAG, "ResponseError - " + errorString);
-			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+			try{
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 	}
 
 	@Override
 	public void onError() {
 			Log.v(TAG, "Error");
-			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+			try{
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 	}
 
 	@Override

@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/shape_textview_border"
             android:gravity="start"
-            android:hint="Hi Driver, why are you so slow!?"
+            android:hint="I will be down in a sec!"
             android:inputType="textMultiLine"
             android:maxLength="256"
             android:padding="10dp"

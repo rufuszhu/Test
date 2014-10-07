@@ -33,23 +33,24 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/small_padding" />
 
-            <TextView
-                android:id="@+id/tv_company_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:layout_toRightOf="@+id/iv_company_logo"
-                android:layout_centerVertical="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_marginLeft="@dimen/normal_padding"/>
+<!--             <TextView -->
+<!--                 android:id="@+id/tv_company_name" -->
+<!--                 android:layout_width="wrap_content" -->
+<!--                 android:layout_height="wrap_content"  -->
+<!--                 android:layout_toRightOf="@+id/iv_company_logo" -->
+<!--                 android:layout_centerVertical="true" -->
+<!--                 android:textSize="14sp" -->
+<!--                 android:layout_marginLeft="@dimen/normal_padding" -->
+<!--                 /> -->
             
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:layout_centerVertical="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_circle"
-                android:layout_toRightOf="@+id/tv_company_name"/>
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/iv_company_logo"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
 
             <ImageView
@@ -102,7 +103,7 @@
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:alpha=".8"
-        android:background="@drawable/shape_round_button"
+        android:background="@drawable/round_button_selector"
         android:src="@drawable/icon_track_toggle" />
 
 </RelativeLayout>

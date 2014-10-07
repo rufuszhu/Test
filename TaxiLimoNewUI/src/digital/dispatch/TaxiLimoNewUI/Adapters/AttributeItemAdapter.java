@@ -16,6 +16,7 @@ import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class AttributeItemAdapter extends BaseAdapter {
 	private Context mContext;
@@ -61,6 +62,10 @@ public class AttributeItemAdapter extends BaseAdapter {
 		name.setText(attrList.get(position).getName());
 
 		ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton1);
+		
+		if(Utils.selected_attribute!=null && Utils.selected_attribute.contains(Integer.parseInt(attrList.get(position).getAttributeId()))){
+			toggleButton.setChecked(true);
+		}
 
 		toggleButton.setOnClickListener(new OnClickListener() {
 			@Override
