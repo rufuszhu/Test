@@ -20,15 +20,19 @@ import digital.dispatch.TaxiLimoNewUI.R.string;
 import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
+import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,11 +90,14 @@ public class PayActivity extends Activity {
 		pay_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String total = tv_total.getText().toString();
-				if(total.equals("") || total.equals(DEFAULT_TOTAL)){
+				if (total.equals("") || total.equals(DEFAULT_TOTAL)) {
 					Utils.showMessageDialog("Cannot pay with 0.00 amount", context);
-				}
-				else{
-					new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+				} else {
+					if (UserAccount.ccPIN(PayActivity.this) != null && !UserAccount.ccPIN(PayActivity.this).equals("")) {
+						showEnterPinDialog();
+					} else {
+						new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+					}
 				}
 			}
 		});
@@ -108,6 +115,23 @@ public class PayActivity extends Activity {
 		setupTextLinstner();
 	}
 
+	private void showEnterPinDialog() {
+		final String msg = getResources().getString(R.string.total_amount) + tv_total.getText().toString() + "\n"
+				+ getResources().getString(R.string.payment_cc_enter_pin);
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final EditText input = (EditText) inflater.inflate(R.layout.layout_pin_edittext, null);
+
+		InputMethodManager imm = (InputMethodManager) getSystemService(PayActivity.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+		new AlertDialog.Builder(PayActivity.this).setTitle(R.string.cc_pin).setMessage(msg).setView(input).setNegativeButton(R.string.cancel, null)
+				.setPositiveButton(R.string.pay_confirm, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						new CheckPINTask().execute(input.getText().toString());
+					}
+				}).show();
+	}
 
 	private void setupTextLinstner() {
 		et_fare_amount.addTextChangedListener(new TextWatcher() {
@@ -357,18 +381,49 @@ public class PayActivity extends Activity {
 	}
 
 	public void showPaySuccessDialog(String msg) {
-		new AlertDialog.Builder(context).setTitle(R.string.payment_approve).setMessage(msg).setCancelable(false).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dbBook.setAlready_paid(true);
-				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
-				bookingDao.update(dbBook);
-				Intent intent = new Intent(context, TrackDetailActivity.class);
-				intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
-				startActivity(intent);
-				finish();
-			}
-		}).show();
+		new AlertDialog.Builder(context).setTitle(R.string.payment_approve).setMessage(msg).setCancelable(false)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dbBook.setAlready_paid(true);
+						DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+						bookingDao.update(dbBook);
+						Intent intent = new Intent(context, TrackDetailActivity.class);
+						intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
+						startActivity(intent);
+						finish();
+					}
+				}).show();
 
+	}
+
+	private class CheckPINTask extends AsyncTask<String, Integer, Boolean> {
+		// The code to be executed in a background thread.
+		@Override
+		protected Boolean doInBackground(String... params) {
+			boolean isPass = false;
+
+			try {
+				isPass = PIN.check(params[0], UserAccount.ccPIN(PayActivity.this));
+			} catch (Exception e) {
+				Logger.e(TAG, e.toString());
+				e.printStackTrace();
+			}
+
+			return isPass;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean isPass) {
+			if (isPass) {
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+				inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+			} else {
+				new AlertDialog.Builder(PayActivity.this).setTitle(R.string.err).setMessage(R.string.pin_not_correct).setCancelable(false)
+						.setPositiveButton(R.string.ok, null).show();
+			}
+		}
 	}
 }

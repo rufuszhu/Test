@@ -83,8 +83,8 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
-<!--     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string> -->
-     <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string>
+    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+<!--      <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
 
 <!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
 	<!-- QA -->
@@ -93,7 +93,7 @@
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>
     <string name="clear"></string>
-    <string name="app_name">Zoro_Internal</string>
+    <string name="app_name">Zoro</string>
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>
@@ -148,6 +148,8 @@
     <string name="payment_cc_approve_line_3_auth_code">Approval Code:</string>
     <string name="payment_cc_approve_email_sent">An e-invoice has been sent to</string>
     <string name="payment_account_approve_line_2_acc_num">Account Number:</string>
+    <string name="pay_confirm">Confirm</string>
+    <string name="total_amount">Total:</string>
 
     <!-- Payment message -->
     <string name="register_success">Registration Successful</string>
@@ -208,6 +210,8 @@
     <string name="payment_cc_err_unauthorized">        Card is not authorized. Possible reasons: account closed, card not activated, 
         card not honored, or card not authorized for this transaction.</string>
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
+ <string name="welcome_message">Thank you for registering with us!</string>
+    
 
     <string-array name="tips_array">
         <item>0%</item>

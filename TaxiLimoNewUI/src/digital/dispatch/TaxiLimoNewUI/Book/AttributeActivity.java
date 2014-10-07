@@ -1,9 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,12 +25,10 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;

@@ -89,7 +89,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		
 		if (which == MBDefinition.IS_FOR_MAP) {
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
-			((TrackingMapActivity) _context).updateCarMarker(carLatLng);
+			((TrackingMapActivity) _context).updateCarMarker(carLatLng,dbBook);
 		} else if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
 		} else if (which == MBDefinition.IS_FOR_LIST) {
@@ -193,6 +193,9 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
 			if (fragment != null)
 				fragment.stopUpdateAnimation();
+		}
+		else{
+			((TrackingMapActivity) _context).stopUpdateAnimation();
 		}
 		try {
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
