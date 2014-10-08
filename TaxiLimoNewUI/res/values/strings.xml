@@ -21,7 +21,6 @@
     <string name="store_const_last_credit_card">LastCreditCard</string>
     <string name="store_const_is_am_pm">IsAmPm</string>
     <string name="store_const_preferred_company">PreferredCompany</string>
-    
 
     <!-- register -->
     <string name="first_name">First Name</string>
@@ -44,29 +43,30 @@
     <string name="email_not_matching">Emails not matching</string>
     <string name="phone_number_too_long">Phone number is too long</string>
     <string name="empty_pin">Please Enter 4 digit Pin</string>
-	<string name="invalid_pin_length">Pin Length must be 4</string>
-	<string name="pin_not_matching">Pin not matching</string>
-	<string name="pin_warning">Without PIN, payment can be used by anyone having access to this phone.\n\nAre you sure you want to continue?</string>
-	<string name="warning">WARNING</string>
-	<string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
-	
-	<!-- Profile -->
+    <string name="invalid_pin_length">Pin Length must be 4</string>
+    <string name="pin_not_matching">Pin not matching</string>
+    <string name="pin_warning">Without PIN, payment can be used by anyone having access to this phone.\n\nAre you sure you want to continue?</string>
+    <string name="warning">WARNING</string>
+    <string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
+
+    <!-- Profile -->
     <string name="phone">PHONE</string>
-    <string name="name">NAME</string>
+    <string name="FIRST_NAME">FIRST NAME</string>
+    <string name="LAST_NAME">LAST NAME</string>
     <string name="profile_email">EMAIL</string>
     <string name="profile_empty_email">Please enter an email for profile</string>
     <string name="profile_email_invalid">Please enter a valid email</string>
     <string name="profile_empty_name">Please enter your Name</string>
-    
+
     <!-- About -->
-	<string name="version">VERSION</string>
-	<string name="versionNum">1.0.2.3 Your app is up to date.</string>
-	<string name="contact">CONTACT</string>
-	<string name="contactNum">1&#8211;800&#8211;111&#8211;2345</string>
-	<string name="contactEmail">support@taxilimo.com</string>
-	<string name="aboutFooter">&#169;2014 DDS Wireless International Inc.</string>
-	<string name="action_edit">Edit</string>
-	
+    <string name="version">VERSION</string>
+    <string name="versionNum">1.0.2.3 Your app is up to date.</string>
+    <string name="contact">CONTACT</string>
+    <string name="contactNum">1&#8211;800&#8211;111&#8211;2345</string>
+    <string name="contactEmail">support@taxilimo.com</string>
+    <string name="aboutFooter">&#169;2014 DDS Wireless International Inc.</string>
+    <string name="action_edit">Edit</string>
+
     <!-- trip detail table -->
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
@@ -81,13 +81,12 @@
     <string name="completed">Completed</string>
     <string name="cancel_trip">Cancel Trip</string>
     <string name="pay">Pay</string>
-
     <string name="trip_cancled">Trip Canceled</string>
     <string name="trip_completed">Trip Completed</string>
     <string name="book_again">Book Again</string>
     <string name="remove">Remove</string>
     <string name="ask_register_cc">There is no registered credit card. Do you want to register a credit card now?</string>
-	<string name="auth_code">Auth Code</string>
+    <string name="auth_code">Auth Code</string>
     <!-- modify address -->
     <string name="contacts">Contacts</string>
     <string name="favorite">Favorite</string>
@@ -101,11 +100,12 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
-<!--      <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
+    <!-- <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
 
-<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
-	<!-- QA -->
-<!--     <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
+
+    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+    <!-- QA -->
+    <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>
@@ -227,8 +227,7 @@
     <string name="payment_cc_err_unauthorized">        Card is not authorized. Possible reasons: account closed, card not activated, 
         card not honored, or card not authorized for this transaction.</string>
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
- <string name="welcome_message">Thank you for registering with us!</string>
-    
+    <string name="welcome_message">Thank you for registering with us!</string>
 
     <string-array name="tips_array">
         <item>0%</item>
@@ -279,14 +278,12 @@
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
 
-    
-    
     <!-- successful messages -->
     <string name="message_cancel_successful">The job was successfully canceled</string>
     <string name="message_book_successful">The job was successfully booked</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
-
+    <string name="save_successful">Save Successful</string>
     <!-- dialog messages -->
     <string name="enter_street_number">Enter a street number for:</string>
     <string name="enter_street_number_range">Select a street number between</string>

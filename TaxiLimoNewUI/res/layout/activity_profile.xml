@@ -15,34 +15,31 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentTop="true"
 	    android:orientation="vertical"
-	    android:paddingLeft="@dimen/normal_padding"
-	    android:paddingRight="@dimen/normal_padding"
-	    android:paddingTop="@dimen/edit_text_height" >
+	    android:gravity="center"
+	    android:paddingTop="@dimen/profile_edit_text_height" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/big_margin"
-            android:paddingRight="@dimen/big_margin" >
+            android:layout_width="@dimen/profile_row_width"
+            android:layout_height="@dimen/profile_row_height"
+            android:orientation="horizontal" 
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/tvname"
-                android:layout_width="90dp"
+                android:id="@+id/tv_firstname"
                 android:layout_height="wrap_content"
-                
-                android:text="@string/name"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/blue" 
-                style="@style/TextView"/>
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:text="@string/FIRST_NAME"
+                style="@style/ProfileTextView"/>
 
             <EditText
-                android:id="@+id/edt_userName"
+                android:id="@+id/et_firstName"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/edit_text_height"
-                android:layout_weight="1"
+                android:layout_weight=".6"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginLeft="@dimen/small_padding"
                 android:inputType="textPersonName"
-                android:background="@drawable/shape_textview_border"
+                android:background="@drawable/shape_textview_border_disable"
                 android:selectAllOnFocus="true"
                 android:paddingLeft="@dimen/normal_margin"
                 android:ems="12" />
@@ -50,29 +47,55 @@
         </LinearLayout>
         
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/profile_row_width"
+            android:layout_height="@dimen/profile_row_height"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/big_margin"
-            android:paddingRight="@dimen/big_margin" >
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_lastname"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                style="@style/ProfileTextView"
+                android:text="@string/LAST_NAME"/>
+
+            <EditText
+                android:id="@+id/et_lastName"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginLeft="@dimen/small_padding"
+                android:inputType="textPersonName"
+                android:background="@drawable/shape_textview_border_disable"
+                android:selectAllOnFocus="true"
+                android:paddingLeft="@dimen/normal_margin"
+                android:ems="12" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="@dimen/profile_row_width"
+            android:layout_height="@dimen/profile_row_height"
+            android:orientation="horizontal" 
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvphone"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-       
                 android:text="@string/phone"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/blue" 
-                style="@style/TextView"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                style="@style/ProfileTextView"/>
 
             <EditText
                 android:id="@+id/edt_phoneNum"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/edit_text_height"
-                android:layout_weight="1"
+                android:layout_weight=".6"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginLeft="@dimen/small_padding"
                 android:inputType="phone"
-                android:background="@drawable/shape_textview_border"
+                android:background="@drawable/shape_textview_border_disable"
                 android:selectAllOnFocus="true"
                 android:paddingLeft="@dimen/normal_margin"
                 android:ems="12" />
@@ -80,29 +103,27 @@
         </LinearLayout>
         
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/profile_row_width"
+            android:layout_height="@dimen/profile_row_height"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/big_margin"
-            android:paddingRight="@dimen/big_margin" >
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/tvpfemail"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                
                 android:text="@string/profile_email"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/blue" 
-                style="@style/TextView"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                style="@style/ProfileTextView" />
 
             <EditText
                 android:id="@+id/edt_userEmail"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/edit_text_height"
-                android:layout_weight="1"
+                android:layout_weight=".6"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginLeft="@dimen/small_padding"
                 android:inputType="textEmailAddress"
-                android:background="@drawable/shape_textview_border"
+                android:background="@drawable/shape_textview_border_disable"
                 android:selectAllOnFocus="true"
                 android:paddingLeft="@dimen/normal_margin"
                 android:ems="12" />
@@ -119,7 +140,8 @@
             android:background="@drawable/gray_button_selector"
             android:clickable="true"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal" 
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/gray_btn_icon_size"
