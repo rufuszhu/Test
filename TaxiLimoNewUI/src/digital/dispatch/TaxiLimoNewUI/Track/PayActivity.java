@@ -21,6 +21,7 @@ import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
@@ -28,8 +29,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -64,6 +67,7 @@ public class PayActivity extends Activity {
 	private Context context;
 	private String final_tip_amount;
 	private BigDecimal tipPercentage;
+	private String storePassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,11 @@ public class PayActivity extends Activity {
 		setContentView(R.layout.activity_pay);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		context = this;
+		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		storePassword = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_CC_PIN);
+		
+		
 		daoManager = DaoManager.getInstance(this);
 		creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_READ);
 		creditCardList = creditCardDao.queryBuilder().list();
@@ -93,7 +102,8 @@ public class PayActivity extends Activity {
 				if (total.equals("") || total.equals(DEFAULT_TOTAL)) {
 					Utils.showMessageDialog("Cannot pay with 0.00 amount", context);
 				} else {
-					if (UserAccount.ccPIN(PayActivity.this) != null && !UserAccount.ccPIN(PayActivity.this).equals("")) {
+					//if (UserAccount.ccPIN(PayActivity.this) != null && !UserAccount.ccPIN(PayActivity.this).equals("")) {
+					if(storePassword!=null && !storePassword.equals("")){	
 						showEnterPinDialog();
 					} else {
 						new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
@@ -115,6 +125,24 @@ public class PayActivity extends Activity {
 		setupTextLinstner();
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		Logger.e(TAG, "on RESUME");
+		//show keyboard
+		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.toggleSoftInputFromWindow(et_fare_amount.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+		et_fare_amount.requestFocus();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		//hide keyboard
+		InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+
 	private void showEnterPinDialog() {
 		final String msg = getResources().getString(R.string.total_amount) + tv_total.getText().toString() + "\n"
 				+ getResources().getString(R.string.payment_cc_enter_pin);
@@ -128,7 +156,16 @@ public class PayActivity extends Activity {
 				.setPositiveButton(R.string.pay_confirm, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int arg1) {
-						new CheckPINTask().execute(input.getText().toString());
+						//hide keyboard
+						InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+						inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+						if(storePassword.equals(input.getText().toString())){
+							new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
+						} else {
+							new AlertDialog.Builder(PayActivity.this).setTitle(R.string.err).setMessage(R.string.pin_not_correct).setCancelable(false)
+									.setPositiveButton(R.string.ok, null).show();
+						}
+						//new CheckPINTask().execute(input.getText().toString());
 					}
 				}).show();
 	}
@@ -339,6 +376,10 @@ public class PayActivity extends Activity {
 				et_tip_amount.setFocusableInTouchMode(true);
 				et_tip_amount.setFocusable(true);
 				et_tip_amount.setTextColor(context.getResources().getColor(R.color.black));
+
+				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputMethodManager.toggleSoftInputFromWindow(et_tip_amount.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+				et_tip_amount.requestFocus();
 			}
 			break;
 		case R.id.percent_radio:
@@ -416,8 +457,8 @@ public class PayActivity extends Activity {
 		@Override
 		protected void onPostExecute(Boolean isPass) {
 			if (isPass) {
+				//hide keyboard
 				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
 				inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				new PayByCreditCardTask(context, dbBook, tv_total.getText().toString(), selectedCard, final_tip_amount).execute();
 			} else {

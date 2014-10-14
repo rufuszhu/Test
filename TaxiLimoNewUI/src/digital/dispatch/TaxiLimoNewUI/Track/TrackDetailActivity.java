@@ -1,5 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -199,6 +201,18 @@ public class TrackDetailActivity extends Activity {
 		inservice_circle = (ImageView) findViewById(R.id.inservice_circle);
 		dispatched_circle = (ImageView) findViewById(R.id.dispatched_circle);
 	}
+	
+	private void checkAndDisablePayBtns(){
+		if(dbBook.getAlready_paid() & !dbBook.getMulti_pay_allow()){
+			completed_pay_btn.setAlpha((float) 0.4);
+			arrived_pay_btn.setAlpha((float) 0.4);
+			inService_pay_btn.setAlpha((float) 0.4);
+			
+			completed_pay_btn.setClickable(false);
+			arrived_pay_btn.setClickable(false);
+			inService_pay_btn.setClickable(false);
+		}
+	}
 
 	private void fillTable() {
 		tv_id.setText(dbBook.getTaxi_ride_id() + "");
@@ -349,18 +363,19 @@ public class TrackDetailActivity extends Activity {
 	public void stopUpdateAnimation() {
 		isRefreshing = false;
 		// Get our refresh item from the menu
-		if (refresh_icon.getActionView() != null) {
+		if (refresh_icon!= null && refresh_icon.getActionView() != null) {
 			// Remove the animation.
 			refresh_icon.getActionView().clearAnimation();
 			refresh_icon.setActionView(null);
 		}
 	}
 
-	public void parseRecallJobResponse(DBBooking dbBook1) {
+	public void parseRecallJobResponse(List<DBBooking> dbBook1) {
 		Logger.i(TAG, "parseRecallJobResponse");
 		stopUpdateAnimation();
 
-		this.dbBook = dbBook1;
+		this.dbBook = dbBook1.get(0);
+		checkAndDisablePayBtns();
 		switch (dbBook.getTripStatus()) {
 		case MBDefinition.MB_STATUS_BOOKED:
 			setupBookedUI();
@@ -589,7 +604,7 @@ public class TrackDetailActivity extends Activity {
 		TextView clear;
 		final Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.message_dialog);
+		messageDialog.setContentView(R.layout.dialog_driver_message);
 		messageDialog.setCanceledOnTouchOutside(true);
 		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

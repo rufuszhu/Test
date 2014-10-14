@@ -104,6 +104,7 @@
             android:name=".Book.ModifyAddressActivity"
             android:label="@string/title_activity_pick_up"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateVisible"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -192,6 +193,7 @@
         <activity
             android:name=".Track.PayActivity"
             android:label="@string/title_activity_pay"
+            android:windowSoftInputMode="stateVisible"
             android:screenOrientation="portrait" >
         </activity>
         <activity

@@ -90,7 +90,7 @@
     <!-- modify address -->
     <string name="contacts">Contacts</string>
     <string name="favorite">Favorite</string>
-    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="add_favorite">Add Favorite</string>
     <string name="save">Save</string>
     <string name="select">Select</string>
 
@@ -100,10 +100,10 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
-    <!-- <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
+<!--     <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
 
 
-    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
     <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>
@@ -187,6 +187,7 @@
     <string name="credit_card_list_info_button">        When you register your credit card number, it is stored securely by the payment processor.\n
         Your credit card number is never stored on your mobile device, and is never revealed to the taxi company.</string>
     <string name="credit_card_delete_confirmation">Are you sure you want to remove this credit card?</string>
+    <string name="delete_confirmation">Are you sure you want delete?</string>
     <string name="credit_card_ccnum_too_short">Credit card number is too short</string>
     <string name="credit_card_ccnum_too_long">Credit card number is too long</string>
     <string name="credit_card_empty_holder_name">Please enter your name</string>
@@ -259,7 +260,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
-    <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try again later</string>
+    <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>
     <string name="err_invalid_street_number">Street number is\ninvalid</string>
     <string name="err_invalid_street_name">Address is invalid</string>
     <string name="err_empty_street_number">Street number can\'t\nbe Empty</string>
@@ -279,8 +280,8 @@
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
 
     <!-- successful messages -->
-    <string name="message_cancel_successful">The job was successfully canceled</string>
-    <string name="message_book_successful">The job was successfully booked</string>
+    <string name="message_cancel_successful">The trip was successfully canceled</string>
+    <string name="message_book_successful">The trip was successfully booked</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
     <string name="save_successful">Save Successful</string>

@@ -1,7 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest;
@@ -85,7 +87,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			JobItem.printJobItem(jobArr[i]);
 		}
 		
-		DBBooking dbBook = updateDBJobs(jobArr);
+		List<DBBooking> dbBook = updateDBJobs(jobArr);
 		
 		if (which == MBDefinition.IS_FOR_MAP) {
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
@@ -94,11 +96,12 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
 		} else if (which == MBDefinition.IS_FOR_LIST) {
 			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
-			fragment.updateStatus(jobArr);
+			fragment.updateStatus(dbBook);
 		}
 	}
 
-	private DBBooking updateDBJobs(JobItem[] jobArr) {
+	private List<DBBooking> updateDBJobs(JobItem[] jobArr) {
+		List<DBBooking> bookingList= new ArrayList<DBBooking>();
 		DaoManager daoManager = DaoManager.getInstance(_context);
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		DBBooking dbBook = new DBBooking();
@@ -151,8 +154,9 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			dbBook.setDispatchedCar(job.dispatchedCar);
 			dbBook.setDispatchedDriver(job.dispatchedDriver);
 			bookingDao.update(dbBook);
+			bookingList.add(dbBook);
 		}
-		return dbBook;
+		return bookingList;
 	}
 
 	@Override

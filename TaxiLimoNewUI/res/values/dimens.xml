@@ -15,7 +15,7 @@
 
     <dimen name="edit_text_height">40dp</dimen>
     
-    <dimen name="gray_btn_icon_size">30dp</dimen>
+    <dimen name="gray_btn_icon_size">25dp</dimen>
     
     <dimen name="editView_paddign">10dp</dimen>
     <dimen name="normal_margin">10dp</dimen>

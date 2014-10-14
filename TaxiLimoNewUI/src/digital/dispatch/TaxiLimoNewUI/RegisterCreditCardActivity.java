@@ -177,7 +177,10 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 
 					builder.show();
 				} else if (validatePin() && validateReEnterPin()) {
-					new SavePINTask().execute(enter_pin.getText().toString(), "");
+					SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+					SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_CC_PIN, enter_pin.getText().toString());
+					showWelcomeDialog();
+					//new SavePINTask().execute(enter_pin.getText().toString(), "");
 				}
 			}
 		});

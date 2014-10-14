@@ -57,7 +57,7 @@
     </style>
 
     <style name="RedBtnText">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@color/red_text</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">@color/white</item>
@@ -67,7 +67,7 @@
     </style>
 
     <style name="BlueBtnText">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#075a9e</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">@color/white</item>
@@ -77,7 +77,7 @@
     </style>
 
     <style name="GreenBtnText">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#009a9c</item>
         <item name="android:textStyle">bold</item>
         <item name="android:shadowColor">@color/white</item>

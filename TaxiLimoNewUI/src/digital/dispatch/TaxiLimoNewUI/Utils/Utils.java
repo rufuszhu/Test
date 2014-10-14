@@ -61,8 +61,10 @@ public class Utils {
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
 	public static String selected_attribute_from_bookAgain;
+	public static String pickup_unit_number;
+	public static String dropoff_unit_number;
 	public static int currentTab = 0;
-	//public static boolean mainActivityIsActivated = true;
+	// public static boolean mainActivityIsActivated = true;
 	private static Dialog progressDialog;
 
 	private static final int DEFAULT_FONT_SIZE = 20;
@@ -237,7 +239,8 @@ public class Utils {
 			if (!attrs[i].equalsIgnoreCase("")) {
 				DaoManager daoManager = DaoManager.getInstance(context);
 				DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-				String iconId = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attrs[i])).list().get(0).getIconId();
+				String iconId = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attrs[i])).list()
+						.get(0).getIconId();
 				if (!iconId.equalsIgnoreCase("")) {
 					ImageView attr = new ImageView(context);
 					attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
@@ -245,7 +248,7 @@ public class Utils {
 					int margin_right = (int) (marginRight * scale + 0.5f);
 					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
 					layoutParams.setMargins(0, 0, margin_right, 0);
-					
+
 					// setting image position
 					attr.setLayoutParams(layoutParams);
 					ll_attr.addView(attr);
@@ -309,18 +312,19 @@ public class Utils {
 
 	private static void setUpPickupAddress(DBBooking mbook, Context context) {
 		mbook.setPickup_district(Utils.mPickupAddress.getLocality());
-		if (pickupHouseNumber.equals("")){
+		if (pickupHouseNumber.equals("")) {
 			mbook.setPickup_house_number(AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress));
 			mbook.setPickupAddress(LocationUtils.addressToString(context, Utils.mPickupAddress));
-		}
-		else{
+		} else {
 			mbook.setPickup_house_number(pickupHouseNumber);
-			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));	
+			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
 		}
+		if(pickup_unit_number!= null && pickup_unit_number.length()>0)
+			mbook.setPickup_unit(pickup_unit_number);
 		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
 		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
 		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
-		
+
 	}
 
 	private static void setUpDropoffAddress(DBBooking mbook, Context context) {
@@ -330,6 +334,8 @@ public class Utils {
 			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
 			mbook.setDropoff_latitude(ad.getLatitude());
 			mbook.setDropoff_longitude(ad.getLongitude());
+			if(dropoff_unit_number!=null && dropoff_unit_number.length()>0)
+				mbook.setDropoff_unit(dropoff_unit_number);
 			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
 			mbook.setDropoffAddress(LocationUtils.addressToString(context, ad));
 		}
@@ -346,9 +352,9 @@ public class Utils {
 		mbook.setDestID(selectedCompany.destID);
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
 
-		if(selected_attribute_from_bookAgain==null)
+		if (selected_attribute_from_bookAgain == null)
 			mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
-		else{
+		else {
 			mbook.setAttributeList(selected_attribute_from_bookAgain);
 		}
 
@@ -385,9 +391,9 @@ public class Utils {
 		TextView clear;
 
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.message_dialog);
+		messageDialog.setContentView(R.layout.dialog_driver_message);
 		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
 		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
@@ -538,8 +544,6 @@ public class Utils {
 
 		builder.show();
 	}
-	
-	
 
 	// public static boolean isNumeric(String str)
 	// {
@@ -556,9 +560,7 @@ public class Utils {
 
 	public static boolean isNumeric(String str) {
 		// match a number with optional '-'(or '.') in the middle. this is for street number return by google Geo
-		return str.matches("-?\\d+(\\-\\d+)?") || str.matches("-?\\d+(\\.\\d+)?"); 
+		return str.matches("-?\\d+(\\-\\d+)?") || str.matches("-?\\d+(\\.\\d+)?");
 	}
-	
-	
 
 }
