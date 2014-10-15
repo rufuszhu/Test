@@ -38,6 +38,7 @@
                 android:ems="10"
                 android:hint="@string/street_number"
                 android:inputType="number"
+                android:windowSoftInputMode="stateVisible"
                 android:nextFocusLeft="@id/tv_streetNumber"
                 android:nextFocusUp="@id/tv_streetNumber"
                 android:paddingLeft="@dimen/editView_paddign"
@@ -138,10 +139,14 @@
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_add_favorite" />
             
+            <Space
+            android:layout_width="@dimen/small_padding"
+            android:layout_height="match_parent" />
+            
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_to_favorite"
+                android:text="@string/add_favorite"
                 style="@style/BlueBtnText" />
         </LinearLayout>
 
@@ -160,11 +165,15 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_add_favorite" />
+            
+            <Space
+            android:layout_width="@dimen/small_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_to_favorite"
+                android:text="@string/add_favorite"
                 style="@style/BlueBtnText" />
         </LinearLayout>
 
@@ -183,6 +192,10 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_remove" />
+            
+            <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -205,6 +218,10 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_save" />
+            
+            <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -228,6 +245,10 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_save" />
+            
+            <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="wrap_content"

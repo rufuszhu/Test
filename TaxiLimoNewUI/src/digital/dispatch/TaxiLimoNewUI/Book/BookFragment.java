@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -276,6 +277,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		final Dialog enterHouseNumDialog = new Dialog(getActivity());
 		enterHouseNumDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		enterHouseNumDialog.setContentView(R.layout.dialog_enter_street_number);
+		enterHouseNumDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		TextView tv_house_num = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.tv_street_address);
 		final EditText et_house_num = (EditText) enterHouseNumDialog.getWindow().findViewById(R.id.et_street_number);
 		TextView ok = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.ok);
@@ -311,6 +313,7 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		final Dialog houseNumRangeDialog = new Dialog(getActivity());
 		houseNumRangeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		houseNumRangeDialog.setContentView(R.layout.dialog_enter_street_number_range);
+		houseNumRangeDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		TextView tv_range_message = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.tv_range_message);
 		final EditText et_house_num = (EditText) houseNumRangeDialog.getWindow().findViewById(R.id.et_street_number);
 		TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);

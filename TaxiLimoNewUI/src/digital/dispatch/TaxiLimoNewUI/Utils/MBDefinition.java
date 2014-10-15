@@ -72,6 +72,7 @@ public class MBDefinition {
 	public static final String SHARE_EMAIL = "SHARE_EMAIL";
 	public static final String SHARE_PHONE_NUMBER = "SHARE_PHONE_NUMBER";
 	public static final String SHARE_ALREADY_REGISTER = "SHARE_ALREADY_REGISTER";
+	public static final String SHARE_CC_PIN = "SHARE_CC_PIN";
 	
 	public static final int MDT_MAX_SEQUENCE_NUM = 255;
 	
@@ -89,6 +90,7 @@ public class MBDefinition {
     
     public static final SparseIntArray attrBtnMap;
 	public static final String EXTRA_CREDIT_CARD = "EXTRA_CREDIT_CARD";
+	
 	
     static {
     	SparseIntArray  aMap = new SparseIntArray();

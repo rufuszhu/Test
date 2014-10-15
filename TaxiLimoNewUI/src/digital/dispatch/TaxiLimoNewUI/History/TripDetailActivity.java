@@ -100,7 +100,6 @@ public class TripDetailActivity extends Activity {
 				builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						
 						DaoManager daoManager = DaoManager.getInstance(_context);
 						DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 						bookingDao.delete(dbBook);
@@ -135,7 +134,6 @@ public class TripDetailActivity extends Activity {
 			tv_to.setText(dbBook.getDropoffAddress());
 		else
 			tv_to.setText("Not Given");
-		
 		
 
 		String prefixURL = this.getString(R.string.url);

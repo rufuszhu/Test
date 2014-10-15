@@ -1,5 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
+import java.util.List;
+
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -322,9 +324,9 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	// get called from recall job task
-	public void updateCarMarker(LatLng carLatLng, DBBooking book) {
+	public void updateCarMarker(LatLng carLatLng, List<DBBooking> book) {
 		stopUpdateAnimation();
-		this.dbBook = book;
+		this.dbBook = book.get(0);
 		if (carLatLng == null) {
 			Toast.makeText(_context, "Car Location not availabe", Toast.LENGTH_LONG).show();
 		}
@@ -347,17 +349,17 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	private void updateStatus() {
 
 		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
-			tv_status.setText("Status: Completed");
+			tv_status.setText("Reached destination");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-			tv_status.setText("Status: Canceled");
+			tv_status.setText("Trip is Canceled");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
-			tv_status.setText("Status: Accepted");
+			tv_status.setText("Enroute to pickup");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
-			tv_status.setText("Status: Arrived");
+			tv_status.setText("At Pickup");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			tv_status.setText("Status: Booked");
+			tv_status.setText("Booked");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			tv_status.setText("Status: In Service");
+			tv_status.setText("Trip in Progress");
 		}
 
 	}
@@ -376,7 +378,7 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 	public void stopUpdateAnimation() {
 		isRefreshing = false;
 		// Get our refresh item from the menu
-		if (refresh_icon.getActionView() != null) {
+		if (refresh_icon!= null && refresh_icon.getActionView() != null) {
 			// Remove the animation.
 			refresh_icon.getActionView().clearAnimation();
 			refresh_icon.setActionView(null);

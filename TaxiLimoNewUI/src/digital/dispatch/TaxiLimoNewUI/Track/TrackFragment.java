@@ -137,7 +137,7 @@ public class TrackFragment extends ListFragment {
 	public void stopUpdateAnimation() {
 		isRefreshing = false;
 		// Get our refresh item from the menu
-		if (refresh_icon.getActionView() != null) {
+		if (refresh_icon!= null && refresh_icon.getActionView() != null) {
 			// Remove the animation.
 			refresh_icon.getActionView().clearAnimation();
 			refresh_icon.setActionView(null);
@@ -161,7 +161,7 @@ public class TrackFragment extends ListFragment {
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.d("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			if (!isRefreshing)
+			if (!isRefreshing && refresh_icon!=null)
 				startUpdateAnimation(refresh_icon);
 			new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
 		}
@@ -212,12 +212,12 @@ public class TrackFragment extends ListFragment {
 		return rideIdList;
 	}
 
-	public void updateStatus(JobItem[] jobArr) {
+	public void updateStatus(List<DBBooking> bookingList) {
 		stopUpdateAnimation();
-		for (int i = 0; i < jobArr.length; i++) {
-			DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(jobArr[i].taxi_ride_id)).list().get(0);
-			adapter.updateValues(dbBook);
-		}
+		
+		adapter.clear();	
+		adapter = new BookingListAdapter(getActivity(), bookingList);
+		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 	}
 

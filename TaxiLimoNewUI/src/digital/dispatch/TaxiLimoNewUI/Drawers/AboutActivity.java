@@ -4,37 +4,32 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class AboutActivity extends ActionBarActivity {
+
+	private static final String TAG = "AboutActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.about, menu);
-		for(int i = 0; i< menu.size(); i++)
-			menu.getItem(i).setVisible(false);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		
+		String versionName = "";
+		try {
+			versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		} catch (Exception e) {
+			Logger.v(TAG, e.toString());
+			e.printStackTrace();
 		}
-		return super.onOptionsItemSelected(item);
+		
+		TextView tvVersionNum = (TextView) findViewById(R.id.tvVersionNum);
+		tvVersionNum.setText(versionName + " Your app is up to date");
 	}
+
 }

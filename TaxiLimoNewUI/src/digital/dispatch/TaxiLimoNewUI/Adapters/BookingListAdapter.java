@@ -87,7 +87,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
 			holder.status.setImageResource(R.drawable.tag_arrived);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			holder.status.setImageResource(R.drawable.tag_accepted);
+			holder.status.setImageResource(R.drawable.tag_booked);
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
 			holder.status.setImageResource(R.drawable.tag_in_service);
 		}
