@@ -118,7 +118,11 @@ public class TripDetailActivity extends Activity {
 		
 		tv_id.setText(dbBook.getTaxi_ride_id()+"");
 		tv_receive.setText(dbBook.getTripCreationTime());
-		tv_from.setText(dbBook.getPickupAddress());
+		if(dbBook.getPickup_unit()!=null && !dbBook.getPickup_unit().equals("")){
+			tv_from.setText(dbBook.getPickup_unit()+"-"+dbBook.getPickupAddress());
+		}
+		else
+			tv_from.setText(dbBook.getPickupAddress());
 		
 		//It is safe to assume that the job is this activity is either completed or cancel
 		if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED){
@@ -130,8 +134,13 @@ public class TripDetailActivity extends Activity {
 			tv_trip_status.setBackgroundColor(getResources().getColor(R.color.canceled_color));
 		}
 		
-		if (dbBook.getDropoffAddress() != null && dbBook.getDropoffAddress().length() > 0)
-			tv_to.setText(dbBook.getDropoffAddress());
+		if (dbBook.getDropoffAddress() != null && dbBook.getDropoffAddress().length() > 0){
+			if(dbBook.getDropoff_unit()!=null && !dbBook.getDropoff_unit().equals("")){
+				tv_to.setText(dbBook.getDropoff_unit()+"-"+dbBook.getDropoffAddress());
+			}
+			else
+				tv_to.setText(dbBook.getDropoffAddress());
+		}
 		else
 			tv_to.setText("Not Given");
 		

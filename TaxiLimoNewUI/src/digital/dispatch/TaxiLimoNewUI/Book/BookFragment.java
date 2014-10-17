@@ -232,8 +232,12 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				else if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0
 						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
-
 				} 
+				//check if drop off MANDATORY
+				else if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_DROP_OFF_MANDATORY, false)
+							&& Utils.mDropoffAddress==null){
+					Utils.showErrorDialog(getActivity().getString(R.string.err_dropoff_mandatory), getActivity());
+				}
 				//no selected company
 				else if (selectedCompany == null) {
 					// get into select company page
