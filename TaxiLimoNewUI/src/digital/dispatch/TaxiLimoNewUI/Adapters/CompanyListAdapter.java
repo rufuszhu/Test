@@ -1,6 +1,8 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
 import android.content.Context;
+import android.location.Address;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,14 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
+import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 
 public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 
 	private final Context context;
 	private final CompanyItem[] items;
 	boolean bookRightAfter;
+	
 
 	public CompanyListAdapter(Context context, CompanyItem[] items, boolean bookRightAfter) {
 		super(context, R.layout.company_list_item, items);
@@ -34,6 +38,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		public TextView description;
 		public LinearLayout ll_attr;
 		public TextView tv_round_btn;
+		public TextView estFare;
 	}
 
 	// @Override
@@ -64,6 +69,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			viewHolder.description = (TextView) rowView.findViewById(R.id.tv_description);
 			viewHolder.ll_attr = (LinearLayout) rowView.findViewById(R.id.ll_attr);
 			viewHolder.tv_round_btn = (TextView) rowView.findViewById(R.id.tv_round_btn);
+			viewHolder.estFare = (TextView) rowView.findViewById(R.id.tv_est_fare);
 
 			if (bookRightAfter)
 				viewHolder.tv_round_btn.setText("Book");
@@ -83,6 +89,22 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			String[] attrs = item.attributes.split(",");
 			int marginRight = 10;
 			Utils.showOption(viewHolder.ll_attr, attrs, context, marginRight);
+			//TL-88 add fare estimate if drop off address is set and baseRate set up
+			if (Utils.mDropoffAddress != null && item.baseRate != 0 && item.ratePerDistance != 0){
+				
+				if (Utils.hasHoneycomb()) {
+					// --post GB use serial executor by default --
+					new GetEstimateFareTask(viewHolder.estFare, item.baseRate, item.ratePerDistance).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+							Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(), Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
+				} else {
+					// --GB uses ThreadPoolExecutor by default--
+					new GetEstimateFareTask(viewHolder.estFare, item.baseRate, item.ratePerDistance).execute(Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
+							Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
+				}
+				
+			}else{
+				viewHolder.estFare.setText("");
+			}
 
 			// final float scale = context.getResources().getDisplayMetrics().density;
 			//
@@ -112,4 +134,6 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 	public CompanyItem getCompanyItem(int i) {
 		return items[i];
 	}
+	
+	
 }
