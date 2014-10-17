@@ -32,6 +32,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -165,6 +166,21 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			}
 		});
 	}
+	
+	//override action bar back button to clear destination
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+            case android.R.id.home:
+            	if(isDesitination){
+            		if(isEmpty())
+            			Utils.mDropoffAddress=null;
+            			Utils.dropoff_unit_number=null;
+            	}
+            	super.onBackPressed();
+            }
+            return true;
+    }
 
 	private void findViews() {
 		save_btn = (LinearLayout) findViewById(R.id.save_btn);
@@ -460,6 +476,13 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		ArrayList<MyAddress> maList = AddressDaoManager.dbAddressListToMyAddressList(favList);
 		expListAdapter.updateFavlist(maList);
 	}
+	
+	private boolean isEmpty(){
+		String streetName = autoCompView.getText().toString();
+		String streetNumber = tv_streetNumber.getText().toString();
+		
+		return streetNumber.equalsIgnoreCase("") && streetName.equalsIgnoreCase("");
+	}
 
 	private boolean validateNotEmpty() {
 		String streetName = autoCompView.getText().toString();
@@ -514,9 +537,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 						mContactList.add(maddr);
 					}
 				}
-
 			}
-
 		}
 		cur.close();
 

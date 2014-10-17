@@ -201,13 +201,13 @@ public class TrackDetailActivity extends Activity {
 		inservice_circle = (ImageView) findViewById(R.id.inservice_circle);
 		dispatched_circle = (ImageView) findViewById(R.id.dispatched_circle);
 	}
-	
-	private void checkAndDisablePayBtns(){
-		if(dbBook.getAlready_paid() & !dbBook.getMulti_pay_allow()){
+
+	private void checkAndDisablePayBtns() {
+		if (dbBook.getAlready_paid() & !dbBook.getMulti_pay_allow()) {
 			completed_pay_btn.setAlpha((float) 0.4);
 			arrived_pay_btn.setAlpha((float) 0.4);
 			inService_pay_btn.setAlpha((float) 0.4);
-			
+
 			completed_pay_btn.setClickable(false);
 			arrived_pay_btn.setClickable(false);
 			inService_pay_btn.setClickable(false);
@@ -217,10 +217,20 @@ public class TrackDetailActivity extends Activity {
 	private void fillTable() {
 		tv_id.setText(dbBook.getTaxi_ride_id() + "");
 		tv_receive.setText(dbBook.getTripCreationTime());
-		tv_from.setText(dbBook.getPickupAddress());
-
+		if (dbBook.getPickup_unit() != null && !dbBook.getPickup_unit().equals("")) {
+			tv_from.setText(dbBook.getPickup_unit() + "-" + dbBook.getPickupAddress());
+		} else {
+			tv_from.setText(dbBook.getPickupAddress());
+		}
 		if (dbBook.getDropoffAddress() != null && dbBook.getDropoffAddress().length() > 0)
-			tv_to.setText(dbBook.getDropoffAddress());
+		{
+			if (dbBook.getDropoff_unit() != null && !dbBook.getDropoff_unit().equals("")) {
+				tv_to.setText(dbBook.getDropoff_unit() + "-" + dbBook.getDropoffAddress());
+			} else {
+				tv_to.setText(dbBook.getDropoffAddress());
+			}	
+			
+		}
 		else
 			tv_to.setText("Not Given");
 
@@ -235,7 +245,6 @@ public class TrackDetailActivity extends Activity {
 			int margin_right = 10;
 			Utils.showOption(ll_attr, dbBook.getAttributeList().split(","), _context, margin_right);
 		}
-
 	}
 
 	private void initListener() {
@@ -363,7 +372,7 @@ public class TrackDetailActivity extends Activity {
 	public void stopUpdateAnimation() {
 		isRefreshing = false;
 		// Get our refresh item from the menu
-		if (refresh_icon!= null && refresh_icon.getActionView() != null) {
+		if (refresh_icon != null && refresh_icon.getActionView() != null) {
 			// Remove the animation.
 			refresh_icon.getActionView().clearAnimation();
 			refresh_icon.setActionView(null);
@@ -583,7 +592,8 @@ public class TrackDetailActivity extends Activity {
 	public void startRecallJobTask() {
 		if (refresh_icon != null && !isRefreshing)
 			startUpdateAnimation(refresh_icon);
-		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_ONE_JOB).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbBook.getDestID(), dbBook.getSysId());
+		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_ONE_JOB).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				dbBook.getDestID(), dbBook.getSysId());
 	}
 
 	public void showCancelDialog() {
@@ -633,7 +643,8 @@ public class TrackDetailActivity extends Activity {
 				if (driverMessage.getText().toString().length() == 0) {
 					Utils.showErrorDialog("Cannot send empty message", _context);
 				} else {
-					new SendDriverMsgTask(dbBook.getTaxi_ride_id() + "", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context).execute();
+					new SendDriverMsgTask(dbBook.getTaxi_ride_id() + "", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context)
+							.execute();
 					messageDialog.dismiss();
 				}
 			}
