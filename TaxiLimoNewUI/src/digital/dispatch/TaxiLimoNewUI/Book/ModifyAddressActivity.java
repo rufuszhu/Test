@@ -806,19 +806,14 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 							nicknameDialog.dismiss();
 						}
 					});
-
 					nicknameDialog.show();
 				} else {
-					
 						tv_streetNumber.requestFocus();
 						((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
-					
 				}
 			} else {
-				
 					autoCompView.requestFocus();
 					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
-				
 			}
 		}
 	}
@@ -847,12 +842,11 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					finish();
 				}
 				else{
-					
 					new addFavoriteTask(_activity).execute(addresses.get(which));
+					Logger.e(TAG, "calling add fav task with address: " + addresses.get(which));
 				}
 			}
 		});
 		builderSingle.show();
 	}
-
 }
