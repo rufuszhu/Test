@@ -48,7 +48,16 @@
     <string name="pin_warning">Without PIN, payment can be used by anyone having access to this phone.\n\nAre you sure you want to continue?</string>
     <string name="warning">WARNING</string>
     <string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
-
+    <string name="enter_verification">Enter the Verification Code below, then click Verify</string>
+    <string name="verify_hint">Verification Code</string>
+    <string name="verify_not_receive">Did not receive your Verification Message?</string>
+    <string name="verify_request_new"><u>Request a new one.</u></string>
+    <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
+	<string name="verify">Verify</string>
+	<string name="next">Next</string>
+	<string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
+	<string name="verify_failed">Please enter the correct verification code</string>
+	
     <!-- Profile -->
     <string name="phone">PHONE</string>
     <string name="FIRST_NAME">FIRST NAME</string>
@@ -100,10 +109,10 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
-<!--     <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
+    <!-- <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
 
 
-<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
     <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>
@@ -285,7 +294,7 @@
     <string name="message_book_successful">The trip was successfully booked</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
-    <string name="save_successful">Save Successful</string>
+    <string name="save_successful">Save Successful</string>
     <!-- dialog messages -->
     <string name="enter_street_number">Enter a street number for:</string>
     <string name="enter_street_number_range">Select a street number between</string>
@@ -333,5 +342,6 @@
     <string name="title_activity_register_credit_card">Register Credit Card</string>
     <string name="title_activity_pay">Pay</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_verify_sms">VerifySMSActivity</string>
 
 </resources>

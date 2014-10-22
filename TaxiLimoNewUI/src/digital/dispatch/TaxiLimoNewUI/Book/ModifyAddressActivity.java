@@ -166,21 +166,21 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			}
 		});
 	}
-	
-	//override action bar back button to clear destination
+
+	// override action bar back button to clear destination
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-            case android.R.id.home:
-            	if(isDesitination){
-            		if(isEmpty())
-            			Utils.mDropoffAddress=null;
-            			Utils.dropoff_unit_number=null;
-            	}
-            	super.onBackPressed();
-            }
-            return true;
-    }
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			if (isDesitination) {
+				if (isEmpty())
+					Utils.mDropoffAddress = null;
+				Utils.dropoff_unit_number = null;
+			}
+			super.onBackPressed();
+		}
+		return true;
+	}
 
 	private void findViews() {
 		save_btn = (LinearLayout) findViewById(R.id.save_btn);
@@ -476,11 +476,11 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 		ArrayList<MyAddress> maList = AddressDaoManager.dbAddressListToMyAddressList(favList);
 		expListAdapter.updateFavlist(maList);
 	}
-	
-	private boolean isEmpty(){
+
+	private boolean isEmpty() {
 		String streetName = autoCompView.getText().toString();
 		String streetNumber = tv_streetNumber.getText().toString();
-		
+
 		return streetNumber.equalsIgnoreCase("") && streetName.equalsIgnoreCase("");
 	}
 
@@ -502,44 +502,60 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 	}
 
 	public void readContacts() {
+		String[] PROJECTION = new String[] { ContactsContract.Data.CONTACT_ID, ContactsContract.Contacts.DISPLAY_NAME, StructuredPostal.STREET };
+
 		ContentResolver cr = getContentResolver();
-		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		Cursor cursor = cr.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, PROJECTION, null, null, ContactsContract.Contacts.DISPLAY_NAME);
 
-		if (cur.getCount() > 0) {
-			while (cur.moveToNext()) {
-				String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-				String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				String street = "";
-				Uri img_uri;
-
-				if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-
-					// get the phone number
-					Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { id }, null);
-					while (pCur.moveToNext()) {
-						String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-					}
-					pCur.close();
-
-					Uri postal_uri = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-					Cursor postal_cursor = getContentResolver().query(postal_uri, null, ContactsContract.Data.CONTACT_ID + "=" + id, null, null);
-					while (postal_cursor.moveToNext()) {
-						street = postal_cursor.getString(postal_cursor.getColumnIndex(StructuredPostal.STREET));
-					}
-					postal_cursor.close();
-
-					// ImageView profile = (ImageView)findViewById(R.id.imageView1);
-					img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
-
+		if (cursor != null) {
+			try {
+				final int contactIdIndex = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);
+				final int displayNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+				final int streetIndex = cursor.getColumnIndex(StructuredPostal.STREET);
+				String contactId;
+				String displayName, street;
+				while (cursor.moveToNext()) {
+					street = cursor.getString(streetIndex);
 					if (street != null && !street.equalsIgnoreCase("")) {
-						MyAddress maddr = new MyAddress(img_uri, name, street, (long) -1.0);
+						contactId = cursor.getString(contactIdIndex);
+						Logger.e(TAG, contactId);
+						displayName = cursor.getString(displayNameIndex);
+						Uri img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId);
+
+						MyAddress maddr = new MyAddress(img_uri, displayName, street, (long) -1.0);
 						mContactList.add(maddr);
 					}
 				}
+			} finally {
+				cursor.close();
 			}
 		}
-		cur.close();
+
+		// Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		//
+		// if (cur.getCount() > 0) {
+		// while (cur.moveToNext()) {
+		// String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+		// String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+		// Uri img_uri;
+		//
+		// Uri postal_uri = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
+		// Cursor postal_cursor = getContentResolver().query(postal_uri, null, ContactsContract.Data.CONTACT_ID + "=" + id, null, null);
+		// while (postal_cursor.moveToNext()) {
+		// String street = postal_cursor.getString(postal_cursor.getColumnIndex(StructuredPostal.STREET));
+		// if (street != null && !street.equalsIgnoreCase("")) {
+		//
+		// img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
+		// Logger.e(TAG,id);
+		// MyAddress maddr = new MyAddress(img_uri, name, street, (long) -1.0);
+		// mContactList.add(maddr);
+		//
+		// }
+		// }
+		// postal_cursor.close();
+		// }
+		// }
+		//cur.close();
 
 	}
 
@@ -794,7 +810,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 			if (addresses.size() > 1) {
 				// pop up list
 				boolean isSave = false;
-				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses,tv_unitNumber.getText().toString(),isSave);
+				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses, tv_unitNumber.getText().toString(), isSave);
 			} else if (addresses.size() == 1) {
 				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
 					final EditText nickname_edit;
@@ -829,17 +845,18 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					});
 					nicknameDialog.show();
 				} else {
-						tv_streetNumber.requestFocus();
-						((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
+					tv_streetNumber.requestFocus();
+					((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
 				}
 			} else {
-					autoCompView.requestFocus();
-					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
+				autoCompView.requestFocus();
+				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
 			}
 		}
 	}
 
-	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final String unit, final boolean isSave) {
+	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final String unit,
+			final boolean isSave) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
 		// builderSingle.setIcon(R.drawable.ic_launcher);
 		builderSingle.setTitle("Please be more specific");
@@ -861,8 +878,7 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 					returnIntent.putExtra(MBDefinition.ADDRESS, addressesObj.get(which));
 					setResult(RESULT_OK, returnIntent);
 					finish();
-				}
-				else{
+				} else {
 					new addFavoriteTask(_activity).execute(addresses.get(which));
 					Logger.e(TAG, "calling add fav task with address: " + addresses.get(which));
 				}

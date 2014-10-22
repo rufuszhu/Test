@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:listSelector="@drawable/list_selector" >
+        android:listSelector="@drawable/list_selector" 
+        android:animateLayoutChanges="true">
     </ListView>
 
     <View

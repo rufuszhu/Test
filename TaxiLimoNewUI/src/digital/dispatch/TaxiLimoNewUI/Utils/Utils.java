@@ -535,14 +535,22 @@ public class Utils {
 	}
 
 	public static void showMessageDialog(String message, Context _context) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-		builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.dismiss();
-			}
-		});
-
-		builder.show();
+		Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		tv_message.setText(message);
+		messageDialog.show();
+//		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+//		builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int id) {
+//				dialog.dismiss();
+//			}
+//		});
+//
+//		builder.show();
 	}
 
 	// public static boolean isNumeric(String str)
