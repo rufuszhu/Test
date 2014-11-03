@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
@@ -20,6 +21,7 @@ import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class HistoryFragment extends ListFragment {
 	/**
@@ -57,6 +59,8 @@ public class HistoryFragment extends ListFragment {
 		
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
+		
+		Utils.isInternetAvailable(getActivity());
 	}
 
 	@Override

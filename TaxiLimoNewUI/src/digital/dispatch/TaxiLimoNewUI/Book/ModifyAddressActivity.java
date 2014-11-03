@@ -530,33 +530,6 @@ public class ModifyAddressActivity extends ActionBarActivity implements OnItemCl
 				cursor.close();
 			}
 		}
-
-		// Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		//
-		// if (cur.getCount() > 0) {
-		// while (cur.moveToNext()) {
-		// String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-		// String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-		// Uri img_uri;
-		//
-		// Uri postal_uri = ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-		// Cursor postal_cursor = getContentResolver().query(postal_uri, null, ContactsContract.Data.CONTACT_ID + "=" + id, null, null);
-		// while (postal_cursor.moveToNext()) {
-		// String street = postal_cursor.getString(postal_cursor.getColumnIndex(StructuredPostal.STREET));
-		// if (street != null && !street.equalsIgnoreCase("")) {
-		//
-		// img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
-		// Logger.e(TAG,id);
-		// MyAddress maddr = new MyAddress(img_uri, name, street, (long) -1.0);
-		// mContactList.add(maddr);
-		//
-		// }
-		// }
-		// postal_cursor.close();
-		// }
-		// }
-		//cur.close();
-
 	}
 
 	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {

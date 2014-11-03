@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 
@@ -34,6 +35,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -118,9 +120,14 @@ public class TrackFragment extends ListFragment {
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 
+		Utils.isInternetAvailable(getActivity());
+	    	
 		if (refresh_icon != null && !isRefreshing) {
 			startRecallJobTask();
 		}
+		
+	    
+	    
 	}
 
 	private void startUpdateAnimation(MenuItem item) {

@@ -269,6 +269,9 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
+    
+    <string name="err_no_current_location">Cannot get current location, please check GPS setting</string>
+    <string name="err_no_internet">Network unavailable. Please try again later</string>
     <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>
     <string name="err_invalid_street_number">Street number is\ninvalid</string>
     <string name="err_invalid_street_name">Address is invalid</string>
