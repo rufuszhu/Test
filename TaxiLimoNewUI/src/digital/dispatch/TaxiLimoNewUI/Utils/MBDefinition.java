@@ -75,6 +75,21 @@ public class MBDefinition {
 	public static final String SHARE_CC_PIN = "SHARE_CC_PIN";
 	
 	public static final int MDT_MAX_SEQUENCE_NUM = 255;
+	//GCM notification event
+	public final static int ACCEPT_EVENT = 0;	 //OSP_JOB_ACCEPT
+	public final static int METER_ON_EVENT = 1;	 //OSP_METER_ON
+	public final static int METER_OFF_EVENT = 2; //OSP_METER_OFF
+	public final static int CANCELLED_EVENT = 3; //OSP_COMPLETE_BY_TRIP_CANCEL
+	public final static int NO_SHOW_EVENT = 4;  //OSP_COMPLETE_BY_NO_SHOW
+	public final static int FORCED_COMPLETE_EVENT = 5;  //OSP_COMPLETE_FORCE
+	public final static int ARRIVED_EVENT = 6;  //OSP_ARRIVED
+	public final static int LATE_TRIP_EVENT = 7;  //OSP_LATE_TRIP
+	public final static int REJECT_FOR_STREET_HIRE = 8; // OSP_REJECT_TRIP
+	public final static int REJECT_OFFER = 9; // OSP_REJECT_OFFER
+	public final static int TRIP_OFFER = 10; // OSP_JOB_OFFER
+	public final static int FARE_EVENT = 97; //driver initiated payment amt
+	public final static int MSG_TO_RIDER = 98;	//Canned message to rider
+	public final static int GPS_UPDATE_EVENT = 99;  //OSP_GPS_UPDATE
 	
 	public static final SparseIntArray attrIconMap;
     static {
