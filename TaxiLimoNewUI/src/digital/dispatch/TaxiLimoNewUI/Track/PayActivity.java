@@ -11,12 +11,6 @@ import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.R.array;
-import digital.dispatch.TaxiLimoNewUI.R.color;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.R.string;
 import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -94,6 +88,15 @@ public class PayActivity extends Activity {
 		et_fare_amount = (EditText) findViewById(R.id.et_fare_amount);
 		tv_total = (TextView) findViewById(R.id.tv_total);
 
+		Logger.v(TAG, "trip fare:" + dbBook.getTaxi_ride_id() + " amount: " + dbBook.getPaidAmount());
+		
+		//TL-194 driver initiated payment flow payment amount in from notification
+		//if the trip has not been paid yet and paid amount has value then display the value as driver request amount
+		if(!dbBook.getAlready_paid() && dbBook.getPaidAmount() != null){
+			et_fare_amount.setText(dbBook.getPaidAmount());
+			
+		}
+		
 		et_tip_amount.setFocusable(false);
 		pay_btn = (TextView) findViewById(R.id.pay_btn);
 		pay_btn.setOnClickListener(new View.OnClickListener() {

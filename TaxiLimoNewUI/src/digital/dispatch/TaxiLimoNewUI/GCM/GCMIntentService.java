@@ -17,8 +17,6 @@ package digital.dispatch.TaxiLimoNewUI.GCM;
 
 import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
@@ -29,28 +27,38 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
+
+
 /**
  * IntentService responsible for handling GCM messages.
  */
-public class GCMIntentService extends GCMBaseIntentService {
+public class GCMIntentService extends GCMBaseIntentService 
+ {
 
 	private static final String TAG = "GCMIntentService";
 	private static int id = 0;
 	public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+    public static final int MAX_CAR_USER_DISTANCE = 1000; //meters TL-194
+ 
+    
+    double mobileLatitude = 0;
+    double mobileLongitude = 0;
+    private Context c;
 
 	public GCMIntentService() {
 		super(SENDER_ID);
@@ -71,16 +79,22 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onMessage(Context context, Intent intent) {
-		Logger.v(TAG, "Received message");
+		
 		String message = intent.getStringExtra("message");
-
-		if (checkDisplayMsg(context, message)) {
-			WakeLocker.acquire(context);
-			displayMessage(context, gcmType.message, message, id);
-			sendNotification(context, message);
-			Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(500);
-			WakeLocker.release();
+		c = context;
+		Logger.v(TAG, "Received message " + message);
+		if(!message.isEmpty()){
+		
+			if (checkDisplayMsg(context, message, intent)) {
+				WakeLocker.acquire(context);
+				displayMessage(context, gcmType.message, message, id);
+				sendNotification(context, message);
+				Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(500);
+				WakeLocker.release();
+			}
+			
+			
 		}
 	}
 
@@ -91,6 +105,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		displayMessage(context, gcmType.deletedMsg, message, id);
 		// notifies user
 		sendNotification(context, message);
+		
 	}
 
 	@Override
@@ -107,97 +122,192 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return super.onRecoverableError(context, errorId);
 	}
 
-	private boolean checkDisplayMsg(Context ctx, String msg) {
+
+
+	   
+	private boolean checkDisplayMsg(Context ctx, String msg, Intent intent) {
 		boolean isJobCancelled = false;
 		boolean isCancelJobBySupervisor = false;
+		boolean isJobPaid = false;
+		boolean isPayable = true;
+		String amt = "";
+		String Lat = "";
+		String Long = "";
+		int trID = 0;
+		int eventID = 0;
 
 		Logger.v(TAG, "GCM msg: " + msg);
+		
+		trID = Integer.parseInt(intent.getStringExtra("tId"));
+		eventID = Integer.parseInt(intent.getStringExtra("eId"));
+		
+		switch(eventID){
+			//TL-194 added driver initiated payment support
+			case MBDefinition.FARE_EVENT:
+				amt = intent.getStringExtra("amt");
+				Lat = intent.getStringExtra("Lat");
+				Long = intent.getStringExtra("Long");
+				Logger.v(TAG, "trip fare:" + trID + " amount: " + amt + " Lat: " + Lat + " Long: " + Long);
+							
+				if(Lat != null && Long != null){
+					
+					double carLat = Double.parseDouble(Lat);
+					double carLong = Double.parseDouble(Long);
+								
+					//measure the car vs mobile's gps to make sure not too far off
+					isPayable = isRightPayTrip(trID, carLat, carLong);
+				
+				}
+				
+				break;
+			case MBDefinition.LATE_TRIP_EVENT:
+				Logger.e(TAG, "late trip:" + trID);
+				SharedPreferences sharedPref = ctx.getSharedPreferences("mobile_booker", 0);
+				SharedPreferences.Editor prefEditor = sharedPref.edit();
+				String curLateTripTRID = trID + "";
+				String prevLateTripTRID = sharedPref.getString(LATE_TRIP_TRID, "");
 
-		if (msg.contains("Trip")) {
-			int trID = 0;
-			String delims = "[ ]";
-			String[] tokens = msg.split(delims);
-
-			for (int i = 0; i < tokens.length; i++) {
-				if (tokens[i].contains("Trip") && (i + 1) < tokens.length) {
-					Pattern pattern = Pattern.compile("\\d+");
-					Matcher matcher = pattern.matcher(tokens[i + 1]);
-
-					if (matcher.find()) {
-						trID = Integer.parseInt(matcher.group(0));
-					}
+				if (!prevLateTripTRID.equalsIgnoreCase("")) {
+					curLateTripTRID = prevLateTripTRID + "," + curLateTripTRID;
 				}
 
-				if (tokens[i].contains("cancelled")) {
-					isCancelJobBySupervisor = true;
+				prefEditor.putString(LATE_TRIP_TRID, curLateTripTRID);
+				prefEditor.commit();
+				break;
+			case MBDefinition.CANCELLED_EVENT:
+			case MBDefinition.FORCED_COMPLETE_EVENT:
+			
+				isCancelJobBySupervisor = true;
+				break;
+			default:
+				break;
+				
+				
+		}
+		
+		if(trID != 0){
+			DaoManager daoManager = DaoManager.getInstance(ctx);
+			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+			final DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(trID)).list().get(0);
+	
+			if (dbBook != null) {
+				if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
+					isJobCancelled = true;
 				}
-			}
-
-			if (trID != 0) {
-				if (msg.contains(getResources().getString(R.string.gcm_late_trip_format))) {
-					Logger.e(TAG, "late trip:" + trID);
-					SharedPreferences sharedPref = ctx.getSharedPreferences("mobile_booker", 0);
-					SharedPreferences.Editor prefEditor = sharedPref.edit();
-					String curLateTripTRID = trID + "";
-					String prevLateTripTRID = sharedPref.getString(LATE_TRIP_TRID, "");
-
-					if (!prevLateTripTRID.equalsIgnoreCase("")) {
-						curLateTripTRID = prevLateTripTRID + "," + curLateTripTRID;
-					}
-
-					prefEditor.putString(LATE_TRIP_TRID, curLateTripTRID);
-					prefEditor.commit();
+	
+				if (isCancelJobBySupervisor) {
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+					bookingDao.update(dbBook);
 				}
-
-				DaoManager daoManager = DaoManager.getInstance(ctx);
-				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-				final DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(trID)).list().get(0);
-
-				if (dbBook != null) {
-					if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-						isJobCancelled = true;
-					}
-
-					if (isCancelJobBySupervisor) {
-						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-						bookingDao.update(dbBook);
-					}
+				//TL-200 use paid amount field to store driver requested fare when already_paid is set to false
+				if(isPayable && !dbBook.getAlready_paid() && !amt.isEmpty()){
+					
+					dbBook.setPaidAmount(amt);
+					bookingDao.update(dbBook);
+					
+				}else if (dbBook.getAlready_paid() && !amt.isEmpty()){
+					isJobPaid = true;
 				}
-
+				
 			}
 		}
 
-		if (isJobCancelled) {
+		if (isJobCancelled ) {
 			return false;
-		} else {
+		} else if(isJobPaid){
+			return false;
+		} else if (!isPayable){
+			return false;
+		}
+		else {
 			return true;
 		}
 	}
+	//TL-194 helper function to check the distance between car and mobile based on on GPS
+	private boolean isRightPayTrip(int tripId, double carLatitude, double carLongitude){
+		
+		boolean res = false;
+		//no car GPS allow pay
+		if(carLatitude == 0 || carLongitude == 0){
+			res = true;
+		}
+		
+		Location locationMobile = getBestLocation();
+		//no mobile GPS allow pay
+		if(locationMobile.getLatitude() == 0 || locationMobile.getLongitude() == 0){
+			res = true;
+		}
+		
+		// mobile GPS and Car GPS within 100 meters allow pay
+		Location locationCar = new Location("Car");
+		locationCar.setLatitude(carLatitude);
+		locationCar.setLongitude(carLongitude);
+		
+		
+		Logger.v(TAG, "mobile GPS: " + locationMobile.getLatitude() + "," + locationMobile.getLongitude());
+		double distanceMeters = locationCar.distanceTo(locationMobile);
+		Logger.v(TAG, "distance:" + distanceMeters);
+		if(distanceMeters < MAX_CAR_USER_DISTANCE){ //this meter should be configurable later
+			res = true;
+		}
+		
+		
+		return res;
+	}
+	
+	//TL-194 added this method to get mobile gps 
+	//should move to some utility later if used by more than one location
+	private Location getBestLocation() {
+		Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
+		Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
+		Location tmpLocation;
 
-//	/**
-//	 * Issues a notification to inform the user that server has sent a message.
-//	 */
-//	@SuppressLint("NewApi")
-//	private static void generateNotification(Context context, String message) {
-//		if (id > 2000000000) {
-//			id = 0;
-//		}
-//		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//		Intent notificationIntent = new Intent(context, MainActivity.class);
-//		PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-//
-//		Notification noti = new Notification.Builder(context).setContentTitle(context.getString(R.string.app_name)).setSmallIcon(R.drawable.ic_launcher).setDefaults(Notification.DEFAULT_SOUND)
-//				.setAutoCancel(true).setContentIntent(intent).setContentText(context.getResources().getString(R.string.gcm_short_content_text))
-//				// .setStyle(new
-//				// Notification.BigTextStyle().bigText("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"))
-//				// .setStyle(new
-//				// Notification.BigTextStyle().bigText("Hello how are you doing today? I hope you're well. Can I schedule a meeting with you today. The weather is great today. Are you planning any vacation soon? How are you kids doing lately? I hope they'r"))
-//				.setStyle(new Notification.BigTextStyle().bigText(message)).build();
-//
-//		notificationManager.notify(id, noti);
-//
-//		id++;
-//	}
+		if (gpsLocation == null) {
+			Logger.v(TAG, "No GPS Location available.");
+			return networkLocation;
+		}
+
+		if (networkLocation == null) {
+			Logger.v(TAG, "No Network Location available");
+			return gpsLocation;
+		}
+	
+		Logger.v(TAG, "GPS location:");
+		Logger.v(TAG, " accurate=" + gpsLocation.getAccuracy() + " time=" + gpsLocation.getTime());
+		Logger.v(TAG, "Netowrk location:");
+		Logger.v(TAG, " accurate=" + networkLocation.getAccuracy() + " time=" + networkLocation.getTime());
+		
+		if (gpsLocation.getAccuracy() < networkLocation.getAccuracy()) {
+				Logger.v(TAG, "use GPS location");
+				tmpLocation = gpsLocation;
+
+		} else {
+			Logger.v(TAG, "use networkLocation");
+			tmpLocation = networkLocation;
+		}
+		return tmpLocation;
+
+	}
+
+	
+	private Location getLocationByProvider(String provider) {
+		Location location = null;
+
+		LocationManager locationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+
+		try {
+			if (locationManager.isProviderEnabled(provider)) {
+				location = locationManager.getLastKnownLocation(provider);
+			}
+		} catch (IllegalArgumentException e) {
+			Logger.d(TAG, "Cannot acces Provider " + provider);
+		}
+
+		return location;
+	}
+	
+	
+
 	
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
