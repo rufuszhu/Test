@@ -2,16 +2,15 @@ package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
+
 
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest.IBookJobResponseListener;
@@ -25,9 +24,8 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -186,6 +184,8 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
+		
+			
 		if (resWrapper.getStatus() == 3) {
 			// new AlertDialog.Builder(getActivity())
 			// .setTitle(R.string.booking_failed_title)
@@ -204,45 +204,17 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			case 16:
 			case 17:
 			case 39:
-				// new AlertDialog.Builder(getActivity())
-				// .setTitle(R.string.booking_failed_title)
-				// .setMessage(R.string.err_msg_book_req_area_not_bookable)
-				// .setPositiveButton(R.string.positive_button, null)
-				// .create()
-				// .show();
-				// break;
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()), _context);
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable), _context);
 				break;
 			case 23:
-				// new AlertDialog.Builder(getActivity())
-				// .setTitle(R.string.booking_failed_title)
-				// .setMessage(R.string.err_msg_book_req_invalid_account)
-				// .setPositiveButton(R.string.cancel_yes, new DialogInterface.OnClickListener() {
-				// public void onClick(DialogInterface dialog,int id) {
-				// UserAccount.setAccountNum(getActivity(), "");
-				// UserAccount.setPassword(getActivity(), "");
-				// llBookByAccount.setVisibility(View.GONE);
-				// }
-				// })
-				// .setNegativeButton(R.string.cancel_no, null)
-				// .create()
-				// .show();
-				// break;
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()), _context);
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_invalid_account), _context);
 				break;
 			case 36:
 			case 40:
-				// new AlertDialog.Builder(getActivity())
-				// .setTitle(R.string.booking_failed_title)
-				// .setMessage(R.string.err_msg_book_req_account_err)
-				// .setPositiveButton(R.string.positive_button, null)
-				// .create()
-				// .show();
-				// break;
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_account_err).replace("[company phone]", mbook.getCompany_phone_number()), _context);
 				break;
-			default:
-				// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()), _context);
+			default:			
+				Utils.showMessageDialog(_context.getString(R.string.booking_failed_generic_msg).replace("[company phone]", mbook.getCompany_phone_number()), _context);
 
 				break;
 			}
