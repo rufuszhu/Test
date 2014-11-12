@@ -66,7 +66,7 @@ public class ContactAdapter extends CursorAdapter implements SectionIndexer {
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         // Inflates the list item layout.
         final View itemLayout =
-                mInflater.inflate(R.layout.list_group_item, viewGroup, false);
+                mInflater.inflate(R.layout.contact_item, viewGroup, false);
 
         // Creates a new ViewHolder in which to store handles to each view resource. This
         // allows bindView() to retrieve stored references instead of calling findViewById for

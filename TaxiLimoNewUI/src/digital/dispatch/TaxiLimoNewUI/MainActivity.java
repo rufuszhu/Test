@@ -299,9 +299,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		case 2:
-//			intent = new Intent(this, PreferenceActivity.class);
-//			startActivity(intent);
-//			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			intent = new Intent(this, PreferenceActivity.class);
+			startActivity(intent);
+			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			break;
 		case 3:
 			intent = new Intent(this, AboutActivity.class);

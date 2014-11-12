@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background"
+    android:padding="@dimen/small_padding"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity" >
 
     <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".21"
-        android:orientation="vertical"
-        android:padding="@dimen/normal_margin" >
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/small_padding" >
 
@@ -29,56 +29,6 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true" />
 
-            <EditText
-                android:id="@+id/tv_streetNumber"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".4"
-                android:background="@drawable/shape_textview_border"
-                android:ems="10"
-                android:hint="@string/street_number"
-                android:inputType="number"
-                android:windowSoftInputMode="stateVisible"
-                android:nextFocusLeft="@id/tv_streetNumber"
-                android:nextFocusUp="@id/tv_streetNumber"
-                android:paddingLeft="@dimen/editView_paddign"
-                android:selectAllOnFocus="true" 
-                android:imeOptions="actionDone">
-            </EditText>
-
-            <EditText
-                android:id="@+id/tv_unitNumber"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/normal_margin"
-                android:layout_marginRight="@dimen/normal_margin"
-                android:layout_weight=".4"
-                android:background="@drawable/shape_textview_border"
-                android:ems="10"
-                android:hint="@string/unit_number"
-                android:inputType="number"
-                android:paddingLeft="@dimen/editView_paddign" 
-                android:imeOptions="actionDone"/>
-
-            <TextView
-                android:id="@+id/driver_note_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".2"
-                android:background="@drawable/driver_note_btn"
-                android:clickable="true"
-                />
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:gravity="center"
-            
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/small_padding" >
-
             <AutoCompleteTextView
                 android:id="@+id/autocomplete"
                 android:layout_width="match_parent"
@@ -86,42 +36,84 @@
                 android:background="@drawable/shape_textview_border"
                 android:ems="10"
                 android:hint="@string/street_name"
-                android:paddingLeft="@dimen/editView_paddign" 
-                android:paddingRight="32dp"
                 android:imeOptions="actionDone"
-                android:singleLine="true"
-                android:inputType="textPostalAddress"/>
+                android:inputType="textPostalAddress"
+                android:nextFocusLeft="@id/autocomplete"
+                android:nextFocusUp="@id/autocomplete"
+                android:paddingLeft="@dimen/normal_padding"
+                android:paddingRight="32dp"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/clear_autocomplete"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="@dimen/normal_padding"
                 android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_marginRight="@dimen/normal_padding"
                 android:clickable="true"
                 android:src="@drawable/icon_clearinput" />
         </FrameLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".66"
-        android:orientation="vertical" >
-
-        <ExpandableListView
-            android:id="@+id/lvExp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="false" >
-        </ExpandableListView>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/small_padding" >
+
+            <EditText
+                android:id="@+id/tv_streetNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".33"
+                android:background="@drawable/shape_textview_border"
+                android:ems="10"
+                android:hint="@string/street_number_hint"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:nextFocusLeft="@id/tv_streetNumber"
+                android:nextFocusUp="@id/tv_streetNumber"
+                android:paddingLeft="@dimen/normal_padding"
+                android:selectAllOnFocus="true"
+                android:windowSoftInputMode="stateVisible" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/tv_unitNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/small_padding"
+                android:layout_marginRight="@dimen/small_padding"
+                android:layout_weight=".33"
+                android:background="@drawable/shape_textview_border"
+                android:ems="10"
+                android:hint="@string/unit_number_hint"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:paddingLeft="@dimen/normal_padding" />
+
+            <TextView
+                android:id="@+id/driver_note_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".33"
+                android:background="@drawable/shape_textview_border"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/normal_padding"
+                android:text="@string/driver_note"
+                android:textSize="13sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/bot"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bot_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:baselineAligned="false"
+        android:isScrollContainer="false"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -138,43 +130,16 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_add_favorite" />
-            
-            <Space
-            android:layout_width="@dimen/small_padding"
-            android:layout_height="match_parent" />
-            
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_favorite"
-                style="@style/BlueBtnText" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/contact_favorite_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_add_favorite" />
-            
             <Space
-            android:layout_width="@dimen/small_padding"
-            android:layout_height="match_parent" />
+                android:layout_width="@dimen/small_padding"
+                android:layout_height="match_parent" />
 
             <TextView
+                style="@style/BlueBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_favorite"
-                style="@style/BlueBtnText" />
+                android:text="@string/add_favorite" />
         </LinearLayout>
 
         <LinearLayout
@@ -192,16 +157,16 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_remove" />
-            
+
             <Space
-            android:layout_width="@dimen/normal_padding"
-            android:layout_height="match_parent" />
+                android:layout_width="@dimen/normal_padding"
+                android:layout_height="match_parent" />
 
             <TextView
+                style="@style/RedBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/remove"
-                style="@style/RedBtnText" />
+                android:text="@string/remove" />
         </LinearLayout>
 
         <LinearLayout
@@ -218,44 +183,170 @@
                 android:layout_width="@dimen/gray_btn_icon_size"
                 android:layout_height="@dimen/gray_btn_icon_size"
                 android:src="@drawable/icon_save" />
-            
+
             <Space
-            android:layout_width="@dimen/normal_padding"
-            android:layout_height="match_parent" />
+                android:layout_width="@dimen/normal_padding"
+                android:layout_height="match_parent" />
 
             <TextView
+                style="@style/GreenBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/save"
-                style="@style/GreenBtnText" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/select_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_save" />
-            
-            <Space
-            android:layout_width="@dimen/normal_padding"
-            android:layout_height="match_parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/select"
-                style="@style/GreenBtnText" />
+                android:text="@string/save" />
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/mid"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/bot"
+        android:layout_below="@+id/top"
+        android:layout_marginBottom="@dimen/normal_padding"
+        android:isScrollContainer="false" >
+
+        <!-- <ExpandableListView -->
+        <!-- android:id="@+id/lvExp" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:isScrollContainer="false" > -->
+        <!-- </ExpandableListView> -->
+
+        <LinearLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:baselineAligned="false"
+            android:isScrollContainer="false"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/tab1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:background="@color/background_tab"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/img_1"
+                    android:layout_width="@dimen/tab_icon_size"
+                    android:layout_height="@dimen/tab_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_action_about" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_1"
+                    android:layout_centerHorizontal="true"
+                    android:text="MAP"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/tab_font_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tab2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:background="@color/background_tab"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/img_2"
+                    android:layout_width="@dimen/tab_icon_size"
+                    android:layout_height="@dimen/tab_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_action_search" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_2"
+                    android:layout_centerHorizontal="true"
+                    android:text="FAVORITES"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/tab_font_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tab3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:background="@color/background_tab"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/img_3"
+                    android:layout_width="@dimen/tab_icon_size"
+                    android:layout_height="@dimen/tab_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_action_event" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_3"
+                    android:layout_centerHorizontal="true"
+                    android:text="CONTACTS"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/tab_font_size" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tab4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".25"
+                android:background="@color/background_tab"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/img_4"
+                    android:layout_width="@dimen/tab_icon_size"
+                    android:layout_height="@dimen/tab_icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_action_edit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_4"
+                    android:layout_centerHorizontal="true"
+                    android:text="LANDMARKS"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/tab_font_size" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignLeft="@+id/tabs"
+            android:layout_below="@+id/tabs"
+            android:isScrollContainer="false"
+            android:gravity="center" >
+
+            <android.support.v4.view.ViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:isScrollContainer="false" >
+            </android.support.v4.view.ViewPager>
+            
+            <ImageView
+            android:id="@+id/blue_pin"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:isScrollContainer="false"
+            android:src="@drawable/pin_blue" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

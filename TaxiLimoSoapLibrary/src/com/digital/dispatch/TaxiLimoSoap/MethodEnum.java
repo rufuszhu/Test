@@ -4,7 +4,8 @@ public enum MethodEnum {
 	AccountValidation("TLValidateAccount"), AttrList("TLGetAttributeList"), BookJob("TLBookJob"), CancelJob("TLCancelJob"), 
 	CompanyList("TLGetCompanyList"), GetMBParam("TLGetMBParameter"), GetVersion("TLGetVersion"), KeyExchange("TLKeyExchange"), 
 	PayByAccount("TLAccountPayment"), PayByToken("TLTokenPayment"), RecallJobs("TLRecallJobs"), RegDev("TLRegisterDevice"), 
-	SendDriverMsg("TLSendDriverMessage"), Tokenization("TLTokenization"), VerifySMS("TLVerifyDevice");
+	SendDriverMsg("TLSendDriverMessage"), Tokenization("TLTokenization"), VerifySMS("TLVerifyDevice"), GetServiceList("TLGetServiceList");
+	
 	
 	private String methodName;
 	

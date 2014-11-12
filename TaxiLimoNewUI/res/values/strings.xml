@@ -108,7 +108,7 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
-    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+    <string name="url">http://192.168.50.161:188/Service.asmx</string>
     <!-- <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
 
 
@@ -150,8 +150,10 @@
     <string name="empty_note">None</string>
     <string name="now">Now</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    <string name="street_number">Street Number</string>
+    <string name="street_number">Street Number</string>   
     <string name="unit_number">Unit Number</string>
+    <string name="street_number_hint">Street No.</string>   
+    <string name="unit_number_hint">Unit No.</string>
     <string name="street_name">Street Name</string>
 
     <!-- Payment -->

@@ -4,18 +4,26 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
+import digital.dispatch.TaxiLimoNewUI.Task.GetServiceListTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.support.v7.app.ActionBarActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class PreferenceActivity extends ActionBarActivity {
 
+	private static final String TAG = "PreferenceActivity";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preference);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		new GetServiceListTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		Logger.e(TAG,"");
 	}
 
 	@Override
