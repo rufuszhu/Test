@@ -269,6 +269,8 @@
     <string name="err_dropoff_mandatory">Please enter your destination</string>
     <string name="err_msg_book_req_area_not_bookable">Address is not within the taxi company\'s service area. Please choose a different address.        </string>
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
+    <string name="err_msg_book_req_account_err">
+        Problem with company account. Please call [company phone] to book your taxi.</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
     <string name="err_no_pickup_address">Still trying to get the pickup address from Google</string>
