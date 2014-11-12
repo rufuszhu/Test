@@ -12,7 +12,7 @@ import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Book.MyAddress;
+import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
 
 import android.content.Context;
 import android.location.Address;
@@ -103,11 +103,11 @@ public class AddressDaoManager {
 	
 	
 	
-	public static ArrayList<MyAddress> dbAddressListToMyAddressList(List<DBAddress> dbAddresses){
-		ArrayList<MyAddress> temp = new ArrayList<MyAddress>();
+	public static ArrayList<MyContact> dbAddressListToMyAddressList(List<DBAddress> dbAddresses){
+		ArrayList<MyContact> temp = new ArrayList<MyContact>();
 		for(int i=0 ; i< dbAddresses.size(); i++){
 			DBAddress dba = dbAddresses.get(i);
-			MyAddress ma = new MyAddress(null,dba.getNickName(),dba.getFullAddress(), dba.getId());
+			MyContact ma = new MyContact(null,dba.getNickName(),dba.getFullAddress(), dba.getId());
 			temp.add(ma);
 		}
 		return temp;

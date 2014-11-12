@@ -15,7 +15,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.MyAddress;
+import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
@@ -24,17 +24,17 @@ public class ContactExpandableListAdapter extends BaseExpandableListAdapter {
 	private Context _context;
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
-	private HashMap<String, List<MyAddress>> _listDataChild;
+	private HashMap<String, List<MyContact>> _listDataChild;
 	private ImageLoader mImageLoader;
 
-	public ContactExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<MyAddress>> listChildData, ImageLoader mImageLoader) {
+	public ContactExpandableListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<MyContact>> listChildData, ImageLoader mImageLoader) {
 		this._context = context;
 		this._listDataHeader = listDataHeader;
 		this._listDataChild = listChildData;
 		this.mImageLoader = mImageLoader;
 	}
 
-	public void updateFavlist(ArrayList<MyAddress> ma) {
+	public void updateFavlist(ArrayList<MyContact> ma) {
 		_listDataChild.get("Favorites").clear();
 		_listDataChild.get("Favorites").addAll(ma);
 	}
@@ -53,14 +53,14 @@ public class ContactExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-		final MyAddress mAddr = (MyAddress) getChild(groupPosition, childPosition);
+		final MyContact mAddr = (MyContact) getChild(groupPosition, childPosition);
 		final String name = mAddr.getName();
 		final String addr = mAddr.getAddress();
 		final Uri uri = mAddr.getImg_URI();
 
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.list_group_item, null);
+			convertView = infalInflater.inflate(R.layout.contact_item, null);
 		}
 
 		TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);

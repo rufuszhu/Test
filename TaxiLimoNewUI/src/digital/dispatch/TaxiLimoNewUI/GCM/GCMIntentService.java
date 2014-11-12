@@ -321,7 +321,7 @@ public class GCMIntentService extends GCMBaseIntentService
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.ic_notification)
+        .setSmallIcon(R.drawable.ic_notification).setAutoCancel(true)
         .setContentTitle(context.getString(R.string.app_name))
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))

@@ -211,8 +211,7 @@ public final class LocationUtils {
 		return new LatLng(location.getLatitude(), location.getLongitude());
 	}
 
-	public static ArrayList<String> addressListToStringList(Context context,
-			List<Address> addresses) {
+	public static ArrayList<String> addressListToStringList(Context context,List<Address> addresses) {
 		ArrayList<String> temp = new ArrayList<String>();
 		for (int i = 0; i < addresses.size(); i++) {
 			temp.add(addressToString(context, addresses.get(i)));

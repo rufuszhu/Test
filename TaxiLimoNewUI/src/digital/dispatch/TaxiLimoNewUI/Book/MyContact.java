@@ -4,11 +4,11 @@ import java.io.InputStream;
 
 import android.net.Uri;
 
-public class MyAddress {
+public class MyContact {
 	private String name, address;
 	private Uri img_URI;
 	private long id;
-	public MyAddress(Uri imgURI, String name, String addr, long id){
+	public MyContact(Uri imgURI, String name, String addr, long id){
 		this.img_URI=imgURI;
 		this.name=name;
 		this.address=addr;

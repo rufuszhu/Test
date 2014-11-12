@@ -2,17 +2,13 @@ package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import kankan.wheel.widget.WheelView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,15 +17,13 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -37,26 +31,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,15 +53,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
-import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
@@ -83,7 +68,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class BookFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
+public class BookFragment extends Fragment implements OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
@@ -93,7 +78,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private static View view;
 
 	private GoogleMap mMap;
-	private LocationClient mLocationClient;
 
 	private TextView textNote;
 	private TextView text_pickup;
@@ -104,11 +88,21 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	private String oldDistrict;
 	private boolean noCompanyAvailable = false;
 
-	// These settings are the same as the settings for the map. They will in fact give you updates
-	// at the maximal rates currently possible.
-	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000) // 5 seconds
-			.setFastestInterval(16) // 16ms = 60fps
-			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+	private void buildAlertMessageNoGps() {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(final DialogInterface dialog, final int id) {
+						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+					}
+				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(final DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+		final AlertDialog alert = builder.create();
+		alert.show();
+	}
 
 	public static BookFragment newInstance() {
 		BookFragment fragment = new BookFragment();
@@ -129,7 +123,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "on CREATEVIEW");
 
-		// View rootView = inflater.inflate(R.layout.fragment_book, container, false);
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
 			if (parent != null)
@@ -158,9 +151,9 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-				if (servicesConnected()) {
-					intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
-				}
+
+				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
+
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_PICKUPADDRESS_CODE);
 			}
@@ -210,42 +203,44 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 				CompanyItem selectedCompany = Utils.mSelectedCompany;
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-				//pick up address not available
+				// pick up address not available
 				if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
 					Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
 				}
-				//no taxi company found in current city
-				else if(noCompanyAvailable){
+				// no taxi company found in current city
+				else if (noCompanyAvailable) {
 					Utils.showMessageDialog(getActivity().getString(R.string.err_no_company_found) + " " + Utils.mPickupAddress.getLocality(), getActivity());
 				}
-				//no house number in pickup address
+				// no house number in pickup address
 				else if (!validateHasHouseNumber()) {
 					showEnterHouseNumberDialog();
-				} 
-				//house number return by Google has a range
+				}
+				// house number return by Google has a range
 				else if (!validateHouseNumberHasNoRange()) {
 					Address address = Utils.mPickupAddress;
 					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
 					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
 				}
 				// check if allow multiple booking
-				else if (bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list().size() > 0
+				else if (bookingDao.queryBuilder()
+						.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+						.list().size() > 0
 						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
-				} 
-				//check if drop off MANDATORY
+				}
+				// check if drop off MANDATORY
 				else if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_DROP_OFF_MANDATORY, false)
-							&& Utils.mDropoffAddress==null){
+						&& Utils.mDropoffAddress == null) {
 					Utils.showErrorDialog(getActivity().getString(R.string.err_dropoff_mandatory), getActivity());
 				}
-				//no selected company
+				// no selected company
 				else if (selectedCompany == null) {
 					// get into select company page
 					Intent intent = new Intent(getActivity(), AttributeActivity.class);
 					intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
 					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
-				} 
-				//finally we can book job
+				}
+				// finally we can book job
 				else {
 					Utils.bookJob(selectedCompany, getActivity());
 				}
@@ -329,7 +324,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			public void onClick(View arg0) {
 				if (et_house_num.getText().toString().equals("")) {
 					et_house_num.setError("Pleace enter a street number for pick up");
-				} else if (Integer.parseInt(et_house_num.getText().toString()) > Integer.parseInt(end) || Integer.parseInt(et_house_num.getText().toString()) < Integer.parseInt(start))
+				} else if (Integer.parseInt(et_house_num.getText().toString()) > Integer.parseInt(end)
+						|| Integer.parseInt(et_house_num.getText().toString()) < Integer.parseInt(start))
 					et_house_num.setError("Street number not in range");
 				else {
 					Utils.pickupHouseNumber = et_house_num.getText().toString();
@@ -373,7 +369,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 			String prefixURL = getActivity().getString(R.string.url);
 			prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
 			// String[] locArray = item.logo.split("/");
-			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon,
+			// context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new DownloadImageTask(iv_company_icon).execute(prefixURL + item.logo);
 		}
 		// if no company selected
@@ -401,9 +398,34 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
+		checkGPSEnable();
+		checkInternet();
 		setUpMapIfNeeded();
-		setUpLocationClientIfNeeded();
-		mLocationClient.connect();
+
+		Location currentLocation = getBestLocation();
+		Address address = Utils.mPickupAddress;
+		if (address != null) {
+			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
+			if (checkReady()) {
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
+			}
+			// boolean isFromBooking = true;
+			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			// setupCompanyUI();
+		} else {
+			if (checkReady() && currentLocation != null) {
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
+			}
+		}
+
+		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
+		if (Utils.mDropoffAddress != null) {
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
+			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
+		} else {
+			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+			tv_destination.setText(getActivity().getResources().getString(R.string.empty_note));
+		}
 
 		setupCompanyUI();
 	}
@@ -412,9 +434,18 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	public void onPause() {
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
-		if (mLocationClient != null) {
-			mLocationClient.disconnect();
+	}
+
+	private void checkGPSEnable() {
+		final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			buildAlertMessageNoGps();
 		}
+	}
+
+	private void checkInternet() {
+		Utils.isInternetAvailable(getActivity());
 	}
 
 	private void setTimeText(TextView tv_time) {
@@ -435,36 +466,6 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 				tv_time.setText(date + "\n" + time);
 			tv_time.setTextSize(13);
 			tv_time.setTextColor(getActivity().getResources().getColor(R.color.black));
-		}
-	}
-
-	/**
-	 * Verify that Google Play services is available before making a request.
-	 * 
-	 * @return true if Google Play services is available, otherwise false
-	 */
-	private boolean servicesConnected() {
-
-		// Check that Google Play services is available
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
-
-		// If Google Play services is available
-		if (ConnectionResult.SUCCESS == resultCode) {
-			// In debug mode, log the status
-			Log.d(LocationUtils.APPTAG, getString(R.string.play_services_available));
-
-			// Continue
-			return true;
-			// Google Play services was not available for some reason
-		} else {
-			// Display an error dialog
-			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
-			if (dialog != null) {
-				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-				errorFragment.setDialog(dialog);
-				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
-			}
-			return false;
 		}
 	}
 
@@ -492,47 +493,59 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		}
 	}
 
-	private void setUpLocationClientIfNeeded() {
-		if (mLocationClient == null) {
-			mLocationClient = new LocationClient(getActivity(), this, // ConnectionCallbacks
-					this); // OnConnectionFailedListener
+	private Location getBestLocation() {
+		Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
+		Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
+		Location tmpLocation;
+
+		if (gpsLocation == null) {
+			Logger.v(TAG, "No GPS Location available.");
+			return networkLocation;
 		}
-	}
 
-	@Override
-	public void onConnected(Bundle arg0) {
-		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
+		if (networkLocation == null) {
+			Logger.v(TAG, "No Network Location available");
+			return gpsLocation;
+		}
 
-		Address address = Utils.mPickupAddress;
-		if (address != null) {
-			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
-			if (checkReady()) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
-			}
-			// boolean isFromBooking = true;
-			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			// setupCompanyUI();
+		Logger.v(TAG, "GPS location:");
+		Logger.v(TAG, "   accurate=" + gpsLocation.getAccuracy() + " time=" + gpsLocation.getTime());
+		Logger.v(TAG, "Netowrk location:");
+		Logger.v(TAG, "   accurate=" + networkLocation.getAccuracy() + " time=" + networkLocation.getTime());
+
+		if (gpsLocation.getAccuracy() < networkLocation.getAccuracy()) {
+			Logger.v(TAG, "use GPS location");
+			tmpLocation = gpsLocation;
+
 		} else {
-			if (checkReady()) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
+			Logger.v(TAG, "use networkLocation");
+			tmpLocation = networkLocation;
+		}
+		return tmpLocation;
+
+	}
+
+	private Location getLocationByProvider(String provider) {
+		Location location = null;
+
+		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+		try {
+			if (locationManager.isProviderEnabled(provider)) {
+				location = locationManager.getLastKnownLocation(provider);
 			}
+		} catch (IllegalArgumentException e) {
+			Logger.d(TAG, "Cannot acces Provider " + provider);
 		}
 
-		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
-		if (Utils.mDropoffAddress != null) {
-			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
-			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
-		} else {
-			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
-			tv_destination.setText(getActivity().getResources().getString(R.string.empty_note));
-		}
+		return location;
 	}
 
-	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
-
-	}
+	// @Override
+	// public void onDisconnected() {
+	// // TODO Auto-generated method stub
+	//
+	// }
 
 	@Override
 	public void onLocationChanged(Location arg0) {
@@ -553,7 +566,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		/*
-		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play services activity that can resolve error.
+		 * Google Play services can resolve some errors it detects. If the error has a resolution, try sending an Intent to start a Google Play services
+		 * activity that can resolve error.
 		 */
 		if (connectionResult.hasResolution()) {
 			try {
@@ -579,20 +593,21 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	private void onCurrentLocationClick() {
-		if (servicesConnected()) {
 
-			// Get the current location
-			Location currentLocation = mLocationClient.getLastLocation();
+		// Get the current location
+		Location currentLocation = getBestLocation();
+		if (currentLocation != null) {
 			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 			// mCurrentLocation = currentLocation;
 
 			CameraPosition currentPosition = new CameraPosition.Builder().target(currLatLng).zoom(MBDefinition.DEFAULT_ZOOM).bearing(0).tilt(0).build();
 			CameraUpdate locatoinUpdate = CameraUpdateFactory.newCameraPosition(currentPosition);
 			mMap.animateCamera(locatoinUpdate);
-			// A few more markers for good measure.
-
-			// queryAddrFromLoc();
 		}
+		else{
+			Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
+		}
+
 	}
 
 	// For Eclipse with ADT, suppress warnings about Geocoder.isPresent()
@@ -635,8 +650,9 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 	}
 
 	/**
-	 * An AsyncTask that calls getFromLocation() in the background. The class uses the following generic types: Location - A {@link android.location.Location} object containing the current location,
-	 * passed as the input parameter to doInBackground() Void - indicates that progress units are not used by this subclass String - An address passed to onPostExecute()
+	 * An AsyncTask that calls getFromLocation() in the background. The class uses the following generic types: Location - A {@link android.location.Location}
+	 * object containing the current location, passed as the input parameter to doInBackground() Void - indicates that progress units are not used by this
+	 * subclass String - An address passed to onPostExecute()
 	 */
 	protected class GetAddressTask extends AsyncTask<Location, Void, String> {
 
@@ -659,7 +675,8 @@ public class BookFragment extends Fragment implements ConnectionCallbacks, OnCon
 		@Override
 		protected String doInBackground(Location... params) {
 			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+			 * to address standards can also be used.
 			 */
 			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
 

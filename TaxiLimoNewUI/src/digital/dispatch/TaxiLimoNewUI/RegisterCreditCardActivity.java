@@ -982,7 +982,6 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 						}
 					}
 				}
-
 				if (params[0].length() == 0) {
 					UserAccount.setCreditCardPIN(context, "");
 					isSuccess = 0;
@@ -995,7 +994,6 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 						Logger.e(TAG, "Save PIN error: " + e.toString());
 					}
 				}
-
 				return isSuccess;
 			}
 		}
@@ -1025,7 +1023,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 		AlertDialog.Builder builder = new AlertDialog.Builder(context).setMessage(R.string.welcome_message).setCancelable(true);
 		final AlertDialog dialog = builder.create();
 		dialog.show();
-		new CountDownTimer(3000, 3000) {
+		new CountDownTimer(2000, 2000) {
 			public void onTick(long millisUntilFinished) {
 				
 			}

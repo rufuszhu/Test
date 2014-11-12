@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 
@@ -33,7 +36,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 	}
 
 	public static class ViewHolder {
-		public ImageView icon;
+		public NetworkImageView icon;
 		public TextView name;
 		public TextView description;
 		public LinearLayout ll_attr;
@@ -64,7 +67,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			// configure view holder
 			viewHolder = new ViewHolder();
 
-			viewHolder.icon = (ImageView) rowView.findViewById(R.id.company_icon);
+			viewHolder.icon = (NetworkImageView) rowView.findViewById(R.id.company_icon);
 			viewHolder.name = (TextView) rowView.findViewById(R.id.tv_name);
 			viewHolder.description = (TextView) rowView.findViewById(R.id.tv_description);
 			viewHolder.ll_attr = (LinearLayout) rowView.findViewById(R.id.ll_attr);
@@ -83,8 +86,11 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
 			// String[] locArray = item.logo.split("/");
 			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon, context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new DownloadImageTask(viewHolder.icon).execute(prefixURL + item.logo);
+			//new DownloadImageTask(viewHolder.icon).execute(prefixURL + item.logo);
+			viewHolder.icon.setDefaultImageResId(R.drawable.launcher);
+			viewHolder.icon.setImageUrl(prefixURL + item.logo, AppController.getInstance().getImageLoader());
 			viewHolder.description.setText(item.description);
+			
 
 			String[] attrs = item.attributes.split(",");
 			int marginRight = 10;

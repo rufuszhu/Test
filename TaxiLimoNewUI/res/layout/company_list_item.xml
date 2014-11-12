@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:paddingTop="@dimen/normal_padding" >
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/company_icon"
             android:layout_marginLeft="@dimen/normal_padding"
             android:layout_width="55dp"

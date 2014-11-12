@@ -1,5 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +34,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
@@ -38,6 +44,7 @@ import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -48,6 +55,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
 public class Utils {
@@ -106,6 +114,58 @@ public class Utils {
 	 */
 	public static boolean hasICS() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+	}
+
+	// public static boolean isInternetAvailable() {
+	// try {
+	// InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name
+	//
+	// if (ipAddr.equals("")) {
+	// return false;
+	// } else {
+	// return true;
+	// }
+	//
+	// } catch (Exception e) {
+	// return false;
+	// }
+	//
+	// }
+	public static void isInternetAvailable(final Context context) {
+		
+		 new AsyncTask<URL, Integer, Boolean>(){
+		     protected Boolean doInBackground(URL... urls) {
+		    	 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		 		if (activeNetwork != null && activeNetwork.isConnected()) {
+		 			try {
+		 				URL url = new URL("http://www.google.com/");
+		 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+		 				urlc.setRequestProperty("User-Agent", "test");
+		 				urlc.setRequestProperty("Connection", "close");
+		 				urlc.setConnectTimeout(1000); // mTimeout is in seconds
+		 				urlc.connect();
+		 				if (urlc.getResponseCode() == 200) {
+		 					return true;
+		 				} else {
+		 					return false;
+		 				}
+		 			} catch (IOException e) {
+		 				Log.i("warning", "Error checking internet connection", e);
+		 				return false;
+		 			}
+		 		}
+
+		 		return false;
+		     }
+
+		     protected void onPostExecute(Boolean result) {
+		         if(!result)
+		        	 Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
+		     }
+		 }.execute();
+
 	}
 
 	public static void setUpTimeDialog(final Context context, final TextView tv_time) {
@@ -319,7 +379,7 @@ public class Utils {
 			mbook.setPickup_house_number(pickupHouseNumber);
 			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
 		}
-		if(pickup_unit_number!= null && pickup_unit_number.length()>0)
+		if (pickup_unit_number != null && pickup_unit_number.length() > 0)
 			mbook.setPickup_unit(pickup_unit_number);
 		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
 		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
@@ -334,7 +394,7 @@ public class Utils {
 			mbook.setDropoff_house_number(AddressDaoManager.getHouseNumberFromAddress(ad));
 			mbook.setDropoff_latitude(ad.getLatitude());
 			mbook.setDropoff_longitude(ad.getLongitude());
-			if(dropoff_unit_number!=null && dropoff_unit_number.length()>0)
+			if (dropoff_unit_number != null && dropoff_unit_number.length() > 0)
 				mbook.setDropoff_unit(dropoff_unit_number);
 			mbook.setDropoff_street_name(AddressDaoManager.getStreetNameFromAddress(ad));
 			mbook.setDropoffAddress(LocationUtils.addressToString(context, ad));
@@ -535,14 +595,22 @@ public class Utils {
 	}
 
 	public static void showMessageDialog(String message, Context _context) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-		builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.dismiss();
-			}
-		});
-
-		builder.show();
+		Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		tv_message.setText(message);
+		messageDialog.show();
+		// AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		// builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+		// public void onClick(DialogInterface dialog, int id) {
+		// dialog.dismiss();
+		// }
+		// });
+		//
+		// builder.show();
 	}
 
 	// public static boolean isNumeric(String str)

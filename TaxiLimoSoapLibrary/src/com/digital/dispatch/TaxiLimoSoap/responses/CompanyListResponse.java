@@ -26,12 +26,14 @@ public class CompanyListResponse extends ResponseWrapper {
 			for (int i = 0; i < properties.size(); i ++) {
 				Object item = ((PropertyInfo)properties.elementAt(i)).getValue();
 				String objName = ((PropertyInfo)properties.elementAt(i)).getName();
+				Log.e(TAG,"objName: " + objName);
 				String cDestID, cName, cLogo, cDesc, cAttr, multiPay, carFile, dupChkTime, ccPayEnable, phoneNr;
 				int cLogoVersion, cBaseRate, cRatePerDist, cSysID;
 
 				if (item instanceof SoapObject) {
 					if (objName.equalsIgnoreCase("listOfDestinations")) {
 						cDestID = ((SoapObject) item).getProperty("destID").toString();
+						
 						cName = ((SoapObject) item).getProperty("name").toString();
 						cLogo = ((SoapObject) item).getProperty("logo").toString();
 						cDesc = checkExistAndGet((SoapObject) item, "desc");
