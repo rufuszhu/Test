@@ -116,21 +116,7 @@ public class Utils {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 	}
 
-	// public static boolean isInternetAvailable() {
-	// try {
-	// InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name
-	//
-	// if (ipAddr.equals("")) {
-	// return false;
-	// } else {
-	// return true;
-	// }
-	//
-	// } catch (Exception e) {
-	// return false;
-	// }
-	//
-	// }
+
 	public static void isInternetAvailable(final Context context) {
 		
 		 new AsyncTask<URL, Integer, Boolean>(){
@@ -342,19 +328,7 @@ public class Utils {
 		return timeList;
 	}
 
-	// private static int getCurrentTimeIndex() {
-	// int currentTimeIndex = 0;
-	// Calendar today = Calendar.getInstance();
-	// if (today.get(Calendar.HOUR) == 12) {
-	// currentTimeIndex += Math.ceil((double) today.get(Calendar.MINUTE) / 5);
-	// } else {
-	// currentTimeIndex += 12 * today.get(Calendar.HOUR) + Math.ceil((double) today.get(Calendar.MINUTE) / 5);
-	// }
-	// if (today.get(Calendar.AM_PM) == Calendar.PM) {
-	// currentTimeIndex += 144;
-	// }
-	// return currentTimeIndex;
-	// }
+
 
 	private static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
 		String temp = "";
@@ -409,6 +383,7 @@ public class Utils {
 		mbook.setCompany_icon(selectedCompany.logo);
 		mbook.setCompany_name(selectedCompany.name);
 		mbook.setCompany_phone_number(selectedCompany.phoneNr);
+		mbook.setCompany_dupChk_time(selectedCompany.dupChkTime); //added duplicate check time frame to DBBooking table
 		mbook.setDestID(selectedCompany.destID);
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
 
@@ -603,14 +578,7 @@ public class Utils {
 		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
 		tv_message.setText(message);
 		messageDialog.show();
-		// AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-		// builder.setMessage(message).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int id) {
-		// dialog.dismiss();
-		// }
-		// });
-		//
-		// builder.show();
+	
 	}
 
 	// public static boolean isNumeric(String str)
@@ -630,5 +598,42 @@ public class Utils {
 		// match a number with optional '-'(or '.') in the middle. this is for street number return by google Geo
 		return str.matches("-?\\d+(\\-\\d+)?") || str.matches("-?\\d+(\\.\\d+)?");
 	}
-
+	
+	//TL-23 check duplicate address
+	public static boolean compareAddr(DBBooking booking) {
+		
+		String district = Utils.mPickupAddress.getLocality();
+		if(district != null && booking.getPickup_district() != null){
+			if(!district.equalsIgnoreCase(booking.getPickup_district())){ return false; }
+		}
+		
+		String houseNumber = null;
+		if (pickupHouseNumber.equals("")) {
+			houseNumber = AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress);
+		}else{
+			houseNumber = pickupHouseNumber;
+		}
+		
+		if(houseNumber != null && booking.getPickup_house_number() != null){
+			if(!houseNumber.equalsIgnoreCase(booking.getPickup_house_number())){ return false; }
+		}
+		
+		String unitNumber = null;
+		if (pickup_unit_number != null && pickup_unit_number.length() > 0){
+			unitNumber = pickup_unit_number;		
+		}
+		
+		if(unitNumber != null && booking.getPickup_unit()!= null){
+			if(!unitNumber.equalsIgnoreCase(booking.getPickup_unit())){ return false; }
+		}
+		
+		String streetName = AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress);
+		if(streetName != null && booking.getPickup_street_name() != null){
+			if(!streetName.equalsIgnoreCase(booking.getPickup_street_name())){ return false; }
+		}
+		
+		
+		return true;
+	}
+	
 }
