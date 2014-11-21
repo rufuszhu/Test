@@ -50,8 +50,9 @@ public class VerifySMSActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				boolean isFirstTime = false;
+				boolean sendVerifySMS = true;
 				String regid = getRegistrationId(_context);
-				new RegisterDeviceTask(_context, regid, isFirstTime).execute();
+				new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
 				Utils.showProcessingDialog(_context);
 			}
 		});

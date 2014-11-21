@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height"
-    android:minHeight="@dimen/list_item_height">
+    android:minHeight="@dimen/list_item_height" >
 
     <TextView
         android:id="@+id/text_address"
@@ -14,15 +14,21 @@
         android:paddingRight="100dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/tv_status_bar"
+        android:layout_width="@dimen/normal_padding"
+        android:layout_height="fill_parent"
+        android:minHeight="@dimen/list_item_height"
+        android:layout_alignParentRight="true"
+        android:background="@color/completed_color" />
 
-    <ImageView
-        android:id="@+id/text_status"
-        android:layout_width="80dp"
-        android:layout_height="24dp"
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/big_margin"
-        android:src="@drawable/tag_dispatched"
+        android:layout_marginRight="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
 </RelativeLayout>

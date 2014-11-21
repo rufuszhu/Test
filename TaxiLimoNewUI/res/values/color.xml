@@ -13,8 +13,12 @@
     <color name="drawer_normal">#013561</color>
     <color name="drawer_selected">#012645</color>
     <color name="transparent">#00000000</color>
+    
     <color name="completed_color">#409a9c</color>
     <color name="canceled_color">#aaaaaa</color>
+    <color name="inservice_color">#4CBBBD</color>
+    <color name="dispatched_color">#A390CB</color>
+    <color name="arrived_color">#69A9DA</color>
 
     <!-- Status para as lista -->
     <color name="navigation_view">#DADADC</color>

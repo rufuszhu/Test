@@ -9,6 +9,7 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.GetServiceListResponse;
 
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Drawers.AddPreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class GetServiceListTask extends AsyncTask<String, Integer, Void> implements IGetServiceListResponseListener, IRequestTimerListener {
@@ -30,8 +31,7 @@ public class GetServiceListTask extends AsyncTask<String, Integer, Void> impleme
 
 	@Override
 	public void onResponseReady(GetServiceListResponse response) {
-
-
+		((AddPreferenceActivity)_context).getData(response.getCountryList(), response.getStateList(), response.getRegionList(), response.getCompanyList());
 	}
 
 	@Override
