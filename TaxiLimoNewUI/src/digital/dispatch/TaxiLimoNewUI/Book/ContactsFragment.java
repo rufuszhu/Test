@@ -5,13 +5,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
@@ -22,22 +30,34 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
+import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 
 public class ContactsFragment extends ListFragment {
 
@@ -45,19 +65,24 @@ public class ContactsFragment extends ListFragment {
 	private View view;
 	private ImageLoader mImageLoader;
 	private List<MyContact> mContactList;
+	private DBAddressDao addressDao;
+	private ListView mListView;
+	private boolean mSwiping = false;
+	private boolean mItemPressed = false;
+
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
 	public static ContactsFragment newInstance() {
 		ContactsFragment fragment = new ContactsFragment();
-		
+
 		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Logger.e(TAG,"onCreate");
+		Logger.e(TAG, "onCreate");
 		mImageLoader = new ImageLoader(getActivity(), getListPreferredItemHeight()) {
 			@Override
 			protected Bitmap processBitmap(Object data) {
@@ -72,32 +97,37 @@ public class ContactsFragment extends ListFragment {
 
 		// Add a cache to the image loader
 		mImageLoader.addImageCache(getActivity().getSupportFragmentManager(), 0.1f);
+
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_contacts, container, false);
+		mListView = (ListView) view.findViewById(android.R.id.list);
 		return view;
 	}
-	
-	public View mGetView(){
+
+	public View mGetView() {
 		return view;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		
+
 		mContactList = new ArrayList<MyContact>();
 		readContacts();
-		
+
 		ContactsAdapter adapter = new ContactsAdapter(getActivity(), mContactList);
 		setListAdapter(adapter);
-		
+
 		Utils.isInternetAvailable(getActivity());
+
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -105,7 +135,64 @@ public class ContactsFragment extends ListFragment {
 		// un-paused to let any remaining background work complete.
 		mImageLoader.setPauseWork(false);
 	}
-	
+
+	/**
+	 * Handle touch events to lock list view swiping during swipe and block multiple swipe
+	 */
+	private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+
+		float mDownX;
+		private int mSwipeSlop = -1;
+
+		@Override
+		public boolean onTouch(final View v, MotionEvent event) {
+			if (mSwipeSlop < 0) {
+				mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
+			}
+			
+			
+			((SwipableListItem) (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+			
+
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				if (mItemPressed) {
+					// Multi-item swipes not handled
+					return false;
+				}
+				mItemPressed = true;
+				mDownX = event.getX();
+				break;
+			case MotionEvent.ACTION_CANCEL:
+				mItemPressed = false;
+				break;
+			case MotionEvent.ACTION_MOVE: {
+				float x = event.getX() + v.getTranslationX();
+				float deltaX = x - mDownX;
+				float deltaXAbs = Math.abs(deltaX);
+				if (!mSwiping) {
+					if (deltaXAbs > mSwipeSlop) {
+						mSwiping = true;
+						mListView.requestDisallowInterceptTouchEvent(true);
+					}
+				}
+				if (mSwiping) {
+					// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+				}
+			}
+				break;
+			case MotionEvent.ACTION_UP: {
+				mSwiping = false;
+				mItemPressed = false;
+				break;
+			}
+			default:
+				return false;
+			}
+			return true;
+		}
+	};
+
 	private int getListPreferredItemHeight() {
 		final TypedValue typedValue = new TypedValue();
 
@@ -122,12 +209,11 @@ public class ContactsFragment extends ListFragment {
 		return (int) typedValue.getDimension(metrics);
 	}
 
-
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		((ModifyAddressActivity) getActivity()).updateAddress(mContactList.get(position).getAddress());
+
 	}
-	
+
 	private void readContacts() {
 		String[] PROJECTION = new String[] { ContactsContract.Data.CONTACT_ID, ContactsContract.Contacts.DISPLAY_NAME, StructuredPostal.STREET };
 
@@ -159,8 +245,6 @@ public class ContactsFragment extends ListFragment {
 		}
 	}
 
-
-	
 	private class ContactsAdapter extends ArrayAdapter<MyContact> {
 
 		private final Context context;
@@ -184,12 +268,13 @@ public class ContactsFragment extends ListFragment {
 			public TextView address;
 			public TextView tv_name;
 			public ImageView profile_icon;
+			public RelativeLayout contact_option;
 		}
 
-
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View rowView = convertView;
+			Logger.e(TAG, "getView() : " + position);
 			// reuse views
 			if (rowView == null) {
 
@@ -199,20 +284,32 @@ public class ContactsFragment extends ListFragment {
 				viewHolder.profile_icon = (ImageView) rowView.findViewById(R.id.profile_icon);
 				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
 				viewHolder.tv_name = (TextView) rowView.findViewById(R.id.tv_name);
+				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
 				rowView.setTag(viewHolder);
 			}
+			
+			final View temp = rowView;
 
 			// fill data
 			ViewHolder holder = (ViewHolder) rowView.getTag();
 			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", holder.profile_icon);
 			holder.address.setText(values.get(position).getAddress());
 			holder.tv_name.setText(values.get(position).getName());
+			holder.contact_option.setOnClickListener(new OnClickListener() {
 
+				@Override
+				public void onClick(View v) {
+					Logger.e(TAG, "onClick");
+					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
+					((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
+				}
+
+			});
+			rowView.setOnTouchListener(mTouchListener);
 			return rowView;
 		}
 	}
-	
-	
+
 	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
 		// Instantiates an AssetFileDescriptor. Given a content Uri pointing to an image file, the
@@ -258,7 +355,7 @@ public class ContactsFragment extends ListFragment {
 			}
 		} finally {
 			// If an AssetFileDescriptor was returned, try to close it
-			if (afd != null) { 
+			if (afd != null) {
 				try {
 					afd.close();
 				} catch (IOException e) {
@@ -270,6 +367,149 @@ public class ContactsFragment extends ListFragment {
 
 		// If the decoding failed, returns null
 		return null;
+	}
+
+	protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
+
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public addFavoriteTask(Context context) {
+			// Required by the semantics of AsyncTask
+			super();
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected List<Address> doInBackground(String... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+			 * to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			String locationName = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocationName(locationName, 10);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				// return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				// return errorString;
+			}
+			return addresses;
+		}
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
+		 */
+		@Override
+		protected void onPostExecute(final List<Address> addresses) {
+			if (addresses.size() > 1) {
+				// pop up list
+				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, "");
+			} else if (addresses.size() == 1) {
+				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
+					final EditText nickname_edit;
+					TextView address_text;
+					TextView cancel;
+					TextView add;
+					final Dialog nicknameDialog = new Dialog(getActivity());
+					nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					nicknameDialog.setContentView(R.layout.nickname_dialog);
+					nicknameDialog.setCanceledOnTouchOutside(true);
+
+					address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
+					nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
+					address_text.setText(LocationUtils.addressToString(getActivity(), addresses.get(0)));
+
+					cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
+					cancel.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							nicknameDialog.dismiss();
+							InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+						}
+					});
+					add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
+					add.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							String nickname = nickname_edit.getText().toString();
+							DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(addresses.get(0), "", nickname, true, addressDao);
+							((ModifyAddressActivity)getActivity()).notifyFavoriteDataChange(dbAddress);
+							Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
+							nicknameDialog.dismiss();
+							InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+						}
+					});
+					nicknameDialog.show();
+				} else {
+					// street number is invalid
+				}
+			} else {
+				// R.string.err_invalid_street_name
+			}
+		}
+	}
+
+	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final String unit) {
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+		// builderSingle.setIcon(R.drawable.ic_launcher);
+		builderSingle.setTitle("Please be more specific");
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.autocomplete_list_item);
+		arrayAdapter.addAll(addresses);
+		builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+				new addFavoriteTask(getActivity()).execute(addresses.get(which));
+				Logger.e(TAG, "calling add fav task with address: " + addresses.get(which));
+
+			}
+		});
+		builderSingle.show();
 	}
 
 }

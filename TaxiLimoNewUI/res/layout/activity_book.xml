@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="digital.dispatch.TaxiLimoNewUI.BookActivity" >
+
+    <RelativeLayout
+        android:id="@+id/rl_pickup"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_activity_box_height"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/tv_pickup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+        
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/rl_drop_off"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_activity_box_height"
+        android:layout_below="@+id/rl_pick_up">
+        <TextView
+            android:id="@+id/tv_drop_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/rl_date"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_activity_box_height"
+        android:layout_below="@+id/rl_drop_off">
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/rl_driver_note"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_activity_box_height"
+        android:layout_below="@+id/rl_pickup_date">
+        <TextView
+            android:id="@+id/tv_driver_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/rl_company"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/book_activity_box_height"
+        android:layout_below="@+id/rl_driver_note">
+        <TextView
+            android:id="@+id/tv_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    
+    
+    <TextView
+            android:id="@+id/book_button"
+            style="@style/TextDropShadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_book_btn_height"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/small_padding"
+            android:layout_weight=".55"
+            android:background="@drawable/green_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/book"
+            android:textColor="@color/white"
+            android:textSize="@dimen/book_font_size"
+            android:textStyle="bold" />
+    
+
+</RelativeLayout>

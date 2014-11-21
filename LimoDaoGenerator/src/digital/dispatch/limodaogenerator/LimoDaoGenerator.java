@@ -22,10 +22,23 @@ public class LimoDaoGenerator {
         addJob(schema);
         addAttribute(schema);
         addCreditCard(schema);
+        addPreference(schema);
         new DaoGenerator().generateAll(schema, "../TaxiLimoNewUI/src-gen");
     }
 
-    private static void addAddress(Schema schema) {
+    private static void addPreference(Schema schema) {
+    	Entity preference = schema.addEntity("DBPreference");
+    	preference.addIdProperty();
+    	preference.addStringProperty("country");
+    	preference.addStringProperty("city");
+    	preference.addStringProperty("region");
+    	preference.addStringProperty("state");
+    	preference.addStringProperty("destId");
+    	preference.addStringProperty("companyName");
+    	preference.addStringProperty("img");
+	}
+
+	private static void addAddress(Schema schema) {
         Entity address = schema.addEntity("DBAddress");
         address.addIdProperty();
         address.addStringProperty("unit");

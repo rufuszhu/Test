@@ -270,7 +270,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
             android:layout_weight=".55"
-            android:background="@drawable/book_btn_selector"
+            android:background="@drawable/green_btn_selector"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/book"

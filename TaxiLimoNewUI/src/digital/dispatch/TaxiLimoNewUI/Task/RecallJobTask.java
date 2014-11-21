@@ -86,13 +86,12 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		for (int i = 0; i < jobArr.length; i++) {
 			JobItem.printJobItem(jobArr[i]);
 		}
-		
+
 		List<DBBooking> dbBook = updateDBJobs(jobArr);
-		
-		if (which == MBDefinition.IS_FOR_MAP) {
+
+		if (which == MBDefinition.IS_FOR_MAP || which == MBDefinition.IS_FOR_ONE_JOB) {
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
-			((TrackingMapActivity) _context).updateCarMarker(carLatLng,dbBook);
-		} else if (which == MBDefinition.IS_FOR_ONE_JOB) {
+			((TrackDetailActivity) _context).updateCarMarker(carLatLng, dbBook);
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
 		} else if (which == MBDefinition.IS_FOR_LIST) {
 			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
@@ -101,7 +100,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	}
 
 	private List<DBBooking> updateDBJobs(JobItem[] jobArr) {
-		List<DBBooking> bookingList= new ArrayList<DBBooking>();
+		List<DBBooking> bookingList = new ArrayList<DBBooking>();
 		DaoManager daoManager = DaoManager.getInstance(_context);
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		DBBooking dbBook = new DBBooking();
@@ -132,13 +131,13 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 				// special complete: no show, force complete etc. set as "Cancelled" to user
 				case MBDefinition.DETAIL_STATUS_NO_SHOW:
 				case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
-					if(dbBook.getTripCompletionTime().length()==0){
+					if (dbBook.getTripCompletionTime().length() == 0) {
 						Calendar cal = Calendar.getInstance();
 						SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
 						dbBook.setTripCompletionTime(pickupTimeFormat.format(cal.getTime()));
 					}
 					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-					
+
 					break;
 				// other unimportant intermediate status, just ignore
 				case MBDefinition.DETAIL_OTHER_IGNORE:
@@ -197,8 +196,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
 			if (fragment != null)
 				fragment.stopUpdateAnimation();
-		}
-		else{
+		} else {
 			((TrackingMapActivity) _context).stopUpdateAnimation();
 		}
 		try {

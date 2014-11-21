@@ -8,6 +8,8 @@
     <string name="important">IMPORTANT!</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 
     <!-- share -->
     <string name="store_const_user_name">UserName</string>
@@ -53,11 +55,11 @@
     <string name="verify_not_receive">Did not receive your Verification Message?</string>
     <string name="verify_request_new"><u>Request a new one.</u></string>
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
-	<string name="verify">Verify</string>
-	<string name="next">Next</string>
-	<string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
-	<string name="verify_failed">Please enter the correct verification code</string>
-	
+    <string name="verify">Verify</string>
+    <string name="next">Next</string>
+    <string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
+    <string name="verify_failed">Please enter the correct verification code</string>
+
     <!-- Profile -->
     <string name="phone">PHONE</string>
     <string name="FIRST_NAME">FIRST NAME</string>
@@ -77,17 +79,23 @@
     <string name="action_edit">Edit</string>
 
     <!-- trip detail table -->
+    <string name="TRACK">TRACK</string>
+    <string name="info">INFO</string>
+    <string name="company">COMPANY</string>
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
     <string name="route">ROUTE</string>
     <string name="fleet">FLEET</string>
-    <string name="options">OPTIONS</string>
+    <string name="option">OPTION</string>
     <string name="vehicle">VEHICLE</string>
     <string name="driver">DRIVER</string>
     <string name="dispatched">Dispatched</string>
     <string name="arrived">Arrived</string>
     <string name="in_service">In Service</string>
     <string name="completed">Completed</string>
+    <string name="canceled">Canceled</string>
+    <string name="accepted">Accepted</string>
+    <string name="booked">Booked</string>
     <string name="cancel_trip">Cancel Trip</string>
     <string name="pay">Pay</string>
     <string name="trip_cancled">Trip Canceled</string>
@@ -96,11 +104,13 @@
     <string name="remove">Remove</string>
     <string name="ask_register_cc">There is no registered credit card. Do you want to register a credit card now?</string>
     <string name="auth_code">Auth Code</string>
+    <string name="driver_info_not_available">Driver information will be available after dispatch</string>
+    <string name="vehicle_info_not_available">Vehicle information will be available after dispatch</string>
+
     <!-- modify address -->
     <string name="contacts">Contacts</string>
     <string name="favorite">Favorite</string>
     <string name="add_favorite">Add Favorite</string>
-    <string name="save">Save</string>
     <string name="select">Select</string>
 
     <!-- attribute -->
@@ -108,8 +118,9 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
-    <string name="url">http://192.168.50.160:76/Service.asmx</string>
-    <!-- <string name="url">http://192.168.50.160:86/Service.asmx?wsdl</string> -->
+
+    <!-- <string name="url">http://192.168.50.161:188/Service.asmx</string> -->
+    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
 
 
     <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
@@ -150,9 +161,9 @@
     <string name="empty_note">None</string>
     <string name="now">Now</string>
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    <string name="street_number">Street Number</string>   
+    <string name="street_number">Street Number</string>
     <string name="unit_number">Unit Number</string>
-    <string name="street_number_hint">Street No.</string>   
+    <string name="street_number_hint">Street No.</string>
     <string name="unit_number_hint">Unit No.</string>
     <string name="street_name">Street Name</string>
 
@@ -272,7 +283,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
-    
+
     <string name="err_no_current_location">Cannot get current location, please check GPS setting</string>
     <string name="err_no_internet">Network unavailable. Please try again later</string>
     <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>
@@ -284,8 +295,7 @@
     <string name="err_dropoff_mandatory">Please enter your destination</string>
     <string name="err_msg_book_req_area_not_bookable">Address is not within the taxi company\'s service area. Please choose a different address.        </string>
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
-    <string name="err_msg_book_req_account_err">
-        Problem with company account. Please call [company phone] to book your taxi.</string>
+    <string name="err_msg_book_req_account_err">        Problem with company account. Please call [company phone] to book your taxi.</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
     <string name="err_msg_no_response">Service unavailable, please try again later.</string>
     <string name="err_no_pickup_address">Still trying to get the pickup address from Google</string>
@@ -296,6 +306,9 @@
     <string name="err">Error</string>
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
+
+    <string name="err_empty_msg">Cannot send empty message</string>
+
     <string name="err_msg_no_same_loc">You already booked a taxi on this address. Please cancel the previous job before booking another trip.</string>
 
     <!-- successful messages -->
@@ -304,10 +317,13 @@
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
     <string name="save_successful">Save Successful</string>
+    <string name="delete_successful">is successfully deleted</string>
+
     <!-- dialog messages -->
     <string name="enter_street_number">Enter a street number for:</string>
     <string name="enter_street_number_range">Select a street number between</string>
     <string name="address_output_string">%1$s %2$s</string>
+
     <!-- Address format -->
 
 
@@ -352,5 +368,7 @@
     <string name="title_activity_pay">Pay</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_verify_sms">VerifySMSActivity</string>
+    <string name="title_activity_add_preference">AddPreferenceActivity</string>
+    <string name="title_activity_book">BookActivity</string>
 
 </resources>

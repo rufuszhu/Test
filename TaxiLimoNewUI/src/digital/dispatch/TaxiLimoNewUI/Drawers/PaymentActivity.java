@@ -54,8 +54,6 @@ public class PaymentActivity extends ActionBarActivity {
 				overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			}
 		});
-		
-		
 	}
 	
 	@Override
@@ -95,9 +93,8 @@ public class PaymentActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_add) {
-			Intent intent = new Intent(this, EditCreditCardActivity.class);
+			Intent intent = new Intent(this, AddPreferenceActivity.class);
 			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -31,13 +31,14 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	private RegDevRequest rdReq;
 	private Context _context;
 	private String GCMRegisterID;
-	private boolean isFirstTime;
+	private boolean isFirstTime, sendVerifySMS;
 
-	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime) {
+	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime, boolean sendVerifySMS) {
 		rdReq = new RegDevRequest(this, this);
 		_context = context;
 		this.GCMRegisterID = GCMRegisterID;
 		this.isFirstTime = isFirstTime;
+		this.sendVerifySMS = sendVerifySMS;
 	}
 
 	// The code to be executed in a background thread.
@@ -68,7 +69,11 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 			} else {
 				rdReq.setLocale("en-US");
 			}
-
+			
+			if(sendVerifySMS)
+				rdReq.setSmsverify("Y");
+			else
+				rdReq.setSmsverify("N");
 			rdReq.setVersion(versionName);
 			rdReq.setProtocol(_context.getString(R.string.protocol));
 			rdReq.setHardwareID(Installation.id(_context));
