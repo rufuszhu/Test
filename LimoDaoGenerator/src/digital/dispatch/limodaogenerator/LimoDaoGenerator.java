@@ -110,6 +110,7 @@ public class LimoDaoGenerator {
         booking.addStringProperty("company_phone_number");
         booking.addStringProperty("company_icon");
         booking.addStringProperty("company_attribute_list");
+        booking.addStringProperty("company_dupChk_time");
         
         booking.addStringProperty("authCode");
         booking.addStringProperty("paidAmount");
