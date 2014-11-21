@@ -118,8 +118,10 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
+
     <!-- <string name="url">http://192.168.50.161:188/Service.asmx</string> -->
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+
 
     <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
@@ -249,6 +251,7 @@
         card not honored, or card not authorized for this transaction.</string>
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
     <string name="welcome_message">Thank you for registering with us!</string>
+    <string name="duplicate_check_buffer_time">30</string> <!-- in minutes -->
 
     <string-array name="tips_array">
         <item>0%</item>
@@ -303,7 +306,11 @@
     <string name="err">Error</string>
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
+
     <string name="err_empty_msg">Cannot send empty message</string>
+
+    <string name="err_msg_no_same_loc">You already booked a taxi on this address. Please cancel the previous job before booking another trip.</string>
+
     <!-- successful messages -->
     <string name="message_cancel_successful">The trip was successfully canceled</string>
     <string name="message_book_successful">The trip was successfully booked</string>

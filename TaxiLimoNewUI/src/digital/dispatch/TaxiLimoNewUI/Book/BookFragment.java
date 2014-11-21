@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.Book;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
@@ -199,51 +201,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		book_btn = (TextView) view.findViewById(R.id.book_button);
 		book_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				DaoManager daoManager = DaoManager.getInstance(getActivity());
-				DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-				CompanyItem selectedCompany = Utils.mSelectedCompany;
-				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-				// pick up address not available
-				if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
-					Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
+				
+				if(checkAllowBooking()){
+					
+					Utils.bookJob(Utils.mSelectedCompany, getActivity());
 				}
-				// no taxi company found in current city
-				else if (noCompanyAvailable) {
-					Utils.showMessageDialog(getActivity().getString(R.string.err_no_company_found) + " " + Utils.mPickupAddress.getLocality(), getActivity());
-				}
-				// no house number in pickup address
-				else if (!validateHasHouseNumber()) {
-					showEnterHouseNumberDialog();
-				}
-				// house number return by Google has a range
-				else if (!validateHouseNumberHasNoRange()) {
-					Address address = Utils.mPickupAddress;
-					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
-					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
-				}
-				// check if allow multiple booking
-				else if (bookingDao.queryBuilder()
-						.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
-						.list().size() > 0
-						&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
-					Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
-				}
-				// check if drop off MANDATORY
-				else if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_DROP_OFF_MANDATORY, false)
-						&& Utils.mDropoffAddress == null) {
-					Utils.showErrorDialog(getActivity().getString(R.string.err_dropoff_mandatory), getActivity());
-				}
-				// no selected company
-				else if (selectedCompany == null) {
-					// get into select company page
-					Intent intent = new Intent(getActivity(), AttributeActivity.class);
-					intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
-					getActivity().startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
-				}
-				// finally we can book job
-				else {
-					Utils.bookJob(selectedCompany, getActivity());
-				}
+				
 			}
 		});
 		return view;
@@ -773,5 +736,134 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
 			setupCompanyUI();
 		}
+	}
+	
+	//helper function before booking
+	private boolean checkAllowBooking() {
+	
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+		CompanyItem selectedCompany = Utils.mSelectedCompany;
+		List<DBBooking> activeBookingList = bookingDao.queryBuilder()
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+				.list();
+		
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		
+		if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
+			Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
+			return false;
+		}
+		// no taxi company found in current city
+		if (noCompanyAvailable) {
+			Utils.showMessageDialog(getActivity().getString(R.string.err_no_company_found) + " " + Utils.mPickupAddress.getLocality(), getActivity());
+			return false;
+		}
+		// no house number in pickup address
+		if (!validateHasHouseNumber()) {
+			showEnterHouseNumberDialog();
+			return false;
+		}
+		// house number return by Google has a range
+		if (!validateHouseNumberHasNoRange()) {
+			Address address = Utils.mPickupAddress;
+			String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
+			showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
+			return false;
+		}
+		// check if allow multiple booking
+		if (activeBookingList.size() > 0
+				&& !SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_MULTI_BOOK_ALLOWED, false)) {
+			Utils.showErrorDialog(getActivity().getString(R.string.err_no_multiple_booking), getActivity());
+			return false;
+		
+		}
+
+		//check if allow duplicate booking TL-23
+		if(activeBookingList.size() > 0 &&
+				!SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_SAME_LOG_BOOK_ALLOWED, false)){
+		
+			for( int i = 0; i < activeBookingList.size(); i++){	
+				DBBooking booking = activeBookingList.get(i);
+		
+				if (Utils.compareAddr(booking)){
+					//both ASAP JOB then it's duplicate
+					if(booking.getPickup_time() == null && (Utils.pickupDate == null || Utils.pickupTime == null)){
+						
+						Utils.showErrorDialog(getActivity().getString(R.string.err_msg_no_same_loc), getActivity());
+						return false;
+						
+					}
+					//both future job then need to check how far apart
+					else if(booking.getPickup_time() != null && Utils.pickupDate != null && Utils.pickupTime != null){
+						
+						if(checkDuplicatePickupTime(booking)){
+							Utils.showErrorDialog(getActivity().getString(R.string.err_msg_no_same_loc), getActivity());
+							return false;
+						}
+						
+						
+					} 
+				}
+				
+			}
+			
+			
+		}
+		// check if drop off MANDATORY
+		if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_DROP_OFF_MANDATORY, false)
+				&& Utils.mDropoffAddress == null) {
+			Utils.showErrorDialog(getActivity().getString(R.string.err_dropoff_mandatory), getActivity());
+			return false;
+		}
+		// no selected company
+		if (selectedCompany == null) {
+			// get into select company page
+			Intent intent = new Intent(getActivity(), AttributeActivity.class);
+			intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
+			getActivity().startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
+			return false;
+		}
+		return true;
+	}
+	//return true if the book job does not fall within the duplicate job time frame with another active job.
+	private boolean checkDuplicatePickupTime(DBBooking booking){
+		
+		try{
+			SimpleDateFormat checkFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+			Date checkDate = (Date) checkFormat.parse(booking.getPickup_time());
+			long checkingTime = checkDate.getTime(); 
+			
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
+			
+			String date = dateFormat.format(Utils.pickupDate);
+			String time = timeFormat.format(Utils.pickupTime);
+	
+			Date bookingDate = (Date)checkFormat.parse(date + " " + time);
+			long bookingTime = bookingDate.getTime();
+			
+			long bufferTime = 0;
+			if(Utils.mSelectedCompany.dupChkTime.isEmpty() || Utils.mSelectedCompany.dupChkTime.equalsIgnoreCase("0") ){
+				bufferTime = Long.parseLong(getActivity().getString(R.string.duplicate_check_buffer_time)); //default		
+			}else{
+				bufferTime = Long.parseLong(Utils.mSelectedCompany.dupChkTime);
+			}
+			//within the duplicate job time frame then consider duplicate job
+			if (Math.abs(bookingTime - checkingTime) > 60000 * bufferTime) {
+			
+				return false;
+				
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+			
+		
+		
+		return true;
 	}
 }
