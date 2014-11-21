@@ -1,25 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height"
-    android:padding="@dimen/big_margin" >
+    android:layout_height="@dimen/list_item_height" >
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Large Text"
-        android:textSize="@dimen/list_item_title_font_size" />
+    <digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem
+        android:id="@+id/swipeContactView"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:visibility="visible" >
+        
+        <RelativeLayout
+            android:id="@+id/viewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/normal_padding"
+            android:paddingLeft="@dimen/normal_padding">
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_title"
-        android:layout_below="@+id/tv_title"
-        android:text="TextView"
-        android:textSize="@dimen/list_item_address_font_size" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Large Text"
+            android:textSize="@dimen/list_item_title_font_size" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_title"
+            android:layout_below="@+id/tv_title"
+            android:text="TextView"
+            android:textSize="@dimen/list_item_address_font_size" />
+        </RelativeLayout>
+        
+        
+         <RelativeLayout
+            android:id="@+id/contact_option"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@color/red_light"
+            android:clickable="true"
+            android:tag="desc" >
+
+            <TextView
+                android:id="@+id/family"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/friend"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/family"
+                 
+                android:layout_centerInParent="true"
+                android:text="@string/delete"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+        </RelativeLayout>
+    </digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem>
 
 </RelativeLayout>

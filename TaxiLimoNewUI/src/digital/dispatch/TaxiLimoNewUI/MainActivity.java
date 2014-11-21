@@ -16,8 +16,13 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -25,7 +30,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +40,9 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
+import digital.dispatch.TaxiLimoNewUI.Book.ContactsFragment;
+import digital.dispatch.TaxiLimoNewUI.Book.FavoritesFragment;
+import digital.dispatch.TaxiLimoNewUI.Book.SearchFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
@@ -45,15 +55,16 @@ import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
+import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
-	
+
 	private static final String TAG = "MainActivity";
 	LocalBroadcastManager locBCManager;
-	
+
 	AtomicInteger msgId = new AtomicInteger();
 	SharedPreferences prefs;
 	String regid;
@@ -65,18 +76,26 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	// Declare Tab Variable
-	private FragmentTabHost mTabHost;
-	View bookTabView;
-	View trackTabView;
-	View historyTabView;
+	// private FragmentTabHost mTabHost;
+	// View bookTabView;
+	// View trackTabView;
+	// View historyTabView;
+	//
+	// ImageView bookImageView;
+	// ImageView trackImageView;
+	// ImageView historyImageView;
+	//
+	// TextView booktab_indicator;
+	// TextView tracktab_indicator;
+	// TextView historytab_indicator;
 
-	ImageView bookImageView;
-	ImageView trackImageView;
-	ImageView historyImageView;
-
-	TextView booktab_indicator;
-	TextView tracktab_indicator;
-	TextView historytab_indicator;
+	private ViewPager mPager;
+	private RelativeLayout tab0, tab1, tab2;
+	private PagerAdapter mAdapter;
+	private OnPageChangeListener pageChangeListener;
+	private BookFragment bookFragment;
+	private TrackFragment trackFragment;
+	private HistoryFragment historyFragment;
 
 	private final String BOOK_TAB = "book";
 	private final String TRACK_TAB = "track";
@@ -101,9 +120,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-		initView();
+		//initView();
 
-		setupTab();
+		setUpTab();
 
 		restoreActionBar();
 
@@ -126,9 +145,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		super.onResume();
 		Logger.d(TAG, "onReusme");
 		CommonUtilities.checkLateTrip(this, -1);
-		mTabHost.setCurrentTab(Utils.currentTab);
+		mPager.setCurrentItem(Utils.currentTab);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -143,8 +162,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		Logger.d(TAG, "onDestroy");
 		super.onDestroy();
 	}
-
-
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -170,15 +187,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 					Utils.mDropoffAddress = (Address) data.getExtras().getParcelable(MBDefinition.ADDRESS);
 				}
 			}
-		} 
-//		else if (requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE) {
-//			if (resultCode == RESULT_OK) {
-//				if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
-//					Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
-//					Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
-//				}
-//			}
-//		} 
+		}
+		// else if (requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE) {
+		// if (resultCode == RESULT_OK) {
+		// if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
+		// Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
+		// Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
+		// }
+		// }
+		// }
 		else if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
 			if (resultCode == RESULT_OK) {
 				Utils.bookJob(Utils.mSelectedCompany, _context);
@@ -186,63 +203,121 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 	}
 
-	// public void setSelectedAttribute(ArrayList<Integer> arrayList) {
-	// selected_attribute = arrayList;
-	// Logger.e(TAG, "setSelectedAttribute");
-	// }
-	// public ArrayList<Integer> getSelectedAttribute(){
-	// return selected_attribute;
-	// }
-	// public void setSelectedCompany(CompanyItem company) {
-	// mSelectedCompany = company;
-	// }
-	//
-	// public CompanyItem getSelectedCompany() {
-	// return mSelectedCompany;
-	// }
-	private void initView() {
-		bookTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
-		trackTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
-		historyTabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
-		bookImageView = (ImageView) bookTabView.findViewById(R.id.tab_icon);
-		trackImageView = (ImageView) trackTabView.findViewById(R.id.tab_icon);
-		historyImageView = (ImageView) historyTabView.findViewById(R.id.tab_icon);
+	private void setUpTab() {
+		mPager = (ViewPager) findViewById(R.id.pager);
+		setTabListener();
+		bookFragment = BookFragment.newInstance();
+		trackFragment = TrackFragment.newInstance();
+		historyFragment = HistoryFragment.newInstance();
 
-		booktab_indicator = (TextView) bookTabView.findViewById(R.id.tab_indicator);
-		tracktab_indicator = (TextView) trackTabView.findViewById(R.id.tab_indicator);
-		historytab_indicator = (TextView) historyTabView.findViewById(R.id.tab_indicator);
-	}
+		mAdapter = new PagerAdapter(getSupportFragmentManager());
+		pageChangeListener = new OnPageChangeListener() {
 
-	private void setupTab() {
-		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-
-		mTabHost.addTab(mTabHost.newTabSpec(BOOK_TAB).setIndicator(getTabIndicator(this, bookImageView, bookTabView, R.string.book, R.drawable.tab_book_icon_selected)), BookFragment.class, null);
-		mTabHost.addTab(mTabHost.newTabSpec(TRACK_TAB).setIndicator(getTabIndicator(this, trackImageView, trackTabView, R.string.track, R.drawable.tab_track_icon)), TrackFragment.class, null);
-		mTabHost.addTab(mTabHost.newTabSpec(HISTORY_TAB).setIndicator(getTabIndicator(this, historyImageView, historyTabView, R.string.history, R.drawable.tab_history_icon)), HistoryFragment.class,
-				null);
-
-		mTabHost.setOnTabChangedListener(new FragmentTabHost.OnTabChangeListener() {
 			@Override
-			public void onTabChanged(String tabId) {
+			public void onPageSelected(int selected) {
+				Log.e(TAG, "onPageSelected: " + selected);
 				restoreActionBar();
-				restoreTab();
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+			}
+		};
+		// set second page back to default Alpha
+		// favoritesFragment.mGetView().setAlpha(1f);
+
+		mPager.setAdapter(mAdapter);
+
+		// This is required to avoid a black flash when the map is loaded. The flash is due
+		// to the use of a SurfaceView as the underlying view of the map.
+		mPager.requestTransparentRegion(mPager);
+		mPager.setOnPageChangeListener(pageChangeListener);
+	}
+	
+	private void setTabListener() {
+		tab0 = (RelativeLayout) findViewById(R.id.tab0);
+		tab1 = (RelativeLayout) findViewById(R.id.tab1);
+		tab2 = (RelativeLayout) findViewById(R.id.tab2);
+
+		tab0.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mPager.setCurrentItem(0);
+				resetAllTabColor();
+				tab0.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+
 			}
 		});
-		mTabHost.getTabWidget().setDividerDrawable(null);
-		booktab_indicator.setVisibility(View.VISIBLE);
+		tab1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mPager.setCurrentItem(1);
+				resetAllTabColor();
+				tab1.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+			}
+		});
+		tab2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mPager.setCurrentItem(2);
+				resetAllTabColor();
+				tab2.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+			}
+		});
+	}
+	
+	private void resetAllTabColor() {
+		tab0.setBackgroundColor(getResources().getColor(R.color.background_tab));
+		tab1.setBackgroundColor(getResources().getColor(R.color.background_tab));
+		tab2.setBackgroundColor(getResources().getColor(R.color.background_tab));
+	}
+	
+	private class PagerAdapter extends FragmentPagerAdapter {
+		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };
 
-		mTabHost.setCurrentTab(Utils.currentTab);
+		public PagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getCount() {
+			return 3;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return TITLES[position];
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				return bookFragment;
+			case 1:
+				return trackFragment;
+			case 2:
+				return historyFragment;
+			default:
+				return null;
+			}
+		}
+
 	}
-	
-	public void switchToTrackTab(){
+
+	public void switchToTrackTab() {
 		Utils.currentTab = 1;
-		mTabHost.setCurrentTab(1);
+		mPager.setCurrentItem(1);
 	}
-	
-	public void switchToBookTab(){
+
+	public void switchToBookTab() {
 		Utils.currentTab = 0;
-		mTabHost.setCurrentTab(0);
+		mPager.setCurrentItem(0);
 	}
 
 	private View getTabIndicator(Context context, ImageView iv, View view, int title, int drawable) {
@@ -252,37 +327,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		return view;
 	}
 
-	public void restoreTab() {
-		switch (mTabHost.getCurrentTab()) {
-		case 0:
-			bookImageView.setImageResource(R.drawable.tab_book_icon_selected);
-			trackImageView.setImageResource(R.drawable.tab_track_icon);
-			historyImageView.setImageResource(R.drawable.tab_history_icon);
-
-			booktab_indicator.setVisibility(View.VISIBLE);
-			tracktab_indicator.setVisibility(View.GONE);
-			historytab_indicator.setVisibility(View.GONE);
-			break;
-		case 1:
-			bookImageView.setImageResource(R.drawable.tab_book_icon);
-			trackImageView.setImageResource(R.drawable.tab_track_icon_selected);
-			historyImageView.setImageResource(R.drawable.tab_history_icon);
-
-			booktab_indicator.setVisibility(View.GONE);
-			tracktab_indicator.setVisibility(View.VISIBLE);
-			historytab_indicator.setVisibility(View.GONE);
-			break;
-		case 2:
-			bookImageView.setImageResource(R.drawable.tab_book_icon);
-			trackImageView.setImageResource(R.drawable.tab_track_icon);
-			historyImageView.setImageResource(R.drawable.tab_history_icon_selected);
-
-			booktab_indicator.setVisibility(View.GONE);
-			tracktab_indicator.setVisibility(View.GONE);
-			historytab_indicator.setVisibility(View.VISIBLE);
-			break;
-		}
-	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -323,7 +367,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// actionBar.setDisplayUseLogoEnabled(false);
 		// actionBar.setIcon(R.color.transparent);
 		// actionBar.setIcon(null);
-		switch (mTabHost.getCurrentTab()) {
+		switch (mPager.getCurrentItem()) {
 		case 0:
 			Utils.currentTab = 0;
 			mTitle = getString(R.string.book_title);
@@ -371,12 +415,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			final int gcmID = intent.getIntExtra(CommonUtilities.GCM_ID, -1);
 
 			if (intent.filterEquals(new Intent(gcmType.register.toString()))) {
-				//String temp = getRegistrationId(_context);
-				
+				// String temp = getRegistrationId(_context);
 
-//				if (temp.equalsIgnoreCase("")) {
-//					registerInBackground();
-//				}
+				// if (temp.equalsIgnoreCase("")) {
+				// registerInBackground();
+				// }
 				Log.v(TAG, "GCM Registered");
 			} else if (intent.filterEquals(new Intent(gcmType.unregister.toString()))) {
 				Logger.v(TAG, "GCM Unregistered");
@@ -393,7 +436,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 									if (gcmID != -1) {
 										notificationManager.cancel(gcmID);
 									}
-									if(Utils.currentTab==1){
+									if (Utils.currentTab == 1) {
 										TrackFragment fragment = (TrackFragment) getSupportFragmentManager().findFragmentByTag("track");
 										fragment.startRecallJobTask();
 									}
@@ -410,7 +453,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		}
 	};
 
-	
 	public void showMessageDialog(int id) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		builder.setMessage(getResources().getString(id)).setNegativeButton("Ok", new DialogInterface.OnClickListener() {

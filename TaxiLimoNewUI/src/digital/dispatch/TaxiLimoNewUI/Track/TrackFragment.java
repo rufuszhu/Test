@@ -84,7 +84,7 @@ public class TrackFragment extends ListFragment {
 		if (!((MainActivity) getActivity()).getDrawerFragment().isDrawerOpen()) {
 			inflater.inflate(R.menu.track, menu);
 			refresh_icon = menu.findItem(R.id.action_refresh);
-			stopUpdateAnimation();
+			
 			startRecallJobTask();
 		}
 	}
@@ -96,7 +96,7 @@ public class TrackFragment extends ListFragment {
 		// as you specify a parent activity in AndroidManifest.xml.
 
 		int id = item.getItemId();
-		if (id == R.id.action_refresh) {
+		if (id == R.id.action_refresh && !isRefreshing) {
 			Logger.d(TAG, "onOptionsItemSelected");
 			startRecallJobTask();
 			return true;
@@ -114,20 +114,18 @@ public class TrackFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		Logger.d(TAG, "on RESUME");
-		List<DBBooking> values = bookingDao.queryBuilder().where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+		List<DBBooking> values = bookingDao.queryBuilder()
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
 				.orderDesc(Properties.TripCreationTime).list();
 		adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 
 		Utils.isInternetAvailable(getActivity());
-	    	
-		if (refresh_icon != null && !isRefreshing) {
-			startRecallJobTask();
-		}
+
 		
-	    
-	    
+		startRecallJobTask();
+		
 	}
 
 	private void startUpdateAnimation(MenuItem item) {
@@ -144,7 +142,7 @@ public class TrackFragment extends ListFragment {
 	public void stopUpdateAnimation() {
 		isRefreshing = false;
 		// Get our refresh item from the menu
-		if (refresh_icon!= null && refresh_icon.getActionView() != null) {
+		if (refresh_icon != null && refresh_icon.getActionView() != null) {
 			// Remove the animation.
 			refresh_icon.getActionView().clearAnimation();
 			refresh_icon.setActionView(null);
@@ -168,9 +166,10 @@ public class TrackFragment extends ListFragment {
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.d("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			if (!isRefreshing && refresh_icon!=null)
+			if (!isRefreshing && refresh_icon != null) {
 				startUpdateAnimation(refresh_icon);
-			new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
+				new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
+			}
 		}
 		// if (pairList.size() == 0) {
 		// if (adapter != null)
@@ -180,7 +179,8 @@ public class TrackFragment extends ListFragment {
 
 	private ArrayList<Pair<String, String>> getUniqueActiveJobDestIdList() {
 		CloseableListIterator<DBBooking> iterator = bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).orderAsc(Properties.DestID).listIterator();
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+				.orderAsc(Properties.DestID).listIterator();
 		ArrayList<Pair<String, String>> activeDestIdSysIdPairList = new ArrayList<Pair<String, String>>();
 		String oldId = "";
 		while (iterator.hasNext()) {
@@ -201,8 +201,10 @@ public class TrackFragment extends ListFragment {
 	}
 
 	private String getRideIdByDestId(String destId) {
-		CloseableListIterator<DBBooking> iterator = bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED), Properties.DestID.eq(destId)).listIterator();
+		CloseableListIterator<DBBooking> iterator = bookingDao
+				.queryBuilder()
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
+						Properties.DestID.eq(destId)).listIterator();
 		String rideIdList = "";
 		while (iterator.hasNext()) {
 			DBBooking book = iterator.next();
@@ -221,8 +223,8 @@ public class TrackFragment extends ListFragment {
 
 	public void updateStatus(List<DBBooking> bookingList) {
 		stopUpdateAnimation();
-		
-		adapter.clear();	
+
+		adapter.clear();
 		adapter = new BookingListAdapter(getActivity(), bookingList);
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();

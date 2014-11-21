@@ -1030,6 +1030,8 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 
 			public void onFinish() {
 				dialog.dismiss();
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+				SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, true);
 				Intent intent = new Intent(context, MainActivity.class);
 				startActivity(intent);
 				finish();

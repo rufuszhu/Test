@@ -1,17 +1,11 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
-import digital.dispatch.TaxiLimoNewUI.Task.GetServiceListTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import android.support.v7.app.ActionBarActivity;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import digital.dispatch.TaxiLimoNewUI.R;
 
 public class PreferenceActivity extends ActionBarActivity {
 
@@ -22,8 +16,6 @@ public class PreferenceActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preference);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		new GetServiceListTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		Logger.e(TAG,"");
 	}
 
 	@Override
@@ -39,9 +31,13 @@ public class PreferenceActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_add) {
+			Intent intent = new Intent(this, AddPreferenceActivity.class);
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+
 }

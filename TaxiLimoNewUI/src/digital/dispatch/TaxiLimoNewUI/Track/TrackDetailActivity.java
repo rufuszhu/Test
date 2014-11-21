@@ -2,7 +2,11 @@ package digital.dispatch.TaxiLimoNewUI.Track;
 
 import java.util.List;
 
-import android.app.Activity;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -10,101 +14,97 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Address;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
-
-import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
-
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
 import digital.dispatch.TaxiLimoNewUI.EditCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.RegisterCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
-import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class TrackDetailActivity extends Activity {
+public class TrackDetailActivity extends FragmentActivity {
 
 	private static final String TAG = "TrackDetailActivity";
+	private static final int RED_TOTAL_DIFF = 194 - 107;
+	private static final int GREEN_TOTAL_DIFF = 194 - 120;
+	private static final int BLUE_TOTAL_DIFF = 194 - 131;
+
+	private static final int RED = 197;
+	private static final int GREEN = 194;
+	private static final int BLUE = 194;
+
+	private static final int RED_SELECTED = 107;
+	private static final int GREEN_SELECTED = 120;
+	private static final int BLUE_SELECTED = 131;
+
+	public static FragmentManager fragmentManager;
+	private static TrackingMapFragment trackingMapFragment;
+	private RelativeLayout tab0, tab1;
+	private PagerAdapter mAdapter;
+	public ViewPager mPager;
+	private OnPageChangeListener pageChangeListener;
+	private boolean isScolling = false;
+	private InfoFragment infoFragment;
+
 	private DaoManager daoManager;
 	private DBBookingDao bookingDao;
 	private Context _context;
 	private DBBooking dbBook;
 	private MenuItem refresh_icon;
 
-	private View.OnClickListener cancelListener;
-	private View.OnClickListener payListener;
-	private View.OnClickListener tracklListener;
-	private LinearLayout received_cancel_button;
-	private LinearLayout dispatched_buttons;
-	private LinearLayout arrived_buttons;
-	private LinearLayout inService_buttons;
-	private LinearLayout dispatched_cancel_btn;
-	private LinearLayout dispatched_track_btn;
-	private LinearLayout arrived_track_btn;
-	private LinearLayout arrived_cancel_btn;
-	private LinearLayout arrived_pay_btn;
-	private LinearLayout inService_pay_btn;
-	private LinearLayout inService_track_btn;
-	private LinearLayout completed_pay_btn;
-	private TableRow vehicle_row;
-	private TableRow driver_row;
-	private TextView tv_id;
-	private TextView tv_receive;
-	private TextView tv_from;
-	private TextView tv_to;
-	private TextView tv_vehicle;
-	private TextView tv_company_name;
-	private TextView tv_company_description;
-	private TextView tv_driver;
-	private Button call_btn;
-	private Button msg_btn;
-	private ImageView iv_company_icon;
-	private LinearLayout ll_attr;
-
 	private TextView tv_arrived_circle;
 	private TextView tv_completed_circle;
 	private TextView tv_inservice_circle;
 	private TextView tv_dispatched_circle;
-
+	private TextView tv_book_time;
+	private TextView tv_id;
+	
 	private ImageView arrived_circle;
 	private ImageView completed_circle;
 	private ImageView inservice_circle;
 	private ImageView dispatched_circle;
 
 	private BroadcastReceiver bcReceiver;
+	
+	private LinearLayout ll_btn_group,ll_cancel_btn,ll_cancel_btn_small,ll_pay_btn;
+	private ImageView zoom_btn;
 
 	private boolean isRefreshing;
 
@@ -116,10 +116,29 @@ public class TrackDetailActivity extends Activity {
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
 
+		setUpTab();
 		findView();
-		fillTable();
+		setTab0Text();
+		// fillTable();
 		initListener();
 		isRefreshing = false;
+	}
+	
+	public DBBooking getDBBook(){
+		return dbBook;
+	}
+	
+	private void setTab0Text(){
+		tv_book_time.setText("Received at " + dbBook.getTripCreationTime());
+		tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
+	}
+	
+	private void setTab1Text(){
+		tv_id.setText(dbBook.getPickupAddress());
+		if(dbBook.getDropoffAddress()==null || dbBook.getDropoffAddress().length()==0)	
+			tv_book_time.setText("Not Given");
+		else
+			tv_book_time.setText(dbBook.getDropoffAddress());
 	}
 
 	@Override
@@ -134,17 +153,23 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	@Override
+	// this is user from user click pay but no registered credit card. And got directed to the cc register page and finished registraion
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Logger.e("onActivityResult");
 		Logger.e("requestCode: " + requestCode);
 		if (requestCode == MBDefinition.REQUEST_REGISTER_CC) {
 			if (resultCode == RESULT_OK) {
 				if (data.getExtras().getParcelable(MBDefinition.EXTRA_BOOKING) != null) {
+
 					dbBook = (DBBooking) data.getExtras().getSerializable(MBDefinition.EXTRA_BOOKING);
-					arrived_pay_btn.callOnClick();
+					// arrived_pay_btn.callOnClick();
 				}
 			}
 		}
+	}
+	
+	public void updateCarMarker(LatLng carLatLng, List<DBBooking> book){
+		trackingMapFragment.updateCarMarker(carLatLng, book);
 	}
 
 	@Override
@@ -159,38 +184,164 @@ public class TrackDetailActivity extends Activity {
 		super.onDestroy();
 	}
 
+	private void setTabListener() {
+		tab0 = (RelativeLayout) findViewById(R.id.tab1);
+		tab1 = (RelativeLayout) findViewById(R.id.tab2);
+
+		tab0.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				isScolling = true;
+				resetAllAlpha();
+				mPager.setCurrentItem(0);
+				resetAllTabColor();
+				tab0.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+
+			}
+		});
+		tab1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				isScolling = true;
+				resetAllAlpha();
+				mPager.setCurrentItem(1);
+				resetAllTabColor();
+				tab1.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+			}
+		});
+	}
+
+	private void setUpTab() {
+		mPager = (ViewPager) findViewById(R.id.pager);
+		setTabListener();
+		trackingMapFragment = TrackingMapFragment.newInstance();
+		infoFragment = new InfoFragment();
+
+		mAdapter = new PagerAdapter(getSupportFragmentManager());
+		fragmentManager = getSupportFragmentManager();
+		pageChangeListener = new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int selected) {
+				Log.e(TAG, "onPageSelected: " + selected);
+				if(selected==0){
+					setTab0Text();
+					zoom_btn.setVisibility(View.GONE);
+				}
+				if(selected==1){
+					setTab1Text();
+					if(dbBook.getCarLatitude()!=0 && dbBook.getCarLongitude()!=0){
+						zoom_btn.setVisibility(View.VISIBLE);
+					}
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				Log.e(TAG, "position: " + position + " positionOffset: " + positionOffset + " positionOffsetPixels: " + positionOffsetPixels);
+				// do not animate tab color transition for clicking on tab
+				if (!isScolling) {
+					if (position == 0) {
+						Log.e(TAG, "setting alpha");
+						trackingMapFragment.mGetView().setAlpha(positionOffset);
+						infoFragment.mGetView().setAlpha(1 - positionOffset);
+
+						if (mPager.getCurrentItem() == 0) {
+							animateSelect(tab1, positionOffset);
+							animateUnSelect(tab0, positionOffset);
+						} else {
+							animateSelect(tab0, 1f - positionOffset);
+							animateUnSelect(getTab(mPager.getCurrentItem()), 1f - positionOffset);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+
+				}
+				if (state == ViewPager.SCROLL_STATE_IDLE) {
+					isScolling = false;
+
+				}
+			}
+		};
+		// set second page back to default Alpha
+		// favoritesFragment.mGetView().setAlpha(1f);
+
+		mPager.setAdapter(mAdapter);
+
+		// This is required to avoid a black flash when the map is loaded. The flash is due
+		// to the use of a SurfaceView as the underlying view of the map.
+		mPager.requestTransparentRegion(mPager);
+		mPager.setOnPageChangeListener(pageChangeListener);
+	}
+
+	private void animateUnSelect(RelativeLayout tab, float positionOffset) {
+		tab.setBackgroundColor(Color.rgb(RED_SELECTED + (int) (positionOffset * RED_TOTAL_DIFF), GREEN_SELECTED + (int) (positionOffset * GREEN_TOTAL_DIFF),
+				BLUE_SELECTED + (int) (positionOffset * BLUE_TOTAL_DIFF)));
+	}
+
+	private void animateSelect(RelativeLayout tab, float positionOffset) {
+		tab.setBackgroundColor(Color.rgb(RED - (int) (positionOffset * RED_TOTAL_DIFF), GREEN - (int) (positionOffset * GREEN_TOTAL_DIFF), BLUE
+				- (int) (positionOffset * BLUE_TOTAL_DIFF)));
+	}
+
+	private void resetAllTabColor() {
+		tab0.setBackgroundColor(getResources().getColor(R.color.background_tab));
+		tab1.setBackgroundColor(getResources().getColor(R.color.background_tab));
+	}
+
+	private void resetAllAlpha() {
+		if (trackingMapFragment.mGetView() != null)
+			trackingMapFragment.mGetView().setAlpha(1);
+		if (infoFragment.mGetView() != null)
+			infoFragment.mGetView().setAlpha(1);
+	}
+
+	private RelativeLayout getTab(int i) {
+		if (i == 0)
+			return tab0;
+		else if (i == 1)
+			return tab1;
+		else
+			return null;
+	}
+
+	private class PagerAdapter extends FragmentPagerAdapter {
+		private final String[] TITLES = { "INFO", "TRACk" };
+
+		public PagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getCount() {
+			return 2;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return TITLES[position];
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				return infoFragment;
+			case 1:
+				return trackingMapFragment;
+			default:
+				return null;
+			}
+		}
+
+	}
+
 	private void findView() {
-		received_cancel_button = (LinearLayout) findViewById(R.id.received_cancel_button);
-		dispatched_buttons = (LinearLayout) findViewById(R.id.dispatched_buttons);
-		arrived_buttons = (LinearLayout) findViewById(R.id.arrived_buttons);
-		inService_buttons = (LinearLayout) findViewById(R.id.inService_buttons);
-		completed_pay_btn = (LinearLayout) findViewById(R.id.completed_pay_button);
-
-		dispatched_cancel_btn = (LinearLayout) findViewById(R.id.dispatched_cancel_btn);
-		dispatched_track_btn = (LinearLayout) findViewById(R.id.dispatched_track_btn);
-		arrived_track_btn = (LinearLayout) findViewById(R.id.arrived_track_btn);
-		arrived_cancel_btn = (LinearLayout) findViewById(R.id.arrived_cancel_btn);
-		arrived_pay_btn = (LinearLayout) findViewById(R.id.arrived_pay_btn);
-		inService_pay_btn = (LinearLayout) findViewById(R.id.inService_pay_btn);
-		inService_track_btn = (LinearLayout) findViewById(R.id.inService_track_btn);
-
-		vehicle_row = (TableRow) findViewById(R.id.vehicle_row);
-		driver_row = (TableRow) findViewById(R.id.driver_row);
-
-		tv_id = (TextView) findViewById(R.id.tv_id);
-		tv_receive = (TextView) findViewById(R.id.tv_receive);
-		tv_from = (TextView) findViewById(R.id.tv_pickup_address);
-		tv_to = (TextView) findViewById(R.id.tv_dropoff_address);
-		tv_vehicle = (TextView) findViewById(R.id.tv_vehicle);
-		tv_company_name = (TextView) findViewById(R.id.tv_company_name);
-		tv_company_description = (TextView) findViewById(R.id.tv_company_description);
-		tv_driver = (TextView) findViewById(R.id.tv_driver);
-
-		call_btn = (Button) findViewById(R.id.call_btn);
-		msg_btn = (Button) findViewById(R.id.msg_btn);
-		iv_company_icon = (ImageView) findViewById(R.id.iv_tracking_company_icon);
-		ll_attr = (LinearLayout) findViewById(R.id.ll_attr);
-
 		tv_arrived_circle = (TextView) findViewById(R.id.tv_arrived_circle);
 		tv_completed_circle = (TextView) findViewById(R.id.tv_completed_circle);
 		tv_inservice_circle = (TextView) findViewById(R.id.tv_inservice_circle);
@@ -200,62 +351,39 @@ public class TrackDetailActivity extends Activity {
 		completed_circle = (ImageView) findViewById(R.id.completed_circle);
 		inservice_circle = (ImageView) findViewById(R.id.inservice_circle);
 		dispatched_circle = (ImageView) findViewById(R.id.dispatched_circle);
+		
+		tv_id = (TextView) findViewById(R.id.tv_id);
+		tv_book_time = (TextView) findViewById(R.id.tv_book_time);
+		
+		ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
+		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
+		ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
+		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
 	}
 
 	private void checkAndDisablePayBtns() {
 		if (dbBook.getAlready_paid() & !dbBook.getMulti_pay_allow()) {
-			completed_pay_btn.setAlpha((float) 0.4);
-			arrived_pay_btn.setAlpha((float) 0.4);
-			inService_pay_btn.setAlpha((float) 0.4);
-
-			completed_pay_btn.setClickable(false);
-			arrived_pay_btn.setClickable(false);
-			inService_pay_btn.setClickable(false);
+			// completed_pay_btn.setAlpha((float) 0.4);
+			// arrived_pay_btn.setAlpha((float) 0.4);
+			// inService_pay_btn.setAlpha((float) 0.4);
+			//
+			// completed_pay_btn.setClickable(false);
+			// arrived_pay_btn.setClickable(false);
+			// inService_pay_btn.setClickable(false);
 		}
 	}
 
-	private void fillTable() {
-		tv_id.setText(dbBook.getTaxi_ride_id() + "");
-		tv_receive.setText(dbBook.getTripCreationTime());
-		if (dbBook.getPickup_unit() != null && !dbBook.getPickup_unit().equals("")) {
-			tv_from.setText(dbBook.getPickup_unit() + "-" + dbBook.getPickupAddress());
-		} else {
-			tv_from.setText(dbBook.getPickupAddress());
-		}
-		if (dbBook.getDropoffAddress() != null && dbBook.getDropoffAddress().length() > 0)
-		{
-			if (dbBook.getDropoff_unit() != null && !dbBook.getDropoff_unit().equals("")) {
-				tv_to.setText(dbBook.getDropoff_unit() + "-" + dbBook.getDropoffAddress());
-			} else {
-				tv_to.setText(dbBook.getDropoffAddress());
-			}	
-			
-		}
-		else
-			tv_to.setText("Not Given");
 
-		String prefixURL = _context.getString(R.string.url);
-		prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
-		new DownloadImageTask(iv_company_icon).execute(prefixURL + dbBook.getCompany_icon());
-
-		tv_company_name.setText(dbBook.getCompany_name());
-		tv_company_description.setText(dbBook.getCompany_description());
-
-		if (dbBook.getAttributeList() != null) {
-			int margin_right = 10;
-			Utils.showOption(ll_attr, dbBook.getAttributeList().split(","), _context, margin_right);
-		}
-	}
 
 	private void initListener() {
 
-		cancelListener = new View.OnClickListener() {
+		OnClickListener cancelListener = new View.OnClickListener() {
 			public void onClick(View v) {
 				// change the status to cancelled in our database if no matter what
 				AlertDialog.Builder builder = new AlertDialog.Builder(_context);
 				builder.setTitle("Confirm Cancel");
 				builder.setMessage("Are you sure you want to cancel?");
-				builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
@@ -264,7 +392,7 @@ public class TrackDetailActivity extends Activity {
 						new CancelJobTask(_context, dbBook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 					}
 				});
-				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
@@ -274,7 +402,7 @@ public class TrackDetailActivity extends Activity {
 			}
 		};
 
-		payListener = new View.OnClickListener() {
+		OnClickListener payListener = new View.OnClickListener() {
 			public void onClick(View v) {
 				DBCreditCardDao creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_READ);
 				if (creditCardDao.queryBuilder().list().size() == 0) {
@@ -301,38 +429,17 @@ public class TrackDetailActivity extends Activity {
 			}
 		};
 
-		tracklListener = new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(_context, TrackingMapActivity.class);
-				intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBook);
-				startActivity(intent);
-			}
-		};
-
-		call_btn.setOnClickListener(new OnClickListener() {
+		ll_cancel_btn.setOnClickListener(cancelListener);
+		ll_cancel_btn_small.setOnClickListener(cancelListener);
+		ll_pay_btn.setOnClickListener(payListener);
+		
+		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
+		zoom_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + dbBook.getCompany_phone_number()));
-				startActivity(intent);
+				trackingMapFragment.toggleCamera();
 			}
 		});
-
-		msg_btn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				setUpDriverNoteDialog();
-			}
-		});
-
-		dispatched_cancel_btn.setOnClickListener(cancelListener);
-		dispatched_track_btn.setOnClickListener(tracklListener);
-		received_cancel_button.setOnClickListener(cancelListener);
-		arrived_cancel_btn.setOnClickListener(cancelListener);
-		arrived_track_btn.setOnClickListener(tracklListener);
-		arrived_pay_btn.setOnClickListener(payListener);
-		inService_pay_btn.setOnClickListener(payListener);
-		inService_track_btn.setOnClickListener(tracklListener);
-		completed_pay_btn.setOnClickListener(payListener);
 	}
 
 	@Override
@@ -380,10 +487,16 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	public void parseRecallJobResponse(List<DBBooking> dbBook1) {
-		Logger.i(TAG, "parseRecallJobResponse");
 		stopUpdateAnimation();
-
 		this.dbBook = dbBook1.get(0);
+		if(mPager.getCurrentItem()==1 && (dbBook.getCarLatitude()!=0 || dbBook.getCarLongitude()!=0)){
+			zoom_btn.setVisibility(View.VISIBLE);
+		}
+		else{
+			zoom_btn.setVisibility(View.GONE);
+		}
+
+		
 		checkAndDisablePayBtns();
 		switch (dbBook.getTripStatus()) {
 		case MBDefinition.MB_STATUS_BOOKED:
@@ -407,19 +520,13 @@ public class TrackDetailActivity extends Activity {
 		default:
 			break;
 		}
-
 	}
 
 	private void setUpCanceledUI() {
-		received_cancel_button.setVisibility(View.GONE);
-		dispatched_buttons.setVisibility(View.GONE);
-		arrived_buttons.setVisibility(View.GONE);
-		inService_buttons.setVisibility(View.GONE);
-		completed_pay_btn.setVisibility(View.GONE);
-
-		vehicle_row.setVisibility(View.GONE);
-		driver_row.setVisibility(View.GONE);
-
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_btn_group.setVisibility(View.GONE);
+		infoFragment.updateDriverAndVehicle();
+		
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -437,15 +544,10 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	private void setupBookedUI() {
-		received_cancel_button.setVisibility(View.VISIBLE);
-		dispatched_buttons.setVisibility(View.GONE);
-		arrived_buttons.setVisibility(View.GONE);
-		inService_buttons.setVisibility(View.GONE);
-		completed_pay_btn.setVisibility(View.GONE);
-
-		vehicle_row.setVisibility(View.GONE);
-		driver_row.setVisibility(View.GONE);
-
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_btn_group.setVisibility(View.GONE);
+		infoFragment.updateDriverAndVehicle();
+		
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -463,17 +565,9 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	private void setUpAcceptedUI() {
-		received_cancel_button.setVisibility(View.GONE);
-		dispatched_buttons.setVisibility(View.VISIBLE);
-		arrived_buttons.setVisibility(View.GONE);
-		inService_buttons.setVisibility(View.GONE);
-		completed_pay_btn.setVisibility(View.GONE);
-
-		vehicle_row.setVisibility(View.VISIBLE);
-		driver_row.setVisibility(View.VISIBLE);
-
-		tv_vehicle.setText(dbBook.getDispatchedCar());
-		tv_driver.setText(dbBook.getDispatchedDriver());
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_btn_group.setVisibility(View.GONE);
+		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -493,17 +587,9 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	private void setUpArrivedUI() {
-		received_cancel_button.setVisibility(View.GONE);
-		dispatched_buttons.setVisibility(View.GONE);
-		arrived_buttons.setVisibility(View.VISIBLE);
-		inService_buttons.setVisibility(View.GONE);
-		completed_pay_btn.setVisibility(View.GONE);
-
-		vehicle_row.setVisibility(View.VISIBLE);
-		driver_row.setVisibility(View.VISIBLE);
-
-		tv_vehicle.setText(dbBook.getDispatchedCar());
-		tv_driver.setText(dbBook.getDispatchedDriver());
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_btn_group.setVisibility(View.VISIBLE);
+		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -522,26 +608,9 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	private void setUpInServiceUI() {
-		received_cancel_button.setVisibility(View.GONE);
-		dispatched_buttons.setVisibility(View.GONE);
-		arrived_buttons.setVisibility(View.GONE);
-		inService_buttons.setVisibility(View.VISIBLE);
-		completed_pay_btn.setVisibility(View.GONE);
-
-		vehicle_row.setVisibility(View.VISIBLE);
-		driver_row.setVisibility(View.VISIBLE);
-
-		tv_vehicle.setText(dbBook.getDispatchedCar());
-		tv_driver.setText(dbBook.getDispatchedDriver());
-
-		arrived_cancel_btn.setOnClickListener(cancelListener);
-		arrived_track_btn.setOnClickListener(tracklListener);
-		arrived_pay_btn.setOnClickListener(payListener);
-
-		vehicle_row.setVisibility(View.VISIBLE);
-		driver_row.setVisibility(View.VISIBLE);
-		tv_vehicle.setText(dbBook.getDispatchedCar());
-		tv_driver.setText(dbBook.getDispatchedDriver());
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_btn_group.setVisibility(View.VISIBLE);
+		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -560,17 +629,9 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	private void setUpInCompletedUI() {
-		received_cancel_button.setVisibility(View.GONE);
-		dispatched_buttons.setVisibility(View.GONE);
-		arrived_buttons.setVisibility(View.GONE);
-		inService_buttons.setVisibility(View.GONE);
-		completed_pay_btn.setVisibility(View.VISIBLE);
-
-		vehicle_row.setVisibility(View.VISIBLE);
-		driver_row.setVisibility(View.VISIBLE);
-
-		tv_vehicle.setText(dbBook.getDispatchedCar());
-		tv_driver.setText(dbBook.getDispatchedDriver());
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_btn_group.setVisibility(View.VISIBLE);
+		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -590,10 +651,11 @@ public class TrackDetailActivity extends Activity {
 	}
 
 	public void startRecallJobTask() {
-		if (refresh_icon != null && !isRefreshing)
+		if (refresh_icon != null && !isRefreshing) {
 			startUpdateAnimation(refresh_icon);
-		new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_ONE_JOB).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				dbBook.getDestID(), dbBook.getSysId());
+			new RecallJobTask(_context, dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_ONE_JOB).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+					dbBook.getDestID(), dbBook.getSysId());
+		}
 	}
 
 	public void showCancelDialog() {
@@ -607,56 +669,6 @@ public class TrackDetailActivity extends Activity {
 		builder.show();
 	}
 
-	public void setUpDriverNoteDialog() {
-		final EditText driverMessage;
-		final TextView textRemaining;
-		TextView ok;
-		TextView clear;
-		final Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_driver_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
-		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
 
-		driverMessage.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable note) {
-				textRemaining.setText(MBDefinition.DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
-		});
-
-		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
-		ok.setText("Send");
-		ok.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (driverMessage.getText().toString().length() == 0) {
-					Utils.showErrorDialog("Cannot send empty message", _context);
-				} else {
-					new SendDriverMsgTask(dbBook.getTaxi_ride_id() + "", dbBook.getSysId(), dbBook.getDestID(), driverMessage.getText().toString(), _context)
-							.execute();
-					messageDialog.dismiss();
-				}
-			}
-		});
-		clear = (TextView) messageDialog.getWindow().findViewById(R.id.clear);
-		clear.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverMessage.setText("");
-			}
-		});
-
-		messageDialog.show();
-	}
 
 }

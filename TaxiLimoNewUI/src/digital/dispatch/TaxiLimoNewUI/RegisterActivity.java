@@ -141,10 +141,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 						gcm = GoogleCloudMessaging.getInstance(_context);
 						regid = getRegistrationId(_context);
 						Logger.e("GCM id: " + regid);
-						if (regid.isEmpty()) {
+						//if (regid.isEmpty()) {
 							Utils.showProcessingDialog(_context);
 							registerInBackground();
-						}
+						//}
 					} else {
 						Log.i(TAG, "No valid Google Play Services APK found.");
 						Toast.makeText(_context,"No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
@@ -178,7 +178,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME, last_name.getText().toString());
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_EMAIL, email.getText().toString());
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER, phone_number.getText().toString());
-		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, true);
+		//SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, true);
 	}
 
 	@Override
@@ -363,7 +363,8 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 					// The request to your server should be authenticated if your app
 					// is using accounts.
 					boolean isFirstTime = true;
-					new RegisterDeviceTask(_context, regid, isFirstTime).execute();
+					boolean verifySMS = true;
+					new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS).execute();
 
 					// For this demo: we don't need to send it because the device
 					// will send upstream messages to a server that echo back the

@@ -43,7 +43,8 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 	public static class ViewHolder {
 		public TextView address;
-		public ImageView status;
+		public TextView status;
+		public TextView status_bar;
 	}
 
 	// @Override
@@ -70,7 +71,8 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 			ViewHolder viewHolder = new ViewHolder();
 
 			viewHolder.address = (TextView) rowView.findViewById(R.id.text_address);
-			viewHolder.status = (ImageView) rowView.findViewById(R.id.text_status);
+			viewHolder.status = (TextView) rowView.findViewById(R.id.tv_status);
+			viewHolder.status_bar = (TextView) rowView.findViewById(R.id.tv_status_bar);
 			rowView.setTag(viewHolder);
 		}
 
@@ -79,17 +81,29 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		holder.address.setText(values.get(position).getPickupAddress());
 
 		if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
-			holder.status.setImageResource(R.drawable.tag_completed);
+			holder.status.setText(context.getString(R.string.completed));
+			holder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-			holder.status.setImageResource(R.drawable.tag_canceled);
+			holder.status.setText(context.getString(R.string.canceled));
+			holder.status.setTextColor(context.getResources().getColor(R.color.canceled_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.canceled_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
-			holder.status.setImageResource(R.drawable.tag_dispatched);
+			holder.status.setText(context.getString(R.string.dispatched));
+			holder.status.setTextColor(context.getResources().getColor(R.color.dispatched_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.dispatched_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
-			holder.status.setImageResource(R.drawable.tag_arrived);
+			holder.status.setText(context.getString(R.string.arrived));
+			holder.status.setTextColor(context.getResources().getColor(R.color.arrived_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.arrived_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			holder.status.setImageResource(R.drawable.tag_booked);
+			holder.status.setText(context.getString(R.string.booked));
+			holder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			holder.status.setImageResource(R.drawable.tag_in_service);
+			holder.status.setText(context.getString(R.string.in_service));
+			holder.status.setTextColor(context.getResources().getColor(R.color.inservice_color));
+			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.inservice_color));
 		}
 
 		return rowView;

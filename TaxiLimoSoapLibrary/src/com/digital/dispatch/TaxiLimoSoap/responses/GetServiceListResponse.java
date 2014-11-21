@@ -15,68 +15,116 @@ public class GetServiceListResponse extends ResponseWrapper {
 	private MGParam params;
 	private HashMap<String, String> paramHM;
 	private ArrayList<AttributeItem> attributeList;
-	private Tree serviceList;
-	private static String TAG = "Soap-GetMBParamRes";
+	private ArrayList<Node> countryList;
+	private ArrayList<Node> stateList;
+	private ArrayList<Node> regionList;
+	private ArrayList<Node> companyList;
+	private static String TAG = "GetServiceListResponse";
 
 
 	public GetServiceListResponse() {
 		super();
-		serviceList = new Tree("root");
-		
-		attributeList = new ArrayList<AttributeItem>();
+		Log.e(TAG,"in constructor");
 	}
 
 	public GetServiceListResponse(SoapObject soap) {
 		super(soap);
-		attributeList = new ArrayList<AttributeItem>();
+		countryList = new ArrayList<Node>();
+		stateList = new ArrayList<Node>();
+		regionList = new ArrayList<Node>();
+		companyList = new ArrayList<Node>();
 		try {
 			paramHM = new HashMap<String, String>();
 			for (int i = 0; i < properties.size(); i++) {
 				Object item = ((PropertyInfo) properties.elementAt(i)).getValue();
 				String objName = ((PropertyInfo) properties.elementAt(i)).getName();
-
+				String countryName = "";
 				if ((item instanceof SoapObject) && (objName.equalsIgnoreCase("listOfCountries"))) {
-					
-					Object states = ((SoapObject) item).getProperty("listOfStates");
-					Log.e(TAG,"country name: " +((SoapObject) item).getProperty("name"));
-					parseStates((SoapObject) states);
-					Log.e(TAG, "--------------------------------");
+					for (int j = 0; j < ((SoapObject) item).getPropertyCount(); j++){
+						if(j==0){
+							countryName = ((SoapObject) item).getProperty(j).toString();
+							Node country = new Node(countryName,"");
+							countryList.add(country);
+						}
+						else{
+							Object states = ((SoapObject) item).getProperty(j);
+							parseStates((SoapObject) states, countryName);
+						}
+					}
 				}
 			}
 
 		} catch (Exception e) {
 			if (GlobalVar.logEnable) {
 				Log.e(TAG, "ERROR: " + e.toString());
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	
-	private void parseStates(SoapObject states){
+	private void parseStates(SoapObject states, String countryName){
+		String stateName = "";
 		for (int i = 0; i < ((SoapObject) states).getPropertyCount(); i++){
-			if(i==0)
-				Log.e(TAG, "state name: " + ((SoapObject) states).getProperty(i).toString());
+			if(i==0){
+				stateName = ((SoapObject) states).getProperty(i).toString();
+				Node state = new Node(stateName,countryName);
+				stateList.add(state);
+			}
 			else{
 				Object regions = ((SoapObject) states).getProperty(i);
-				parseRegions((SoapObject) regions);
+				parseRegions((SoapObject) regions, stateName);
 			}
 		}
 	}
 	
-	private void parseRegions(SoapObject regions){
+	private void parseRegions(SoapObject regions, String stateName){
+		String regionName="";
 		for (int i = 0; i <  regions.getPropertyCount(); i++){
-			if(i==0)
-				Log.e(TAG, "region name: " + regions.getProperty(i).toString());
+			if(i==0){
+				regionName = ((SoapObject) regions).getProperty(i).toString();
+				Node region = new Node(regionName,stateName);
+				regionList.add(region);
+			}
 			else{
 				Object companies = ((SoapObject) regions).getProperty(i);
-				Log.e(TAG, "companies: " + companies.toString());
+				String companyString = companies.toString();
+				Node company = new Node(companyString,regionName);
+				companyList.add(company);
 			}
 		}
-
 	}
 	
+	public ArrayList<Node> getCountryList() {
+		return countryList;
+	}
 
+	public void setCountryList(ArrayList<Node> countryList) {
+		this.countryList = countryList;
+	}
 
+	public ArrayList<Node> getStateList() {
+		return stateList;
+	}
+
+	public void setStateList(ArrayList<Node> stateList) {
+		this.stateList = stateList;
+	}
+
+	public ArrayList<Node> getRegionList() {
+		return regionList;
+	}
+
+	public void setRegionList(ArrayList<Node> regionList) {
+		this.regionList = regionList;
+	}
+
+	public ArrayList<Node> getCompanyList() {
+		return companyList;
+	}
+
+	public void setCompanyList(ArrayList<Node> companyList) {
+		this.companyList = companyList;
+	}
 	public int GetErrCode() {
 		return errCode;
 	}
@@ -106,51 +154,6 @@ public class GetServiceListResponse extends ResponseWrapper {
 		}
 	}
 
-	public class Tree {
-		private Node root;
-
-		public Tree(String rootData) {
-			root = new Node(rootData);
-			root.setChildren(new ArrayList<Node>());
-		}
-		
-		public Node getRoot(){
-			return root;
-		}
-
-		public class Node {
-			private String data;
-			private Node parent;
-			private List<Node> children;
-			
-			public Node(String data){
-				this.setData(data);
-			}
-
-			public List<Node> getChildren() {
-				return children;
-			}
-
-			public void setChildren(List<Node> children) {
-				this.children = children;
-			}
-
-			public String getData() {
-				return data;
-			}
-
-			public void setData(String data) {
-				this.data = data;
-			}
-
-			public Node getParent() {
-				return parent;
-			}
-
-			public void setParent(Node parent) {
-				this.parent = parent;
-			}
-			
-		}
-	}
+	
+	
 }
