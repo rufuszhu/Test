@@ -1,27 +1,40 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
+import digital.dispatch.TaxiLimoNewUI.Book.ContactsFragment.ValidateAddressTask;
+import digital.dispatch.TaxiLimoNewUI.Book.ContactsFragment.addFavoriteTask;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
@@ -96,9 +109,9 @@ public class FavoritesFragment extends ListFragment {
 			if (mSwipeSlop < 0) {
 				mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
 			}
+			Logger.e(TAG,"onTouch");
 			
-			
-			((SwipableListItem) (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+			((SwipableListItem)v).processDragEvent(event);
 			
 
 			switch (event.getAction()) {
@@ -169,8 +182,9 @@ public class FavoritesFragment extends ListFragment {
 			public TextView address;
 			public TextView title;
 			public RelativeLayout delete_btn;
+			public RelativeLayout viewHeader;
+			public ViewGroup swipeContactView;
 		}
-
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
@@ -185,6 +199,8 @@ public class FavoritesFragment extends ListFragment {
 				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
 				viewHolder.title = (TextView) rowView.findViewById(R.id.tv_title);
 				viewHolder.delete_btn = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
+				viewHolder.viewHeader = (RelativeLayout) rowView.findViewById(R.id.viewHeader);
 				rowView.setTag(viewHolder);
 			}
 
@@ -195,7 +211,6 @@ public class FavoritesFragment extends ListFragment {
 			final View temp = rowView;
 			holder.delete_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 					builder.setTitle(getActivity().getString(R.string.warning));
 					builder.setMessage(getActivity().getString(R.string.delete_confirmation));
@@ -220,12 +235,16 @@ public class FavoritesFragment extends ListFragment {
 					builder.show();
 				}
 			});
-			rowView.setOnTouchListener(mTouchListener);
+			holder.swipeContactView.setOnTouchListener(mTouchListener);
+			holder.viewHeader.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getFullAddress());
+				}
+			});
 			return rowView;
 		}
 	}
-
-
 
 	public void notifyChange() {
 		List<DBAddress> values = addressDao.queryBuilder()
@@ -233,5 +252,125 @@ public class FavoritesFragment extends ListFragment {
 		adapter = new FavoritesAdapter(getActivity(), values);
 		setListAdapter(adapter);
 	}
+	
+	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
 
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public ValidateAddressTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected List<Address> doInBackground(String... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+			 * to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			String locationName = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocationName(locationName, 10);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				// return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				// return errorString;
+			}
+			return addresses;
+		}
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
+		 */
+		@Override
+		protected void onPostExecute(List<Address> addresses) {
+			if (addresses == null) {
+				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+			} else if (addresses.size() > 1) {
+				// pop up list
+				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses);
+			} else if (addresses.size() == 1) {
+				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
+					if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+						Utils.mDropoffAddress = addresses.get(0);
+					else
+						Utils.mPickupAddress = addresses.get(0);
+					getActivity().finish();
+				} else {
+					Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_number), getActivity());
+
+				}
+			} else {
+				Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_name), getActivity());
+
+			}
+		}
+	}
+	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj) {
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+		// builderSingle.setIcon(R.drawable.ic_launcher);
+		builderSingle.setTitle("Please be more specific");
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.autocomplete_list_item);
+		arrayAdapter.addAll(addresses);
+		builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+
+		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+				if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+					Utils.mDropoffAddress = addressesObj.get(which);
+				else
+					Utils.mPickupAddress = addressesObj.get(which);
+				getActivity().finish();
+			}
+		});
+		builderSingle.show();
+	}
 }

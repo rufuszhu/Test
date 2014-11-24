@@ -24,6 +24,7 @@
                 android:background="@drawable/ic_contact_picture_holo_light" />
 
             <LinearLayout
+                android:id="@+id/address_box"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".7"

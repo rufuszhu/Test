@@ -289,7 +289,7 @@ public class Utils {
 						.get(0).getIconId();
 				if (!iconId.equalsIgnoreCase("")) {
 					ImageView attr = new ImageView(context);
-					attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
+					attr.setImageResource(MBDefinition.attrBtnMap.get(Integer.valueOf(iconId)));
 					int dimens = (int) (30 * scale + 0.5f);
 					int margin_right = (int) (marginRight * scale + 0.5f);
 					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);

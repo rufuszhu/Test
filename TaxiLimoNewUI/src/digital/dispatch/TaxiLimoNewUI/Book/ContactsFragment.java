@@ -40,6 +40,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -69,13 +70,13 @@ public class ContactsFragment extends ListFragment {
 	private ListView mListView;
 	private boolean mSwiping = false;
 	private boolean mItemPressed = false;
+	private ContactsAdapter adapter;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
 	public static ContactsFragment newInstance() {
 		ContactsFragment fragment = new ContactsFragment();
-
 		return fragment;
 	}
 
@@ -121,7 +122,7 @@ public class ContactsFragment extends ListFragment {
 		mContactList = new ArrayList<MyContact>();
 		readContacts();
 
-		ContactsAdapter adapter = new ContactsAdapter(getActivity(), mContactList);
+		adapter = new ContactsAdapter(getActivity(), mContactList);
 		setListAdapter(adapter);
 
 		Utils.isInternetAvailable(getActivity());
@@ -150,10 +151,8 @@ public class ContactsFragment extends ListFragment {
 				mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
 			}
 			
-			
-			((SwipableListItem) (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
-			
-
+			//((SwipableListItem) (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+			((SwipableListItem) (v)).processDragEvent(event);
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				if (mItemPressed) {
@@ -164,6 +163,7 @@ public class ContactsFragment extends ListFragment {
 				mDownX = event.getX();
 				break;
 			case MotionEvent.ACTION_CANCEL:
+				mSwiping = false;
 				mItemPressed = false;
 				break;
 			case MotionEvent.ACTION_MOVE: {
@@ -176,9 +176,9 @@ public class ContactsFragment extends ListFragment {
 						mListView.requestDisallowInterceptTouchEvent(true);
 					}
 				}
-				if (mSwiping) {
-					// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
-				}
+//				if (mSwiping) {
+//					// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+//				}
 			}
 				break;
 			case MotionEvent.ACTION_UP: {
@@ -209,10 +209,6 @@ public class ContactsFragment extends ListFragment {
 		return (int) typedValue.getDimension(metrics);
 	}
 
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-
-	}
 
 	private void readContacts() {
 		String[] PROJECTION = new String[] { ContactsContract.Data.CONTACT_ID, ContactsContract.Contacts.DISPLAY_NAME, StructuredPostal.STREET };
@@ -231,7 +227,6 @@ public class ContactsFragment extends ListFragment {
 					street = cursor.getString(streetIndex);
 					if (street != null && !street.equalsIgnoreCase("")) {
 						contactId = cursor.getString(contactIdIndex);
-						Logger.e(TAG, contactId);
 						displayName = cursor.getString(displayNameIndex);
 						Uri img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId);
 
@@ -269,12 +264,14 @@ public class ContactsFragment extends ListFragment {
 			public TextView tv_name;
 			public ImageView profile_icon;
 			public RelativeLayout contact_option;
+			public LinearLayout viewHeader;
+			public ViewGroup swipeContactView;
+			
 		}
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View rowView = convertView;
-			Logger.e(TAG, "getView() : " + position);
 			// reuse views
 			if (rowView == null) {
 
@@ -285,9 +282,11 @@ public class ContactsFragment extends ListFragment {
 				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
 				viewHolder.tv_name = (TextView) rowView.findViewById(R.id.tv_name);
 				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
+				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
 				rowView.setTag(viewHolder);
 			}
-			
+
 			final View temp = rowView;
 
 			// fill data
@@ -296,16 +295,21 @@ public class ContactsFragment extends ListFragment {
 			holder.address.setText(values.get(position).getAddress());
 			holder.tv_name.setText(values.get(position).getName());
 			holder.contact_option.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
-					Logger.e(TAG, "onClick");
 					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
 					((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
 				}
-
 			});
-			rowView.setOnTouchListener(mTouchListener);
+			
+			holder.viewHeader.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getAddress());
+				}
+			});
+			
+			holder.swipeContactView.setOnTouchListener(mTouchListener);
 			return rowView;
 		}
 	}
@@ -351,7 +355,7 @@ public class ContactsFragment extends ListFragment {
 			// opened in "read" mode, ContentResolver.openAssetFileDescriptor throws a
 			// FileNotFoundException.
 			if (BuildConfig.DEBUG) {
-				Log.d(TAG, "Contact photo thumbnail not found for contact " + photoData + ": " + e.toString());
+				//Log.d(TAG, "Contact photo thumbnail not found for contact " + photoData + ": " + e.toString());
 			}
 		} finally {
 			// If an AssetFileDescriptor was returned, try to close it
@@ -441,43 +445,11 @@ public class ContactsFragment extends ListFragment {
 		protected void onPostExecute(final List<Address> addresses) {
 			if (addresses.size() > 1) {
 				// pop up list
-				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, "");
+				boolean isSave = false;
+				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
 			} else if (addresses.size() == 1) {
 				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-					final EditText nickname_edit;
-					TextView address_text;
-					TextView cancel;
-					TextView add;
-					final Dialog nicknameDialog = new Dialog(getActivity());
-					nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					nicknameDialog.setContentView(R.layout.nickname_dialog);
-					nicknameDialog.setCanceledOnTouchOutside(true);
-
-					address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
-					nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
-					address_text.setText(LocationUtils.addressToString(getActivity(), addresses.get(0)));
-
-					cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
-					cancel.setOnClickListener(new View.OnClickListener() {
-						public void onClick(View v) {
-							nicknameDialog.dismiss();
-							InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-						}
-					});
-					add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
-					add.setOnClickListener(new View.OnClickListener() {
-						public void onClick(View v) {
-							String nickname = nickname_edit.getText().toString();
-							DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(addresses.get(0), "", nickname, true, addressDao);
-							((ModifyAddressActivity)getActivity()).notifyFavoriteDataChange(dbAddress);
-							Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-							nicknameDialog.dismiss();
-							InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-						}
-					});
-					nicknameDialog.show();
+					setUpEnterNickNameDialog(addresses.get(0));
 				} else {
 					// street number is invalid
 				}
@@ -487,7 +459,7 @@ public class ContactsFragment extends ListFragment {
 		}
 	}
 
-	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final String unit) {
+	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final boolean isSave) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
 		// builderSingle.setIcon(R.drawable.ic_launcher);
 		builderSingle.setTitle("Please be more specific");
@@ -503,13 +475,149 @@ public class ContactsFragment extends ListFragment {
 		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
-				new addFavoriteTask(getActivity()).execute(addresses.get(which));
-				Logger.e(TAG, "calling add fav task with address: " + addresses.get(which));
-
+				if(isSave){
+					if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+						Utils.mDropoffAddress = addressesObj.get(0);
+					else
+						Utils.mPickupAddress = addressesObj.get(0);
+					getActivity().finish();
+				}
+				else
+					new addFavoriteTask(getActivity()).execute(addresses.get(which));
 			}
 		});
 		builderSingle.show();
 	}
 
+	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
+
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public ValidateAddressTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+
+		/**
+		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
+		 */
+		@Override
+		protected List<Address> doInBackground(String... params) {
+			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+			 * to address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+
+			// Get the current location from the input parameter list
+			String locationName = params[0];
+
+			// Create a list to contain the result address
+			List<Address> addresses = null;
+
+			// Try to get an address for the current location. Catch IO or network problems.
+			try {
+
+				/*
+				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
+				 */
+				addresses = geocoder.getFromLocationName(locationName, 10);
+
+				// Catch network or other I/O problems.
+			} catch (IOException exception1) {
+
+				// Log an error and return an error message
+				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
+
+				// print the stack trace
+				exception1.printStackTrace();
+
+				// Return an error message
+				// return (getString(R.string.IO_Exception_getFromLocation));
+
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+
+				// Construct a message containing the invalid arguments
+				String errorString = getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Log.e(LocationUtils.APPTAG, errorString);
+				exception2.printStackTrace();
+
+				//
+				// return errorString;
+			}
+			return addresses;
+		}
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
+		 */
+		@Override
+		protected void onPostExecute(List<Address> addresses) {
+			if (addresses == null) {
+				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+			} else if (addresses.size() > 1) {
+				// pop up list
+				boolean isSave = true;
+				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
+			} else if (addresses.size() == 1) {
+				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
+					if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+						Utils.mDropoffAddress = addresses.get(0);
+					else
+						Utils.mPickupAddress = addresses.get(0);
+					getActivity().finish();
+				} else {
+					setUpEnterNickNameDialog(addresses.get(0));
+				}
+			} else {
+				Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_name), getActivity());
+
+			}
+		}
+	}
+	
+	private void setUpEnterNickNameDialog(final Address address){
+		final EditText nickname_edit;
+		TextView address_text;
+		TextView cancel;
+		TextView add;
+		final Dialog nicknameDialog = new Dialog(getActivity());
+		nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		nicknameDialog.setContentView(R.layout.nickname_dialog);
+		nicknameDialog.setCanceledOnTouchOutside(true);
+
+		address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
+		nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
+		address_text.setText(LocationUtils.addressToString(getActivity(), address));
+
+		cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
+		cancel.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				nicknameDialog.dismiss();
+				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+			}
+		});
+		add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
+		add.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				String nickname = nickname_edit.getText().toString();
+				DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
+				((ModifyAddressActivity) getActivity()).notifyFavoriteDataChange(dbAddress);
+				Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
+				nicknameDialog.dismiss();
+				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+			}
+		});
+		nicknameDialog.show();
+	}
 }

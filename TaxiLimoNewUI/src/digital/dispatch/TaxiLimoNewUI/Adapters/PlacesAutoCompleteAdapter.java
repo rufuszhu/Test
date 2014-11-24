@@ -17,9 +17,13 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -38,6 +42,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
         _context=context;
+        resultList = new ArrayList<String>();
     }
 
     @Override
@@ -49,6 +54,34 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     public String getItem(int index) {
         return resultList.get(index);
     }
+    
+	private class ViewHolder {
+		public ImageView icon;
+		public TextView bold;
+		public TextView notBold;
+	}
+    
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View rowView = convertView;
+		// reuse views
+		if (rowView == null) {
+			rowView = LayoutInflater.from(getContext()).inflate(R.layout.search_list_item, null);
+			// configure view holder
+			ViewHolder viewHolder = new ViewHolder();
+
+			viewHolder.bold = (TextView) rowView.findViewById(R.id.bold);
+			viewHolder.notBold = (TextView) rowView.findViewById(R.id.notBold);
+			rowView.setTag(viewHolder);
+		}
+		
+		// fill data
+		ViewHolder holder = (ViewHolder) rowView.getTag();
+		holder.bold.setVisibility(View.GONE);
+		holder.notBold.setText(resultList.get(position));
+		
+		return rowView;
+	}
 
     @Override
     public Filter getFilter() {

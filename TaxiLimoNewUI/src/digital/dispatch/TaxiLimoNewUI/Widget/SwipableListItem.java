@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
+import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 
 
 
@@ -84,10 +86,16 @@ public class SwipableListItem extends ViewGroup {
 	protected void onFinishInflate() {
 		mHeaderView = this.findViewById(R.id.viewHeader);
 		mSideView = (RelativeLayout) this.findViewById(R.id.contact_option);
-		
+		//mHeaderView.setOnClickListener(mOnClickListener);
 	}
 	
 
+	private OnClickListener mOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+        	Toast.makeText(context, "aaabbbccc", Toast.LENGTH_SHORT).show();
+        }
+    };
 
 	
 	public class MyDragHelperCallback extends ViewDragHelper.Callback {

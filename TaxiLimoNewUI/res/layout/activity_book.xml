@@ -6,13 +6,14 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="digital.dispatch.TaxiLimoNewUI.BookActivity" >
+    tools:context="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" >
 
     <RelativeLayout
         android:id="@+id/rl_pickup"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:background="@color/blue">
 
         <TextView
             android:id="@+id/tv_pickup"
@@ -27,7 +28,8 @@
         android:id="@+id/rl_drop_off"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_pick_up">
+        android:layout_below="@+id/rl_pickup"
+        android:background="@color/green_light">
         <TextView
             android:id="@+id/tv_drop_off"
             android:layout_width="wrap_content"
@@ -40,7 +42,8 @@
         android:id="@+id/rl_date"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_drop_off">
+        android:layout_below="@+id/rl_drop_off"
+        android:background="@color/red_light">
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
@@ -53,7 +56,8 @@
         android:id="@+id/rl_driver_note"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_pickup_date">
+        android:layout_below="@+id/rl_date"
+        android:background="@color/blue_light">
         <TextView
             android:id="@+id/tv_driver_note"
             android:layout_width="wrap_content"
@@ -66,7 +70,8 @@
         android:id="@+id/rl_company"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_driver_note">
+        android:layout_below="@+id/rl_driver_note"
+        android:background="@color/orange_light">
         <TextView
             android:id="@+id/tv_company"
             android:layout_width="wrap_content"

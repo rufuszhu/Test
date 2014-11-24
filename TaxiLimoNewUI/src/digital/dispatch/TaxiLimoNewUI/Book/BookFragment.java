@@ -136,11 +136,11 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			/* map is already there, just return view as it is */
 		}
 
-		textNote = (TextView) view.findViewById(R.id.text_note);
+//		textNote = (TextView) view.findViewById(R.id.text_note);
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		tv_empty_comany_message = (TextView) view.findViewById(R.id.tv_empty_comany_message);
+//		tv_empty_comany_message = (TextView) view.findViewById(R.id.tv_empty_comany_message);
 		// setupCompanyUI();
-		Utils.setNoteIndication(getActivity(), textNote);
+//		Utils.setNoteIndication(getActivity(), textNote);
 
 		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
 		current_location_btn.setOnClickListener(new View.OnClickListener() {
@@ -161,54 +161,60 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		});
 
-		text_pickup = (TextView) view.findViewById(R.id.text_pickup);
-		setTimeText(text_pickup);
-		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
-		pickTime.setOnClickListener(new View.OnClickListener() {
+//		text_pickup = (TextView) view.findViewById(R.id.text_pickup);
+//		setTimeText(text_pickup);
+//		LinearLayout pickTime = (LinearLayout) view.findViewById(R.id.pickupTime);
+//		pickTime.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				// TimePickerDialog.timepick(getActivity(), 1, 20);
+//				// TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
+//				// tpd.show();
+//				Utils.setUpTimeDialog(getActivity(), text_pickup);
+//			}
+//		});
+
+//		LinearLayout driverNote = (LinearLayout) view.findViewById(R.id.driverNote);
+//		driverNote.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				// setUpMessageDialog();
+//				Dialog messageDialog = new Dialog(getActivity());
+//
+//				Utils.setUpDriverNoteDialog(getActivity(), messageDialog, textNote);
+//
+//			}
+//		});
+		
+		ImageView blue_pin =  (ImageView) view.findViewById(R.id.blue_pin);
+		blue_pin.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// TimePickerDialog.timepick(getActivity(), 1, 20);
-				// TimePickerDialog tpd = new TimePickerDialog(getActivity(), null, 10, 10, true);
-				// tpd.show();
-				Utils.setUpTimeDialog(getActivity(), text_pickup);
+				Intent intent = new Intent(getActivity(), BookActivity.class);
+				getActivity().startActivity(intent);
 			}
 		});
 
-		LinearLayout driverNote = (LinearLayout) view.findViewById(R.id.driverNote);
-		driverNote.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// setUpMessageDialog();
-				Dialog messageDialog = new Dialog(getActivity());
-
-				Utils.setUpDriverNoteDialog(getActivity(), messageDialog, textNote);
-
-			}
-		});
-
-		LinearLayout destination = (LinearLayout) view.findViewById(R.id.destination_button);
-		destination.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				// Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-				// if(servicesConnected()){
-				// intent.putExtra("currentLocation", mLocationClient.getLastLocation());
-				// }
-				// startActivityForResult(intent,REQUEST_CODE);
-				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-				intent.putExtra(MBDefinition.IS_DESTINATION, true);
-				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_DROPOFFADDRESS_CODE);
-			}
-		});
-
-		book_btn = (TextView) view.findViewById(R.id.book_button);
-		book_btn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				
-				if(checkAllowBooking()){
-					
-					Utils.bookJob(Utils.mSelectedCompany, getActivity());
-				}
-				
-			}
-		});
+//		LinearLayout destination = (LinearLayout) view.findViewById(R.id.destination_button);
+//		destination.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				// Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
+//				// if(servicesConnected()){
+//				// intent.putExtra("currentLocation", mLocationClient.getLastLocation());
+//				// }
+//				// startActivityForResult(intent,REQUEST_CODE);
+//				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
+//				intent.putExtra(MBDefinition.IS_DESTINATION, true);
+//				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_DROPOFFADDRESS_CODE);
+//			}
+//		});
+//
+//		book_btn = (TextView) view.findViewById(R.id.book_button);
+//		book_btn.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				if(checkAllowBooking()){
+//					Utils.bookJob(Utils.mSelectedCompany, getActivity());
+//				}
+//				
+//			}
+//		});
 		return view;
 	}
 
@@ -308,54 +314,54 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		houseNumRangeDialog.show();
 	}
 
-	private void setupCompanyUI() {
-		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
-		LinearLayout ll_no_company_selected = (LinearLayout) view.findViewById(R.id.ll_no_company_selected);
-		if (Utils.mSelectedCompany != null) {
-			CompanyItem item = Utils.mSelectedCompany;
-			attribute.setVisibility(View.VISIBLE);
-			ll_no_company_selected.setVisibility(View.GONE);
-			attribute.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					if (Utils.mPickupAddress != null) {
-						Intent intent = new Intent(getActivity(), AttributeActivity.class);
-						intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
-						startActivity(intent);
-						// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
-					}
-				}
-			});
-
-			ImageView iv_company_icon = (ImageView) view.findViewById(R.id.iv_company_icon);
-			TextView tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);
-			tv_company_name.setText(item.name);
-			String prefixURL = getActivity().getString(R.string.url);
-			prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
-			// String[] locArray = item.logo.split("/");
-			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon,
-			// context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new DownloadImageTask(iv_company_icon).execute(prefixURL + item.logo);
-		}
-		// if no company selected
-		else {
-			attribute.setVisibility(View.GONE);
-			ll_no_company_selected.setVisibility(View.VISIBLE);
-			if (noCompanyAvailable)
-				ll_no_company_selected.setOnClickListener(null);
-			else {
-				ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						if (Utils.mPickupAddress != null) {
-							Intent intent = new Intent(getActivity(), AttributeActivity.class);
-							intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
-							// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
-							startActivity(intent);
-						}
-					}
-				});
-			}
-		}
-	}
+//	private void setupCompanyUI() {
+//		LinearLayout attribute = (LinearLayout) view.findViewById(R.id.attribute);
+//		LinearLayout ll_no_company_selected = (LinearLayout) view.findViewById(R.id.ll_no_company_selected);
+//		if (Utils.mSelectedCompany != null) {
+//			CompanyItem item = Utils.mSelectedCompany;
+//			attribute.setVisibility(View.VISIBLE);
+//			ll_no_company_selected.setVisibility(View.GONE);
+//			attribute.setOnClickListener(new View.OnClickListener() {
+//				public void onClick(View v) {
+//					if (Utils.mPickupAddress != null) {
+//						Intent intent = new Intent(getActivity(), AttributeActivity.class);
+//						intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
+//						startActivity(intent);
+//						// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+//					}
+//				}
+//			});
+//
+//			ImageView iv_company_icon = (ImageView) view.findViewById(R.id.iv_company_icon);
+//			TextView tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);
+//			tv_company_name.setText(item.name);
+//			String prefixURL = getActivity().getString(R.string.url);
+//			prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+//			// String[] locArray = item.logo.split("/");
+//			// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon,
+//			// context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//			new DownloadImageTask(iv_company_icon).execute(prefixURL + item.logo);
+//		}
+//		// if no company selected
+//		else {
+//			attribute.setVisibility(View.GONE);
+//			ll_no_company_selected.setVisibility(View.VISIBLE);
+//			if (noCompanyAvailable)
+//				ll_no_company_selected.setOnClickListener(null);
+//			else {
+//				ll_no_company_selected.setOnClickListener(new View.OnClickListener() {
+//					public void onClick(View v) {
+//						if (Utils.mPickupAddress != null) {
+//							Intent intent = new Intent(getActivity(), AttributeActivity.class);
+//							intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
+//							// getActivity().startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
+//							startActivity(intent);
+//						}
+//					}
+//				});
+//			}
+//		}
+//	}
 
 	@Override
 	public void onResume() {
@@ -381,16 +387,16 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		}
 
-		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
-		if (Utils.mDropoffAddress != null) {
-			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
-			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
-		} else {
-			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
-			tv_destination.setText(getActivity().getResources().getString(R.string.empty_note));
-		}
-
-		setupCompanyUI();
+//		TextView tv_destination = (TextView) view.findViewById(R.id.tv_destination);
+//		if (Utils.mDropoffAddress != null) {
+//			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.black));
+//			tv_destination.setText(LocationUtils.addressToString(getActivity(), Utils.mDropoffAddress));
+//		} else {
+//			tv_destination.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+//			tv_destination.setText(getActivity().getResources().getString(R.string.empty_note));
+//		}
+//
+//		setupCompanyUI();
 	}
 
 	@Override
@@ -411,26 +417,26 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Utils.isInternetAvailable(getActivity());
 	}
 
-	private void setTimeText(TextView tv_time) {
-		if (Utils.pickupDate == null || Utils.pickupTime == null) {
-			tv_time.setText(getActivity().getResources().getString(R.string.now));
-			tv_time.setTextSize(20);
-			tv_time.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
-		} else {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
-			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
-			String date = dateFormat.format(Utils.pickupDate);
-			String time = timeFormat.format(Utils.pickupTime);
-			Calendar cal = Calendar.getInstance();
-
-			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
-				tv_time.setText("Today" + "\n" + time);
-			} else
-				tv_time.setText(date + "\n" + time);
-			tv_time.setTextSize(13);
-			tv_time.setTextColor(getActivity().getResources().getColor(R.color.black));
-		}
-	}
+//	private void setTimeText(TextView tv_time) {
+//		if (Utils.pickupDate == null || Utils.pickupTime == null) {
+//			tv_time.setText(getActivity().getResources().getString(R.string.now));
+//			tv_time.setTextSize(20);
+//			tv_time.setTextColor(getActivity().getResources().getColor(R.color.gray_light));
+//		} else {
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
+//			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
+//			String date = dateFormat.format(Utils.pickupDate);
+//			String time = timeFormat.format(Utils.pickupTime);
+//			Calendar cal = Calendar.getInstance();
+//
+//			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
+//				tv_time.setText("Today" + "\n" + time);
+//			} else
+//				tv_time.setText(date + "\n" + time);
+//			tv_time.setTextSize(13);
+//			tv_time.setTextColor(getActivity().getResources().getColor(R.color.black));
+//		}
+//	}
 
 	/**
 	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google Maps API.
@@ -687,19 +693,19 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
-				if (oldDistrict == null) {
-					oldDistrict = address.getLocality();
-					boolean isFromBooking = true;
-					new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-				} else {
-					// only call if district changes
-					if (!oldDistrict.equalsIgnoreCase(address.getLocality())) {
-						Utils.mSelectedCompany = null;
-						oldDistrict = address.getLocality();
-						boolean isFromBooking = true;
-						new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-					}
-				}
+//				if (oldDistrict == null) {
+//					oldDistrict = address.getLocality();
+//					boolean isFromBooking = true;
+//					new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//				} else {
+//					// only call if district changes
+//					if (!oldDistrict.equalsIgnoreCase(address.getLocality())) {
+//						Utils.mSelectedCompany = null;
+//						oldDistrict = address.getLocality();
+//						boolean isFromBooking = true;
+//						new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//					}
+//				}
 				return LocationUtils.addressToString(getActivity(), address);
 
 				// If there aren't any addresses, post a message
@@ -717,26 +723,26 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 	}
 
-	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
-
-		if (tempCompList.length == 0) {
-			noCompanyAvailable = true;
-			// show no available company;
-			Logger.e("No company available in " + city);
-			tv_empty_comany_message.setText("No company available in " + city);
-			setupCompanyUI();
-		} else if (tempCompList.length == 1) {
-			noCompanyAvailable = false;
-			Utils.mSelectedCompany = tempCompList[0];
-			setupCompanyUI();
-		} else {
-			noCompanyAvailable = false;
-			// show please choose a company
-			Logger.e(tempCompList.length + " companies available in " + city);
-			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
-			setupCompanyUI();
-		}
-	}
+//	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String city) {
+//
+//		if (tempCompList.length == 0) {
+//			noCompanyAvailable = true;
+//			// show no available company;
+//			Logger.e("No company available in " + city);
+//			tv_empty_comany_message.setText("No company available in " + city);
+//			setupCompanyUI();
+//		} else if (tempCompList.length == 1) {
+//			noCompanyAvailable = false;
+//			Utils.mSelectedCompany = tempCompList[0];
+//			setupCompanyUI();
+//		} else {
+//			noCompanyAvailable = false;
+//			// show please choose a company
+//			Logger.e(tempCompList.length + " companies available in " + city);
+//			tv_empty_comany_message.setText(tempCompList.length + " companies available in " + city);
+//			setupCompanyUI();
+//		}
+//	}
 	
 	//helper function before booking
 	private boolean checkAllowBooking() {
