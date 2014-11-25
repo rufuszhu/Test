@@ -25,17 +25,7 @@ import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
 public class ModifyAddressActivity extends FragmentActivity {
 	private static final String TAG = "ModifyAddressActivity";
-	private static final int RED_TOTAL_DIFF = 194 - 107;
-	private static final int GREEN_TOTAL_DIFF = 194 - 120;
-	private static final int BLUE_TOTAL_DIFF = 194 - 131;
 
-	private static final int RED = 197;
-	private static final int GREEN = 194;
-	private static final int BLUE = 194;
-
-	private static final int RED_SELECTED = 107;
-	private static final int GREEN_SELECTED = 120;
-	private static final int BLUE_SELECTED = 131;
 
 	private Context _activity;
 	private boolean isDesitination;
@@ -50,7 +40,7 @@ public class ModifyAddressActivity extends FragmentActivity {
 	private NonSwipeableViewPager mPager;
 	private OnPageChangeListener pageChangeListener;
 	private FavoritesFragment favoritesFragment;
-	private ContactsFragment contactsFragment;
+	public ContactsFragment contactsFragment;
 	private SearchFragment searchFragment;
 
 	// LinearLayout select_btn;
@@ -76,6 +66,10 @@ public class ModifyAddressActivity extends FragmentActivity {
 		// autoCompView.setOnItemClickListener(this);
 
 		bindEvents();
+	}
+	
+	public boolean getIsDesitination(){
+		return isDesitination;
 	}
 
 	private void setupActionBarTitle() {
@@ -133,6 +127,8 @@ public class ModifyAddressActivity extends FragmentActivity {
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
+				if(selected==0)
+					searchFragment.getData();
 
 			}
 
@@ -166,12 +162,12 @@ public class ModifyAddressActivity extends FragmentActivity {
 		favoritesFragment.notifyDataChange(value);
 	}
 
-	public static class TextFragment extends Fragment {
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-			return inflater.inflate(R.layout.text_fragment, container, false);
-		}
-	}
+//	public static class TextFragment extends Fragment {
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+//			return inflater.inflate(R.layout.text_fragment, container, false);
+//		}
+//	}
 
 	private class PagerAdapter extends FragmentPagerAdapter {
 		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };

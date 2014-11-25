@@ -122,7 +122,6 @@
     <!-- <string name="url">http://192.168.50.161:188/Service.asmx</string> -->
     <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
 
-
     <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
     <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
@@ -251,7 +250,8 @@
         card not honored, or card not authorized for this transaction.</string>
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
     <string name="welcome_message">Thank you for registering with us!</string>
-    <string name="duplicate_check_buffer_time">30</string> <!-- in minutes -->
+    <string name="duplicate_check_buffer_time">30</string>
+ <!-- in minutes -->
 
     <string-array name="tips_array">
         <item>0%</item>
@@ -306,9 +306,7 @@
     <string name="err">Error</string>
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
-
     <string name="err_empty_msg">Cannot send empty message</string>
-
     <string name="err_msg_no_same_loc">You already booked a taxi on this address. Please cancel the previous job before booking another trip.</string>
 
     <!-- successful messages -->
@@ -323,6 +321,9 @@
     <string name="enter_street_number">Enter a street number for:</string>
     <string name="enter_street_number_range">Select a street number between</string>
     <string name="address_output_string">%1$s %2$s</string>
+    <string name="time_is_local_time">Your selected pickup time is the local time at the pickup location.</string>
+    <string name="charaters_left">256 Characters Left</string>
+    
 
     <!-- Address format -->
 
@@ -370,5 +371,6 @@
     <string name="title_activity_verify_sms">VerifySMSActivity</string>
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
     <string name="title_activity_book">BookActivity</string>
+    <string name="title_activity_set_time">SetTimeActivity</string>
 
 </resources>

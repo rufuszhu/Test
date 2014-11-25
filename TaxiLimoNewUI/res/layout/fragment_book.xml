@@ -65,183 +65,9 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_option_height"
-            android:layout_below="@+id/addressBar"
-            android:baselineAligned="false"
-            android:orientation="horizontal" >
+        
 
-            <LinearLayout
-                android:id="@+id/pickupTime"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".24"
-                android:background="@drawable/map_box"
-                android:clickable="true"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".35"
-                    android:gravity="center"
-                    android:text="PICKUP TIME"
-                    android:textColor="@color/blue_text"
-                    android:textSize="@dimen/map_option_title_font"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/text_pickup"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".65"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/normal_padding"
-                    android:text="Now"
-                    android:textColor="@color/gray_light"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/driverNote"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".24"
-                android:background="@drawable/map_box"
-                android:clickable="true"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".35"
-                    android:gravity="center"
-                    android:text="DRIVER NOTE"
-                    android:textColor="@color/blue_text"
-                    android:textSize="@dimen/map_option_title_font"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/text_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".65"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:paddingLeft="@dimen/normal_padding"
-                    android:text="@string/empty_note"
-                    android:textColor="@color/gray_light"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/destination_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".52"
-                android:background="@drawable/destination_box"
-                android:clickable="true"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".35"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/normal_padding"
-                    android:text="DESTINATION"
-                    android:textColor="@color/blue_text"
-                    android:textSize="@dimen/map_option_title_font"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_destination"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".65"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/normal_padding"
-                    android:singleLine="true"
-                    android:text="@string/empty_note"
-                    android:textColor="@color/gray_light"
-                    android:textSize="20sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/attribute"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_company_bar_height"
-            android:layout_above="@+id/book_button"
-            android:background="@drawable/company_bar"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:padding="@dimen/normal_padding" >
-
-            <ImageView
-                android:id="@+id/iv_company_icon"
-                android:layout_width="@dimen/map_company_icon_height"
-                android:layout_height="@dimen/map_company_icon_height"
-                android:layout_marginLeft="@dimen/small_padding" />
-
-            <TextView
-                android:id="@+id/tv_company_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/normal_padding"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <!-- <LinearLayout -->
-            <!-- android:layout_width="0dp" -->
-            <!-- android:layout_height="match_parent" -->
-            <!-- android:layout_weight=".5" -->
-            <!-- android:gravity="center" > -->
-
-
-            <!-- <LinearLayout -->
-            <!-- android:layout_width="0dp" -->
-            <!-- android:layout_height="match_parent" -->
-            <!-- android:layout_weight=".5" -->
-            <!-- android:gravity="center" > -->
-
-
-            <!-- <ImageView -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:src="@drawable/abc_ab_bottom_solid_dark_holo" /> -->
-
-
-            <!-- <TextView -->
-            <!-- android:id="@+id/tv_est_price" -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:text="$ 40" /> -->
-            <!-- </LinearLayout> -->
-
-
-            <!-- <LinearLayout -->
-            <!-- android:layout_width="0dp" -->
-            <!-- android:layout_height="match_parent" -->
-            <!-- android:layout_weight=".5" -->
-            <!-- android:gravity="center" > -->
-
-
-            <!-- <ImageView -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:src="@drawable/abc_ab_bottom_solid_dark_holo" /> -->
-
-
-            <!-- <TextView -->
-            <!-- android:id="@+id/tv_est_time" -->
-            <!-- android:layout_width="wrap_content" -->
-            <!-- android:layout_height="wrap_content" -->
-            <!-- android:text="20 min" /> -->
-            <!-- </LinearLayout> -->
-            <!-- </LinearLayout> -->
-        </LinearLayout>
+        
 
         <LinearLayout
             android:id="@+id/ll_no_company_selected"
@@ -262,27 +88,15 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/book_button"
-            style="@style/TextDropShadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_book_btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/small_padding"
-            android:layout_weight=".55"
-            android:background="@drawable/green_btn_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/book"
-            android:textColor="@color/white"
-            android:textSize="@dimen/book_font_size"
-            android:textStyle="bold" />
+        
 
         <ImageView
+            android:id="@+id/blue_pin"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:clickable="true"
             android:src="@drawable/pin_blue" />
     </RelativeLayout>
 
