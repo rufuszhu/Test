@@ -1,16 +1,16 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
-
 
 import android.content.Context;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-
 
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.BookJobRequest.IBookJobResponseListener;
@@ -25,6 +25,7 @@ import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 
+import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -52,7 +53,6 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	protected Void doInBackground(Void... params) {
 
-		
 		bjReq = new BookJobRequest(this, this);
 		// sysid get from company list response
 		bjReq.setSysID(mbook.getSysId() + "");
@@ -75,9 +75,8 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 		String multiPay_allow = "";
 
 		bjReq.setTaxiCompanyID(mbook.getDestID() + "");
-		
+
 		bjReq.setPickUpTime(mbook.getPickup_time());
-		
 
 		if (mbook.getPickup_unit() != null) {
 			bjReq.setPickUpUnit(mbook.getPickup_unit());
@@ -105,17 +104,13 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			bjReq.setDropOffDistrict(mbook.getDropoff_district());
 		}
 
-		// set attributes (dynamic)
-		// if (mAttrRcd != null) {
-		// List<String> attrList = new ArrayList<String>();
-		// for (int i = 0; i < mAttrRcd.length; i++) {
-		// if (mAttrRcd[i].checked == true ) {
-		// attrList.add(mAttrRcd[i].shortName);
-		// }
-		// }
-		//
-		// bjReq.setAttributeList(attrList);
-		// }
+		if (Utils.selected_attribute!=null) {
+			ArrayList<String> temp = new ArrayList<String>();
+			for(int i=0;i<Utils.selected_attribute.size();i++){
+				temp.add(Utils.selected_attribute.get(i).toString());
+			}
+			bjReq.setAttributeList(temp);
+		}
 
 		String remark = mbook.getRemarks();
 		for (int i = 0; i < MBDefinition.SPECIAL_CHAR_TO_REMOVE.length; i++) {
@@ -148,30 +143,31 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Logger.v(TAG, "Taxi ride ID = " + response.getTRID());
 			mbook.setTaxi_ride_id(response.getTRID());
 			mbook.setTripStatus(MBDefinition.MB_STATUS_BOOKED);
-			
+
 			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss",Locale.US);
+			SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
 			mbook.setTripCreationTime(pickupTimeFormat.format(cal.getTime()));
 			mbook.setAlready_paid(false);
-			
+
 			DaoManager daoManager = DaoManager.getInstance(_context);
 			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 			bookingDao.insert(mbook);
-			//clean up
+			// clean up
 			Utils.driverNoteString = "";
 			Utils.pickupDate = null;
 			Utils.pickupTime = null;
 			Utils.mSelectedCompany = null;
 			Utils.mDropoffAddress = null;
 			Utils.mPickupAddress = null;
-			Utils.pickupHouseNumber="";
-			Utils.selected_attribute_from_bookAgain=null;
-			Utils.selected_attribute=null;
-			Utils.pickup_unit_number=null;
-			Utils.dropoff_unit_number=null;
-			
+			Utils.pickupHouseNumber = "";
+			Utils.selected_attribute_from_bookAgain = null;
+			Utils.selected_attribute = null;
+			Utils.pickup_unit_number = null;
+			Utils.dropoff_unit_number = null;
+
 			Utils.showMessageDialog(_context.getString(R.string.message_book_successful), _context);
-			((MainActivity)_context).switchToTrackTab();
+			Utils.currentTab = 1;
+			((BookActivity) _context).finish();
 			Logger.d(TAG, "ride id: " + mbook.getTaxi_ride_id());
 			Logger.d(TAG, "create time: " + mbook.getTripCreationTime());
 		} else {
@@ -184,8 +180,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
-		
-			
+
 		if (resWrapper.getStatus() == 3) {
 			// new AlertDialog.Builder(getActivity())
 			// .setTitle(R.string.booking_failed_title)
@@ -194,7 +189,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			// .create()
 			// .show();
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable), _context);
-			
+
 		} else {
 			switch (resWrapper.getErrCode()) {
 			case 12:
@@ -211,10 +206,12 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				break;
 			case 36:
 			case 40:
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_account_err).replace("[company phone]", mbook.getCompany_phone_number()), _context);
+				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_account_err).replace("[company phone]", mbook.getCompany_phone_number()),
+						_context);
 				break;
-			default:			
-				Utils.showMessageDialog(_context.getString(R.string.booking_failed_generic_msg).replace("[company phone]", mbook.getCompany_phone_number()), _context);
+			default:
+				Utils.showMessageDialog(_context.getString(R.string.booking_failed_generic_msg).replace("[company phone]", mbook.getCompany_phone_number()),
+						_context);
 
 				break;
 			}
@@ -226,7 +223,9 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	public void onError() {
 		Utils.stopProcessingDialog(_context);
 		// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
-		Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()), _context);;
+		Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()),
+				_context);
+		;
 	}
 
 	@Override

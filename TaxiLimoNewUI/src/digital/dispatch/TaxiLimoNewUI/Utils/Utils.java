@@ -65,7 +65,6 @@ public class Utils {
 	public static Date pickupTime;
 	public static Address mPickupAddress;
 	public static Address mDropoffAddress;
-	public static ArrayList<AttributeItem> attributeList;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
 	public static String selected_attribute_from_bookAgain;
@@ -154,130 +153,6 @@ public class Utils {
 
 	}
 
-	public static void setUpTimeDialog(final Context context, final TextView tv_time) {
-
-		int transparent = context.getResources().getColor(R.color.transparent);
-		boolean isDate = true;
-		final Dialog timeDialog = new Dialog(context);
-		timeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		timeDialog.setContentView(R.layout.time_dialog);
-		final WheelView dates = (WheelView) timeDialog.getWindow().findViewById(R.id.dates);
-		final WheelView times = (WheelView) timeDialog.getWindow().findViewById(R.id.times);
-		final RadioButton now_btn = (RadioButton) timeDialog.getWindow().findViewById(R.id.now);
-		final RadioButton later_btn = (RadioButton) timeDialog.getWindow().findViewById(R.id.later);
-		TextView save = (TextView) timeDialog.getWindow().findViewById(R.id.save);
-		TextView cancel = (TextView) timeDialog.getWindow().findViewById(R.id.cancel);
-
-		timeDialog.setCanceledOnTouchOutside(true);
-
-		dates.setVisibleItems(5); // Number of items
-		dates.setWheelBackground(R.drawable.wheel_bg_holo);
-		dates.setWheelForeground(R.drawable.wheel_val_holo);
-
-		dates.setShadowColor(transparent, transparent, transparent);
-
-		times.setVisibleItems(5); // Number of items
-		times.setWheelBackground(R.drawable.wheel_bg_holo);
-		times.setWheelForeground(R.drawable.wheel_val_holo);
-		times.setShadowColor(transparent, transparent, transparent);
-		boolean isToday = true;
-		final DateAdapter dateAdapter = new DateAdapter(context, isDate, setupDateList());
-		final DateAdapter timeTodayAdapter = new DateAdapter(context, !isDate, setupTimeList(isToday));
-		final DateAdapter timeNotTodayAdapter = new DateAdapter(context, !isDate, setupTimeList(!isToday));
-		dates.setViewAdapter(dateAdapter);
-		dates.setCurrentItem(dateAdapter.getIndexOfDate(pickupDate));
-		// if today
-		if (pickupDate == null || pickupDate.getDate() == Calendar.getInstance().getTime().getDate()) {
-			times.setViewAdapter(timeTodayAdapter);
-			times.setCurrentItem(timeTodayAdapter.getIndexOfTime(pickupTime));
-		} else {
-			times.setViewAdapter(timeNotTodayAdapter);
-			times.setCurrentItem(timeNotTodayAdapter.getIndexOfTime(pickupTime));
-		}
-
-		final OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
-			@Override
-			public void onChanged(WheelView wheel, int oldValue, int newValue) {
-				if (newValue == 0) {
-					Date oldDate = timeNotTodayAdapter.getTime(times.getCurrentItem());
-					times.setViewAdapter(timeTodayAdapter);
-					times.setCurrentItem(timeTodayAdapter.getIndexOfTime(oldDate));
-				} else {
-					if (oldValue == 0) {
-						Date oldDate = timeTodayAdapter.getTime(times.getCurrentItem());
-						times.setViewAdapter(timeNotTodayAdapter);
-						times.setCurrentItem(timeNotTodayAdapter.getIndexOfTime(oldDate));
-					}
-				}
-			}
-		};
-
-		now_btn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				TextView disable_view = (TextView) timeDialog.getWindow().findViewById(R.id.disable_view);
-				disable_view.setVisibility(View.VISIBLE);
-				later_btn.setChecked(false);
-				now_btn.setChecked(true);
-			}
-		});
-
-		later_btn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				TextView disable_view = (TextView) timeDialog.getWindow().findViewById(R.id.disable_view);
-				disable_view.setVisibility(View.GONE);
-				later_btn.setChecked(true);
-				now_btn.setChecked(false);
-			}
-		});
-
-		save.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if (now_btn.isChecked()) {
-					tv_time.setText(context.getString(R.string.now));
-					tv_time.setTextSize(DEFAULT_FONT_SIZE);
-					tv_time.setTextColor(context.getResources().getColor(R.color.gray_light));
-				} else {
-					int dateIndex = dates.getCurrentItem();
-					int timeIndex = times.getCurrentItem();
-
-					if (dates.getCurrentItem() == 0) {
-						pickupTime = timeTodayAdapter.getTime(timeIndex);
-						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeTodayAdapter.getItemText(times.getCurrentItem()));
-						tv_time.setTextSize(VALUE_FONT_SIZE);
-						tv_time.setTextColor(context.getResources().getColor(R.color.black));
-					} else {
-						pickupTime = timeNotTodayAdapter.getTime(timeIndex);
-						tv_time.setText(dateAdapter.getItemText(dates.getCurrentItem()) + "\n" + timeNotTodayAdapter.getItemText(times.getCurrentItem()));
-						tv_time.setTextSize(VALUE_FONT_SIZE);
-						tv_time.setTextColor(context.getResources().getColor(R.color.black));
-					}
-					pickupDate = dateAdapter.getDate(dateIndex);
-				}
-				timeDialog.dismiss();
-			}
-		});
-		cancel.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				timeDialog.dismiss();
-			}
-		});
-
-		dates.addChangingListener(wheelListener);
-		timeDialog.show();
-	}
-
-	private static ArrayList<Date> setupDateList() {
-		ArrayList<Date> dateList = new ArrayList<Date>();
-		Calendar cal = Calendar.getInstance();
-		for (int i = 0; i <= MBDefinition.FUTURE_BOOKING_RANGE; i++) {
-			Date temp = new Date();
-			temp = cal.getTime();
-			dateList.add(temp);
-			cal.add(Calendar.DATE, 1);
-		}
-		return dateList;
-	}
-
 	public static void showOption(LinearLayout ll_attr, String[] attrs, Context context, int marginRight) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		ll_attr.removeAllViews();
@@ -289,7 +164,7 @@ public class Utils {
 						.get(0).getIconId();
 				if (!iconId.equalsIgnoreCase("")) {
 					ImageView attr = new ImageView(context);
-					attr.setImageResource(MBDefinition.attrBtnMap.get(Integer.valueOf(iconId)));
+					attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
 					int dimens = (int) (30 * scale + 0.5f);
 					int margin_right = (int) (marginRight * scale + 0.5f);
 					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
@@ -302,33 +177,6 @@ public class Utils {
 			}
 		}
 	}
-
-	private static ArrayList<Date> setupTimeList(boolean isToday) {
-		ArrayList<Date> timeList = new ArrayList<Date>();
-		Calendar cal = Calendar.getInstance();
-		Calendar today = Calendar.getInstance();
-		if (isToday) {
-			int currentMin = cal.get(Calendar.MINUTE);
-			int roundMin = (int) (Math.ceil((double) currentMin / 5) * 5);
-			cal.set(Calendar.MINUTE, roundMin);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-		} else {
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-		}
-		while (cal.get(Calendar.DATE) == today.get(Calendar.DATE)) {
-			Date temp = new Date();
-			temp = cal.getTime();
-			timeList.add(temp);
-			cal.add(Calendar.MINUTE, 5);
-		}
-		return timeList;
-	}
-
-
 
 	private static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
 		String temp = "";

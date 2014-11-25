@@ -162,12 +162,12 @@ public class ModifyAddressActivity extends FragmentActivity {
 		favoritesFragment.notifyDataChange(value);
 	}
 
-	public static class TextFragment extends Fragment {
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-			return inflater.inflate(R.layout.text_fragment, container, false);
-		}
-	}
+//	public static class TextFragment extends Fragment {
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+//			return inflater.inflate(R.layout.text_fragment, container, false);
+//		}
+//	}
 
 	private class PagerAdapter extends FragmentPagerAdapter {
 		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };

@@ -97,9 +97,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	private TrackFragment trackFragment;
 	private HistoryFragment historyFragment;
 
-	private final String BOOK_TAB = "book";
-	private final String TRACK_TAB = "track";
-	private final String HISTORY_TAB = "history";
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
@@ -216,6 +213,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
+				Utils.currentTab=selected;
 				restoreActionBar();
 			}
 
@@ -320,12 +318,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		mPager.setCurrentItem(0);
 	}
 
-	private View getTabIndicator(Context context, ImageView iv, View view, int title, int drawable) {
-		TextView tv = (TextView) view.findViewById(R.id.tab_text);
-		tv.setText(title);
-		iv.setImageResource(drawable);
-		return view;
-	}
+
 
 
 	@Override

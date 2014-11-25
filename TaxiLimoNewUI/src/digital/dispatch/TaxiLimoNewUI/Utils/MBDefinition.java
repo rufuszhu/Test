@@ -91,18 +91,18 @@ public class MBDefinition {
 	public final static int MSG_TO_RIDER = 98;	//Canned message to rider
 	public final static int GPS_UPDATE_EVENT = 99;  //OSP_GPS_UPDATE
 	
-//	public static final SparseIntArray attrIconMap;
-//    static {
-//    	SparseIntArray  aMap = new SparseIntArray();
-//        
-//        aMap.put(1, R.drawable.icon_attr_van);
-//        aMap.put(2, R.drawable.icon_attr_wheelchair);
-//        aMap.put(3, R.drawable.icon_attr_pet);
-//        aMap.put(4, R.drawable.icon_attr_airport);
-//        
-//        attrIconMap = aMap;
-//    }
-//    
+	public static final SparseIntArray attrIconMap;
+    static {
+    	SparseIntArray  aMap = new SparseIntArray();
+        
+        aMap.put(1, R.drawable.icon_attr_van);
+        aMap.put(2, R.drawable.icon_attr_wheelchair);
+        aMap.put(3, R.drawable.icon_attr_pet);
+        aMap.put(4, R.drawable.icon_attr_airport);
+        
+        attrIconMap = aMap;
+    }
+    
     public static final SparseIntArray attrBtnMap;
 	public static final String EXTRA_CREDIT_CARD = "EXTRA_CREDIT_CARD";
 	

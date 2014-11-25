@@ -64,7 +64,6 @@ public void onResponseReady(GetMBParamResponse response) {
 }
 
 public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
-	Utils.attributeList = attributeList;
 	DaoManager daoManager = DaoManager.getInstance(_context);
 	DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_WRITE);
 	attributeDao.deleteAll();

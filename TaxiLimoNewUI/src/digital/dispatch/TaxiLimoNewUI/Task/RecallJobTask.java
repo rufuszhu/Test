@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
@@ -15,10 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
@@ -26,9 +28,6 @@ import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import android.content.Context;
-import android.os.AsyncTask;
 
 public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implements IRecallJobsResponseListener, IRequestTimerListener {
 	private static final String TAG = "RecallJobTask";
@@ -95,7 +94,8 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
 		} else if (which == MBDefinition.IS_FOR_LIST) {
 			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
-			fragment.updateStatus(dbBook);
+			if(fragment!=null)
+				fragment.updateStatus(dbBook);
 		}
 	}
 

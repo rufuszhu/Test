@@ -46,7 +46,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 			clReq = new CompanyListRequest(this, this);
 			clReq.setRegionName(mAddress.getLocality().toUpperCase(Locale.US));
 			clReq.setStateProvince(LocationUtils.states.get(mAddress.getAdminArea()));
-			clReq.setCountry(mAddress.getCountryName().toUpperCase(Locale.US));
+			clReq.setCountry(mAddress.getCountryCode().toUpperCase(Locale.US));
 			clReq.sendRequest(_context.getString(R.string.name_space), _context.getString(R.string.url));
 		} catch (Exception e) {
 			e.printStackTrace();

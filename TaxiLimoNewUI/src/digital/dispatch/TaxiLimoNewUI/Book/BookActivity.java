@@ -12,6 +12,7 @@ import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.SetTimeActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.R.color;
@@ -50,6 +51,8 @@ public class BookActivity extends Activity {
 	private Context _this;
 	private RelativeLayout rl_pick_up, rl_drop_off, rl_date, rl_driver_note, rl_company;
 	private TextView tv_pick_up, tv_drop_off, tv_date, tv_driver_note, tv_company, book_btn;
+	private static final int DEFAULT_FONT_SIZE = 20;
+	private static final int VALUE_FONT_SIZE = 13;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,24 @@ public class BookActivity extends Activity {
 		checkInternet();
 		setPickupIfExist();
 		setDropOffIfExist();
+		setTimeIfExist();
+	}
+
+	private void setTimeIfExist() {
+		if(Utils.pickupDate==null || Utils.pickupTime==null){
+			tv_date.setText(this.getString(R.string.now));
+			tv_date.setTextSize(DEFAULT_FONT_SIZE);
+			tv_date.setTextColor(this.getResources().getColor(R.color.gray_light));
+		}
+		else{
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
+			String date = dateFormat.format(Utils.pickupDate);
+			String time = timeFormat.format(Utils.pickupTime);
+			tv_date.setText(date + "\n" + time);
+			tv_date.setTextSize(VALUE_FONT_SIZE);
+			tv_date.setTextColor(this.getResources().getColor(R.color.black));
+		}
 	}
 
 	private void setDropOffIfExist() {
@@ -119,10 +140,8 @@ public class BookActivity extends Activity {
 
 		rl_date.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// TimePickerDialog.timepick(_this, 1, 20);
-				// TimePickerDialog tpd = new TimePickerDialog(_this, null, 10, 10, true);
-				// tpd.show();
-				Utils.setUpTimeDialog(_this, tv_date);
+				Intent intent = new Intent(_this, SetTimeActivity.class);
+				_this.startActivity(intent);
 			}
 		});
 
@@ -142,7 +161,6 @@ public class BookActivity extends Activity {
 				if (checkAllowBooking()) {
 					Utils.bookJob(Utils.mSelectedCompany, _this);
 				}
-
 			}
 		});
 

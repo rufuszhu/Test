@@ -77,7 +77,6 @@ public class AttributeItemAdapter extends BaseAdapter {
 						positive_IDs.add(Integer.valueOf(attrList.get(i).getAttributeId())); 
 					}
 				}
-				
 				((AttributeActivity)mContext).filterCompany(positive_IDs);
 				
 			}

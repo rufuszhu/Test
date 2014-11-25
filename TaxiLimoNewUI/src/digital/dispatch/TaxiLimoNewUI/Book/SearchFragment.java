@@ -130,8 +130,8 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
             	if(s.toString().length()>0){
             		searchForContact(s.toString());
             		searchForFavorite(s.toString());
-            		googleAdapter.getFilter().filter(s.toString());
             	}
+            	googleAdapter.getFilter().filter(s.toString());
             	contactAdapter.notifyDataSetChanged();
             	favAdapter.notifyDataSetChanged();
             }
