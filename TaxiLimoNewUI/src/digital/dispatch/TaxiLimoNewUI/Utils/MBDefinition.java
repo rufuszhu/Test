@@ -90,6 +90,10 @@ public class MBDefinition {
 	public final static int MSG_TO_RIDER = 98;	//Canned message to rider
 	public final static int GPS_UPDATE_EVENT = 99;  //OSP_GPS_UPDATE
 	
+	//fontawesome icon Unicode
+	//eg. http://fortawesome.github.io/Font-Awesome/icon/question-circle/
+	public final static String question_circle_icon_code = "\uf059";
+	
 	public static final SparseIntArray attrIconMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();

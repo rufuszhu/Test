@@ -71,10 +71,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 		setContentView(R.layout.activity_register);
 		getActionBar().setTitle(R.string.title_activity_register);
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
-        question_ic = (TextView) findViewById(R.id.question_circle);
-        question_ic.setTypeface(fontFamily);
-        question_ic.setText("\uf059");
+		
 		findAndBindView();
 		
 		_context = this;
@@ -101,7 +98,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		next_btn = (TextView) findViewById(R.id.next_btn);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		
-
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+        question_ic = (TextView) findViewById(R.id.question_circle);
+        question_ic.setTypeface(fontFamily);
+        question_ic.setText(MBDefinition.question_circle_icon_code);
 
 		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);
