@@ -60,10 +60,9 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 		String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
-		String firstName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME);
-		String lastName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME);
+		String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
 		bjReq.setPhoneNum(phone);
-		bjReq.setPassengerName(firstName + " " + lastName);
+		bjReq.setPassengerName(userName);
 		bjReq.setNumOfPassenger("1");
 		bjReq.setNumOfTaxi("1");
 		bjReq.setAdviseArrival("1");

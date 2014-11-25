@@ -103,11 +103,11 @@ public class ProfileActivity extends ActionBarActivity {
 
 			edtPhone.setText(phone);
 
-			String firstName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME);
-			String lastName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME);
+			String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
 
-			et_firstName.setText(firstName);
-			et_lastName.setText(lastName);
+
+			et_firstName.setText(userName);
+			et_lastName.setText(userName);
 			String email = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
 			edtUEmail.setText(email);
 		}
@@ -132,11 +132,10 @@ public class ProfileActivity extends ActionBarActivity {
 
 	private void storeInfo() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences((_activity));
-		String firstName = et_firstName.getText().toString();
-		String lastName = et_lastName.getText().toString();
+		String userName = et_firstName.getText().toString();
+	
 
-		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME, firstName);
-		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME, lastName);
+		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_NAME, userName);
 		// SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_EMAIL, edtUEmail.getText().toString());
 		// SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER, edtPhone.getText().toString());
 		AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
