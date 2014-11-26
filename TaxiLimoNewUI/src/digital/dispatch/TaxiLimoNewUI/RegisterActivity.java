@@ -8,15 +8,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
+import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-import android.app.Activity;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,21 +26,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
+
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,13 +55,15 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	GoogleCloudMessaging gcm;
 	String regid;
 	
-	private EditText first_name, last_name, email, re_enter_email, phone_number;
-	private TextView next_btn, register_title;
-	private LinearLayout ll_info_form, ll_sms_verify;
-	private Animation infoFormLeaveAnimation;
+	private EditText name, email, phone_number;
+	private TextView next_btn, register_btn;
+	private LinearLayout ll_sms_verify;
+	
 	private Context _context;
+	private EditText et_code;
+	private TextView question_ic;
 
-	// private EditText cc_nick_name,cc_number,cc_holder_name,cc_yy,cc_mm,cc_zip;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +71,16 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 		setContentView(R.layout.activity_register);
 		getActionBar().setTitle(R.string.title_activity_register);
+		
 		findAndBindView();
-		// setAnimation();
+		
 		_context = this;
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, false)) {
 			Intent intent = new Intent(_context, MainActivity.class);
@@ -86,52 +89,28 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		}
 	}
 
-	private void setAnimation() {
-		infoFormLeaveAnimation = AnimationUtils.loadAnimation(_context, R.anim.base_activity_exit);
-
-		infoFormLeaveAnimation.setAnimationListener(new AnimationListener() {
-			public void onAnimationStart(Animation anim) {
-			};
-
-			public void onAnimationRepeat(Animation anim) {
-			};
-
-			public void onAnimationEnd(Animation anim) {
-				ll_info_form.setVisibility(View.GONE);
-
-			};
-		});
-
-	}
+	
 
 	private void findAndBindView() {
-		first_name = (EditText) findViewById(R.id.first_name);
-		last_name = (EditText) findViewById(R.id.last_name);
+		name = (EditText) findViewById(R.id.name);	
 		email = (EditText) findViewById(R.id.email);
-		re_enter_email = (EditText) findViewById(R.id.re_enter_email);
 		phone_number = (EditText) findViewById(R.id.phone_number);
 		next_btn = (TextView) findViewById(R.id.next_btn);
-		ll_info_form = (LinearLayout) findViewById(R.id.ll_info_form);
-		register_title = (TextView) findViewById(R.id.register_title);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
+		
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+        question_ic = (TextView) findViewById(R.id.question_circle);
+        question_ic.setTypeface(fontFamily);
+        question_ic.setText(MBDefinition.question_circle_icon_code);
 
-		// cc_nick_name = (EditText) findViewById(R.id.cc_nick_name);
-		// cc_holder_name = (EditText) findViewById(R.id.cc_holder_name);
-		// cc_number = (EditText) findViewById(R.id.cc_number);
-		// cc_mm = (EditText) findViewById(R.id.cc_mm);
-		// cc_yy = (EditText) findViewById(R.id.cc_yy);
-		// cc_zip = (EditText) findViewById(R.id.cc_zip);
-
-		first_name.setOnFocusChangeListener(this);
-		last_name.setOnFocusChangeListener(this);
+		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);
-		re_enter_email.setOnFocusChangeListener(this);
 		phone_number.setOnFocusChangeListener(this);
 
 		next_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// ll_info_form.startAnimation(infoFormLeaveAnimation);
+				
 				if (validate(null)) {
 					storeInfo();
 					
@@ -141,10 +120,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 						gcm = GoogleCloudMessaging.getInstance(_context);
 						regid = getRegistrationId(_context);
 						Logger.e("GCM id: " + regid);
-						//if (regid.isEmpty()) {
-							Utils.showProcessingDialog(_context);
-							registerInBackground();
-						//}
+						
+						Utils.showProcessingDialog(_context);
+						registerInBackground();
+						
 					} else {
 						Log.i(TAG, "No valid Google Play Services APK found.");
 						Toast.makeText(_context,"No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
@@ -152,6 +131,31 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 				}
 			}
 
+		});
+		
+		et_code = (EditText) findViewById(R.id.et_code);
+		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+		//request new verification code, here need to refresh the phone number in case number is updated
+		request_new_btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (validate(null)) {
+					storeInfo();
+					boolean isFirstTime = true; //set this parameter to false when called from profile page
+					boolean sendVerifySMS = true;
+					String regid = getRegistrationId(_context);
+					new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					Utils.showProcessingDialog(_context);
+			}
+		}});
+
+		register_btn = (TextView) findViewById(R.id.register_btn);
+		register_btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new VerifyDeviceTask(_context, et_code.getText().toString()).execute();
+				Utils.showProcessingDialog(_context);
+			}
 		});
 	}
 	
@@ -166,19 +170,19 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		messageDialog.setOnCancelListener(new OnCancelListener(){
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				Intent intent = new Intent(_context, VerifySMSActivity.class);
-				startActivity(intent);
+				ll_sms_verify.setVisibility(View.VISIBLE);
+				next_btn.setVisibility(View.GONE);
+				register_btn.setVisibility(View.VISIBLE);
 			}});
 		messageDialog.show();
 	}
 	
 	private void storeInfo() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
-		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME, first_name.getText().toString());
-		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME, last_name.getText().toString());
+		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_NAME, name.getText().toString());
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_EMAIL, email.getText().toString());
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER, phone_number.getText().toString());
-		//SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, true);
+		
 	}
 
 	@Override
@@ -191,14 +195,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	private boolean validate(EditText target) {
 
 		if (target != null) {
-			if (target == first_name) {
-				return validateFirstName();
-			} else if (target == last_name) {
-				return validateLastName();
+			if (target == name) {
+				return validateName();
 			} else if (target == email) {
 				return validateEmail();
-			} else if (target == re_enter_email) {
-				return validateReEnterEmail();
 			} else if (target == phone_number) {
 				return validatePhone();
 			} else
@@ -206,15 +206,15 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		}
 		// validate all if not from afterTextChanged
 		else {
-			return validateFirstName() && validateLastName() && validateEmail() && validateReEnterEmail() && validatePhone();
+			return validateName()  && validateEmail()  && validatePhone();
 		}
 
 	}
 
-	private boolean validateLastName() {
-		String name = last_name.getText().toString();
-		if (name.length() == 0) {
-			last_name.setError(getResources().getString(R.string.empty_last_name));
+	private boolean validateName() {
+		String userName = name.getText().toString();
+		if (userName.length() == 0) {
+			name.setError(getResources().getString(R.string.empty_name));
 			return false;
 		} else {
 			return true;
@@ -233,16 +233,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			return true;
 	}
 
-	private boolean validateReEnterEmail() {
-		String emailToMatch = email.getText().toString();
-		String match = re_enter_email.getText().toString();
-		if (!emailToMatch.equals(match)) {
-			re_enter_email.setError(getResources().getString(R.string.email_not_matching));
-			return false;
-		} else {
-			return true;
-		}
-	}
+	
 
 	private boolean validateEmail() {
 		boolean isValid = true;
@@ -265,15 +256,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		return isValid;
 	}
 
-	private boolean validateFirstName() {
-		String name = first_name.getText().toString();
-		if (name.length() == 0) {
-			first_name.setError(getResources().getString(R.string.empty_first_name));
-			return false;
-		} else {
-			return true;
-		}
-	}
 	
 	/**
 	 * Check the device to make sure it has the Google Play Services APK. If it doesn't, display a dialog that allows users to download the APK from the Google Play Store or enable it in the device's
@@ -406,6 +388,54 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		editor.putString(PROPERTY_REG_ID, regId);
 		editor.putInt(PROPERTY_APP_VERSION, appVersion);
 		editor.commit();
+	}
+	
+	public void showResendSuccessMessage() {
+		Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+
+		String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
+		tv_message.setText(_context.getString(R.string.verify_dialog_text, phone));
+
+
+		messageDialog.show();
+	}
+
+	//callback by RegisterDevice Task
+	public void showVerifySuccessMessage() {
+		Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		tv_message.setText(_context.getString(R.string.verify_success));
+		messageDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				//flow to register confirmation page
+				Intent intent = new Intent(_context, RegisterConfirmActivity.class);
+				startActivity(intent);
+			}
+		});
+		messageDialog.show();
+	}
+	
+	public void showVerifyFailedMessage() {
+		Dialog messageDialog = new Dialog(_context);
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		tv_message.setText(_context.getString(R.string.verify_failed));
+
+		messageDialog.show();
 	}
 
 }

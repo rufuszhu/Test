@@ -215,14 +215,6 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
         </activity>
         <activity
-            android:name=".VerifySMSActivity"
-            android:label="@string/title_activity_verify_sms"
-            android:parentActivityName=".RegisterActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
-        </activity>
-        <activity
             android:name=".Drawers.AddPreferenceActivity"
             android:label="@string/title_activity_add_preference"
             android:parentActivityName=".Drawers.PreferenceActivity" >
@@ -245,6 +237,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" />
+        </activity>
+        <activity
+            android:name=".RegisterConfirmActivity"
+            android:label="@string/title_activity_register_confirm" 
+            android:parentActivityName=".RegisterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
         </activity>
     </application>
 

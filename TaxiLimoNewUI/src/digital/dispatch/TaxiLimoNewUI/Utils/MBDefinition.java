@@ -67,8 +67,7 @@ public class MBDefinition {
 	public static final String SHARE_SAME_LOG_BOOK_ALLOWED = "C_MB_SAME_LOC_BK_ALW";
 	public static final String SHARE_TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
 	public static final String SHARE_PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
-	public static final String SHARE_FIRST_NAME = "SHARE_FIRST_NAME";
-	public static final String SHARE_LAST_NAME = "SHARE_LAST_NAME";
+	public static final String SHARE_NAME = "SHARE_NAME";
 	public static final String SHARE_EMAIL = "SHARE_EMAIL";
 	public static final String SHARE_PHONE_NUMBER = "SHARE_PHONE_NUMBER";
 	public static final String SHARE_ALREADY_REGISTER = "SHARE_ALREADY_REGISTER";
@@ -90,6 +89,10 @@ public class MBDefinition {
 	public final static int FARE_EVENT = 97; //driver initiated payment amt
 	public final static int MSG_TO_RIDER = 98;	//Canned message to rider
 	public final static int GPS_UPDATE_EVENT = 99;  //OSP_GPS_UPDATE
+	
+	//fontawesome icon Unicode
+	//eg. http://fortawesome.github.io/Font-Awesome/icon/question-circle/
+	public final static String question_circle_icon_code = "\uf059";
 	
 	public static final SparseIntArray attrIconMap;
     static {
