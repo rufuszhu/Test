@@ -43,9 +43,12 @@ import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,22 +73,23 @@ import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class BookFragment extends Fragment implements OnConnectionFailedListener, LocationListener, OnCameraChangeListener {
+public class BookFragment extends Fragment implements OnConnectionFailedListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks,
+		OnCameraChangeListener {
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
 
 	private static final String ARG_SECTION_NUMBER = "section_number";
-	private static final String TAG = "Book";
+	private static final String TAG = "BookFragment";
 	private static View view;
+	
+	private ImageView blue_pin;
+
+	private LocationRequest mLocationRequest;
+	private LocationClient mLocationClient;
 
 	private GoogleMap mMap;
-
-
 	private TextView address_bar_text;
-	private TextView book_btn;
-
-	private boolean noCompanyAvailable = false;
 
 	private void buildAlertMessageNoGps() {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -108,6 +112,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, 1);
 		fragment.setArguments(args);
+
 		return fragment;
 	}
 
@@ -116,11 +121,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		// only show refresh if drawer is not open.
 		if (!((MainActivity) getActivity()).getDrawerFragment().isDrawerOpen())
 			inflater.inflate(R.menu.main, menu);
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "on CREATEVIEW");
+
+		mLocationRequest = LocationRequest.create();
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+		mLocationClient = new LocationClient(getActivity(), this, this);
 
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
@@ -134,7 +145,6 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-
 
 		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
 		current_location_btn.setOnClickListener(new View.OnClickListener() {
@@ -155,18 +165,80 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		});
 
-
-		
-		ImageView blue_pin =  (ImageView) view.findViewById(R.id.blue_pin);
+		blue_pin = (ImageView) view.findViewById(R.id.blue_pin);
 		blue_pin.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), BookActivity.class);
-				getActivity().startActivity(intent);
+				if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
+					Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
+				}
+				// no house number in pickup address
+				else if (!validateHasHouseNumber()) {
+					showEnterHouseNumberDialog();
+				}
+				// house number return by Google has a range
+				else if (!validateHouseNumberHasNoRange()) {
+					Address address = Utils.mPickupAddress;
+					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
+					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
+				} else {
+					Intent intent = new Intent(getActivity(), BookActivity.class);
+					getActivity().startActivity(intent);
+				}
 			}
 		});
 
-
 		return view;
+	}
+
+	@Override
+	public void onStop() {
+
+		// If the client is connected
+		if (mLocationClient.isConnected()) {
+			// stopPeriodicUpdates();
+		}
+
+		// After disconnect() is called, the client is considered "dead".
+		mLocationClient.disconnect();
+
+		super.onStop();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mLocationClient.connect();
+
+	}
+
+	/**
+	 * Verify that Google Play services is available before making a request.
+	 * 
+	 * @return true if Google Play services is available, otherwise false
+	 */
+	private boolean servicesConnected() {
+
+		// Check that Google Play services is available
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+
+		// If Google Play services is available
+		if (ConnectionResult.SUCCESS == resultCode) {
+			// In debug mode, log the status
+			Log.d(LocationUtils.APPTAG, getString(R.string.play_services_available));
+
+			// Continue
+			return true;
+			// Google Play services was not available for some reason
+		} else {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(), 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getActivity().getSupportFragmentManager(), LocationUtils.APPTAG);
+			}
+			return false;
+		}
 	}
 
 	private boolean validateHasHouseNumber() {
@@ -213,7 +285,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				else {
 					Utils.pickupHouseNumber = et_house_num.getText().toString();
 					enterHouseNumDialog.dismiss();
-					book_btn.callOnClick();
+					blue_pin.callOnClick();
 				}
 			}
 		});
@@ -250,7 +322,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				else {
 					Utils.pickupHouseNumber = et_house_num.getText().toString();
 					houseNumRangeDialog.dismiss();
-					book_btn.callOnClick();
+					blue_pin.callOnClick();
 				}
 			}
 		});
@@ -265,31 +337,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		houseNumRangeDialog.show();
 	}
 
-
 	@Override
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
 		checkGPSEnable();
 		checkInternet();
-		setUpMapIfNeeded();
-
-		Location currentLocation = getBestLocation();
-		Address address = Utils.mPickupAddress;
-		if (address != null) {
-			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
-			if (checkReady()) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
-			}
-			// boolean isFromBooking = true;
-			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			// setupCompanyUI();
-		} else {
-			if (checkReady() && currentLocation != null) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
-			}
-		}
-
 
 	}
 
@@ -311,7 +364,6 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Utils.isInternetAvailable(getActivity());
 	}
 
-
 	/**
 	 * When the map is not ready the CameraUpdateFactory cannot be used. This should be called on all entry points that call methods on the Google Maps API.
 	 */
@@ -329,7 +381,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
-				mMap.setMyLocationEnabled(false);
+				mMap.setMyLocationEnabled(true);
 				mMap.getUiSettings().setZoomControlsEnabled(false);
 				mMap.setOnCameraChangeListener(this);
 			}
@@ -438,16 +490,16 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	private void onCurrentLocationClick() {
 
 		// Get the current location
-		Location currentLocation = getBestLocation();
-		if (currentLocation != null) {
+		Location currentLocation = mLocationClient.getLastLocation();
+		if (servicesConnected() && currentLocation!=null) {
+			
 			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 			// mCurrentLocation = currentLocation;
 
 			CameraPosition currentPosition = new CameraPosition.Builder().target(currLatLng).zoom(MBDefinition.DEFAULT_ZOOM).bearing(0).tilt(0).build();
 			CameraUpdate locatoinUpdate = CameraUpdateFactory.newCameraPosition(currentPosition);
 			mMap.animateCamera(locatoinUpdate);
-		}
-		else{
+		} else {
 			Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
 		}
 
@@ -465,6 +517,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 
 		new GetAddressTask(getActivity()).execute(location);
+
 	}
 
 	/**
@@ -583,6 +636,37 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		protected void onPostExecute(String address) {
 			address_bar_text.setText(address);
 		}
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		Logger.e(TAG, "onConnected");
+		setUpMapIfNeeded();
+		Address address = Utils.mPickupAddress;
+		if (address != null) {
+			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
+			if (checkReady()) {
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
+			}
+			// boolean isFromBooking = true;
+			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			// setupCompanyUI();
+		} else {
+			if (checkReady() && servicesConnected()) {
+				// Get the current location
+				Location currentLocation = mLocationClient.getLastLocation();
+				if(currentLocation!=null)
+					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
+				else
+					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

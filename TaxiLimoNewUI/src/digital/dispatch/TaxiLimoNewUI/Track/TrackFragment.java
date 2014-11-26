@@ -84,8 +84,9 @@ public class TrackFragment extends ListFragment {
 		if (!((MainActivity) getActivity()).getDrawerFragment().isDrawerOpen()) {
 			inflater.inflate(R.menu.track, menu);
 			refresh_icon = menu.findItem(R.id.action_refresh);
-			
-			startRecallJobTask();
+			if (!isRefreshing) {
+				//startRecallJobTask();
+			}
 		}
 	}
 
@@ -94,10 +95,9 @@ public class TrackFragment extends ListFragment {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-
+		Logger.d(TAG, "onOptionsItemSelected");
 		int id = item.getItemId();
 		if (id == R.id.action_refresh && !isRefreshing) {
-			Logger.d(TAG, "onOptionsItemSelected");
 			startRecallJobTask();
 			return true;
 		}
@@ -119,13 +119,12 @@ public class TrackFragment extends ListFragment {
 				.orderDesc(Properties.TripCreationTime).list();
 		adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
-		adapter.notifyDataSetChanged();
 
 		Utils.isInternetAvailable(getActivity());
 
-		
-		startRecallJobTask();
-		
+		if (!isRefreshing) {
+			startRecallJobTask();
+		}
 	}
 
 	private void startUpdateAnimation(MenuItem item) {
@@ -158,23 +157,20 @@ public class TrackFragment extends ListFragment {
 	}
 
 	public void startRecallJobTask() {
-
+		
 		ArrayList<Pair<String, String>> pairList = getUniqueActiveJobDestIdList();
+		if (!isRefreshing && refresh_icon != null && pairList.size()>0) {
+			startUpdateAnimation(refresh_icon);
+		}
 		Logger.d(TAG, "size of pairlist: " + pairList.size());
 		for (int i = 0; i < pairList.size(); i++) {
 			String jobList = getRideIdByDestId(pairList.get(i).first);
 			String destId = pairList.get(i).first;
 			String SysId = pairList.get(i).second;
 			Logger.d("DestID: " + destId + " sysID: " + SysId + " JobList: " + jobList);
-			if (!isRefreshing && refresh_icon != null) {
-				startUpdateAnimation(refresh_icon);
-				new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
-			}
+			
+			new RecallJobTask(getActivity(), jobList, MBDefinition.IS_FOR_LIST).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, destId, SysId);
 		}
-		// if (pairList.size() == 0) {
-		// if (adapter != null)
-		// adapter.clear();
-		// }
 	}
 
 	private ArrayList<Pair<String, String>> getUniqueActiveJobDestIdList() {

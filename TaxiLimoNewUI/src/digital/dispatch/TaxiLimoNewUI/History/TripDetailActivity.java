@@ -40,8 +40,6 @@ public class TripDetailActivity extends Activity {
 	private static final String TAG = "TripDetailActivity";
 	private DBBooking dbBook;
 	private Context _context;
-	private Address pickupAddress;
-	private Address dropOffAddress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

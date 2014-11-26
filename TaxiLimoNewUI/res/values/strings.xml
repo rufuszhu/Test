@@ -251,7 +251,7 @@
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
     <string name="welcome_message">Thank you for registering with us!</string>
     <string name="duplicate_check_buffer_time">30</string>
- <!-- in minutes -->
+    <!-- in minutes -->
 
     <string-array name="tips_array">
         <item>0%</item>
@@ -323,7 +323,6 @@
     <string name="address_output_string">%1$s %2$s</string>
     <string name="time_is_local_time">Your selected pickup time is the local time at the pickup location.</string>
     <string name="charaters_left">256 Characters Left</string>
-    
 
     <!-- Address format -->
 
@@ -372,5 +371,6 @@
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
     <string name="title_activity_book">BookActivity</string>
     <string name="title_activity_set_time">SetTimeActivity</string>
+    <string name="title_activity_driver_note">DriverNoteActivity</string>
 
 </resources>

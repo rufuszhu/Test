@@ -10,6 +10,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DriverNoteActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.SetTimeActivity;
@@ -19,6 +20,7 @@ import digital.dispatch.TaxiLimoNewUI.R.color;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.string;
+import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -29,10 +31,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -45,6 +49,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class BookActivity extends Activity {
 	private static final String TAG = "BookActivity";
@@ -67,27 +72,72 @@ public class BookActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		checkGPSEnable();
+		//checkGPSEnable();
 		checkInternet();
 		setPickupIfExist();
 		setDropOffIfExist();
 		setTimeIfExist();
+		setDriverNoteIfExist();
+		setCompanyIfExist();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Logger.e("onActivityResult");
+		Logger.e("requestCode: " + requestCode);
+		if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
+			if (resultCode == RESULT_OK) {
+				Utils.bookJob(Utils.mSelectedCompany, this);
+			}
+		}
+	}
+
+	private void setCompanyIfExist() {
+		// no need to get company list again if pick up city is not changed
+		if(Utils.mSelectedCompany!=null && Utils.last_city.equals(Utils.mPickupAddress.getLocality())){
+			tv_company.setText(Utils.mSelectedCompany.name);
+		}
+		else{
+			boolean isFromBooking = true;
+			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		}
+	}
+
+	private void setDriverNoteIfExist() {
+			if (Utils.driverNoteString.length() > 20) {
+				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
+				tv_driver_note.setTextSize(VALUE_FONT_SIZE);
+				tv_driver_note.setText(Utils.driverNoteString.substring(0, 20) + "...");
+			} else if (Utils.driverNoteString.length() == 0) {
+				tv_driver_note.setTextColor(getResources().getColor(R.color.gray_light));
+				tv_driver_note.setTextSize(DEFAULT_FONT_SIZE);
+				tv_driver_note.setText(getString(R.string.empty_note));
+			} else {
+				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
+				tv_driver_note.setTextSize(VALUE_FONT_SIZE);
+				tv_driver_note.setText(Utils.driverNoteString);
+			}
+		
 	}
 
 	private void setTimeIfExist() {
-		if(Utils.pickupDate==null || Utils.pickupTime==null){
-			tv_date.setText(this.getString(R.string.now));
-			tv_date.setTextSize(DEFAULT_FONT_SIZE);
-			tv_date.setTextColor(this.getResources().getColor(R.color.gray_light));
-		}
-		else{
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-			SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss", Locale.US);
+		if (Utils.pickupDate == null || Utils.pickupTime == null) {
+			tv_date.setText(_this.getResources().getString(R.string.now));
+			tv_date.setTextSize(20);
+			tv_date.setTextColor(_this.getResources().getColor(R.color.gray_light));
+		} else {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
 			String date = dateFormat.format(Utils.pickupDate);
 			String time = timeFormat.format(Utils.pickupTime);
-			tv_date.setText(date + "\n" + time);
-			tv_date.setTextSize(VALUE_FONT_SIZE);
-			tv_date.setTextColor(this.getResources().getColor(R.color.black));
+			Calendar cal = Calendar.getInstance();
+
+			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
+				tv_date.setText("Today" + "\n" + time);
+			} else
+				tv_date.setText(date + "\n" + time);
+			tv_date.setTextSize(13);
+			tv_date.setTextColor(_this.getResources().getColor(R.color.black));
 		}
 	}
 
@@ -103,8 +153,10 @@ public class BookActivity extends Activity {
 
 	private void setPickupIfExist() {
 		if(Utils.mPickupAddress!=null){
-			
-			tv_pick_up.setText(LocationUtils.addressToString(_this, Utils.mPickupAddress));
+			if(Utils.pickupHouseNumber!=null && !Utils.pickupHouseNumber.equals(""))
+				tv_pick_up.setText(Utils.pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " " + Utils.mPickupAddress.getLocality());
+			else
+				tv_pick_up.setText(LocationUtils.addressToString(_this, Utils.mPickupAddress));
 		}
 	}
 
@@ -130,11 +182,8 @@ public class BookActivity extends Activity {
 
 		rl_driver_note.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				// setUpMessageDialog();
-				Dialog messageDialog = new Dialog(_this);
-
-				Utils.setUpDriverNoteDialog(_this, messageDialog, tv_driver_note);
-
+				Intent intent = new Intent(_this, DriverNoteActivity.class);
+				_this.startActivity(intent);
 			}
 		});
 
@@ -197,26 +246,7 @@ public class BookActivity extends Activity {
 		alert.show();
 	}
 
-	private void setTimeText(TextView tv_time) {
-		if (Utils.pickupDate == null || Utils.pickupTime == null) {
-			tv_time.setText(_this.getResources().getString(R.string.now));
-			tv_time.setTextSize(20);
-			tv_time.setTextColor(_this.getResources().getColor(R.color.gray_light));
-		} else {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
-			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
-			String date = dateFormat.format(Utils.pickupDate);
-			String time = timeFormat.format(Utils.pickupTime);
-			Calendar cal = Calendar.getInstance();
 
-			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
-				tv_time.setText("Today" + "\n" + time);
-			} else
-				tv_time.setText(date + "\n" + time);
-			tv_time.setTextSize(13);
-			tv_time.setTextColor(_this.getResources().getColor(R.color.black));
-		}
-	}
 
 	private void checkGPSEnable() {
 		final LocationManager manager = (LocationManager) _this.getSystemService(Context.LOCATION_SERVICE);
@@ -308,7 +338,7 @@ public class BookActivity extends Activity {
 			// get into select company page
 			Intent intent = new Intent(_this, AttributeActivity.class);
 			intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, true);
-			_this.startActivity(intent);
+			startActivityForResult(intent, MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK);
 			return false;
 		}
 		return true;
@@ -447,5 +477,37 @@ public class BookActivity extends Activity {
 		houseNumRangeDialog.setCanceledOnTouchOutside(true);
 		houseNumRangeDialog.show();
 	}
+	
+	public void showBookSuccessDialog() {
+		Dialog messageDialog = new Dialog(this);
+		Context _this = this;
+		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		messageDialog.setContentView(R.layout.dialog_message);
+		messageDialog.setCanceledOnTouchOutside(true);
+		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		tv_message.setText(_this.getString(R.string.message_book_successful));
+		messageDialog.setOnCancelListener(new OnCancelListener(){
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				finish();
+			}
+		});
+		messageDialog.show();
+	
+	}
 
+	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String locality) {
+		Utils.last_city = locality;
+		if (tempCompList.length == 0) {
+			tv_company.setText("No company available in " + locality);
+		} else if (tempCompList.length == 1) {
+			Utils.mSelectedCompany = tempCompList[0];
+			tv_company.setText(Utils.mSelectedCompany.name);
+		} else {
+			// show please choose a company
+			tv_company.setText(tempCompList.length + " companies available in " + locality);
+		}
+		
+	}
 }

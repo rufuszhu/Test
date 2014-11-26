@@ -93,9 +93,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			((TrackDetailActivity) _context).updateCarMarker(carLatLng, dbBook);
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
 		} else if (which == MBDefinition.IS_FOR_LIST) {
-			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
-			if(fragment!=null)
-				fragment.updateStatus(dbBook);
+			((MainActivity) _context).trackFragment.updateStatus(dbBook);
 		}
 	}
 
@@ -152,6 +150,9 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			dbBook.setCarLongitude(Double.parseDouble(job.carLongitude));
 			dbBook.setDispatchedCar(job.dispatchedCar);
 			dbBook.setDispatchedDriver(job.dispatchedDriver);
+
+			if (!job.redispatchJobID.equals(""))
+				dbBook.setTaxi_ride_id(Integer.parseInt(job.redispatchJobID));
 			bookingDao.update(dbBook);
 			bookingList.add(dbBook);
 		}
@@ -170,8 +171,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).stopUpdateAnimation();
 		} else if (which == MBDefinition.IS_FOR_LIST) {
-			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
-			fragment.stopUpdateAnimation();
+			((MainActivity) _context).trackFragment.stopUpdateAnimation();
 		}
 		try {
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
@@ -193,9 +193,8 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).stopUpdateAnimation();
 		} else if (which == MBDefinition.IS_FOR_LIST) {
-			TrackFragment fragment = (TrackFragment) ((MainActivity) _context).getSupportFragmentManager().findFragmentByTag("track");
-			if (fragment != null)
-				fragment.stopUpdateAnimation();
+
+			((MainActivity) _context).trackFragment.stopUpdateAnimation();
 		} else {
 			((TrackingMapActivity) _context).stopUpdateAnimation();
 		}
