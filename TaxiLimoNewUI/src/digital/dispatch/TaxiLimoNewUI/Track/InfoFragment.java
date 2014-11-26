@@ -55,7 +55,6 @@ public class InfoFragment extends Fragment {
 	private NetworkImageView company_icon;
 	private DBBooking book;
 	
-	
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
@@ -80,8 +79,6 @@ public class InfoFragment extends Fragment {
 		
 		return view;
 	}
-
-
 
 	private void findView() {
 		tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);

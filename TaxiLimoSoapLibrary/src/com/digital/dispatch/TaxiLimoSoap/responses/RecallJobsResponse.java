@@ -34,7 +34,7 @@ public class RecallJobsResponse extends ResponseWrapper {
 				String pName, phoneNum, phoneExt, pStreetName, pRegion, pLandmark, dStreetName, dRegion, dLandmark;
 				String aCode, aName, pDate, pTime, repPTime, repPDays, repSt, repEn, trID, bDateTime, tStatus;
 				String aArrival, dCar, dDriver, cLongitude, cLatitude, tStatCode, dStatCode, e1, e2, eDis;
-				String pStreetNum, pUnitNum, dStreetNum, dUnitNum, jobEndDateTime;
+				String pStreetNum, pUnitNum, dStreetNum, dUnitNum, jobEndDateTime,redispatchJobID;
 				//DBBooking dbBook = new DBBooking();
 				
 				if ((item instanceof SoapObject) && (objName.equalsIgnoreCase("listOfJobs"))) {
@@ -85,10 +85,11 @@ public class RecallJobsResponse extends ResponseWrapper {
 					e2 = checkExistAndGet((SoapObject) item, "eta2");
 					eDis = checkExistAndGet((SoapObject) item, "estimateDistance");
 					jobEndDateTime = checkExistAndGet((SoapObject) item, "jobEndDateTime");
-
+					redispatchJobID = checkExistAndGet((SoapObject)item, "redispatchJobID");
+					
 					JobItem ji = new JobItem(pName, phoneNum, phoneExt, pStreetNum, pStreetName, pRegion, pUnitNum, pLandmark, dStreetNum, dStreetName, dRegion, dUnitNum, dLandmark, aCode, aName,
 							pDate, pTime, repPTime, repPDays, repSt, repEn, trID, bDateTime, tStatus, aArrival, dCar, dDriver, cLongitude, cLatitude, tStatCode, dStatCode, e1, e2, eDis,
-							jobEndDateTime);
+							jobEndDateTime,redispatchJobID);
 					
 					
 					listOfJobs[j] = ji;

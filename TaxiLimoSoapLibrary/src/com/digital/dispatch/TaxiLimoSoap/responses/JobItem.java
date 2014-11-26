@@ -40,6 +40,7 @@ public class JobItem {
 	public String eta2;
 	public String estimateDistance;
 	public String jobEndDateTime;
+	public String redispatchJobID;
 	
 	public JobItem() {
 		passengerName = "";
@@ -77,6 +78,7 @@ public class JobItem {
 		eta2 = "";
 		estimateDistance = "";
 		jobEndDateTime = "";
+		redispatchJobID = "";
 	}
 	
 	public JobItem(String pName, String phoneNum, String phoneExt, String pStreetNum, String pStreetName, String pRegion,
@@ -84,7 +86,7 @@ public class JobItem {
 				String dLandmark, String aCode, String aName, String pDate, String pTime, String repPTime, String repPDays,
 				String repSt, String repEn, String trID, String bDateTime, String tStatus, String aArrival, String dCar,
 				String dDriver, String cLongitude, String cLatitude, String tStatCode, String dStatCode, 
-				String e1, String e2, String eDis, String jEndTime) {
+				String e1, String e2, String eDis, String jEndTime, String redispatchJobID) {
 		
 		passengerName = pName;
 		phoneNumber = phoneNum;
@@ -121,6 +123,7 @@ public class JobItem {
 		eta2 = e2;
 		estimateDistance = eDis;
 		jobEndDateTime = jEndTime;
+		this.redispatchJobID = redispatchJobID;
 	}
 
 	
@@ -160,6 +163,7 @@ public class JobItem {
 		Log.i(TAG,"eta2: " + jobItem.eta2);
 		Log.i(TAG,"estimateDistance: " + jobItem.estimateDistance);
 		Log.i(TAG,"jobEndDateTime: " + jobItem.jobEndDateTime);
+		Log.i(TAG,"redispatchJobID: " + jobItem.redispatchJobID);
 		Log.i(TAG, "----------------------------------------------");
 	}
 }

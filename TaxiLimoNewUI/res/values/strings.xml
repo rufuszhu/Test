@@ -100,8 +100,7 @@
 
         5. Disclaimer of Warranties and Technical Support\n
             The Software is provided to you on an "AS IS" basis, without any technical support or warranty of any kind including, 
-            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.
-	</string>
+            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.</string>
     <string name="chk_agreement">I agree to the terms and conditions.</string>
     <string name="register_warning">Sorry, you haven\'t accepted the terms and conditions</string>
 
@@ -296,7 +295,7 @@
     <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
     <string name="welcome_message">Thank you for registering with us!</string>
     <string name="duplicate_check_buffer_time">30</string>
- <!-- in minutes -->
+    <!-- in minutes -->
 
     <string-array name="tips_array">
         <item>0%</item>
@@ -368,7 +367,6 @@
     <string name="address_output_string">%1$s %2$s</string>
     <string name="time_is_local_time">Your selected pickup time is the local time at the pickup location.</string>
     <string name="charaters_left">256 Characters Left</string>
-    
 
     <!-- Address format -->
 
@@ -416,6 +414,7 @@
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
     <string name="title_activity_book">BookActivity</string>
     <string name="title_activity_set_time">SetTimeActivity</string>
+    <string name="title_activity_driver_note">DriverNoteActivity</string>
     <string name="title_activity_register_confirm">RegisterConfirmActivity</string>
 
 </resources>

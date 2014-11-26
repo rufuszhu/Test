@@ -75,26 +75,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-	// Declare Tab Variable
-	// private FragmentTabHost mTabHost;
-	// View bookTabView;
-	// View trackTabView;
-	// View historyTabView;
-	//
-	// ImageView bookImageView;
-	// ImageView trackImageView;
-	// ImageView historyImageView;
-	//
-	// TextView booktab_indicator;
-	// TextView tracktab_indicator;
-	// TextView historytab_indicator;
 
 	private ViewPager mPager;
 	private RelativeLayout tab0, tab1, tab2;
 	private PagerAdapter mAdapter;
 	private OnPageChangeListener pageChangeListener;
 	private BookFragment bookFragment;
-	private TrackFragment trackFragment;
+	public TrackFragment trackFragment;
 	private HistoryFragment historyFragment;
 
 	/**
@@ -160,45 +147,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		super.onDestroy();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Logger.e("onActivityResult");
-		Logger.e("requestCode: " + requestCode);
-		if (requestCode == MBDefinition.REQUEST_PICKUPADDRESS_CODE) {
-			if (resultCode == RESULT_OK) {
-				// this address comes from modifyAddress activity, and it has
-				// been validated
-				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
-					// Logger.e("dataBundle address: " +
-					// dataBundle.getString(MBDefinition.ADDRESS));
-					Utils.mPickupAddress = (Address) data.getExtras().getParcelable(MBDefinition.ADDRESS);
-				}
-			}
-		} else if (requestCode == MBDefinition.REQUEST_DROPOFFADDRESS_CODE) {
-			if (resultCode == RESULT_OK) {
-				// this address comes from modifyAddress activity, and it has
-				// been validated
-				if (data.getExtras().getParcelable(MBDefinition.ADDRESS) != null) {
-					// Logger.e("dataBundle address: " +
-					// dataBundle.getString(MBDefinition.ADDRESS));
-					Utils.mDropoffAddress = (Address) data.getExtras().getParcelable(MBDefinition.ADDRESS);
-				}
-			}
-		}
-		// else if (requestCode == MBDefinition.REQUEST_COMPANYITEM_CODE) {
-		// if (resultCode == RESULT_OK) {
-		// if (data.getSerializableExtra(MBDefinition.COMPANY_ITEM) != null) {
-		// Logger.e(TAG, "selected company: " + ((CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM)).name);
-		// Utils.mSelectedCompany = (CompanyItem) data.getSerializableExtra(MBDefinition.COMPANY_ITEM);
-		// }
-		// }
-		// }
-		else if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
-			if (resultCode == RESULT_OK) {
-				Utils.bookJob(Utils.mSelectedCompany, _context);
-			}
-		}
-	}
 
 	private void setUpTab() {
 		mPager = (ViewPager) findViewById(R.id.pager);
@@ -213,7 +161,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
-				Utils.currentTab=selected;
+				//Utils.currentTab=selected;
 				restoreActionBar();
 			}
 

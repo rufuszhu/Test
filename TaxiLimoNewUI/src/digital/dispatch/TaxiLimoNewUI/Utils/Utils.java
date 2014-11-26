@@ -61,6 +61,7 @@ import android.widget.LinearLayout.LayoutParams;
 public class Utils {
 
 	public static String driverNoteString = "";
+	public static String last_city = "";
 	public static Date pickupDate;
 	public static Date pickupTime;
 	public static Address mPickupAddress;
@@ -199,14 +200,13 @@ public class Utils {
 			mbook.setPickupAddress(LocationUtils.addressToString(context, Utils.mPickupAddress));
 		} else {
 			mbook.setPickup_house_number(pickupHouseNumber);
-			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
+			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " " + Utils.mPickupAddress.getLocality());
 		}
 		if (pickup_unit_number != null && pickup_unit_number.length() > 0)
 			mbook.setPickup_unit(pickup_unit_number);
 		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
 		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
 		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
-
 	}
 
 	private static void setUpDropoffAddress(DBBooking mbook, Context context) {
@@ -267,73 +267,9 @@ public class Utils {
 		new BookJobTask(context, mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
-	public static void setUpDriverNoteDialog(final Context context, final Dialog messageDialog, final TextView textNote) {
-		final EditText driverMessage;
-		final TextView textRemaining;
-		TextView ok;
-		TextView clear;
 
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_driver_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
-		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
-		driverMessage.setHint("Buzzer #");
-		driverMessage.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable note) {
-				textRemaining.setText(MBDefinition.DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
-			}
 
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
 
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			}
-		});
-
-		driverMessage.setText(driverNoteString);
-		driverMessage.setSelection(driverNoteString.length());
-
-		ok = (TextView) messageDialog.getWindow().findViewById(R.id.ok);
-		ok.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverNoteString = driverMessage.getText().toString();
-				if (textNote != null) {
-					setNoteIndication(context, textNote);
-				}
-				messageDialog.dismiss();
-			}
-		});
-		clear = (TextView) messageDialog.getWindow().findViewById(R.id.clear);
-		clear.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverMessage.setText("");
-			}
-		});
-
-		messageDialog.show();
-	}
-
-	public static void setNoteIndication(Context context, TextView textNote) {
-		if (driverNoteString.length() > 20) {
-			textNote.setTextColor(context.getResources().getColor(R.color.black));
-			textNote.setTextSize(VALUE_FONT_SIZE);
-			textNote.setText(driverNoteString.substring(0, 20) + "...");
-		} else if (driverNoteString.length() == 0) {
-			textNote.setTextColor(context.getResources().getColor(R.color.gray_light));
-			textNote.setTextSize(DEFAULT_FONT_SIZE);
-			textNote.setText(context.getString(R.string.empty_note));
-		} else {
-			textNote.setTextColor(context.getResources().getColor(R.color.black));
-			textNote.setTextSize(VALUE_FONT_SIZE);
-			textNote.setText(driverNoteString);
-		}
-	}
 
 	/**
 	 * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
@@ -429,18 +365,6 @@ public class Utils {
 	
 	}
 
-	// public static boolean isNumeric(String str)
-	// {
-	// try
-	// {
-	// double d = Double.parseDouble(str);
-	// }
-	// catch(NumberFormatException nfe)
-	// {
-	// return false;
-	// }
-	// return true;
-	// }
 
 	public static boolean isNumeric(String str) {
 		// match a number with optional '-'(or '.') in the middle. this is for street number return by google Geo

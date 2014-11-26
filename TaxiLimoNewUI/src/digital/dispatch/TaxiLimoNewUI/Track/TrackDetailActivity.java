@@ -124,6 +124,7 @@ public class TrackDetailActivity extends FragmentActivity {
 		isRefreshing = false;
 	}
 	
+	
 	public DBBooking getDBBook(){
 		return dbBook;
 	}
@@ -462,6 +463,12 @@ public class TrackDetailActivity extends FragmentActivity {
 			startRecallJobTask();
 			return true;
 		}
+		if (id == android.R.id.home) {
+			Utils.currentTab=1;
+			finish();
+			return true;
+		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -493,6 +500,7 @@ public class TrackDetailActivity extends FragmentActivity {
 			zoom_btn.setVisibility(View.VISIBLE);
 		}
 		else{
+			tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
 			zoom_btn.setVisibility(View.GONE);
 		}
 
