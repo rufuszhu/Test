@@ -12,7 +12,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="digital.dispatch.TaxiLimoNewUI.permission.C2D_MESSAGE"
@@ -140,7 +140,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name=".GCM.GCMReceiver"
@@ -156,7 +156,7 @@
                      when create new project, after copy paste the manifest, other than both permission
                      and user permission for C2D_MESSAGE need to be new package specific; this receiver
                      category must be change to the right package as well 
-                     (i.e. digital.dispatch.mobilebookerv2.(new project name) for any devices below 4.0.0
+                     (i.e. digital.dispatch.mobilebookerv2.(new project name) for any devices below 4.0.0
                 -->
                 <category android:name="digital.dispatch.TaxiLimoNewUI" />
             </intent-filter>
@@ -167,7 +167,7 @@
           handle received messages.
 
           By default, it must be named .GCMIntentService, unless the
-          application uses a custom BroadcastReceiver that redefines its name.
+          application uses a custom BroadcastReceiver that redefines its name.
         -->
         <service android:name=".GCM.GCMIntentService" />
 
@@ -215,14 +215,6 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
         </activity>
         <activity
-            android:name=".VerifySMSActivity"
-            android:label="@string/title_activity_verify_sms"
-            android:parentActivityName=".RegisterActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
-        </activity>
-        <activity
             android:name=".Drawers.AddPreferenceActivity"
             android:label="@string/title_activity_add_preference"
             android:parentActivityName=".Drawers.PreferenceActivity" >
@@ -253,6 +245,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" />
+        </activity>
+        <activity
+            android:name=".RegisterConfirmActivity"
+            android:label="@string/title_activity_register_confirm"
+            android:parentActivityName=".RegisterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
         </activity>
     </application>
 

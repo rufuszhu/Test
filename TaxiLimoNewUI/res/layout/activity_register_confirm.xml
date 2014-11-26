@@ -1,0 +1,141 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp" 
+    tools:context="digital.dispatch.TaxiLimoNewUI.RegisterConfirmActivity" >
+    
+    <RelativeLayout
+        android:id="@+id/rl_confirm_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        >
+
+        <TextView
+            android:id="@+id/confirm_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"            
+            android:layout_marginRight="120dp"
+            android:text="@string/confirmation"
+            android:textSize="19sp"
+            android:textStyle="bold"/>
+        
+        <FrameLayout
+            android:id="@+id/confirm_status_1"
+   			android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_centerVertical="true"
+    		android:layout_toRightOf="@+id/confirm_title" >
+        	
+        	<ImageView
+                android:id="@+id/confirm_circle_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shape_solid_circle_light_grey" />
+        	
+        	<TextView
+        	    android:id="@+id/confirm_num_1"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:layout_gravity="center"
+        	    android:alpha=".8"
+        	    android:text="@string/step1"
+        	    android:textColor="@color/white"
+        	    android:textSize="14sp"
+        	    android:textStyle="bold" />
+        	
+       	</FrameLayout>
+		
+		 
+       	<View
+            android:id="@+id/confirm_dash"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/confirm_status_1"
+            android:background="@color/gray_line" />
+        
+        <FrameLayout
+            android:id="@+id/confirm_status_2"
+   			android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_centerVertical="true"
+    		android:layout_alignParentRight="true"   
+    		 >
+        							
+	        <ImageView
+	                android:id="@+id/confirm_circle_2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:src="@drawable/shape_solid_circle" />
+
+	        <TextView
+	            android:id="@+id/confirm_num_2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:alpha=".8"
+	            android:layout_gravity="center"
+	            android:text="@string/step2"
+	            android:textColor="@color/white"
+	            android:textSize="14sp"
+	            android:textStyle="bold" />
+        
+        </FrameLayout>
+        
+      </RelativeLayout>
+      
+      <ScrollView
+          android:id="@+id/scrv_eula"
+          android:layout_width="match_parent"
+          android:layout_below="@+id/rl_confirm_title"
+          android:layout_height="290dp"   
+          android:paddingTop="20dp"     
+          android:fillViewport="true"
+          android:orientation="vertical" >
+        
+          
+		
+		    <TextView
+		        android:id="@+id/eula"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="@dimen/normal_padding"
+		        android:paddingLeft="@dimen/normal_padding"
+              	android:background="@drawable/shape_textview_border"
+		        android:text="@string/eula"
+		        android:textSize= "12sp"
+		        android:textAppearance="?android:attr/textAppearanceLarge" >
+		    </TextView>
+		
+		</ScrollView> 
+		
+      <CheckBox
+        android:id="@+id/chk_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/scrv_eula"
+        android:text="@string/chk_agreement" />
+        
+
+   	<TextView
+            android:id="@+id/register_confirm_btn"
+            style="@style/TextDropShadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_book_btn_height"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/small_padding"
+            android:background="@drawable/green_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="@color/white"
+            android:textSize="@dimen/book_font_size"
+            android:textStyle="bold" />
+
+</RelativeLayout>

@@ -8,20 +8,18 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
+
 import android.preference.PreferenceManager;
 
-import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
+
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest.IVerifySMSResponseListener;
-import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.VerifySMSResponse;
 
 import digital.dispatch.TaxiLimoNewUI.Installation;
+import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.VerifySMSActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -67,7 +65,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	@Override
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
-		((VerifySMSActivity)_context).showVerifyFailedMessage();
+		((RegisterActivity)_context).showVerifyFailedMessage();
 
 		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
 
@@ -80,7 +78,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null)
 					.show();
 		} else {
-			((VerifySMSActivity)_context).showVerifyFailedMessage();
+			((RegisterActivity)_context).showVerifyFailedMessage();
 		}
 
 		Logger.v(TAG, "RegDev: Error");
@@ -93,9 +91,9 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		str = response.getStatus() + " :: " + response.getErrorString();
 
 		if(response.getStatus()==0)
-			((VerifySMSActivity)_context).showVerifySuccessMessage();
+			((RegisterActivity)_context).showVerifySuccessMessage();
 		else
-			((VerifySMSActivity)_context).showVerifyFailedMessage();
+			((RegisterActivity)_context).showVerifyFailedMessage();
 		
 		Logger.e(TAG, "VerifyDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 	}

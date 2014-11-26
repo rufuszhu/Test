@@ -19,7 +19,6 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
-import digital.dispatch.TaxiLimoNewUI.VerifySMSActivity;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -59,10 +58,10 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 			// rdReq.setName(UserAccount.userName(getApplicationContext()));
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
-			String firstName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_FIRST_NAME);
-			String lastName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_LAST_NAME);
+			String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
+		
 			rdReq.setPhoneNum(phone);
-			rdReq.setName(firstName + " " + lastName);
+			rdReq.setName(userName);
 
 			if (Locale.getDefault().getLanguage().compareToIgnoreCase("de") == 0) {
 				rdReq.setLocale("de-DE");
@@ -124,7 +123,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		if(isFirstTime)
 			((RegisterActivity)_context).showRegisterSuccessMessage();
 		else
-			((VerifySMSActivity)_context).showResendSuccessMessage();
+			((RegisterActivity)_context).showResendSuccessMessage();
 		
 		Logger.e(TAG, "RegDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 
