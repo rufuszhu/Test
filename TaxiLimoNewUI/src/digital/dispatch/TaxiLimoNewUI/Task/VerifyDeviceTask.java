@@ -33,6 +33,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	private String smsCode;
 	private boolean isFirstTime;
 
+	//TL-170  added flag isFirstTime to differentiate the call from register or profile page
 	public VerifyDeviceTask(Context context, boolean isFirstTime, String smsCode) {
 		rdReq = new VerifySMSRequest(this, this);
 		_context = context;
@@ -69,7 +70,6 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
 		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.verify_failed).setCancelable(false).setPositiveButton(R.string.ok, null).show();
-		//((RegisterActivity)_context).showVerifyFailedMessage();
 
 		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
 
@@ -82,7 +82,6 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null)
 					.show();
 		} else {
-			//((RegisterActivity)_context).showVerifyFailedMessage();
 			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_internet).setCancelable(false).setPositiveButton(R.string.ok, null)
 			.show();
 		}
@@ -100,12 +99,6 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			((RegisterActivity)_context).showVerifySuccessMessage();
 		else
 			((ProfileActivity)_context).showProfileVerifySuccessMessage();
-		/*
-		if(response.getStatus()==0)
-			((RegisterActivity)_context).showVerifySuccessMessage();
-		else
-			((RegisterActivity)_context).showVerifyFailedMessage();
-		*/
 		
 		Logger.e(TAG, "VerifyDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 	}

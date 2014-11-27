@@ -126,35 +126,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		}});
 		
 	}
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.profile, menu);
-		// edit_icon = menu.findItem(R.id.action_edit);
-		return true;
-	}*/
-	/*
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		
-		int id = item.getItemId();
-		if (id == R.id.action_edit) {
-			Logger.d(TAG, "onOptionsItemSelected");
-			edtName.setFocusable(true);
-			edtName.setFocusableInTouchMode(true);
-			edtName.setBackground(getResources().getDrawable(R.drawable.shape_textview_border));
-			
-			
-			save_btn.setVisibility(View.VISIBLE);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-		
-	}*/
+
 
 	@Override
 	public void onResume() {
@@ -162,7 +134,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		if (sharedPreferences != null) {
 			curPhoneNum = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 			edtPhone.setText(curPhoneNum);
-			//Logger.v(TAG, "curPhoneNum: " + curPhoneNum);
+	
 			String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
 			edtName.setText(userName);
 			String email = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
@@ -211,10 +183,10 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			return false;
 		} else{
 			//if phone number changed we need show sms verification
-			//Logger.v(TAG, "phone: " + phone);
+			
 			if(!phone.equalsIgnoreCase(curPhoneNum)){
 				sendVerifySMS = true;
-				//Logger.v(TAG, "sendVerifySMS true ");
+				
 			}
 			return true;
 		}
@@ -282,31 +254,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		return registrationId;
 	}
 	
-	/*
-	//callback from RegisterDevice
-	public void showRegisterSuccessMessage(){
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		if(sendVerifySMS == true){
-			tv_message.setText(_context.getString(R.string.verify_dialog_text,edtPhone.getText().toString()));
-		}else{
-			tv_message.setText(_context.getString(R.string.profile_update_text));
-		}
-		messageDialog.setOnCancelListener(new OnCancelListener(){
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				if(sendVerifySMS == true){
-					ll_sms_verify.setVisibility(View.VISIBLE);
-					save_btn.setVisibility(View.GONE);
-					verify_btn.setVisibility(View.VISIBLE);
-				}
-			}});
-		messageDialog.show();
-	}*/
+	
 	
 		//callback by VerifyDeviceTask
 		
@@ -318,33 +266,12 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
 			tv_message.setText(_context.getString(R.string.verify_success));
-			/*
-			messageDialog.setOnCancelListener(new OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					
-					Intent intent = new Intent(_context, RegisterConfirmActivity.class);
-					startActivity(intent);
-					
-				} 
-			});*/
+			
 			messageDialog.show();
 			
 		}
 		
-		/*
-		//callback by VerifyDeviceTask failed
-		public void showVerifyFailedMessage() {
-			Dialog messageDialog = new Dialog(_context);
-			messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			messageDialog.setContentView(R.layout.dialog_message);
-			messageDialog.setCanceledOnTouchOutside(true);
-			messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-			tv_message.setText(_context.getString(R.string.verify_failed));
-
-			messageDialog.show();
-		}*/
+		
 		
 		//callback by RegisterDeviceTask for successful update
 		public void showResendSuccessMessage() {
@@ -357,7 +284,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 
 			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
-			//tv_message.setText(_context.getString(R.string.verify_dialog_text, phone));
+
 			if(sendVerifySMS == true){
 				tv_message.setText(_context.getString(R.string.verify_dialog_text, phone));
 			}else{
