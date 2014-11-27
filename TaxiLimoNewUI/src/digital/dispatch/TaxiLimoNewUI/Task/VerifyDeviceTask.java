@@ -20,6 +20,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.VerifySMSResponse;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -30,11 +31,13 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	private VerifySMSRequest rdReq;
 	private Context _context;
 	private String smsCode;
+	private boolean isFirstTime;
 
-	public VerifyDeviceTask(Context context, String smsCode) {
+	public VerifyDeviceTask(Context context, boolean isFirstTime, String smsCode) {
 		rdReq = new VerifySMSRequest(this, this);
 		_context = context;
 		this.smsCode = smsCode;
+		this.isFirstTime = isFirstTime;
 	}
 
 	// The code to be executed in a background thread.
@@ -56,16 +59,17 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		return true;
 	}
 
+	
 	@Override
 	public void onProgressUpdate(int progress) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
-		((RegisterActivity)_context).showVerifyFailedMessage();
+		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.verify_failed).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+		//((RegisterActivity)_context).showVerifyFailedMessage();
 
 		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
 
@@ -78,7 +82,9 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null)
 					.show();
 		} else {
-			((RegisterActivity)_context).showVerifyFailedMessage();
+			//((RegisterActivity)_context).showVerifyFailedMessage();
+			new AlertDialog.Builder(_context).setTitle(R.string.err_no_response_error).setMessage(R.string.err_msg_no_internet).setCancelable(false).setPositiveButton(R.string.ok, null)
+			.show();
 		}
 
 		Logger.v(TAG, "RegDev: Error");
@@ -89,11 +95,17 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		Utils.stopProcessingDialog(_context);
 		String str = "";
 		str = response.getStatus() + " :: " + response.getErrorString();
-
+		
+		if(isFirstTime)
+			((RegisterActivity)_context).showVerifySuccessMessage();
+		else
+			((ProfileActivity)_context).showProfileVerifySuccessMessage();
+		/*
 		if(response.getStatus()==0)
 			((RegisterActivity)_context).showVerifySuccessMessage();
 		else
 			((RegisterActivity)_context).showVerifyFailedMessage();
+		*/
 		
 		Logger.e(TAG, "VerifyDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 	}

@@ -56,6 +56,7 @@ public class RegisterConfirmActivity extends BaseActivity {
 	private void findView() {
 
 		check_box = (CheckBox) findViewById(R.id.chk_agreement);
+		//check_box.setButtonDrawable(context.getResources().getDrawable( R.drawable.checkbox_selector));
 		register_btn = (TextView) findViewById(R.id.register_confirm_btn);
 
 		register_btn.setOnClickListener(new OnClickListener() {

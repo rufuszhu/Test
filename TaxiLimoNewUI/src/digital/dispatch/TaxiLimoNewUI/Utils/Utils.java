@@ -2,34 +2,18 @@ package digital.dispatch.TaxiLimoNewUI.Utils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import kankan.wheel.widget.OnWheelChangedListener;
-import kankan.wheel.widget.OnWheelScrollListener;
-import kankan.wheel.widget.WheelView;
-
-import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
-import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -38,25 +22,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
+
+import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
+
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 
 public class Utils {
 
@@ -406,6 +390,19 @@ public class Utils {
 		
 		
 		return true;
+	}
+	
+	/**
+	 * @return Application's version code from the {@code PackageManager}.
+	 */
+	public static int getAppVersion(Context context) {
+		try {
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch (NameNotFoundException e) {
+			// should never happen
+			throw new RuntimeException("Could not get package name: " + e);
+		}
 	}
 	
 }

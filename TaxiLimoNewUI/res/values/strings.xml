@@ -60,7 +60,7 @@
     <string name="verify_check_phone">Check your phone number and  </string>
     <string name="verify_request_new"><u>Request a new one.</u></string>
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
-    <string name="verify">Verify</string>
+    <string name="verify">VERIFY</string>
     <string name="next">NEXT</string>
     <string name="register">REGISTER</string>
     <string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
@@ -112,6 +112,8 @@
     <string name="profile_empty_email">Please enter an email for profile</string>
     <string name="profile_email_invalid">Please enter a valid email</string>
     <string name="profile_empty_name">Please enter your Name</string>
+    <string name="profile_update_text">Your profile is updated</string>
+    <string name="SAVE">SAVE</string>
 
     <!-- About -->
     <string name="version">VERSION</string>

@@ -1,6 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI;
 
-import java.io.IOException;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.AlertDialog;
@@ -11,15 +11,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.location.Address;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -27,22 +22,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
-import digital.dispatch.TaxiLimoNewUI.Book.ContactsFragment;
-import digital.dispatch.TaxiLimoNewUI.Book.FavoritesFragment;
-import digital.dispatch.TaxiLimoNewUI.Book.SearchFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
@@ -50,17 +34,14 @@ import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.History.HistoryFragment;
-import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
+
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final String EXTRA_MESSAGE = "message";
-	public static final String PROPERTY_REG_ID = "registration_id";
-	private static final String PROPERTY_APP_VERSION = "appVersion";
+
 
 	private static final String TAG = "MainActivity";
 	LocalBroadcastManager locBCManager;
