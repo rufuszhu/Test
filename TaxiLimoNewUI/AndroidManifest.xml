@@ -249,7 +249,8 @@
         <activity
             android:name=".RegisterConfirmActivity"
             android:label="@string/title_activity_register_confirm"
-            android:parentActivityName=".RegisterActivity" >
+            android:parentActivityName=".RegisterActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />

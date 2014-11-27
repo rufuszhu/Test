@@ -33,29 +33,12 @@ public class RegisterConfirmActivity extends BaseActivity {
 
 	}
 
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.register_confirm, menu);
-		return true;
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}*/
 
 	private void findView() {
 
 		check_box = (CheckBox) findViewById(R.id.chk_agreement);
+		//check_box.setButtonDrawable(context.getResources().getDrawable( R.drawable.checkbox_selector));
 		register_btn = (TextView) findViewById(R.id.register_confirm_btn);
 
 		register_btn.setOnClickListener(new OnClickListener() {
@@ -70,17 +53,10 @@ public class RegisterConfirmActivity extends BaseActivity {
 										public void onClick(
 												DialogInterface dialog, int id) {
 											dialog.dismiss();
-											// Close the activity as they have
-											// declined the EULA
-											// finish();
+											
 										}
 									});
-					/*
-					 * .setNegativeButton(R.string.cancel, new
-					 * DialogInterface.OnClickListener() { public void
-					 * onClick(DialogInterface dialog, int id) {
-					 * check_box.setChecked(true); } });
-					 */
+					
 
 					builder.show();
 				} else {

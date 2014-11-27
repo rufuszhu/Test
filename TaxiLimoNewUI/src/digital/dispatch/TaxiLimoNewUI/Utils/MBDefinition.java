@@ -31,7 +31,8 @@ public class MBDefinition {
 	public static final int REQUEST_REGISTER_CC = 7;
 	public static final String[] SPECIAL_CHAR_TO_REMOVE = new String[] {"%", "[", "]", "<", ">", "\\"};
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	
+	public static final String PROPERTY_REG_ID = "registration_id";
+	public static final String PROPERTY_APP_VERSION = "appVersion";
 	public static final int FUTURE_BOOKING_RANGE = 14;
 	
 	// tripStatusUniformCode
