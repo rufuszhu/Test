@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.Drawers;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 //import digital.dispatch.TaxiLimoNewUI.R.id;
 //import digital.dispatch.TaxiLimoNewUI.R.layout;
@@ -27,7 +28,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class ProfileActivity extends ActionBarActivity {
+public class ProfileActivity extends BaseActivity {
 
 	private EditText edtPhone, et_firstName, et_lastName, edtUEmail;
 	private LinearLayout save_btn;
@@ -39,7 +40,7 @@ public class ProfileActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		edtPhone = (EditText) findViewById(R.id.edt_phoneNum);
 		et_firstName = (EditText) findViewById(R.id.et_firstName);
 		et_lastName = (EditText) findViewById(R.id.et_lastName);
@@ -79,6 +80,10 @@ public class ProfileActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
 		if (id == R.id.action_edit) {
 			Logger.d(TAG, "onOptionsItemSelected");
 			et_firstName.setFocusable(true);

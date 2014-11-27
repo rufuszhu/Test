@@ -1,38 +1,27 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
 import android.app.ActionBar;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
-import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
-public class ModifyAddressActivity extends FragmentActivity {
+public class ModifyAddressActivity extends BaseActivity {
 	private static final String TAG = "ModifyAddressActivity";
-
-
-	private Context _activity;
 	private boolean isDesitination;
-
-	private DBAddressDao addressDao;
-
-	AutoCompleteTextView autoCompView;
 
 	public static FragmentManager fragmentManager;
 	private RelativeLayout tab0, tab1, tab2;
@@ -52,20 +41,20 @@ public class ModifyAddressActivity extends FragmentActivity {
 
 		findViews();
 
-		DaoManager daoManager = DaoManager.getInstance(this);
-		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
-
-		_activity = this;
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
 
 		setupActionBarTitle();
-
 		setUpTab();
-
-		// autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.autocomplete_list_item));
-		// autoCompView.setOnItemClickListener(this);
-
 		bindEvents();
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	public boolean getIsDesitination(){
@@ -213,300 +202,11 @@ public class ModifyAddressActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		// inputMethodManager.toggleSoftInputFromWindow(tv_streetNumber.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
-		// tv_streetNumber.requestFocus();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 	}
-
-
-
-	public void hideKeyBoard() {
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(autoCompView.getWindowToken(), 0);
-		// getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-	}
-
-
-
-
-
-//	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
-//
-//		// Store the context passed to the AsyncTask when the system instantiates it.
-//		Context localContext;
-//		boolean isFromContact;
-//		String unit;
-//
-//		// Constructor called by the system to instantiate the task
-//		public ValidateAddressTask(Context context, boolean isFromContact, String unit) {
-//
-//			// Required by the semantics of AsyncTask
-//			super();
-//
-//			// Set a Context for the background task
-//			localContext = context;
-//			this.isFromContact = isFromContact;
-//			this.unit = unit;
-//		}
-//
-//		/**
-//		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
-//		 */
-//		@Override
-//		protected List<Address> doInBackground(String... params) {
-//			/*
-//			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
-//			 * to address standards can also be used.
-//			 */
-//			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
-//
-//			// Get the current location from the input parameter list
-//			String locationName = params[0];
-//
-//			// Create a list to contain the result address
-//			List<Address> addresses = null;
-//
-//			// Try to get an address for the current location. Catch IO or network problems.
-//			try {
-//
-//				/*
-//				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
-//				 */
-//				addresses = geocoder.getFromLocationName(locationName, 10);
-//
-//				// Catch network or other I/O problems.
-//			} catch (IOException exception1) {
-//
-//				// Log an error and return an error message
-//				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-//
-//				// print the stack trace
-//				exception1.printStackTrace();
-//
-//				// Return an error message
-//				// return (getString(R.string.IO_Exception_getFromLocation));
-//
-//				// Catch incorrect latitude or longitude values
-//			} catch (IllegalArgumentException exception2) {
-//
-//				// Construct a message containing the invalid arguments
-//				String errorString = getString(R.string.illegal_argument_exception, locationName);
-//				// Log the error and print the stack trace
-//				Log.e(LocationUtils.APPTAG, errorString);
-//				exception2.printStackTrace();
-//
-//				//
-//				// return errorString;
-//			}
-//			return addresses;
-//		}
-//
-//		/**
-//		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
-//		 */
-//		@Override
-//		protected void onPostExecute(List<Address> addresses) {
-//			if (addresses == null) {
-//				Utils.showMessageDialog(_activity.getString(R.string.cannot_get_address_from_google), _activity);
-//			} else if (addresses.size() > 1) {
-//				// pop up list
-//				boolean isSave = true;
-//				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses, unit, isSave);
-//			} else if (addresses.size() == 1) {
-//				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-//					addUnitNumber(unit);
-//
-//					Intent returnIntent = new Intent();
-//					returnIntent.putExtra(MBDefinition.ADDRESS, addresses.get(0));
-//					setResult(RESULT_OK, returnIntent);
-//					finish();
-//				} else {
-//					if (isFromContact) {
-//						Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_number), _activity);
-//					} else {
-//						tv_streetNumber.requestFocus();
-//						((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
-//					}
-//				}
-//			} else {
-//				if (isFromContact) {
-//					Utils.showErrorDialog(_activity.getString(R.string.err_invalid_street_name), _activity);
-//				} else {
-//					autoCompView.requestFocus();
-//					((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
-//				}
-//				// Toast.makeText(_activity, "invalid address", Toast.LENGTH_SHORT).show();
-//			}
-//		}
-//	}
-//
-//	private void addUnitNumber(String unit) {
-//		if (unit != null && unit.length() > 0) {
-//			if (isDesitination)
-//				Utils.dropoff_unit_number = unit;
-//			else
-//				Utils.pickup_unit_number = unit;
-//		}
-//	}
-//
-//	protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
-//
-//		// Store the context passed to the AsyncTask when the system instantiates it.
-//		Context localContext;
-//
-//		// Constructor called by the system to instantiate the task
-//		public addFavoriteTask(Context context) {
-//			// Required by the semantics of AsyncTask
-//			super();
-//			// Set a Context for the background task
-//			localContext = context;
-//		}
-//
-//		/**
-//		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
-//		 */
-//		@Override
-//		protected List<Address> doInBackground(String... params) {
-//			/*
-//			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
-//			 * to address standards can also be used.
-//			 */
-//			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
-//
-//			// Get the current location from the input parameter list
-//			String locationName = params[0];
-//
-//			// Create a list to contain the result address
-//			List<Address> addresses = null;
-//
-//			// Try to get an address for the current location. Catch IO or network problems.
-//			try {
-//
-//				/*
-//				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
-//				 */
-//				addresses = geocoder.getFromLocationName(locationName, 10);
-//
-//				// Catch network or other I/O problems.
-//			} catch (IOException exception1) {
-//
-//				// Log an error and return an error message
-//				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-//
-//				// print the stack trace
-//				exception1.printStackTrace();
-//
-//				// Return an error message
-//				// return (getString(R.string.IO_Exception_getFromLocation));
-//
-//				// Catch incorrect latitude or longitude values
-//			} catch (IllegalArgumentException exception2) {
-//
-//				// Construct a message containing the invalid arguments
-//				String errorString = getString(R.string.illegal_argument_exception, locationName);
-//				// Log the error and print the stack trace
-//				Log.e(LocationUtils.APPTAG, errorString);
-//				exception2.printStackTrace();
-//
-//				//
-//				// return errorString;
-//			}
-//			return addresses;
-//		}
-//
-//		/**
-//		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
-//		 */
-//		@Override
-//		protected void onPostExecute(final List<Address> addresses) {
-//			if (addresses.size() > 1) {
-//				// pop up list
-//				boolean isSave = false;
-//				setUpListDialog(_activity, LocationUtils.addressListToStringList(_activity, addresses), addresses, tv_unitNumber.getText().toString(), isSave);
-//			} else if (addresses.size() == 1) {
-//				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-//					final EditText nickname_edit;
-//					TextView address_text;
-//					TextView cancel;
-//					TextView add;
-//					final Dialog nicknameDialog = new Dialog(_activity);
-//					nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//					nicknameDialog.setContentView(R.layout.nickname_dialog);
-//					nicknameDialog.setCanceledOnTouchOutside(true);
-//
-//					address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
-//					nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
-//					address_text.setText(LocationUtils.addressToString(_activity, addresses.get(0)));
-//
-//					cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
-//					cancel.setOnClickListener(new View.OnClickListener() {
-//						public void onClick(View v) {
-//							nicknameDialog.dismiss();
-//							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-//						}
-//					});
-//					add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
-//					add.setOnClickListener(new View.OnClickListener() {
-//						public void onClick(View v) {
-//							String nickname = nickname_edit.getText().toString();
-//							DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(addresses.get(0), tv_unitNumber.getText().toString(), nickname,
-//									true, addressDao);
-//							favoritesFragment.notifyChange();
-//							Toast.makeText(_activity, dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-//							nicknameDialog.dismiss();
-//							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//							imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-//						}
-//					});
-//					nicknameDialog.show();
-//				} else {
-//					tv_streetNumber.requestFocus();
-//					((EditText) tv_streetNumber).setError(_activity.getString(R.string.err_invalid_street_number));
-//				}
-//			} else {
-//				autoCompView.requestFocus();
-//				((AutoCompleteTextView) autoCompView).setError(_activity.getString(R.string.err_invalid_street_name));
-//			}
-//		}
-//	}
-//
-//	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final String unit,
-//			final boolean isSave) {
-//		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
-//		// builderSingle.setIcon(R.drawable.ic_launcher);
-//		builderSingle.setTitle("Please be more specific");
-//		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(context, R.layout.autocomplete_list_item);
-//		arrayAdapter.addAll(addresses);
-//		builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dialog.dismiss();
-//			}
-//		});
-//
-//		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				if (isSave) {
-//					addUnitNumber(unit);
-//					Intent returnIntent = new Intent();
-//					returnIntent.putExtra(MBDefinition.ADDRESS, addressesObj.get(which));
-//					setResult(RESULT_OK, returnIntent);
-//					finish();
-//				} else {
-//					new addFavoriteTask(_activity).execute(addresses.get(which));
-//					Logger.e(TAG, "calling add fav task with address: " + addresses.get(which));
-//				}
-//			}
-//		});
-//		builderSingle.show();
-//	}
-
 
 }

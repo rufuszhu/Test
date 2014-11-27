@@ -11,7 +11,6 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.EditCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;

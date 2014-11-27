@@ -57,6 +57,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
@@ -158,10 +159,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
 
-				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
 
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
-				getActivity().startActivityForResult(intent, MBDefinition.REQUEST_PICKUPADDRESS_CODE);
+				((MainActivity) getActivity()).startActivityForAnim(intent);
 			}
 		});
 
@@ -182,7 +182,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
 				} else {
 					Intent intent = new Intent(getActivity(), BookActivity.class);
-					getActivity().startActivity(intent);
+					((MainActivity) getActivity()).startActivityForAnim(intent);
 				}
 			}
 		});

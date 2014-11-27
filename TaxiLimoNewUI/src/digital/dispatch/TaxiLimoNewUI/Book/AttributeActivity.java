@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -34,7 +35,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class AttributeActivity extends Activity {
+public class AttributeActivity extends BaseActivity {
 	private static final String TAG = "AttributeActivity";
 	private CompanyItem[] companyArr;
 	private ListView lv_company;
@@ -83,7 +84,15 @@ public class AttributeActivity extends Activity {
 		super.onResume();
 		refreshing = true;
 	}
-
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Logger.e(TAG, "onCreateOptionsMenu");
@@ -99,15 +108,6 @@ public class AttributeActivity extends Activity {
 		return true;
 	}
 
-	// override actionbar back button
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-		}
-		return true;
-	}
 
 	public void startUpdateAnimation(MenuItem item) {
 		// Do animation start

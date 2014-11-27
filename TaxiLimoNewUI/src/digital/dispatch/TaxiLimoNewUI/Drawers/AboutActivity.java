@@ -1,5 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
@@ -11,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class AboutActivity extends ActionBarActivity {
+public class AboutActivity extends BaseActivity {
 
 	private static final String TAG = "AboutActivity";
 
@@ -31,5 +32,13 @@ public class AboutActivity extends ActionBarActivity {
 		TextView tvVersionNum = (TextView) findViewById(R.id.tvVersionNum);
 		tvVersionNum.setText(versionName + " Your app is up to date");
 	}
-
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

@@ -26,14 +26,21 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 	public void setValues(List<DBBooking> values) {
 		this.values = values;
 	}
-	
-	public void updateValues(DBBooking dbBook){
+
+	// remove object from value if is completed or canceled
+	public void updateValue(DBBooking dbBook) {
 		int trid = dbBook.getTaxi_ride_id();
-		for(int i=0;i<values.size();i++){
-			if(values.get(i).getTaxi_ride_id()==trid)
-				values.set(i, dbBook);
+		for (int i = 0; i < values.size(); i++) {
+			if (values.get(i).getTaxi_ride_id() == trid) {
+				if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED
+						||dbBook.getTripStatus()==MBDefinition.MB_STATUS_CANCELLED)
+					values.remove(i);
+				else
+					values.set(i, dbBook);
+			}
 		}
 	}
+
 
 	public BookingListAdapter(Context context, List<DBBooking> values) {
 		super(context, R.layout.booking_list_item, values);
@@ -47,17 +54,10 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		public TextView status_bar;
 	}
 
-	// @Override
-	// public View getView(int position, View convertView, ViewGroup parent) {
-	// LayoutInflater inflater = (LayoutInflater) context
-	// .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	// View rowView = inflater.inflate(R.layout.list_item, parent, false);
-	// TextView address = (TextView) rowView.findViewById(R.id.text_address);
-	// TextView status = (TextView) rowView.findViewById(R.id.text_status);
-	// address.setText(values.get(position).getAttribute());
-	// status.setText(values.get(position).getDispatchedCar());
-	//
-	// return rowView;
+	// public void removeIfNotInList(List<DBBooking> newList) {
+	// for(int i=0;i<values.size();i++){
+	// DBBooking oldValue = values.get(i)
+	// }
 	// }
 
 	@Override
@@ -108,4 +108,5 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 		return rowView;
 	}
+
 }

@@ -29,6 +29,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -57,7 +58,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends BaseActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -112,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
 		registerGCMReceiver();
 	}
+	
 
 	private void registerGCMReceiver() {
 		// Register GCM listener
@@ -275,23 +277,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		switch (position) {
 		case 0:
 			intent = new Intent(this, ProfileActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
 		case 1:
 			intent = new Intent(this, PaymentActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
 		case 2:
 			intent = new Intent(this, PreferenceActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
 		case 3:
 			intent = new Intent(this, AboutActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
 		}
 	}
@@ -378,8 +376,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 										notificationManager.cancel(gcmID);
 									}
 									if (Utils.currentTab == 1) {
-										TrackFragment fragment = (TrackFragment) getSupportFragmentManager().findFragmentByTag("track");
-										fragment.startRecallJobTask();
+										trackFragment.startRecallJobTask();
 									}
 								}
 							}).show();

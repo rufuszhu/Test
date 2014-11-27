@@ -1,5 +1,9 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.Book;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
@@ -17,7 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
-public class DriverNoteActivity extends Activity {
+public class DriverNoteActivity extends BaseActivity {
 	private EditText driverMessage;
 	private TextView textRemaining, ok ,clear;
 	
@@ -60,6 +64,16 @@ public class DriverNoteActivity extends Activity {
 			}
 		});
 
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

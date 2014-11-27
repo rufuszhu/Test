@@ -1,4 +1,4 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.Drawers;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -24,7 +24,18 @@ import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizat
 import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.Installation;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R.color;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
+import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.R.string;
 import digital.dispatch.TaxiLimoNewUI.Task.DeleteCreditCardTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -126,6 +137,8 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		
 
 	}
+	
+	
 
 	private void findView() {
 		edtCardNum = (EditText) findViewById(R.id.et_card_number);

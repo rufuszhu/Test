@@ -23,8 +23,6 @@ import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -35,11 +33,13 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	private Context _context;
 	private String jobList;
 	private int which;
+	private boolean tridChanged;
 
 	public RecallJobTask(Context context, String jobs, int which) {
 		_context = context;
 		jobList = jobs;
 		this.which = which;
+		tridChanged = false;
 	}
 
 	// Before running code in separate thread
@@ -92,8 +92,15 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			LatLng carLatLng = new LatLng(Double.parseDouble(jobArr[0].carLatitude), Double.parseDouble(jobArr[0].carLongitude));
 			((TrackDetailActivity) _context).updateCarMarker(carLatLng, dbBook);
 			((TrackDetailActivity) _context).parseRecallJobResponse(dbBook);
+
+			if (tridChanged) {
+				((TrackDetailActivity) _context).startRecallJobTask();
+			}
 		} else if (which == MBDefinition.IS_FOR_LIST) {
 			((MainActivity) _context).trackFragment.updateStatus(dbBook);
+			if (tridChanged) {
+				((MainActivity) _context).trackFragment.startRecallJobTask();
+			}
 		}
 	}
 
@@ -105,69 +112,69 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 		for (int i = 0; i < jobArr.length; i++) {
 			dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(jobArr[i].taxi_ride_id)).list().get(0);
 			JobItem job = jobArr[i];
-			switch (Integer.parseInt(job.tripStatusUniformCode)) {
-			case MBDefinition.TRIP_STATUS_BOOKED:
-			case MBDefinition.TRIP_STATUS_DISPATCHING:
-				break;
-			case MBDefinition.TRIP_STATUS_ACCEPTED:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
-				break;
-			case MBDefinition.TRIP_STATUS_ARRIVED:
-				dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
-				break;
-			case MBDefinition.TRIP_STATUS_COMPLETE:
-				switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
-				case MBDefinition.DETAIL_STATUS_IN_SERVICE:
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+			if (!job.redispatchJobID.equals("")) {
+				Logger.d(TAG,"job is redispatched!");
+				dbBook.setTaxi_ride_id(Integer.parseInt(job.redispatchJobID));
+				tridChanged = true;
+				bookingDao.update(dbBook);
+				bookingList.add(dbBook);
+			} else {
+				switch (Integer.parseInt(job.tripStatusUniformCode)) {
+				case MBDefinition.TRIP_STATUS_BOOKED:
+				case MBDefinition.TRIP_STATUS_DISPATCHING:
 					break;
-				case MBDefinition.DETAIL_STATUS_COMPLETE:
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
+				case MBDefinition.TRIP_STATUS_ACCEPTED:
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
 					break;
-				case MBDefinition.DETAIL_STATUS_CANCEL:
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+				case MBDefinition.TRIP_STATUS_ARRIVED:
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
 					break;
-				// special complete: no show, force complete etc. set as "Cancelled" to user
-				case MBDefinition.DETAIL_STATUS_NO_SHOW:
-				case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
-					if (dbBook.getTripCompletionTime().length() == 0) {
-						Calendar cal = Calendar.getInstance();
-						SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
-						dbBook.setTripCompletionTime(pickupTimeFormat.format(cal.getTime()));
-					}
-					dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+				case MBDefinition.TRIP_STATUS_COMPLETE:
+					switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
+					case MBDefinition.DETAIL_STATUS_IN_SERVICE:
+						dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+						break;
+					case MBDefinition.DETAIL_STATUS_COMPLETE:
+						dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
+						break;
+					case MBDefinition.DETAIL_STATUS_CANCEL:
+						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+						break;
+					// special complete: no show, force complete etc. set as "Cancelled" to user
+					case MBDefinition.DETAIL_STATUS_NO_SHOW:
+					case MBDefinition.DETAIL_STATUS_FORCE_COMPLETE:
+						if (dbBook.getTripCompletionTime().length() == 0) {
+							Calendar cal = Calendar.getInstance();
+							SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+							dbBook.setTripCompletionTime(pickupTimeFormat.format(cal.getTime()));
+						}
+						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
 
+						break;
+					// other unimportant intermediate status, just ignore
+					case MBDefinition.DETAIL_OTHER_IGNORE:
+					default:
+						break;
+					}
 					break;
-				// other unimportant intermediate status, just ignore
-				case MBDefinition.DETAIL_OTHER_IGNORE:
 				default:
 					break;
 				}
-				break;
-			default:
-				break;
-			}
-			dbBook.setCarLatitude(Double.parseDouble(job.carLatitude));
-			dbBook.setCarLongitude(Double.parseDouble(job.carLongitude));
-			dbBook.setDispatchedCar(job.dispatchedCar);
-			dbBook.setDispatchedDriver(job.dispatchedDriver);
+				dbBook.setCarLatitude(Double.parseDouble(job.carLatitude));
+				dbBook.setCarLongitude(Double.parseDouble(job.carLongitude));
+				dbBook.setDispatchedCar(job.dispatchedCar);
+				dbBook.setDispatchedDriver(job.dispatchedDriver);
 
-			if (!job.redispatchJobID.equals(""))
-				dbBook.setTaxi_ride_id(Integer.parseInt(job.redispatchJobID));
-			bookingDao.update(dbBook);
-			bookingList.add(dbBook);
+				bookingDao.update(dbBook);
+				
+				bookingList.add(dbBook);
+			}
 		}
 		return bookingList;
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
-		// if (!isDialogVisible) {
-		// new AlertDialog.Builder(getActivity())
-		// .setTitle(R.string.err_error_response)
-		// .setMessage(R.string.err_msg_no_response) // TODO: change to more detail error msg when come up
-		// .setPositiveButton(R.string.positive_button, null)
-		// .show();
-		// }
 		if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).stopUpdateAnimation();
 		} else if (which == MBDefinition.IS_FOR_LIST) {
@@ -183,20 +190,12 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 
 	@Override
 	public void onError() {
-		// if (!isDialogVisible) {
-		// new AlertDialog.Builder(getActivity())
-		// .setTitle(R.string.err_no_response_error)
-		// .setMessage(R.string.err_msg_no_response)
-		// .setPositiveButton(R.string.positive_button, null)
-		// .show();
-		// }
 		if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).stopUpdateAnimation();
 		} else if (which == MBDefinition.IS_FOR_LIST) {
-
 			((MainActivity) _context).trackFragment.stopUpdateAnimation();
 		} else {
-			((TrackingMapActivity) _context).stopUpdateAnimation();
+			((TrackDetailActivity) _context).stopUpdateAnimation();
 		}
 		try {
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
