@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<color name="actionbar_background">#3e3f48</color>
     <color name="white">#ffffff</color>
     <color name="gray">#757575</color>
     <color name="gray_light">#9C9C9C</color>
@@ -10,8 +11,8 @@
     <color name="black">#000000</color>
     <color name="background">#EEEEEE</color>
     <color name="drawer_divider">#5d7e9a</color>
-    <color name="drawer_normal">#013561</color>
-    <color name="drawer_selected">#012645</color>
+    <color name="drawer_normal">#212125</color>
+    <color name="drawer_selected">#3e3f48</color>
     <color name="transparent">#00000000</color>
     
     <color name="completed_color">#409a9c</color>
@@ -39,6 +40,7 @@
     <color name="red_dark">#CC0000</color>
     
      <color name="background_tab">#c2c2c2</color>
- 		<color name="background_tab_selected">#6b7883</color>
-
+ 	<color name="background_tab_selected">#6b7883</color>
+ 	<color name="tab_text">#b5bcc1</color>
+	<color name="tab_text_selected">#ffffff</color>
 </resources>

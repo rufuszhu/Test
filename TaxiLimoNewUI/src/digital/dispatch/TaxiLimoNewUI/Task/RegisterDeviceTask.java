@@ -19,7 +19,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackingMapActivity;
+import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -123,7 +123,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		if(isFirstTime)
 			((RegisterActivity)_context).showRegisterSuccessMessage();
 		else
-			((RegisterActivity)_context).showResendSuccessMessage();
+			((ProfileActivity)_context).showResendSuccessMessage();
 		
 		Logger.e(TAG, "RegDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 

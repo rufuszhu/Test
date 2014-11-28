@@ -41,8 +41,7 @@ public final class LocationUtils {
 	public static final String KEY_UPDATES_REQUESTED = "digital.dispatch.TaxiLimoNewUI.KEY_UPDATES_REQUESTED";
 
 	/*
-	 * Define a request code to send to Google Play services This code is
-	 * returned in Activity.onActivityResult
+	 * Define a request code to send to Google Play services This code is returned in Activity.onActivityResult
 	 */
 	public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -59,12 +58,10 @@ public final class LocationUtils {
 	public static final int FAST_CEILING_IN_SECONDS = 1;
 
 	// Update interval in milliseconds
-	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-			* UPDATE_INTERVAL_IN_SECONDS;
+	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 
 	// A fast ceiling of update intervals, used when the app is visible
-	public static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-			* FAST_CEILING_IN_SECONDS;
+	public static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND * FAST_CEILING_IN_SECONDS;
 
 	// Create an empty string for initializing strings
 	public static final String EMPTY_STRING = new String();
@@ -152,28 +149,24 @@ public final class LocationUtils {
 		states.put("Nunavut", "NU");
 		states.put("Ontario", "ON");
 		states.put("Prince Edward Island", "PE");
-		states.put("Quebec", "QC");	
+		states.put("Quebec", "QC");
 		states.put("Saskatchewan", "SK");
 		states.put("Yukon", "YT");
 	}
 
 	/**
-	 * Get the latitude and longitude from the Location object returned by
-	 * Location Services.
+	 * Get the latitude and longitude from the Location object returned by Location Services.
 	 * 
 	 * @param currentLocation
 	 *            A Location object containing the current location
-	 * @return The latitude and longitude of the current location, or null if no
-	 *         location is available.
+	 * @return The latitude and longitude of the current location, or null if no location is available.
 	 */
 	public static String getLatLng(Context context, Location currentLocation) {
 		// If the location is valid
 		if (currentLocation != null) {
 
 			// Return the latitude and longitude as strings
-			return context.getString(R.string.latitude_longitude,
-					currentLocation.getLatitude(),
-					currentLocation.getLongitude());
+			return context.getString(R.string.latitude_longitude, currentLocation.getLatitude(), currentLocation.getLongitude());
 		} else {
 
 			// Otherwise, return the empty string
@@ -182,18 +175,19 @@ public final class LocationUtils {
 	}
 
 	public static String addressToString(Context context, Address address) {
-		// Format the first line of address
-		String addressText = context.getString(
-				R.string.address_output_string,
+		if (address != null && context != null) {
+			// Format the first line of address
+			String addressText = context.getString(R.string.address_output_string,
 
-				// If there's a street address, add it
-				address.getMaxAddressLineIndex() > 0 ? address
-						.getAddressLine(0) : "",
+			// If there's a street address, add it
+					address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
 
-				// Locality is usually a city
-				address.getLocality());
-		// Return the text
-		return addressText;
+					// Locality is usually a city
+					address.getLocality());
+			// Return the text
+			return addressText;
+		} else
+			return "";
 	}
 
 	public static Location addressToLocation(Address address) {
@@ -211,7 +205,7 @@ public final class LocationUtils {
 		return new LatLng(location.getLatitude(), location.getLongitude());
 	}
 
-	public static ArrayList<String> addressListToStringList(Context context,List<Address> addresses) {
+	public static ArrayList<String> addressListToStringList(Context context, List<Address> addresses) {
 		ArrayList<String> temp = new ArrayList<String>();
 		for (int i = 0; i < addresses.size(); i++) {
 			temp.add(addressToString(context, addresses.get(i)));

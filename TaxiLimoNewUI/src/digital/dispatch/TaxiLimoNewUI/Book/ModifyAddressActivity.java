@@ -1,6 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
 import android.app.ActionBar;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -32,6 +34,13 @@ public class ModifyAddressActivity extends BaseActivity {
 	public ContactsFragment contactsFragment;
 	private SearchFragment searchFragment;
 
+	private TextView tab0_icon;
+	private TextView tab1_icon;
+	private TextView tab2_icon;
+	private TextView tab0_text;
+	private TextView tab1_text;
+	private TextView tab2_text;
+
 	// LinearLayout select_btn;
 
 	@Override
@@ -47,17 +56,18 @@ public class ModifyAddressActivity extends BaseActivity {
 		setUpTab();
 		bindEvents();
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if(id==android.R.id.home){
+		if (id == android.R.id.home) {
 			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public boolean getIsDesitination(){
+
+	public boolean getIsDesitination() {
 		return isDesitination;
 	}
 
@@ -79,8 +89,7 @@ public class ModifyAddressActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(0);
-				resetAllTabColor();
-				tab0.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+				selectTab0();
 
 			}
 		});
@@ -88,16 +97,14 @@ public class ModifyAddressActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(1);
-				resetAllTabColor();
-				tab1.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+				selectTab1();
 			}
 		});
 		tab2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(2);
-				resetAllTabColor();
-				tab2.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+				selectTab2();
 			}
 		});
 	}
@@ -109,6 +116,27 @@ public class ModifyAddressActivity extends BaseActivity {
 		contactsFragment = new ContactsFragment();
 		searchFragment = SearchFragment.newInstance();
 
+		tab0 = (RelativeLayout) findViewById(R.id.tab0);
+		tab1 = (RelativeLayout) findViewById(R.id.tab1);
+		tab2 = (RelativeLayout) findViewById(R.id.tab2);
+
+		tab0_text = (TextView) findViewById(R.id.tab0_text);
+		tab1_text = (TextView) findViewById(R.id.tab1_text);
+		tab2_text = (TextView) findViewById(R.id.tab2_text);
+
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
+		tab0_icon.setTypeface(fontFamily);
+		tab0_icon.setText(MBDefinition.icon_tab_search);
+
+		tab1_icon = (TextView) findViewById(R.id.tab1_icon);
+		tab1_icon.setTypeface(fontFamily);
+		tab1_icon.setText(MBDefinition.icon_tab_fav);
+
+		tab2_icon = (TextView) findViewById(R.id.tab2_icon);
+		tab2_icon.setTypeface(fontFamily);
+		tab2_icon.setText(MBDefinition.icon_tab_contact);
+
 		mAdapter = new PagerAdapter(getSupportFragmentManager());
 		fragmentManager = getSupportFragmentManager();
 		pageChangeListener = new OnPageChangeListener() {
@@ -116,8 +144,15 @@ public class ModifyAddressActivity extends BaseActivity {
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
-				if(selected==0)
+
+				if (selected == 0) {
+					selectTab0();
 					searchFragment.getData();
+				} else if (selected == 1) {
+					selectTab1();
+				} else if (selected == 2) {
+					selectTab2();
+				}
 
 			}
 
@@ -134,11 +169,44 @@ public class ModifyAddressActivity extends BaseActivity {
 		// favoritesFragment.mGetView().setAlpha(1f);
 
 		mPager.setAdapter(mAdapter);
-
+		selectTab0();
 		// This is required to avoid a black flash when the map is loaded. The flash is due
 		// to the use of a SurfaceView as the underlying view of the map.
 		mPager.requestTransparentRegion(mPager);
 		mPager.setOnPageChangeListener(pageChangeListener);
+	}
+
+	private void selectTab0() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColorSelected);
+		tab1_text.setTextColor(textColor);
+		tab2_text.setTextColor(textColor);
+		tab0_icon.setTextColor(textColorSelected);
+		tab1_icon.setTextColor(textColor);
+		tab2_icon.setTextColor(textColor);
+	}
+
+	private void selectTab1() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColor);
+		tab1_text.setTextColor(textColorSelected);
+		tab2_text.setTextColor(textColor);
+		tab0_icon.setTextColor(textColor);
+		tab1_icon.setTextColor(textColorSelected);
+		tab2_icon.setTextColor(textColor);
+	}
+
+	private void selectTab2() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColor);
+		tab1_text.setTextColor(textColor);
+		tab2_text.setTextColor(textColorSelected);
+		tab0_icon.setTextColor(textColor);
+		tab1_icon.setTextColor(textColor);
+		tab2_icon.setTextColor(textColorSelected);
 	}
 
 	private void resetAllTabColor() {
@@ -147,16 +215,16 @@ public class ModifyAddressActivity extends BaseActivity {
 		tab2.setBackgroundColor(getResources().getColor(R.color.background_tab));
 	}
 
-	public void notifyFavoriteDataChange(DBAddress value){
+	public void notifyFavoriteDataChange(DBAddress value) {
 		favoritesFragment.notifyDataChange(value);
 	}
 
-//	public static class TextFragment extends Fragment {
-//		@Override
-//		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-//			return inflater.inflate(R.layout.text_fragment, container, false);
-//		}
-//	}
+	// public static class TextFragment extends Fragment {
+	// @Override
+	// public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+	// return inflater.inflate(R.layout.text_fragment, container, false);
+	// }
+	// }
 
 	private class PagerAdapter extends FragmentPagerAdapter {
 		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };

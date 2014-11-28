@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -32,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -58,6 +60,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.DBAddress;
+import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
@@ -83,7 +87,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "BookFragment";
 	private static View view;
-	
+
 	private ImageView blue_pin;
 
 	private LocationRequest mLocationRequest;
@@ -145,6 +149,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			/* map is already there, just return view as it is */
 		}
 
+		TextView add_fav_btn = (TextView) view.findViewById(R.id.add_fav_btn);
+		Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+		add_fav_btn.setTypeface(fontFamily);
+		add_fav_btn.setText(MBDefinition.icon_star_hollow);
+		add_fav_btn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				if (Utils.mPickupAddress != null)
+					setUpEnterNickNameDialog(Utils.mPickupAddress);
+			}
+		});
+
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
 
 		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
@@ -158,7 +173,6 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-
 
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				((MainActivity) getActivity()).startActivityForAnim(intent);
@@ -491,8 +505,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 		// Get the current location
 		Location currentLocation = mLocationClient.getLastLocation();
-		if (servicesConnected() && currentLocation!=null) {
-			
+		if (servicesConnected() && currentLocation != null) {
+
 			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 			// mCurrentLocation = currentLocation;
 
@@ -655,7 +669,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			if (checkReady() && servicesConnected()) {
 				// Get the current location
 				Location currentLocation = mLocationClient.getLastLocation();
-				if(currentLocation!=null)
+				if (currentLocation != null)
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
 				else
 					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
@@ -669,4 +683,46 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 	}
 
+	private void setUpEnterNickNameDialog(final Address address) {
+		final EditText nickname_edit;
+		TextView address_text;
+		TextView cancel;
+		TextView add;
+		final Dialog nicknameDialog = new Dialog(getActivity());
+		nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		nicknameDialog.setContentView(R.layout.nickname_dialog);
+		nicknameDialog.setCanceledOnTouchOutside(true);
+
+		address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
+		nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
+		address_text.setText(LocationUtils.addressToString(getActivity(), address));
+
+		cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
+		cancel.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				nicknameDialog.dismiss();
+				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+			}
+		});
+		add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
+		add.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				String nickname = nickname_edit.getText().toString();
+				if (nickname.length() == 0) {
+					nickname_edit.setError(getActivity().getString(R.string.nickName_cannot_be_empty));
+				} else {
+					DaoManager daoManager = DaoManager.getInstance(getActivity());
+					DBAddressDao addressDao = daoManager.getAddressDao(DaoManager.TYPE_WRITE);
+					DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
+
+					Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
+					nicknameDialog.dismiss();
+					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+				}
+			}
+		});
+		nicknameDialog.show();
+	}
 }

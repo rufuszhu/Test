@@ -60,7 +60,7 @@
     <string name="verify_check_phone">Check your phone number and  </string>
     <string name="verify_request_new"><u>Request a new one.</u></string>
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
-    <string name="verify">Verify</string>
+    <string name="verify">VERIFY</string>
     <string name="next">NEXT</string>
     <string name="register">REGISTER</string>
     <string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
@@ -112,6 +112,8 @@
     <string name="profile_empty_email">Please enter an email for profile</string>
     <string name="profile_email_invalid">Please enter a valid email</string>
     <string name="profile_empty_name">Please enter your Name</string>
+    <string name="profile_update_text">Your profile is updated</string>
+    <string name="SAVE">SAVE</string>
 
     <!-- About -->
     <string name="version">VERSION</string>
@@ -153,7 +155,8 @@
 
     <!-- modify address -->
     <string name="contacts">Contacts</string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">FAVORITE</string>
+    <string name="search">SEARCH</string>
     <string name="add_favorite">Add Favorite</string>
     <string name="select">Select</string>
 
@@ -327,7 +330,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
-
+ 	<string name="nickName_cannot_be_empty">Nickname cannot be empty</string>
     <string name="err_no_current_location">Cannot get current location, please check GPS setting</string>
     <string name="err_no_internet">Network unavailable. Please try again later</string>
     <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>
@@ -412,7 +415,7 @@
     <string name="title_activity_pay">Pay</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
-    <string name="title_activity_book">BookActivity</string>
+    <string name="title_activity_book">YOUR TRIP</string>
     <string name="title_activity_set_time">SetTimeActivity</string>
     <string name="title_activity_driver_note">DriverNoteActivity</string>
     <string name="title_activity_register_confirm">RegisterConfirmActivity</string>

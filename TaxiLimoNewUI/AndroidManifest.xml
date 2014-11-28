@@ -12,7 +12,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="digital.dispatch.TaxiLimoNewUI.permission.C2D_MESSAGE"
@@ -249,7 +249,8 @@
         <activity
             android:name=".RegisterConfirmActivity"
             android:label="@string/title_activity_register_confirm"
-            android:parentActivityName=".RegisterActivity" >
+            android:parentActivityName=".RegisterActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />

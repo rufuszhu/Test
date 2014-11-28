@@ -25,13 +25,13 @@
             android:background="@drawable/address_bar_background"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:id="@+id/image_myplace"
-                android:layout_width="@dimen/little_guy_icon_size"
-                android:layout_height="@dimen/little_guy_icon_size"
+            <TextView
+                android:id="@+id/add_fav_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/big_margin"
-                android:src="@drawable/little_guy_icon" />
+                android:textSize="25sp"
+                android:layout_marginLeft="@dimen/big_margin"/>
 
             <TextView
                 android:id="@+id/text_address"

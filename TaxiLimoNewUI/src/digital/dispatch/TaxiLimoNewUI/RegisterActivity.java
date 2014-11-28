@@ -22,8 +22,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -37,7 +35,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.animation.Animation;
+
 
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -46,10 +44,9 @@ import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
 public class RegisterActivity extends BaseActivity implements OnFocusChangeListener {
-	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-	public static final String PROPERTY_REG_ID = "registration_id";
-	private static final String PROPERTY_APP_VERSION = "appVersion";
+	
 	
 	protected static final String TAG = "RegisterActivity";
 	GoogleCloudMessaging gcm;
@@ -75,6 +72,19 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		findAndBindView();
 		
 		_context = this;
+		
+		// Check device for Play Services APK. If check succeeds, proceed with
+		// GCM registration.
+		if (checkPlayServices()) {
+			gcm = GoogleCloudMessaging.getInstance(_context);
+			regid = getRegistrationId(_context);
+			Logger.e("GCM id: " + regid);
+			registerInBackground();	
+			
+		} else {
+			Log.i(TAG, "No valid Google Play Services APK found.");
+			Toast.makeText(_context,"No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
@@ -98,10 +108,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		next_btn = (TextView) findViewById(R.id.next_btn);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
         question_ic = (TextView) findViewById(R.id.question_circle);
         question_ic.setTypeface(fontFamily);
-        question_ic.setText(MBDefinition.question_circle_icon_code);
+        question_ic.setText(MBDefinition.icon_question_circle_code);
 
 		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);
@@ -112,22 +122,13 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			public void onClick(View arg0) {
 				
 				if (validate(null)) {
-					storeInfo();
+					storeInfo();			
+					Utils.showProcessingDialog(_context);
 					
-					// Check device for Play Services APK. If check succeeds, proceed with
-					// GCM registration.
-					if (checkPlayServices()) {
-						gcm = GoogleCloudMessaging.getInstance(_context);
-						regid = getRegistrationId(_context);
-						Logger.e("GCM id: " + regid);
-						
-						Utils.showProcessingDialog(_context);
-						registerInBackground();
-						
-					} else {
-						Log.i(TAG, "No valid Google Play Services APK found.");
-						Toast.makeText(_context,"No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
-					}	
+					boolean isFirstTime = true;
+					boolean verifySMS = true;
+					new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS).execute();
+					
 				}
 			}
 
@@ -153,12 +154,14 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		register_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new VerifyDeviceTask(_context, et_code.getText().toString()).execute();
+				boolean isFirstTime = true; //set this parameter to false when called from profile page
+				new VerifyDeviceTask(_context, isFirstTime, et_code.getText().toString()).execute();
 				Utils.showProcessingDialog(_context);
 			}
 		});
 	}
 	
+	//callback by RegisterDeviceTask
 	public void showRegisterSuccessMessage(){
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -243,7 +246,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			isValid = false;
 		} else {
 			// check if the entered email is a valid pattern
-			Pattern ePattern = Pattern.compile(EMAIL_PATTERN);
+			Pattern ePattern = Pattern.compile(MBDefinition.EMAIL_PATTERN);
 			Matcher matcher = ePattern.matcher(email.getText().toString());
 
 			if (matcher.matches()) {
@@ -284,7 +287,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	 */
 	private String getRegistrationId(Context context) {
 		final SharedPreferences prefs = getGCMPreferences(context);
-		String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+		String registrationId = prefs.getString(MBDefinition.PROPERTY_REG_ID, "");
 		if (registrationId.isEmpty()) {
 			Logger.i(TAG, "Registration not found.");
 			return "";
@@ -292,8 +295,8 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		// Check if app was updated; if so, it must clear the registration ID
 		// since the existing regID is not guaranteed to work with the new
 		// app version.
-		int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
-		int currentVersion = getAppVersion(context);
+		int registeredVersion = prefs.getInt(MBDefinition.PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+		int currentVersion = Utils.getAppVersion(context);
 		if (registeredVersion != currentVersion) {
 			Log.i(TAG, "App version changed.");
 			return "";
@@ -301,18 +304,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		return registrationId;
 	}
 	
-	/**
-	 * @return Application's version code from the {@code PackageManager}.
-	 */
-	private static int getAppVersion(Context context) {
-		try {
-			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return packageInfo.versionCode;
-		} catch (NameNotFoundException e) {
-			// should never happen
-			throw new RuntimeException("Could not get package name: " + e);
-		}
-	}
+	
 
 	/**
 	 * @return Application's {@code SharedPreferences}.
@@ -344,9 +336,11 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 					// so it can use GCM/HTTP or CCS to send messages to your app.
 					// The request to your server should be authenticated if your app
 					// is using accounts.
+					/*
 					boolean isFirstTime = true;
 					boolean verifySMS = true;
 					new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS).execute();
+					*/
 
 					// For this demo: we don't need to send it because the device
 					// will send upstream messages to a server that echo back the
@@ -382,14 +376,15 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	 */
 	private void storeRegistrationId(Context context, String regId) {
 		final SharedPreferences prefs = getGCMPreferences(context);
-		int appVersion = getAppVersion(context);
+		int appVersion = Utils.getAppVersion(context);
 		Logger.i(TAG, "Saving regId on app version " + appVersion);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(PROPERTY_REG_ID, regId);
-		editor.putInt(PROPERTY_APP_VERSION, appVersion);
+		editor.putString(MBDefinition.PROPERTY_REG_ID, regId);
+		editor.putInt(MBDefinition.PROPERTY_APP_VERSION, appVersion);
 		editor.commit();
 	}
 	
+	/*
 	public void showResendSuccessMessage() {
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -404,7 +399,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 
 		messageDialog.show();
-	}
+	}*/
 
 	//callback by RegisterDevice Task
 	public void showVerifySuccessMessage() {

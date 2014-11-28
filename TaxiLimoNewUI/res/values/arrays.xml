@@ -3,8 +3,8 @@
 
     <string-array name="nav_menu_items">
         <item>Profile</item>
-        <item>Payment</item>
-        <item>Preference</item>
+<!--         <item>Payment</item> -->
+<!--         <item>Preference</item> -->
         <item>About</item>
     </string-array>       
 </resources>

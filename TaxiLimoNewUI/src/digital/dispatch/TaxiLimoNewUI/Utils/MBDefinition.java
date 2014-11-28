@@ -31,7 +31,8 @@ public class MBDefinition {
 	public static final int REQUEST_REGISTER_CC = 7;
 	public static final String[] SPECIAL_CHAR_TO_REMOVE = new String[] {"%", "[", "]", "<", ">", "\\"};
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	
+	public static final String PROPERTY_REG_ID = "registration_id";
+	public static final String PROPERTY_APP_VERSION = "appVersion";
 	public static final int FUTURE_BOOKING_RANGE = 14;
 	
 	// tripStatusUniformCode
@@ -92,7 +93,14 @@ public class MBDefinition {
 	
 	//fontawesome icon Unicode
 	//eg. http://fortawesome.github.io/Font-Awesome/icon/question-circle/
-	public final static String question_circle_icon_code = "\uf059";
+	public final static String icon_question_circle_code = "\uf059";
+	public final static String icon_tab_calendar = "\uf073";
+	public final static String icon_tab_track = "\uf1e5";
+	public final static String icon_tab_clock = "\uf017";
+	public final static String icon_tab_search = "\uf002";
+	public final static String icon_tab_fav = "\uf005";
+	public final static String icon_tab_contact = "\uf1ea";
+	public final static String icon_star_hollow = "\uf006";
 	
 	public static final SparseIntArray attrIconMap;
     static {
