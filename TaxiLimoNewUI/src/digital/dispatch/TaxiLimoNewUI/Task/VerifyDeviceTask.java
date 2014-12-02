@@ -69,8 +69,13 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	@Override
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
+		if(isFirstTime)
+			((RegisterActivity)_context).showVerifyFailedMessage();
+		else
+			((ProfileActivity)_context).showProfileVerifyFailedMessage();
+		/*
 		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.verify_failed).setCancelable(false).setPositiveButton(R.string.ok, null).show();
-
+		*/
 		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
 
 	}

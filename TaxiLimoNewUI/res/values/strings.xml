@@ -100,9 +100,10 @@
 
         5. Disclaimer of Warranties and Technical Support\n
             The Software is provided to you on an "AS IS" basis, without any technical support or warranty of any kind including, 
-            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.</string>
+            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.\n
+                  </string>
     <string name="chk_agreement">I agree to the terms and conditions.</string>
-    <string name="register_warning">Sorry, you haven\'t accepted the terms and conditions</string>
+    <string name="register_warning">You must agree in order to register.</string>
 
     <!-- Profile -->
     <string name="phone">PHONE</string>
@@ -113,7 +114,8 @@
     <string name="profile_email_invalid">Please enter a valid email</string>
     <string name="profile_empty_name">Please enter your Name</string>
     <string name="profile_update_text">Your profile is updated</string>
-    <string name="SAVE">SAVE</string>
+    <string name="profile_save">SAVE</string>
+    <string name="profile_cancel">CANCEL</string>
 
     <!-- About -->
     <string name="version">VERSION</string>
@@ -192,7 +194,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_payment">Payment</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_profile">PROFILE</string>
     <string name="title_activity_preference">Preference</string>
     <string name="title_activity_about">About</string>
     <string name="title_activity_destination">Destination</string>
@@ -351,6 +353,7 @@
     <string name="err_no_response_error">No Response Error</string>
     <string name="err">Error</string>
     <string name="err_msg_reg_device">Login failed. Please check user name and phone number.</string>
+    <string name="err_msg_reg_email">Login failed. Please check email address.</string>
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
     <string name="err_empty_msg">Cannot send empty message</string>
     <string name="err_msg_no_same_loc">You already booked a taxi on this address. Please cancel the previous job before booking another trip.</string>
@@ -412,11 +415,11 @@
     <string name="title_activity_edit_credit_card">Edit Credit Card</string>
     <string name="title_activity_register_credit_card">Register Credit Card</string>
     <string name="title_activity_pay">Pay</string>
-    <string name="title_activity_register">Register</string>
+    <string name="title_activity_register">REGISTER</string>
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
     <string name="title_activity_book">BookActivity</string>
     <string name="title_activity_set_time">SetTimeActivity</string>
     <string name="title_activity_driver_note">DriverNoteActivity</string>
-    <string name="title_activity_register_confirm">RegisterConfirmActivity</string>
+    <string name="title_activity_register_confirm">REGISTER</string>
 
 </resources>
