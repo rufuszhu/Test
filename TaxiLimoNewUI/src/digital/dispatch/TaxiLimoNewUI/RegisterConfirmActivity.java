@@ -2,14 +2,11 @@ package digital.dispatch.TaxiLimoNewUI;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -38,27 +35,15 @@ public class RegisterConfirmActivity extends BaseActivity {
 	private void findView() {
 
 		check_box = (CheckBox) findViewById(R.id.chk_agreement);
-		//check_box.setButtonDrawable(context.getResources().getDrawable( R.drawable.checkbox_selector));
 		register_btn = (TextView) findViewById(R.id.register_confirm_btn);
 
 		register_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (!check_box.isChecked()) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							context);
-					builder.setMessage(R.string.register_warning)
-							.setTitle(R.string.warning)
-							.setPositiveButton(R.string.ok,
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog, int id) {
-											dialog.dismiss();
-											
-										}
-									});
 					
+					TextView warning = (TextView) findViewById(R.id.chk_warning);
+					warning.setVisibility(View.VISIBLE);
 
-					builder.show();
 				} else {
 					showWelcomeDialog();
 				}

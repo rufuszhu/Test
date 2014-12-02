@@ -15,6 +15,7 @@ import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
+import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -31,6 +32,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	private Context _context;
 	private String GCMRegisterID;
 	private boolean isFirstTime, sendVerifySMS;
+	private static final int REQEUST_STATUS_INVALID_EMAIL = 2;
 
 	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime, boolean sendVerifySMS) {
 		rdReq = new RegDevRequest(this, this);
@@ -59,9 +61,11 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 			String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
+			String userEmail = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
 		
 			rdReq.setPhoneNum(phone);
 			rdReq.setName(userName);
+			rdReq.setEmail(userEmail); //TL-241
 
 			if (Locale.getDefault().getLanguage().compareToIgnoreCase("de") == 0) {
 				rdReq.setLocale("de-DE");
@@ -93,11 +97,15 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	}
 
 	@Override
-	public void onErrorResponse(String errorString) {
+	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
-		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.ok, null).show();
-
-		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
+		//TL-241
+		if(resWrapper.getStatus() == REQEUST_STATUS_INVALID_EMAIL){
+			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_email).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+		}else{
+			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+		}
+		Logger.v(TAG, "RegDev: ResponseError - " + resWrapper.getErrorString());
 
 	}
 

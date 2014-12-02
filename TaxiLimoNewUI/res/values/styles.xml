@@ -86,6 +86,16 @@
         <item name="android:shadowRadius">1</item>
     </style>
     
+    <style name="GreenBlueBtnText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#469D9F</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+    
     <style name="WhiteBtnText">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#ffffff</item>
