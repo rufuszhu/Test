@@ -361,7 +361,7 @@
 
     <!-- successful messages -->
     <string name="message_cancel_successful">The trip was successfully canceled</string>
-    <string name="message_book_successful">The trip was successfully booked</string>
+    <string name="message_book_successful">Thank you. We\'re looking for a Taxi. Please stand by.</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
     <string name="save_successful">Save Successful</string>
