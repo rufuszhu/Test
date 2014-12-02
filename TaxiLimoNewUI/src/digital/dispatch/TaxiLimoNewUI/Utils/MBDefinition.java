@@ -101,6 +101,10 @@ public class MBDefinition {
 	public final static String icon_tab_fav = "\uf005";
 	public final static String icon_tab_contact = "\uf1ea";
 	public final static String icon_star_hollow = "\uf006";
+	public final static String icon_pencil = "\uf040";
+	public final static String icon_delete = "\uf1f8";
+	public final static String icon_location = "\uf041";
+	public final static String icon_phone = "\uf095";
 	
 	public static final SparseIntArray attrIconMap;
     static {

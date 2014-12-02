@@ -43,4 +43,12 @@
  	<color name="background_tab_selected">#6b7883</color>
  	<color name="tab_text">#b5bcc1</color>
 	<color name="tab_text_selected">#ffffff</color>
+	
+	<color name="list_background2">#f5f6f7</color>
+	<color name="list_gray_text">#999999</color>
+	
+	
+	<color name="green">#66aeb0</color>
+	
+	
 </resources>

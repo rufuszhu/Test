@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height" >
+    android:layout_height="?android:attr/listPreferredItemHeight" >
 
     <digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem
         android:id="@+id/swipeContactView"
@@ -9,59 +9,68 @@
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
         android:visibility="visible" >
-        
+
         <RelativeLayout
             android:id="@+id/viewHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/normal_padding"
-            android:paddingLeft="@dimen/normal_padding">
+            android:background="@color/white" >
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="Large Text"
-            android:textSize="@dimen/list_item_title_font_size" />
+            <LinearLayout
+                android:id="@+id/address_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="@dimen/normal_padding"
+                android:paddingRight="@dimen/normal_padding"
+                android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_title"
-            android:layout_below="@+id/tv_title"
-            android:text="TextView"
-            android:textSize="@dimen/list_item_address_font_size" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/list_item_title_font_size" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_padding"
+                    android:singleLine="true"
+                    android:textColor="@color/list_gray_text"
+                    android:textSize="@dimen/list_item_address_font_size" />
+            </LinearLayout>
         </RelativeLayout>
-        
-        
-         <RelativeLayout
+
+        <RelativeLayout
             android:id="@+id/contact_option"
-            android:layout_width="100dp"
+            android:layout_width="160dp"
             android:layout_height="match_parent"
-            android:background="@color/red_light"
-            android:clickable="true"
+            android:background="@color/green"
             android:tag="desc" >
 
             <TextView
-                android:id="@+id/family"
-                android:layout_width="wrap_content"
+                android:id="@+id/edit_btn"
+                android:layout_width="@dimen/swipe_btn_width"
                 android:layout_height="match_parent"
-                android:text=""
+                android:clickable="true"
+                android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/swipe_btn_font_size" />
 
             <TextView
-                android:id="@+id/friend"
-                android:layout_width="wrap_content"
+                android:id="@+id/delete_btn"
+                android:layout_width="@dimen/swipe_btn_width"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/family"
-                 
-                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/edit_btn"
+                android:clickable="true"
+                android:gravity="center"
                 android:text="@string/delete"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/swipe_btn_font_size" />
         </RelativeLayout>
     </digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem>
 

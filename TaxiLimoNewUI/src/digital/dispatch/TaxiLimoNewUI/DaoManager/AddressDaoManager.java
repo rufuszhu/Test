@@ -44,7 +44,7 @@ public class AddressDaoManager {
 		String ad = address.getMaxAddressLineIndex() > 0 ? address
 				.getAddressLine(0) : "";
 		String[] strArray = TextUtils.split(ad, " ");
-		if (Utils.isNumeric(strArray[0])) {
+		if (strArray.length>0 && Utils.isNumeric(strArray[0])) {
 			return strArray[0];
 		} else
 			return "";

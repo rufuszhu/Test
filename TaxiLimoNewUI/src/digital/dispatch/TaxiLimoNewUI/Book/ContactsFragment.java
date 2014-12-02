@@ -12,10 +12,10 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -32,10 +32,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -48,11 +49,9 @@ import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -87,7 +86,8 @@ public class ContactsFragment extends ListFragment {
 		mImageLoader = new ImageLoader(getActivity(), getListPreferredItemHeight()) {
 			@Override
 			protected Bitmap processBitmap(Object data) {
-				// This gets called in a background thread and passed the data from
+				// This gets called in a background thread and passed the data
+				// from
 				// ImageLoader.loadImage().
 				return loadContactPhotoThumbnail((String) data, getImageSize());
 			}
@@ -101,10 +101,16 @@ public class ContactsFragment extends ListFragment {
 
 		DaoManager daoManager = DaoManager.getInstance(getActivity());
 		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
+		mContactList = new ArrayList<MyContact>();
+		readContacts();
+
+		adapter = new ContactsAdapter(getActivity(), mContactList);
+		setListAdapter(adapter);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Logger.e(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_contacts, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
 		return view;
@@ -118,15 +124,7 @@ public class ContactsFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-
-		mContactList = new ArrayList<MyContact>();
-		readContacts();
-
-		adapter = new ContactsAdapter(getActivity(), mContactList);
-		setListAdapter(adapter);
-
-		Utils.isInternetAvailable(getActivity());
-
+		//Utils.isInternetAvailable(getActivity());
 	}
 
 	@Override
@@ -150,8 +148,9 @@ public class ContactsFragment extends ListFragment {
 			if (mSwipeSlop < 0) {
 				mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
 			}
-			
-			//((SwipableListItem) (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+
+			// ((SwipableListItem)
+			// (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
 			((SwipableListItem) (v)).processDragEvent(event);
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
@@ -176,9 +175,10 @@ public class ContactsFragment extends ListFragment {
 						mListView.requestDisallowInterceptTouchEvent(true);
 					}
 				}
-//				if (mSwiping) {
-//					// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
-//				}
+				// if (mSwiping) {
+				// //
+				// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+				// }
 			}
 				break;
 			case MotionEvent.ACTION_UP: {
@@ -208,7 +208,6 @@ public class ContactsFragment extends ListFragment {
 		// Return theme value based on DisplayMetrics
 		return (int) typedValue.getDimension(metrics);
 	}
-
 
 	private void readContacts() {
 		String[] PROJECTION = new String[] { ContactsContract.Data.CONTACT_ID, ContactsContract.Contacts.DISPLAY_NAME, StructuredPostal.STREET };
@@ -262,11 +261,12 @@ public class ContactsFragment extends ListFragment {
 		public class ViewHolder {
 			public TextView address;
 			public TextView tv_name;
+			public TextView add_fav_btn;
 			public ImageView profile_icon;
 			public RelativeLayout contact_option;
 			public LinearLayout viewHeader;
 			public ViewGroup swipeContactView;
-			
+
 		}
 
 		@Override
@@ -282,6 +282,7 @@ public class ContactsFragment extends ListFragment {
 				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
 				viewHolder.tv_name = (TextView) rowView.findViewById(R.id.tv_name);
 				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+				viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
 				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
 				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
 				rowView.setTag(viewHolder);
@@ -290,10 +291,23 @@ public class ContactsFragment extends ListFragment {
 			final View temp = rowView;
 
 			// fill data
+			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
 			ViewHolder holder = (ViewHolder) rowView.getTag();
+			holder.add_fav_btn.setTypeface(fontFamily);
+			holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
+			
+			
+
 			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", holder.profile_icon);
-			holder.address.setText(values.get(position).getAddress());
+
+			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+			holder.tv_name.setTypeface(RionaSansMedium);
 			holder.tv_name.setText(values.get(position).getName());
+			
+			Typeface RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+			holder.address.setTypeface(RionaSansRegular);
+			holder.address.setText(values.get(position).getAddress());
+	
 			holder.contact_option.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -302,13 +316,16 @@ public class ContactsFragment extends ListFragment {
 				}
 			});
 			
+			if(position%2==1){
+				holder.viewHeader.setBackgroundColor(context.getResources().getColor(R.color.list_background2));
+			}
 			holder.viewHeader.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getAddress());
 				}
 			});
-			
+
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
 			return rowView;
 		}
@@ -316,46 +333,59 @@ public class ContactsFragment extends ListFragment {
 
 	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
-		// Instantiates an AssetFileDescriptor. Given a content Uri pointing to an image file, the
+		// Instantiates an AssetFileDescriptor. Given a content Uri pointing to
+		// an image file, the
 		// ContentResolver can return an AssetFileDescriptor for the file.
 		AssetFileDescriptor afd = null;
 
-		// This "try" block catches an Exception if the file descriptor returned from the Contacts
+		// This "try" block catches an Exception if the file descriptor returned
+		// from the Contacts
 		// Provider doesn't point to an existing file.
 		try {
 			Uri thumbUri;
-			// If Android 3.0 or later, converts the Uri passed as a string to a Uri object.
+			// If Android 3.0 or later, converts the Uri passed as a string to a
+			// Uri object.
 			if (Utils.hasHoneycomb()) {
 				thumbUri = Uri.parse(photoData);
 			} else {
-				// For versions prior to Android 3.0, appends the string argument to the content
+				// For versions prior to Android 3.0, appends the string
+				// argument to the content
 				// Uri for the Contacts table.
 				final Uri contactUri = Uri.withAppendedPath(Contacts.CONTENT_URI, photoData);
 
-				// Appends the content Uri for the Contacts.Photo table to the previously
-				// constructed contact Uri to yield a content URI for the thumbnail image
+				// Appends the content Uri for the Contacts.Photo table to the
+				// previously
+				// constructed contact Uri to yield a content URI for the
+				// thumbnail image
 				thumbUri = Uri.withAppendedPath(contactUri, Photo.CONTENT_DIRECTORY);
 			}
-			// Retrieves a file descriptor from the Contacts Provider. To learn more about this
+			// Retrieves a file descriptor from the Contacts Provider. To learn
+			// more about this
 			// feature, read the reference documentation for
 			// ContentResolver#openAssetFileDescriptor.
 			afd = getActivity().getContentResolver().openAssetFileDescriptor(thumbUri, "r");
 
-			// Gets a FileDescriptor from the AssetFileDescriptor. A BitmapFactory object can
-			// decode the contents of a file pointed to by a FileDescriptor into a Bitmap.
+			// Gets a FileDescriptor from the AssetFileDescriptor. A
+			// BitmapFactory object can
+			// decode the contents of a file pointed to by a FileDescriptor into
+			// a Bitmap.
 			FileDescriptor fileDescriptor = afd.getFileDescriptor();
 
 			if (fileDescriptor != null) {
-				// Decodes a Bitmap from the image pointed to by the FileDescriptor, and scales it
+				// Decodes a Bitmap from the image pointed to by the
+				// FileDescriptor, and scales it
 				// to the specified width and height
 				return ImageLoader.decodeSampledBitmapFromDescriptor(fileDescriptor, imageSize, imageSize);
 			}
 		} catch (FileNotFoundException e) {
-			// If the file pointed to by the thumbnail URI doesn't exist, or the file can't be
-			// opened in "read" mode, ContentResolver.openAssetFileDescriptor throws a
+			// If the file pointed to by the thumbnail URI doesn't exist, or the
+			// file can't be
+			// opened in "read" mode, ContentResolver.openAssetFileDescriptor
+			// throws a
 			// FileNotFoundException.
 			if (BuildConfig.DEBUG) {
-				//Log.d(TAG, "Contact photo thumbnail not found for contact " + photoData + ": " + e.toString());
+				// Log.d(TAG, "Contact photo thumbnail not found for contact " +
+				// photoData + ": " + e.toString());
 			}
 		} finally {
 			// If an AssetFileDescriptor was returned, try to close it
@@ -363,7 +393,8 @@ public class ContactsFragment extends ListFragment {
 				try {
 					afd.close();
 				} catch (IOException e) {
-					// Closing a file descriptor might cause an IOException if the file is
+					// Closing a file descriptor might cause an IOException if
+					// the file is
 					// already closed. Nothing extra is needed to handle this.
 				}
 			}
@@ -375,7 +406,8 @@ public class ContactsFragment extends ListFragment {
 
 	protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 
-		// Store the context passed to the AsyncTask when the system instantiates it.
+		// Store the context passed to the AsyncTask when the system
+		// instantiates it.
 		Context localContext;
 
 		// Constructor called by the system to instantiate the task
@@ -403,7 +435,8 @@ public class ContactsFragment extends ListFragment {
 			// Create a list to contain the result address
 			List<Address> addresses = null;
 
-			// Try to get an address for the current location. Catch IO or network problems.
+			// Try to get an address for the current location. Catch IO or
+			// network problems.
 			try {
 
 				/*
@@ -475,14 +508,13 @@ public class ContactsFragment extends ListFragment {
 		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if(isSave){
-					if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+				if (isSave) {
+					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addressesObj.get(0);
 					else
 						Utils.mPickupAddress = addressesObj.get(0);
 					getActivity().finish();
-				}
-				else
+				} else
 					new addFavoriteTask(getActivity()).execute(addresses.get(which));
 			}
 		});
@@ -491,7 +523,8 @@ public class ContactsFragment extends ListFragment {
 
 	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
 
-		// Store the context passed to the AsyncTask when the system instantiates it.
+		// Store the context passed to the AsyncTask when the system
+		// instantiates it.
 		Context localContext;
 
 		// Constructor called by the system to instantiate the task
@@ -521,7 +554,8 @@ public class ContactsFragment extends ListFragment {
 			// Create a list to contain the result address
 			List<Address> addresses = null;
 
-			// Try to get an address for the current location. Catch IO or network problems.
+			// Try to get an address for the current location. Catch IO or
+			// network problems.
 			try {
 
 				/*
@@ -569,7 +603,7 @@ public class ContactsFragment extends ListFragment {
 				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
 			} else if (addresses.size() == 1) {
 				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-					if(((ModifyAddressActivity)getActivity()).getIsDesitination())
+					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addresses.get(0);
 					else
 						Utils.mPickupAddress = addresses.get(0);
@@ -583,8 +617,8 @@ public class ContactsFragment extends ListFragment {
 			}
 		}
 	}
-	
-	private void setUpEnterNickNameDialog(final Address address){
+
+	private void setUpEnterNickNameDialog(final Address address) {
 		final EditText nickname_edit;
 		TextView address_text;
 		TextView cancel;
@@ -601,23 +635,31 @@ public class ContactsFragment extends ListFragment {
 		cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				nicknameDialog.dismiss();
 				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+				nicknameDialog.dismiss();
 			}
 		});
 		add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
 		add.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				String nickname = nickname_edit.getText().toString();
-				DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
-				((ModifyAddressActivity) getActivity()).notifyFavoriteDataChange(dbAddress);
-				Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-				nicknameDialog.dismiss();
-				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+				if (nickname.length() == 0) {
+					nickname_edit.setError(getActivity().getString(R.string.nickName_cannot_be_empty));
+				} else {
+					DaoManager daoManager = DaoManager.getInstance(getActivity());
+					DBAddressDao addressDao = daoManager.getAddressDao(DaoManager.TYPE_WRITE);
+					DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
+					Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
+					
+					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+					((ModifyAddressActivity)getActivity()).favoritesFragment.notifyChange();
+					nicknameDialog.dismiss();
+				}
 			}
 		});
+		nicknameDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		nicknameDialog.show();
 	}
 }

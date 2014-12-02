@@ -50,7 +50,7 @@
             android:id="@+id/contact_option"
             android:layout_width="150dp"
             android:layout_height="match_parent"
-            android:background="@color/red_light"
+            android:background="@color/green"
             android:tag="desc" >
 
             <TextView

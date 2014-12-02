@@ -22,7 +22,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/address_bar_background"
+            android:background="@drawable/searchbar_selector"
             android:orientation="horizontal" >
 
             <TextView

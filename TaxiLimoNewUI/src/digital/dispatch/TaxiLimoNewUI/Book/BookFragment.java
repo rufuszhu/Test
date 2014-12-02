@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -639,6 +640,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 				// If there aren't any addresses, post a message
 			} else {
+				Utils.mPickupAddress = null;
 				return getString(R.string.no_address_found);
 			}
 		}
@@ -700,9 +702,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				nicknameDialog.dismiss();
 				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+				nicknameDialog.dismiss();
 			}
 		});
 		add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
@@ -717,12 +719,13 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
 
 					Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-					nicknameDialog.dismiss();
 					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
+					nicknameDialog.dismiss();
 				}
 			}
 		});
+		nicknameDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		nicknameDialog.show();
 	}
 }

@@ -16,9 +16,7 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
 public class ModifyAddressActivity extends BaseActivity {
@@ -30,9 +28,9 @@ public class ModifyAddressActivity extends BaseActivity {
 	private PagerAdapter mAdapter;
 	private NonSwipeableViewPager mPager;
 	private OnPageChangeListener pageChangeListener;
-	private FavoritesFragment favoritesFragment;
+	public FavoritesFragment favoritesFragment;
 	public ContactsFragment contactsFragment;
-	private SearchFragment searchFragment;
+	public SearchFragment searchFragment;
 
 	private TextView tab0_icon;
 	private TextView tab1_icon;
@@ -89,22 +87,18 @@ public class ModifyAddressActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(0);
-				selectTab0();
-
 			}
 		});
 		tab1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(1);
-				selectTab1();
 			}
 		});
 		tab2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(2);
-				selectTab2();
 			}
 		});
 	}
@@ -147,7 +141,7 @@ public class ModifyAddressActivity extends BaseActivity {
 
 				if (selected == 0) {
 					selectTab0();
-					searchFragment.getData();
+					//searchFragment.getData();
 				} else if (selected == 1) {
 					selectTab1();
 				} else if (selected == 2) {
@@ -209,11 +203,7 @@ public class ModifyAddressActivity extends BaseActivity {
 		tab2_icon.setTextColor(textColorSelected);
 	}
 
-	private void resetAllTabColor() {
-		tab0.setBackgroundColor(getResources().getColor(R.color.background_tab));
-		tab1.setBackgroundColor(getResources().getColor(R.color.background_tab));
-		tab2.setBackgroundColor(getResources().getColor(R.color.background_tab));
-	}
+
 
 	public void notifyFavoriteDataChange(DBAddress value) {
 		favoritesFragment.notifyDataChange(value);
@@ -227,7 +217,6 @@ public class ModifyAddressActivity extends BaseActivity {
 	// }
 
 	private class PagerAdapter extends FragmentPagerAdapter {
-		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };
 
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -238,10 +227,6 @@ public class ModifyAddressActivity extends BaseActivity {
 			return 3;
 		}
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return TITLES[position];
-		}
 
 		@Override
 		public Fragment getItem(int position) {
