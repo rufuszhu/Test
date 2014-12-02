@@ -38,7 +38,7 @@
     <color name="green_dark">#669900</color>
     <color name="orange_dark">#FF8800</color>
     <color name="red_dark">#CC0000</color>
-    
+
      <color name="background_tab">#c2c2c2</color>
  	<color name="background_tab_selected">#6b7883</color>
  	<color name="tab_text">#b5bcc1</color>
@@ -50,5 +50,14 @@
 	
 	<color name="green">#66aeb0</color>
 	
-	
+
+ 	<color name="large_btn_text_color">#409A9C</color>
+ 	<color name="large_btn_bg_color">#FCFCFC</color>
+ 	<color name="large_btn_line_color">#6E6F76</color>
+ 	<color name="blue_green_color">#409A9C</color>
+ 	<color name="blue_grenn_color2">#469D9F</color>
+ 	<color name="red_color">#C12F39</color>
+ 	<color name="btn_bg_green_color">#71B4B5</color>
+ 	
+
 </resources>

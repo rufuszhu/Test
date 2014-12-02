@@ -15,7 +15,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
 public class RegDevRequest extends Request {
-	private String deviceToken, phoneNr, name, locale, version, protocol, hardwareID, type, smsverify;
+	private String deviceToken, phoneNr, name, locale, version, protocol, hardwareID, type, smsverify, email;
 	private IRegDevResponseListener iResponseListener = null;
 	private static String TAG = "Soap-RegDev";
 	
@@ -72,7 +72,7 @@ public class RegDevRequest extends Request {
 							ResponseWrapper rWrapper = new ResponseWrapper(((SoapTypeWrapper)response).GetSoap());
 						    	
 							if (rWrapper.getStatus() != 0) {
-								iResponseListener.onErrorResponse(rWrapper.getErrorString());
+								iResponseListener.onErrorResponse(rWrapper);
 								
 								if (GlobalVar.logEnable) {
 									Log.v(TAG, "Response Status: " + rWrapper.getErrorString());
@@ -104,7 +104,7 @@ public class RegDevRequest extends Request {
 	
 	public interface IRegDevResponseListener {
 		public void onResponseReady(RegDevResponse response);
-		public void onErrorResponse(String errorString);
+		public void onErrorResponse(ResponseWrapper response);
 		public void onError();
 	}
 	
@@ -120,6 +120,7 @@ public class RegDevRequest extends Request {
 		if (hardwareID != null) { list.add(new DataParam("hardwareID", hardwareID)); }
 		if (type != null) { list.add(new DataParam("type", type)); }
 		if (smsverify != null) { list.add(new DataParam("smsverify", smsverify)); }
+		if (email != null) { list.add(new DataParam("email", email)); }
 		return list;
 	}
 
@@ -129,5 +130,9 @@ public class RegDevRequest extends Request {
 
 	public void setSmsverify(String smsverify) {
 		this.smsverify = smsverify;
+	}
+	
+	public void setEmail(String e) {
+		email = e;
 	}
 }

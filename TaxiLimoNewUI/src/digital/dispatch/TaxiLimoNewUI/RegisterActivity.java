@@ -4,20 +4,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-
-import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
-import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
-import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,20 +14,30 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-
-
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
+import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class RegisterActivity extends BaseActivity implements OnFocusChangeListener {
 	
@@ -53,13 +49,12 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	String regid;
 	
 	private EditText name, email, phone_number;
-	private TextView next_btn, register_btn;
+	private TextView next_btn, verify_btn;
 	private LinearLayout ll_sms_verify;
-	
 	private Context _context;
 	private EditText et_code;
 	private TextView question_ic;
-
+	//boolean mBlockCompletion = false; //use this to bypass assigning existing value
 
 
 	@Override
@@ -102,16 +97,23 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	
 
 	private void findAndBindView() {
-		name = (EditText) findViewById(R.id.name);	
+		
+		name = (EditText) findViewById(R.id.name);
+		name.addTextChangedListener(new GenericTextWatcher(name));
 		email = (EditText) findViewById(R.id.email);
+		email.addTextChangedListener(new GenericTextWatcher(email));
 		phone_number = (EditText) findViewById(R.id.phone_number);
+		phone_number.addTextChangedListener(new GenericTextWatcher(phone_number));
+		
+		
 		next_btn = (TextView) findViewById(R.id.next_btn);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		
 		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
         question_ic = (TextView) findViewById(R.id.question_circle);
         question_ic.setTypeface(fontFamily);
-        question_ic.setText(MBDefinition.icon_question_circle_code);
+        question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
+
 
 		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);
@@ -135,6 +137,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		});
 		
 		et_code = (EditText) findViewById(R.id.et_code);
+		et_code.addTextChangedListener(new GenericTextWatcher(et_code));
 		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
 		//request new verification code, here need to refresh the phone number in case number is updated
 		request_new_btn.setOnClickListener(new OnClickListener() {
@@ -150,8 +153,8 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			}
 		}});
 
-		register_btn = (TextView) findViewById(R.id.register_btn);
-		register_btn.setOnClickListener(new OnClickListener() {
+		verify_btn = (TextView) findViewById(R.id.verify_btn);
+		verify_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				boolean isFirstTime = true; //set this parameter to false when called from profile page
@@ -175,7 +178,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			public void onCancel(DialogInterface dialog) {
 				ll_sms_verify.setVisibility(View.VISIBLE);
 				next_btn.setVisibility(View.GONE);
-				register_btn.setVisibility(View.VISIBLE);
+				et_code.requestFocus();
 			}});
 		messageDialog.show();
 	}
@@ -332,15 +335,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 					regid = gcm.register(CommonUtilities.SENDER_ID);
 					msg = "Device registered, registration ID=" + regid;
 
-					// You should send the registration ID to your server over HTTP,
-					// so it can use GCM/HTTP or CCS to send messages to your app.
-					// The request to your server should be authenticated if your app
-					// is using accounts.
-					/*
-					boolean isFirstTime = true;
-					boolean verifySMS = true;
-					new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS).execute();
-					*/
 
 					// For this demo: we don't need to send it because the device
 					// will send upstream messages to a server that echo back the
@@ -384,22 +378,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		editor.commit();
 	}
 	
-	/*
-	public void showResendSuccessMessage() {
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
-
-		String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
-		tv_message.setText(_context.getString(R.string.verify_dialog_text, phone));
-
-
-		messageDialog.show();
-	}*/
 
 	//callback by RegisterDevice Task
 	public void showVerifySuccessMessage() {
@@ -422,6 +400,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	}
 	
 	public void showVerifyFailedMessage() {
+		et_code.setText("");
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -431,6 +410,33 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		tv_message.setText(_context.getString(R.string.verify_failed));
 
 		messageDialog.show();
+	}
+	
+	//inner class implements TextWatcher for show and hide button when user enter something
+	private class GenericTextWatcher implements TextWatcher{
+
+	    private View view;
+	    private GenericTextWatcher(View view) {
+	        this.view = view;
+	    }
+
+	    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+	    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+	    public void afterTextChanged(Editable editable) {
+	    	   
+	        switch(view.getId()){
+	            case R.id.name:    
+	            case R.id.email:    	
+	            case R.id.phone_number:
+	            	next_btn.setVisibility(View.VISIBLE);
+	                break;
+	            case R.id.et_code:
+	            	verify_btn.setVisibility(View.VISIBLE);
+	            default:
+	            	break;
+	        }
+	    }
 	}
 
 }

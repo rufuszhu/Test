@@ -2,10 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="20dp" 
+    android:padding="@dimen/normal_margin"
+    android:background="@color/background" 
     tools:context="digital.dispatch.TaxiLimoNewUI.RegisterConfirmActivity" >
     
     <RelativeLayout
@@ -13,6 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:paddingLeft="@dimen/normal_margin"
+    	android:paddingRight="@dimen/normal_margin"
+    	android:paddingTop="@dimen/normal_margin"
+        
         >
 
         <TextView
@@ -21,80 +23,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"            
             android:layout_marginRight="120dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/confirmation"
             android:textSize="19sp"
             android:textStyle="bold"/>
-        <!--  
-        <FrameLayout
-            android:id="@+id/confirm_status_1"
-   			android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_centerVertical="true"
-    		android:layout_toRightOf="@+id/confirm_title" >
-        	
-        	<ImageView
-                android:id="@+id/confirm_circle_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/shape_solid_circle_light_grey" />
-        	
-        	<TextView
-        	    android:id="@+id/confirm_num_1"
-        	    android:layout_width="wrap_content"
-        	    android:layout_height="wrap_content"
-        	    android:layout_gravity="center"
-        	    android:alpha=".8"
-        	    android:text="@string/step1"
-        	    android:textColor="@color/white"
-        	    android:textSize="14sp"
-        	    android:textStyle="bold" />
-        	
-       	</FrameLayout>
-		
-		 
-       	<View
-            android:id="@+id/confirm_dash"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/confirm_status_1"
-            android:background="@color/gray_line" />
-        
-        <FrameLayout
-            android:id="@+id/confirm_status_2"
-   			android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_centerVertical="true"
-    		android:layout_alignParentRight="true"   
-    		 >
-        							
-	        <ImageView
-	                android:id="@+id/confirm_circle_2"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:src="@drawable/shape_solid_circle" />
-
-	        <TextView
-	            android:id="@+id/confirm_num_2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:alpha=".8"
-	            android:layout_gravity="center"
-	            android:text="@string/step2"
-	            android:textColor="@color/white"
-	            android:textSize="14sp"
-	            android:textStyle="bold" />
-        
-        </FrameLayout>
-        -->
-      </RelativeLayout>
+       
+      
       
       <ScrollView
           android:id="@+id/scrv_eula"
           android:layout_width="match_parent"
-          android:layout_below="@+id/rl_confirm_title"
-          android:layout_height="290dp"   
-          android:paddingTop="20dp"     
+          android:layout_below="@+id/confirm_title"
+          android:layout_height="280dp" 
+          android:background="@drawable/scrollviewborder"
+          android:paddingLeft="10dp"
+    	  android:paddingRight="10dp"    
           android:fillViewport="true"
           android:orientation="vertical" >
         
@@ -104,38 +47,52 @@
 		        android:id="@+id/eula"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:layout_marginTop="@dimen/normal_padding"
+		        android:layout_marginTop="@dimen/normal_margin"
 		        android:paddingLeft="@dimen/normal_padding"
-              	android:background="@drawable/shape_textview_border"
 		        android:text="@string/eula"
-		        android:textSize= "12sp"
-		        android:textAppearance="?android:attr/textAppearanceLarge" >
-		    </TextView>
+		        android:textSize= "14sp" />
+		   
 		
 		</ScrollView> 
 		
       <CheckBox
-        android:id="@+id/chk_agreement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:layout_below="@+id/scrv_eula"
-        android:text="@string/chk_agreement" />
-        
-
+          android:id="@+id/chk_agreement"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/scrv_eula"
+          android:layout_marginTop="@dimen/big_margin"
+          android:paddingLeft="10dp"
+    	  android:paddingRight="10dp"
+          android:gravity="center_vertical"
+          android:layout_alignParentLeft="true"
+          android:layout_marginLeft = "-7dp"
+          android:text="@string/chk_agreement" />
+      
+      <TextView 
+          android:id="@+id/chk_warning"
+          android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:layout_below="@+id/chk_agreement"
+		  android:layout_marginLeft = "27dp"
+		  android:text="@string/register_warning"
+		  android:textColor="@color/red_color"
+		  android:visibility="gone"
+		  />
+      
+      </RelativeLayout>
+      
    	<TextView
-            android:id="@+id/register_confirm_btn"
-            style="@style/TextDropShadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_book_btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/register"
-            android:textColor="@color/white"
-            android:textSize="@dimen/book_font_size"
-            android:textStyle="bold" />
+   	    android:id="@+id/register_confirm_btn"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="@dimen/map_book_btn_height"
+   	    android:layout_alignParentBottom="true"
+   	    android:layout_marginTop="@dimen/small_padding"
+   	    android:background="@drawable/blue_green_btn_selector"
+   	    android:clickable="true"
+   	    android:gravity="center"
+   	    android:text="@string/register"
+   	    android:textColor="@color/white"
+   	    android:textSize="@dimen/large_button_font_size"
+   	    android:textStyle="bold" />
 
 </RelativeLayout>

@@ -2,17 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="20dp"
-   
+    android:padding="@dimen/normal_margin"
+    android:background="@color/background"
     tools:context="digital.dispatch.TaxiLimoNewUI.RegisterActivity" >
+    
     
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/normal_margin"
+    	android:paddingRight="@dimen/normal_margin"
+    	android:paddingTop="@dimen/normal_margin"
         android:layout_alignParentTop="true">
 
         <TextView
@@ -24,78 +25,13 @@
             android:text="@string/personal_info"
             android:textSize="19sp"
             android:textStyle="bold"/>
-        <!--  
-        <FrameLayout
-            android:id="@+id/register_status_1"
-   			android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_centerVertical="true"
-    		android:layout_toRightOf="@+id/register_title" >
-        	
-        	<ImageView
-                android:id="@+id/register_circle_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/shape_solid_circle" />
-        	
-        	<TextView
-        	    android:id="@+id/register_num_1"
-        	    android:layout_width="wrap_content"
-        	    android:layout_height="wrap_content"
-        	    android:layout_gravity="center"
-        	    android:alpha=".8"
-        	    android:text="@string/step1"
-        	    android:textColor="@color/white"
-        	    android:textSize="14sp"
-        	    android:textStyle="bold" />
-        	
-       </FrameLayout>
-		
-		 
-        <View
-            android:id="@+id/register_dash"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/register_status_1"
-            android:layout_toLeftOf="@+id/register_status_2"
-            android:background="@color/gray_line" />
-        
-        <FrameLayout
-            android:id="@+id/register_status_2"
-   			android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_centerVertical="true"
-    		android:layout_alignParentRight="true"   
-    		 >
-        							
-	        <ImageView
-	                android:id="@+id/register_circle_2"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:src="@drawable/shape_holo_circle" />
-
-	        <TextView
-	            android:id="@+id/register_num_2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:alpha=".8"
-	            android:layout_gravity="center"
-	            android:text="@string/step2"
-	            android:textColor="@color/gray_light"
-	            android:textSize="14sp"
-	            android:textStyle="bold" />
-        
-        </FrameLayout>
-		-->
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_info_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:layout_below="@+id/rl_title"
+        android:layout_below="@+id/register_title"
         android:orientation="vertical">
 
         <EditText
@@ -103,11 +39,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/shape_textview_border"
+            android:background="@android:drawable/editbox_background"
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textPersonName"
-            android:paddingLeft="@dimen/normal_padding" >
+            android:paddingLeft="@dimen/normal_padding"
+            android:selectAllOnFocus="true" >
         </EditText>
 
  
@@ -117,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/shape_textview_border"
+            android:background="@android:drawable/editbox_background"
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
@@ -130,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/shape_textview_border"
+            android:background="@android:drawable/editbox_background"
             android:ems="10"
             android:hint="@string/phone_number"
             android:inputType="phone"
@@ -160,7 +97,7 @@
             android:layout_height="@dimen/edit_text_height"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/shape_textview_border"
+            android:background="@android:drawable/editbox_background"
             android:hint="@string/verify_hint"
             android:paddingLeft="@dimen/normal_padding">
 			
@@ -181,7 +118,7 @@
         	android:layout_marginTop="@dimen/small_padding"	
         	android:layout_gravity="center"
         	android:textSize="28sp"
-        	android:text="@string/name" />
+        	android:text="A" />
         	
         <LinearLayout
             android:layout_width="wrap_content"
@@ -216,43 +153,42 @@
 	            android:clickable="true"
 	            android:text="@string/verify_request_new"
 	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textColor="@color/blue_text"
+	            android:textColor="@color/large_btn_text_color"
 	            android:textSize="12sp" />
 
         </LinearLayout>
         </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-   
+   </RelativeLayout>
 
    <TextView
             android:id="@+id/next_btn"
-            style="@style/TextDropShadow"
             android:layout_width="match_parent"
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
+            android:background="@drawable/chk_bg"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/next"
-            android:textColor="@color/white"
-            android:textSize="@dimen/book_font_size"
-            android:textStyle="bold" />
+            android:textColor="@color/large_btn_text_color"
+            android:textSize="@dimen/large_button_font_size"
+            android:textStyle="bold" 
+            android:visibility="gone" />
    
    <TextView
-            android:id="@+id/register_btn"
-            style="@style/TextDropShadow"
+            android:id="@+id/verify_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
+            android:background="@drawable/chk_bg"
             android:clickable="true"
             android:gravity="center"
-            android:text="@string/register"
-            android:textColor="@color/white"
-            android:textSize="@dimen/book_font_size"
+            android:text="@string/verify"
+            android:textColor="@color/large_btn_text_color"
+            android:textSize="@dimen/large_button_font_size"
             android:textStyle="bold" 
             android:visibility="gone"/>
 
