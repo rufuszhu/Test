@@ -59,11 +59,10 @@ public class Utils {
 	// public static boolean mainActivityIsActivated = true;
 	private static Dialog progressDialog;
 
-	private static final int DEFAULT_FONT_SIZE = 20;
-	private static final int VALUE_FONT_SIZE = 13;
 
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
-	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
+//	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
+	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_about };
 	public static String pickupHouseNumber = "";
 
 	// get title of the item navigation

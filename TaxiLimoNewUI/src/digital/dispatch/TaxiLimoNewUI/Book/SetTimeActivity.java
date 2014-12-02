@@ -1,4 +1,4 @@
-package digital.dispatch.TaxiLimoNewUI;
+package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -6,7 +6,13 @@ import java.util.Date;
 
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
+import digital.dispatch.TaxiLimoNewUI.R.color;
+import digital.dispatch.TaxiLimoNewUI.R.drawable;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
@@ -21,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class SetTimeActivity extends Activity {
+public class SetTimeActivity extends BaseActivity {
 
 	private WheelView dates;
 	private WheelView times;
@@ -39,6 +45,16 @@ public class SetTimeActivity extends Activity {
 		findView();
 		setUpWheel();
 		bindEvents();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if(id==android.R.id.home){
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void findView() {

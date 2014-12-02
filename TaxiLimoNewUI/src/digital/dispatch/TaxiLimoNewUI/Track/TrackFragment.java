@@ -44,10 +44,8 @@ public class TrackFragment extends ListFragment {
 
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private final String TAG = "TrackFragment";
-	private DBBookingDao bookingDao;
 	private View rootView;
 	private MenuItem refresh_icon;
-	private BookingListAdapter adapter;
 	private boolean isRefreshing;
 
 	/**
@@ -65,9 +63,17 @@ public class TrackFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		isRefreshing = false;
+		
+		BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
+		setListAdapter(adapter);
+	}
+	
+	private List<DBBooking> getActiveJobs(){
 		DaoManager daoManager = DaoManager.getInstance(getActivity());
-		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
+		return bookingDao.queryBuilder()
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+				.orderDesc(Properties.TripCreationTime).list();
 	}
 
 	@Override
@@ -82,10 +88,11 @@ public class TrackFragment extends ListFragment {
 		Logger.d(TAG, "onCreateOptionsMenu");
 		// only show refresh if drawer is not open.
 		if (!((MainActivity) getActivity()).getDrawerFragment().isDrawerOpen()) {
-			inflater.inflate(R.menu.track, menu);
-			refresh_icon = menu.findItem(R.id.action_refresh);
+			
 			if (!isRefreshing) {
-				//startRecallJobTask();
+				inflater.inflate(R.menu.track, menu);
+				refresh_icon = menu.findItem(R.id.action_refresh);
+				startRecallJobTask();
 			}
 		}
 	}
@@ -114,17 +121,9 @@ public class TrackFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		Logger.d(TAG, "on RESUME");
-		List<DBBooking> values = bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
-				.orderDesc(Properties.TripCreationTime).list();
-		adapter = new BookingListAdapter(getActivity(), values);
+		BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
 		setListAdapter(adapter);
-
 		Utils.isInternetAvailable(getActivity());
-
-		if (!isRefreshing) {
-			startRecallJobTask();
-		}
 	}
 
 	private void startUpdateAnimation(MenuItem item) {
@@ -174,29 +173,27 @@ public class TrackFragment extends ListFragment {
 	}
 
 	private ArrayList<Pair<String, String>> getUniqueActiveJobDestIdList() {
-		CloseableListIterator<DBBooking> iterator = bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
-				.orderAsc(Properties.DestID).listIterator();
+		List<DBBooking> values = getActiveJobs();
+		if(values.size()==0)
+			((BookingListAdapter)getListView().getAdapter()).clear();
+		
 		ArrayList<Pair<String, String>> activeDestIdSysIdPairList = new ArrayList<Pair<String, String>>();
 		String oldId = "";
-		while (iterator.hasNext()) {
-			DBBooking book = iterator.next();
+		for (int i = 0; i < values.size(); i++) {
+			DBBooking book = values.get(i);
 			if (!book.getDestID().equalsIgnoreCase(oldId)) {
 				Pair<String, String> tempPair = new Pair<String, String>(book.getDestID(), book.getSysId());
 				activeDestIdSysIdPairList.add(tempPair);
 			}
 			oldId = book.getDestID();
 		}
-		try {
-			iterator.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		return activeDestIdSysIdPairList;
 	}
 
 	private String getRideIdByDestId(String destId) {
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
 		CloseableListIterator<DBBooking> iterator = bookingDao
 				.queryBuilder()
 				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
@@ -219,11 +216,11 @@ public class TrackFragment extends ListFragment {
 
 	public void updateStatus(List<DBBooking> bookingList) {
 		stopUpdateAnimation();
-
-		adapter.clear();
-		adapter = new BookingListAdapter(getActivity(), bookingList);
+		setListAdapter(null);
+		BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
+		if(adapter.getCount()>0)
+		Logger.e(TAG,"trip status: " + adapter.getItem(0).getTripStatus());
 		setListAdapter(adapter);
-		adapter.notifyDataSetChanged();
 	}
 
 }

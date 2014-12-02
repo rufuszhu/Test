@@ -109,10 +109,11 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		next_btn = (TextView) findViewById(R.id.next_btn);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
         question_ic = (TextView) findViewById(R.id.question_circle);
         question_ic.setTypeface(fontFamily);
         question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
+
 
 		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);

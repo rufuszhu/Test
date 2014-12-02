@@ -25,7 +25,7 @@
             android:id="@+id/autocomplete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/shape_textview_border"
+            android:background="@drawable/searchbar_selector"
             android:ems="10"
             android:hint="@string/street_name"
             android:imeOptions="actionDone"
@@ -47,28 +47,44 @@
             android:src="@drawable/icon_clearinput" />
     </FrameLayout>
 
-    <ListView
-        android:id="@+id/listView_favorite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_below="@+id/frameLayout1"
-        android:paddingTop="@dimen/normal_padding">
-    </ListView>
-
-    <ListView
-        android:id="@+id/listView_contact"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listView_favorite"
-        android:paddingTop="@dimen/normal_padding">
-    </ListView>
+        android:layout_below="@+id/frameLayout1" >
 
-    <ListView
-        android:id="@+id/listView_google"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/listView_contact"
-        android:paddingTop="@dimen/normal_padding">
-    </ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/listView_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:paddingTop="@dimen/normal_padding" >
+            </ListView>
+
+            <ListView
+                android:id="@+id/listView_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:paddingTop="@dimen/normal_padding" >
+            </ListView>
+
+            <ListView
+                android:id="@+id/listView_google"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:paddingTop="@dimen/normal_padding" >
+            </ListView>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

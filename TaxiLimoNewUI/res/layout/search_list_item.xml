@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp" >
+    android:layout_height="50dp"
+    android:minHeight="50dp"
+    android:background="@color/white" >
 
-    <ImageView
+    <TextView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="21dp"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+        android:textSize="@dimen/search_list_item_icon_size"
+        android:layout_marginLeft="@dimen/big_margin" />
+
 
     <TextView
         android:id="@+id/bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
+        android:textSize="@dimen/search_list_item_font_size"
+        android:layout_marginLeft="@dimen/big_margin"
         android:layout_toRightOf="@+id/icon"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:singleLine="true" />
+
 
     <TextView
         android:id="@+id/notBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="14dp"
+        android:textSize="@dimen/search_list_item_font_size"
+        android:layout_marginLeft="@dimen/normal_padding"
         android:layout_toRightOf="@+id/bold"
-        android:text="TextView" />
+        android:textColor="@color/list_gray_text"
+        android:singleLine="true"/>
 
 </RelativeLayout>

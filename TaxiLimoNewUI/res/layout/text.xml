@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity" >
-
-    <digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_above="@+id/tabs"
-        android:layout_height="match_parent"
-        android:isScrollContainer="false" >
-    </digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager>
-
+    android:layout_height="match_parent" >
     <LinearLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
@@ -38,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tab0_text"
@@ -46,8 +33,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tab0_icon"
-                    android:text="@string/search"
-                    android:layout_marginLeft="@dimen/small_padding"
+                    android:text="book"
+                    android:layout_marginLeft="@dimen/normal_padding"
                     android:textColor="@color/white"
                     android:textSize="@dimen/tab_font_size" />
             </RelativeLayout>
@@ -66,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tab1_text"
@@ -74,8 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/tab1_icon"
-                    android:layout_marginLeft="@dimen/small_padding"
-                    android:text="@string/favorite"
+                    android:text="@string/track"
                     android:textColor="@color/white"
                     android:textSize="@dimen/tab_font_size" />
             </RelativeLayout>
@@ -85,25 +71,23 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".33"
-                android:background="@color/background_tab_selected"
-                android:gravity="center">
+                android:background="@color/background_tab_selected">
 
                 <TextView
                     android:id="@+id/tab2_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tab2_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"
                     android:layout_toRightOf="@+id/tab2_icon"
-                    android:text="@string/contact"
-                    android:layout_marginLeft="@dimen/small_padding"
+                    android:text="@string/history"
                     android:textColor="@color/white"
                     android:textSize="@dimen/tab_font_size" />
             </RelativeLayout>

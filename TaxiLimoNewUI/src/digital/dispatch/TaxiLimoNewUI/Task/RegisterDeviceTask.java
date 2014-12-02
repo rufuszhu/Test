@@ -107,7 +107,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		}
 		Logger.v(TAG, "RegDev: ResponseError - " + resWrapper.getErrorString());
 
-	}
+	} 
 
 	@Override
 	public void onError() {

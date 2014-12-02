@@ -12,7 +12,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="digital.dispatch.TaxiLimoNewUI.permission.C2D_MESSAGE"
@@ -181,7 +181,7 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name=".EditCreditCardActivity"
+            android:name="digital.dispatch.TaxiLimoNewUI.Drawers.EditCreditCardActivity"
             android:label="@string/title_activity_edit_credit_card"
             android:parentActivityName=".Drawers.PaymentActivity"
             android:screenOrientation="portrait" >
@@ -231,7 +231,7 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name=".SetTimeActivity"
+            android:name="digital.dispatch.TaxiLimoNewUI.Book.SetTimeActivity"
             android:label="@string/title_activity_set_time"
             android:parentActivityName=".Book.BookActivity" >
             <meta-data
@@ -239,7 +239,7 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" />
         </activity>
         <activity
-            android:name=".DriverNoteActivity"
+            android:name="digital.dispatch.TaxiLimoNewUI.Book.DriverNoteActivity"
             android:label="@string/title_activity_driver_note"
             android:parentActivityName=".Book.BookActivity" >
             <meta-data

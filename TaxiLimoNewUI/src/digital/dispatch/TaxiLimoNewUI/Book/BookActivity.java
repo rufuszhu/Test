@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -31,12 +30,11 @@ import android.widget.TextView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.DriverNoteActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.SetTimeActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
@@ -46,7 +44,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class BookActivity extends Activity {
+public class BookActivity extends BaseActivity {
 	private static final String TAG = "BookActivity";
 	private Context _this;
 	private RelativeLayout rl_pick_up, rl_drop_off, rl_date, rl_driver_note, rl_company;
@@ -163,7 +161,7 @@ public class BookActivity extends Activity {
 				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, tv_pick_up.getText().toString());
 
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
-				_this.startActivity(intent);
+				((BookActivity) _this).startActivityForAnim(intent);
 			}
 		});
 
@@ -171,21 +169,21 @@ public class BookActivity extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(_this, ModifyAddressActivity.class);
 				intent.putExtra(MBDefinition.IS_DESTINATION, true);
-				_this.startActivity(intent);
+				((BookActivity) _this).startActivityForAnim(intent);
 			}
 		});
 
 		rl_driver_note.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(_this, DriverNoteActivity.class);
-				_this.startActivity(intent);
+				((BookActivity) _this).startActivityForAnim(intent);
 			}
 		});
 
 		rl_date.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(_this, SetTimeActivity.class);
-				_this.startActivity(intent);
+				((BookActivity) _this).startActivityForAnim(intent);
 			}
 		});
 
@@ -194,7 +192,7 @@ public class BookActivity extends Activity {
 				if (Utils.mPickupAddress != null) {
 					Intent intent = new Intent(_this, AttributeActivity.class);
 					intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
-					startActivity(intent);
+					((BookActivity) _this).startActivityForAnim(intent);
 					// _this.startActivityForResult(intent, MBDefinition.REQUEST_COMPANYITEM_CODE);
 				}
 			}

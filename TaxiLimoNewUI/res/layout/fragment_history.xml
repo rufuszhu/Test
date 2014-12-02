@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/normal_padding"
     android:background="@color/background"
+    android:padding="@dimen/small_padding"
     tools:context="digital.dispatch.TaxiLimoNewUI.MainActivity$PlaceholderFragment" >
 
     <ListView
@@ -11,23 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        android:dividerHeight="@dimen/normal_padding"
         android:listSelector="@drawable/list_selector"
+        android:dividerHeight="@dimen/normal_padding"
         android:divider="@color/background"
         android:scrollbars="none">
     </ListView>
-
-<!--     <View -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="1dp" -->
-<!--         android:layout_above="@+id/white_line" -->
-<!--         android:background="@color/gray_light" /> -->
-
-<!--     <View -->
-<!--         android:id="@+id/white_line" -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="1dp" -->
-<!--         android:layout_alignParentBottom="true" -->
-<!--         android:background="@color/white" /> -->
 
 </RelativeLayout>

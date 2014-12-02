@@ -1,6 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI;
 
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.AlertDialog;
@@ -11,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,9 +23,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
@@ -36,12 +38,11 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.History.HistoryFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-
-public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends BaseActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final String EXTRA_MESSAGE = "message";
-
 
 	private static final String TAG = "MainActivity";
 	LocalBroadcastManager locBCManager;
@@ -56,7 +57,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-
 	private ViewPager mPager;
 	private RelativeLayout tab0, tab1, tab2;
 	private PagerAdapter mAdapter;
@@ -64,6 +64,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 	private BookFragment bookFragment;
 	public TrackFragment trackFragment;
 	private HistoryFragment historyFragment;
+
+	private TextView tab0_icon;
+	private TextView tab1_icon;
+	private TextView tab2_icon;
+	private TextView tab0_text;
+	private TextView tab1_text;
+	private TextView tab2_text;
 
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -85,7 +92,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-		//initView();
+		// initView();
 
 		setUpTab();
 
@@ -128,8 +135,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		super.onDestroy();
 	}
 
-
 	private void setUpTab() {
+
 		mPager = (ViewPager) findViewById(R.id.pager);
 		setTabListener();
 		bookFragment = BookFragment.newInstance();
@@ -142,7 +149,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
-				//Utils.currentTab=selected;
+				if(selected==0){
+					selectTab0();
+				}
+				else if(selected==1){
+					selectTab1();
+				}
+				else if(selected==2){
+					selectTab2();
+				}
 				restoreActionBar();
 			}
 
@@ -159,51 +174,91 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		// favoritesFragment.mGetView().setAlpha(1f);
 
 		mPager.setAdapter(mAdapter);
-
+		selectTab0();
 		// This is required to avoid a black flash when the map is loaded. The flash is due
 		// to the use of a SurfaceView as the underlying view of the map.
 		mPager.requestTransparentRegion(mPager);
 		mPager.setOnPageChangeListener(pageChangeListener);
 	}
-	
+
 	private void setTabListener() {
 		tab0 = (RelativeLayout) findViewById(R.id.tab0);
 		tab1 = (RelativeLayout) findViewById(R.id.tab1);
 		tab2 = (RelativeLayout) findViewById(R.id.tab2);
 
+		tab0_text = (TextView) findViewById(R.id.tab0_text);
+		tab1_text = (TextView) findViewById(R.id.tab1_text);
+		tab2_text = (TextView) findViewById(R.id.tab2_text);
+
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
+		tab0_icon.setTypeface(fontFamily);
+		tab0_icon.setText(MBDefinition.icon_tab_calendar);
+
+		tab1_icon = (TextView) findViewById(R.id.tab1_icon);
+		tab1_icon.setTypeface(fontFamily);
+		tab1_icon.setText(MBDefinition.icon_tab_track);
+
+		tab2_icon = (TextView) findViewById(R.id.tab2_icon);
+		tab2_icon.setTypeface(fontFamily);
+		tab2_icon.setText(MBDefinition.icon_tab_clock);
+
 		tab0.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(0);
-				resetAllTabColor();
-				tab0.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
-
+				selectTab0();
 			}
 		});
 		tab1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(1);
-				resetAllTabColor();
-				tab1.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+				selectTab1();
 			}
 		});
 		tab2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				mPager.setCurrentItem(2);
-				resetAllTabColor();
-				tab2.setBackgroundColor(getResources().getColor(R.color.background_tab_selected));
+				selectTab2();
 			}
 		});
 	}
-	
-	private void resetAllTabColor() {
-		tab0.setBackgroundColor(getResources().getColor(R.color.background_tab));
-		tab1.setBackgroundColor(getResources().getColor(R.color.background_tab));
-		tab2.setBackgroundColor(getResources().getColor(R.color.background_tab));
+
+	private void selectTab0() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColorSelected);
+		tab1_text.setTextColor(textColor);
+		tab2_text.setTextColor(textColor);
+		tab0_icon.setTextColor(textColorSelected);
+		tab1_icon.setTextColor(textColor);
+		tab2_icon.setTextColor(textColor);
 	}
-	
+
+	private void selectTab1() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColor);
+		tab1_text.setTextColor(textColorSelected);
+		tab2_text.setTextColor(textColor);
+		tab0_icon.setTextColor(textColor);
+		tab1_icon.setTextColor(textColorSelected);
+		tab2_icon.setTextColor(textColor);
+	}
+
+	private void selectTab2() {
+		final int textColor = getResources().getColor(R.color.tab_text);
+		final int textColorSelected = getResources().getColor(R.color.tab_text_selected);
+		tab0_text.setTextColor(textColor);
+		tab1_text.setTextColor(textColor);
+		tab2_text.setTextColor(textColorSelected);
+		tab0_icon.setTextColor(textColor);
+		tab1_icon.setTextColor(textColor);
+		tab2_icon.setTextColor(textColorSelected);
+	}
+
 	private class PagerAdapter extends FragmentPagerAdapter {
 		private final String[] TITLES = { "SEARCH", "FAVORITES", "CONTACTS" };
 
@@ -247,32 +302,25 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 		mPager.setCurrentItem(0);
 	}
 
-
-
-
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		Intent intent;
 		switch (position) {
 		case 0:
 			intent = new Intent(this, ProfileActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
+//		case 1:
+//			intent = new Intent(this, PaymentActivity.class);
+//			startActivityForAnim(intent);
+//			break;
+//		case 2:
+//			intent = new Intent(this, PreferenceActivity.class);
+//			startActivityForAnim(intent);
+//			break;
 		case 1:
-			intent = new Intent(this, PaymentActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
-			break;
-		case 2:
-			intent = new Intent(this, PreferenceActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
-			break;
-		case 3:
 			intent = new Intent(this, AboutActivity.class);
-			startActivity(intent);
-			overridePendingTransition(R.anim.base_back_activity_enter, R.anim.base_back_activity_exit);
+			startActivityForAnim(intent);
 			break;
 		}
 	}
@@ -359,8 +407,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 										notificationManager.cancel(gcmID);
 									}
 									if (Utils.currentTab == 1) {
-										TrackFragment fragment = (TrackFragment) getSupportFragmentManager().findFragmentByTag("track");
-										fragment.startRecallJobTask();
+										trackFragment.startRecallJobTask();
 									}
 								}
 							}).show();

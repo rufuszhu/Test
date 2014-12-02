@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/normal_padding"
     android:background="@color/background"
+    android:padding="@dimen/small_padding"
     tools:context="digital.dispatch.TaxiLimoNewUI.MainActivity$PlaceholderFragment" >
 
     <ListView
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        android:dividerHeight="@dimen/normal_padding"
+        android:dividerHeight="@dimen/small_padding"
         android:divider="@color/background"
         android:scrollbars="none" >
     </ListView>

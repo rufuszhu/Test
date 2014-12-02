@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/drawer_normal"
     android:choiceMode="singleChoice"
-    android:divider="@drawable/drawer_divider"
+    android:divider="@android:color/transparent"
     android:listSelector="@drawable/drawer_selector"
     style="@style/TextDropShadow"
     android:dividerHeight="1dp"

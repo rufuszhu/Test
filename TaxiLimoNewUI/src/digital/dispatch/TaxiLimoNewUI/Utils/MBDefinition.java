@@ -93,12 +93,23 @@ public class MBDefinition {
 	
 	//fontawesome icon Unicode
 	//eg. http://fortawesome.github.io/Font-Awesome/icon/question-circle/
+	public final static String icon_tab_calendar = "\uf073";
+	public final static String icon_tab_track = "\uf1e5";
+	public final static String icon_tab_clock = "\uf017";
+	public final static String icon_tab_search = "\uf002";
+	public final static String icon_tab_fav = "\uf005";
+	public final static String icon_tab_contact = "\uf1ea";
+	public final static String icon_star_hollow = "\uf006";
+	public final static String icon_pencil = "\uf040";
+	public final static String icon_delete = "\uf1f8";
+	public final static String icon_location = "\uf041";
+	public final static String icon_phone = "\uf095";
 	public final static String ICON_QUESTION_CIRCLE_CODE = "\uf059";
 	public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
 	public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
 	public final static String ICON_CHECK_SQUARE_CODE = "\uf14a"; //http://fortawesome.github.io/Font-Awesome/icon/check-square/
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
-	
+
 	
 	public static final SparseIntArray attrIconMap;
     static {

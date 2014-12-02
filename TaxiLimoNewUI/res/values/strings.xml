@@ -157,7 +157,8 @@
 
     <!-- modify address -->
     <string name="contacts">Contacts</string>
-    <string name="favorite">Favorite</string>
+    <string name="favorite">FAVORITE</string>
+    <string name="search">SEARCH</string>
     <string name="add_favorite">Add Favorite</string>
     <string name="select">Select</string>
 
@@ -331,7 +332,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
-
+ 	<string name="nickName_cannot_be_empty">Nickname cannot be empty</string>
     <string name="err_no_current_location">Cannot get current location, please check GPS setting</string>
     <string name="err_no_internet">Network unavailable. Please try again later</string>
     <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>
@@ -417,7 +418,7 @@
     <string name="title_activity_pay">Pay</string>
     <string name="title_activity_register">REGISTER</string>
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
-    <string name="title_activity_book">BookActivity</string>
+    <string name="title_activity_book">YOUR TRIP</string>
     <string name="title_activity_set_time">SetTimeActivity</string>
     <string name="title_activity_driver_note">DriverNoteActivity</string>
     <string name="title_activity_register_confirm">REGISTER</string>

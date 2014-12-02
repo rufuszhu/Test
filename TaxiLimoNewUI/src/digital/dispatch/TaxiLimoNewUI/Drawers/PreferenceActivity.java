@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 
-public class PreferenceActivity extends ActionBarActivity {
+public class PreferenceActivity extends BaseActivity {
 
 	private static final String TAG = "PreferenceActivity";
 
@@ -34,6 +35,10 @@ public class PreferenceActivity extends ActionBarActivity {
 		if (id == R.id.action_add) {
 			Intent intent = new Intent(this, AddPreferenceActivity.class);
 			startActivity(intent);
+			return true;
+		}
+		if(id==android.R.id.home){
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
