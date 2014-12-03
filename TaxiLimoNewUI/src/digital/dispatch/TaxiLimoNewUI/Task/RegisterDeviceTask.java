@@ -56,13 +56,10 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 
 			Logger.e(TAG, _context.getString(R.string.reg_device_start));
 			rdReq.setToken(GCMRegisterID);
-			// rdReq.setPhoneNum(UserAccount.phoneNum(getApplicationContext()));
-			// rdReq.setName(UserAccount.userName(getApplicationContext()));
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
-			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
-			String userName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
-			String userEmail = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
-		
+			String userName = params[0];
+			String userEmail = params[1];
+			String phone = params[2];
+			
 			rdReq.setPhoneNum(phone);
 			rdReq.setName(userName);
 			rdReq.setEmail(userEmail); //TL-241

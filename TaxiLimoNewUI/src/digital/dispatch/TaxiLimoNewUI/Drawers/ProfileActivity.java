@@ -15,8 +15,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -33,11 +31,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-//import digital.dispatch.TaxiLimoNewUI.R.id;
-//import digital.dispatch.TaxiLimoNewUI.R.layout;
-//import digital.dispatch.TaxiLimoNewUI.R.menu;
-//import android.text.TextWatcher;
-//import android.app.AlertDialog;
+
 
 public class ProfileActivity extends ActionBarActivity implements OnFocusChangeListener {
 
@@ -89,6 +83,8 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		edtName.addTextChangedListener(new GenericTextWatcher(edtName));
 		edtUEmail = (EditText) findViewById(R.id.edt_userEmail);
 		edtUEmail.addTextChangedListener(new GenericTextWatcher(edtUEmail));
+		et_code = (EditText) findViewById(R.id.et_code);
+		et_code.addTextChangedListener(new GenericTextWatcher(et_code));
 		save_btn = (LinearLayout) findViewById(R.id.profile_save_btn);
 		cancel_btn = (LinearLayout) findViewById(R.id.profile_cancel_btn);
 		verify_btn = (TextView) findViewById(R.id.profile_verify_btn);
@@ -113,52 +109,22 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		edtName.setOnFocusChangeListener(this);
 		edtUEmail.setOnFocusChangeListener(this);
 		edtPhone.setOnFocusChangeListener(this);
-		/*
-		 * edtName.addTextChangedListener(new TextWatcher() {
-		 * 
-		 * @Override public void afterTextChanged(Editable note) {
-		 * 
-		 * if(!curName.equals(note.toString())){ LinearLayout buttons = (LinearLayout) findViewById(R.id.profile_btn_group);
-		 * buttons.setVisibility(View.VISIBLE); }
-		 * 
-		 * }
-		 * 
-		 * @Override public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { if(mBlockCompletion) return; }
-		 * 
-		 * @Override public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { } });
-		 * 
-		 * edtUEmail.addTextChangedListener(new TextWatcher() {
-		 * 
-		 * @Override public void afterTextChanged(Editable note) { if(!curEmail.equals(note.toString())){ LinearLayout buttons = (LinearLayout)
-		 * findViewById(R.id.profile_btn_group); buttons.setVisibility(View.VISIBLE); } }
-		 * 
-		 * @Override public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { if(mBlockCompletion) return; }
-		 * 
-		 * @Override public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { } });
-		 * 
-		 * edtPhone.addTextChangedListener(new TextWatcher() {
-		 * 
-		 * @Override public void afterTextChanged(Editable note) { if(!curPhoneNum.equals(note.toString())){ LinearLayout buttons = (LinearLayout)
-		 * findViewById(R.id.profile_btn_group); buttons.setVisibility(View.VISIBLE); }
-		 * 
-		 * }
-		 * 
-		 * @Override public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { if(mBlockCompletion) return; }
-		 * 
-		 * @Override public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) { } });
-		 */
+		
 
 		save_btn.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 
 				if (validate(null)) {
-
-					storeInfo();
+					
 					// send register device again
 					boolean isFirstTime = false; // set this parameter to false when called from profile page
 					String regid = getRegistrationId(_context);
-					new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					
+					//new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
+					String[] params = {edtName.getText().toString(), edtUEmail.getText().toString(), edtPhone.getText().toString()};
+					task.execute(params);
 					Utils.showProcessingDialog(_context);
 
 				}
@@ -183,18 +149,21 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			}
 		});
 
-		et_code = (EditText) findViewById(R.id.et_code);
+		
 		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
 		// request new verification code, here need to refresh the phone number in case number is updated
 		request_new_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (validate(null)) {
-					storeInfo();
+					
 					boolean isFirstTime = false; // set this parameter to false when called from profile page
 					sendVerifySMS = true;
 					String regid = getRegistrationId(_context);
-					new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					//new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
+					String[] params = {edtName.getText().toString(), edtUEmail.getText().toString(), edtPhone.getText().toString()};
+					task.execute(params);
 					Utils.showProcessingDialog(_context);
 				}
 			}
@@ -202,27 +171,6 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 
 	}
 	
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.profile, menu);
-		// edit_icon = menu.findItem(R.id.action_edit);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == android.R.id.home) {
-			finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 		
 
@@ -342,6 +290,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 
 	// callback by VerifyDeviceTask
 	public void showProfileVerifySuccessMessage() {
+
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -374,6 +323,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 
 	// callback by RegisterDeviceTask for successful update
 	public void showResendSuccessMessage() {
+		storeInfo();//update local database
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -396,7 +346,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			public void onCancel(DialogInterface dialog) {
 				if (sendVerifySMS == true) {
 					ll_sms_verify.setVisibility(View.VISIBLE);
-					save_btn.setVisibility(View.GONE);
+					button_groups.setVisibility(View.GONE);
 					et_code.requestFocus();
 
 				} else {

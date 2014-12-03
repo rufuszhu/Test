@@ -124,13 +124,14 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			public void onClick(View arg0) {
 				
 				if (validate(null)) {
-					storeInfo();			
+								
 					Utils.showProcessingDialog(_context);
 					
 					boolean isFirstTime = true;
 					boolean verifySMS = true;
-					new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS).execute();
-					
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS);
+					String[] params = {name.getText().toString(), email.getText().toString(), phone_number.getText().toString()};
+					task.execute(params);
 				}
 			}
 
@@ -148,7 +149,9 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 					boolean isFirstTime = true; //set this parameter to false when called from profile page
 					boolean sendVerifySMS = true;
 					String regid = getRegistrationId(_context);
-					new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
+					String[] params = {name.getText().toString(), email.getText().toString(), phone_number.getText().toString()};
+					task.execute(params);
 					Utils.showProcessingDialog(_context);
 			}
 		}});
@@ -166,6 +169,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	
 	//callback by RegisterDeviceTask
 	public void showRegisterSuccessMessage(){
+		storeInfo();
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
