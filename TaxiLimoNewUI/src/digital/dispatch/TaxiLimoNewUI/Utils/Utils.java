@@ -217,6 +217,8 @@ public class Utils {
 		mbook.setCompany_dupChk_time(selectedCompany.dupChkTime); //added duplicate check time frame to DBBooking table
 		mbook.setDestID(selectedCompany.destID);
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
+		//TL-222
+		mbook.setCompany_car_file(selectedCompany.carFile);
 
 		if (selected_attribute_from_bookAgain == null)
 			mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));

@@ -111,6 +111,12 @@ public class MBDefinition {
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
 
 	
+	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
+	public final static String ICON_TRACK_TAXI_BLUE = "blue";
+	public final static String ICON_TRACK_TAXI_RED = "red";
+	public final static String ICON_TRACK_TAXI_ORANGE = "orange";
+	public final static String ICON_TRACK_TAXI_GREEN = "green";
+	
 	public static final SparseIntArray attrIconMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();

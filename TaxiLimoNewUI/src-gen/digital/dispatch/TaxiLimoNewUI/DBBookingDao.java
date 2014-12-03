@@ -67,8 +67,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         public final static Property Company_icon = new Property(41, String.class, "company_icon", false, "COMPANY_ICON");
         public final static Property Company_attribute_list = new Property(42, String.class, "company_attribute_list", false, "COMPANY_ATTRIBUTE_LIST");
         public final static Property Company_dupChk_time = new Property(43, String.class, "company_dupChk_time", false, "COMPANY_DUP_CHK_TIME");
-        public final static Property AuthCode = new Property(44, String.class, "authCode", false, "AUTH_CODE");
-        public final static Property PaidAmount = new Property(45, String.class, "paidAmount", false, "PAID_AMOUNT");
+        public final static Property Company_car_file = new Property(44, String.class, "company_car_file", false, "COMPANY_CAR_FILE");
+        public final static Property AuthCode = new Property(45, String.class, "authCode", false, "AUTH_CODE");
+        public final static Property PaidAmount = new Property(46, String.class, "paidAmount", false, "PAID_AMOUNT");
     };
 
 
@@ -128,8 +129,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
                 "'COMPANY_ICON' TEXT," + // 41: company_icon
                 "'COMPANY_ATTRIBUTE_LIST' TEXT," + // 42: company_attribute_list
                 "'COMPANY_DUP_CHK_TIME' TEXT," + // 43: company_dupChk_time
-                "'AUTH_CODE' TEXT," + // 44: authCode
-                "'PAID_AMOUNT' TEXT);"); // 45: paidAmount
+                "'COMPANY_CAR_FILE' TEXT," + // 44: company_car_file
+                "'AUTH_CODE' TEXT," + // 45: authCode
+                "'PAID_AMOUNT' TEXT);"); // 46: paidAmount
     }
 
     /** Drops the underlying database table. */
@@ -363,14 +365,19 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             stmt.bindString(44, company_dupChk_time);
         }
  
+        String company_car_file = entity.getCompany_car_file();
+        if (company_car_file != null) {
+            stmt.bindString(45, company_car_file);
+        }
+ 
         String authCode = entity.getAuthCode();
         if (authCode != null) {
-            stmt.bindString(45, authCode);
+            stmt.bindString(46, authCode);
         }
  
         String paidAmount = entity.getPaidAmount();
         if (paidAmount != null) {
-            stmt.bindString(46, paidAmount);
+            stmt.bindString(47, paidAmount);
         }
     }
 
@@ -428,8 +435,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // company_icon
             cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // company_attribute_list
             cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // company_dupChk_time
-            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // authCode
-            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45) // paidAmount
+            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // company_car_file
+            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45), // authCode
+            cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46) // paidAmount
         );
         return entity;
     }
@@ -481,8 +489,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         entity.setCompany_icon(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
         entity.setCompany_attribute_list(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
         entity.setCompany_dupChk_time(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
-        entity.setAuthCode(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
-        entity.setPaidAmount(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
+        entity.setCompany_car_file(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
+        entity.setAuthCode(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
+        entity.setPaidAmount(cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46));
      }
     
     /** @inheritdoc */

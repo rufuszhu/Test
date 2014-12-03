@@ -325,7 +325,7 @@
     <string name="gcm_late_trip_format">We are currently experiencing unusually high volume of bookings and we apologize for the delay</string>
     <string name="late_trip_msg">        Taxi delayed due to high demand. Would you like to wait or cancel? You won\'t be charged a cancellation fee.</string>
     <!-- Late Trip Notification -->
-    <string name="late_trip">Late Trip</string>
+    <string name="late_trip">LATE TRIP NOTIFICATION</string>
     <string name="late_trip_wait">Wait</string>
     <string name="late_trip_no_wait">Do not wait</string>
     <string name="gcm">Notification</string>
