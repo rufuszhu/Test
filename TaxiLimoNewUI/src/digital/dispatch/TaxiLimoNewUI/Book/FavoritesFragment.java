@@ -24,6 +24,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -107,7 +109,7 @@ public class FavoritesFragment extends ListFragment {
 	}
 
 	/**
-	 * Handle touch events to lock list view swiping during swipe and block multiple swipe
+	 * Handle touch events to lock list view scrolling during swipe and block multiple swipe
 	 */
 	private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
 
@@ -192,6 +194,8 @@ public class FavoritesFragment extends ListFragment {
 			public TextView edit_btn;
 			public RelativeLayout viewHeader;
 			public ViewGroup swipeContactView;
+			public TextView green_circle_edit;
+			public TextView green_circle_delete;
 		}
 
 		@Override
@@ -210,12 +214,15 @@ public class FavoritesFragment extends ListFragment {
 				viewHolder.edit_btn = (TextView) rowView.findViewById(R.id.edit_btn);
 				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
 				viewHolder.viewHeader = (RelativeLayout) rowView.findViewById(R.id.viewHeader);
+				
+				viewHolder.green_circle_edit = (TextView) rowView.findViewById(R.id.green_circle_edit);
+				viewHolder.green_circle_delete = (TextView) rowView.findViewById(R.id.green_circle_delete);
 				rowView.setTag(viewHolder);
 			}
 			
 			// fill data
 			
-			ViewHolder holder = (ViewHolder) rowView.getTag();
+			final ViewHolder holder = (ViewHolder) rowView.getTag();
 			
 			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
 			holder.title.setTypeface(RionaSansMedium);
@@ -235,6 +242,10 @@ public class FavoritesFragment extends ListFragment {
 
 			holder.edit_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
+					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+					pop.setFillAfter(true);
+					holder.green_circle_edit.setVisibility(View.VISIBLE);
+					holder.green_circle_edit.startAnimation(pop);
 					setUpEditNickNameDialog(values.get(position), position);
 				}
 			});
@@ -248,6 +259,10 @@ public class FavoritesFragment extends ListFragment {
 
 			holder.delete_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
+					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+					pop.setFillAfter(true);
+					holder.green_circle_delete.setVisibility(View.VISIBLE);
+					holder.green_circle_delete.startAnimation(pop);
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 					builder.setTitle(getActivity().getString(R.string.warning));
 					builder.setMessage(getActivity().getString(R.string.delete_confirmation));
@@ -277,7 +292,7 @@ public class FavoritesFragment extends ListFragment {
 			});
 			
 			if(position%2==1){
-				holder.viewHeader.setBackgroundColor(context.getResources().getColor(R.color.list_background2));
+				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
 			holder.viewHeader.setOnClickListener(new OnClickListener() {

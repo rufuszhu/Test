@@ -91,7 +91,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		// fill data
 		ViewHolder holder = (ViewHolder) rowView.getTag();
 		if(position%2==1){
-			rowView.setBackgroundColor(_context.getResources().getColor(R.color.list_background2));
+			rowView.setBackgroundResource(R.drawable.list_background2_selector);
 		}
 		Typeface fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/fontawesome.ttf");
 		holder.icon.setTypeface(fontFamily);

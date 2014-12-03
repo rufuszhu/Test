@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:minHeight="50dp"
-    android:background="@color/white" >
+    android:background="@drawable/list_background_selector" >
 
     <TextView
         android:id="@+id/icon"

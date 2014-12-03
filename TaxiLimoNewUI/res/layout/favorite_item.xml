@@ -14,25 +14,25 @@
             android:id="@+id/viewHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white" >
+            android:background="@drawable/list_background_selector" >
 
             <LinearLayout
                 android:id="@+id/address_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="left|center_vertical"
+                android:orientation="vertical"
                 android:paddingLeft="@dimen/normal_padding"
-                android:paddingRight="@dimen/normal_padding"
-                android:orientation="vertical" >
+                android:paddingRight="@dimen/normal_padding" >
 
                 <TextView
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/list_item_title_font_size" />
+                    android:textSize="@dimen/list_item_title_font_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_address"
@@ -52,25 +52,52 @@
             android:background="@color/green"
             android:tag="desc" >
 
-            <TextView
-                android:id="@+id/edit_btn"
+            <FrameLayout
+                android:id="@+id/frame1"
                 android:layout_width="@dimen/swipe_btn_width"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/swipe_btn_font_size" />
+                android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/delete_btn"
+                <TextView
+                    android:id="@+id/green_circle_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_green_circle"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/edit_btn"
+                    android:layout_width="@dimen/swipe_btn_width"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/swipe_btn_font_size" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="@dimen/swipe_btn_width"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/edit_btn"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/delete"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/swipe_btn_font_size" />
+                android:layout_toRightOf="@+id/frame1" >
+
+                <TextView
+                    android:id="@+id/green_circle_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_green_circle"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/delete_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="@string/delete"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/swipe_btn_font_size" />
+            </FrameLayout>
         </RelativeLayout>
     </digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem>
 
