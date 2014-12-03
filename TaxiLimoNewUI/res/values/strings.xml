@@ -323,8 +323,7 @@
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="gcm_late_trip_format">We are currently experiencing unusually high volume of bookings and we apologize for the delay</string>
-    <string name="late_trip_msg">        We are currently experiencing unusually high volume of bookings and we apologize for the delay.
-        \nDo you want to continue to wait for a cab?</string>
+    <string name="late_trip_msg">        Taxi delayed due to high demand. Would you like to wait or cancel? You won\'t be charged a cancellation fee.</string>
     <!-- Late Trip Notification -->
     <string name="late_trip">Late Trip</string>
     <string name="late_trip_wait">Wait</string>
@@ -361,7 +360,7 @@
 
     <!-- successful messages -->
     <string name="message_cancel_successful">The trip was successfully canceled</string>
-    <string name="message_book_successful">The trip was successfully booked</string>
+    <string name="message_book_successful">Thank you. We\'re looking for a Taxi. Please stand by.</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
     <string name="save_successful">Save Successful</string>
