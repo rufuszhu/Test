@@ -4,7 +4,7 @@
     android:layout_height="@dimen/list_item_height"
     android:minHeight="@dimen/list_item_height"
     android:elevation="2dp" 
-    android:background="@color/white">
+    android:background="@drawable/list_background_selector">
 
     <TextView
         android:id="@+id/text_address"
@@ -13,9 +13,9 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/normal_padding"
-        android:paddingRight="100dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="@dimen/booking_list_address_font_size"
+        android:layout_marginRight="100dp"
+        android:singleLine="true" />
     
     <TextView
         android:id="@+id/tv_status_bar"
@@ -31,6 +31,5 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="30dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_marginRight="25dp" />
 </RelativeLayout>

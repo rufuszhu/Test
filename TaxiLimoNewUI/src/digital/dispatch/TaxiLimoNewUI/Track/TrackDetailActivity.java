@@ -105,7 +105,6 @@ public class TrackDetailActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
-
 		setUpTab();
 		findView();
 		setTab0Text();

@@ -283,7 +283,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			// fill data
 			ViewHolder holder = (ViewHolder) rowView.getTag();
 			if(position%2==1){
-				rowView.setBackgroundColor(getActivity().getResources().getColor(R.color.list_background2));
+				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
 			holder.icon.setTypeface(fontFamily);
@@ -330,7 +330,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			// fill data
 			ViewHolder holder = (ViewHolder) rowView.getTag();
 			if(position%2==1){
-				rowView.setBackgroundColor(getActivity().getResources().getColor(R.color.list_background2));
+				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
 			holder.icon.setTypeface(fontFamily);

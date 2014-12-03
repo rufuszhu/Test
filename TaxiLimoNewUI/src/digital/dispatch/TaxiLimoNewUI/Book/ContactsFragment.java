@@ -37,6 +37,9 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -266,6 +269,8 @@ public class ContactsFragment extends ListFragment {
 			public RelativeLayout contact_option;
 			public LinearLayout viewHeader;
 			public ViewGroup swipeContactView;
+			public TextView green_circle;
+			
 
 		}
 
@@ -285,6 +290,7 @@ public class ContactsFragment extends ListFragment {
 				viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
 				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
 				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
+				viewHolder.green_circle = (TextView) rowView.findViewById(R.id.green_circle);
 				rowView.setTag(viewHolder);
 			}
 
@@ -292,12 +298,10 @@ public class ContactsFragment extends ListFragment {
 
 			// fill data
 			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
-			ViewHolder holder = (ViewHolder) rowView.getTag();
+			final ViewHolder holder = (ViewHolder) rowView.getTag();
 			holder.add_fav_btn.setTypeface(fontFamily);
 			holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
 			
-			
-
 			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", holder.profile_icon);
 
 			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
@@ -311,13 +315,33 @@ public class ContactsFragment extends ListFragment {
 			holder.contact_option.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener(){
+
+						@Override
+						public void onAnimationStart(Animation animation) {
+						}
+
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();	
+						}
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}});
+					holder.green_circle.setVisibility(View.VISIBLE);
+					holder.green_circle.startAnimation(pop);
+					
+					
+					
 					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
-					((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
+					
 				}
 			});
 			
 			if(position%2==1){
-				holder.viewHeader.setBackgroundColor(context.getResources().getColor(R.color.list_background2));
+				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			holder.viewHeader.setOnClickListener(new OnClickListener() {
 				@Override

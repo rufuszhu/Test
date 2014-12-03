@@ -398,7 +398,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			if (mMap != null) {
 				mMap.setMyLocationEnabled(true);
 				mMap.getUiSettings().setZoomControlsEnabled(false);
+				mMap.getUiSettings().setMyLocationButtonEnabled(true);
 				mMap.setOnCameraChangeListener(this);
+				
 			}
 		}
 	}
