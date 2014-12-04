@@ -117,6 +117,11 @@ public class ModifyAddressActivity extends BaseActivity {
 		tab0_text = (TextView) findViewById(R.id.tab0_text);
 		tab1_text = (TextView) findViewById(R.id.tab1_text);
 		tab2_text = (TextView) findViewById(R.id.tab2_text);
+		
+		Typeface exoFamily = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		tab0_text.setTypeface(exoFamily);
+		tab1_text.setTypeface(exoFamily);
+		tab2_text.setTypeface(exoFamily);
 
 		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);

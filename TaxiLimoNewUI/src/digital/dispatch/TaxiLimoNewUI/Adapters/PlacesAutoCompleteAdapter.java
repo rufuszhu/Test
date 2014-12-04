@@ -134,8 +134,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 				resultList = (ArrayList<String>)results.values;
 				if (results != null && results.count > 0) {
 					((ModifyAddressActivity) _context).searchFragment.resetGoogleListViewHight();
+					((ModifyAddressActivity) _context).searchFragment.hideNoResultFoundLayout();
 					notifyDataSetChanged();
 				} else {
+					((ModifyAddressActivity) _context).searchFragment.displayNoResultFoundIfNoResultFound();
 					notifyDataSetInvalidated();
 				}
 			}
