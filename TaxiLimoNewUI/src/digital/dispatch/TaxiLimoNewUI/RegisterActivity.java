@@ -85,13 +85,13 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	@Override
 	protected void onResume() {
 		super.onResume();
-		/*
+		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, false)) {
 			Intent intent = new Intent(_context, MainActivity.class);
 			startActivity(intent);
 			finish();
-		}*/
+		}
 	}
 
 	
