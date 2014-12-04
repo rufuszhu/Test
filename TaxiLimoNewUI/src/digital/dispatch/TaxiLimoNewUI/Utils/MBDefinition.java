@@ -110,11 +110,21 @@ public class MBDefinition {
 	public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
 	public final static String ICON_CHECK_SQUARE_CODE = "\uf14a"; //http://fortawesome.github.io/Font-Awesome/icon/check-square/
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
-	public final static String ICON_MALE = "\uf183";
+
+
+	
+	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
+	public final static String ICON_TRACK_TAXI_BLUE = "blue";
+	public final static String ICON_TRACK_TAXI_RED = "red";
+	public final static String ICON_TRACK_TAXI_ORANGE = "orange";
+	public final static String ICON_TRACK_TAXI_GREEN = "green";
+	
+	public final static String ICON_PERSON = "\uf183";
 	public final static String ICON_DROPOFF = "\uf041";
 	public final static String ICON_ANGLE_RIGHT = "\uf105";
 	public final static String ICON_COMMENT = "\uf075";
 	public final static String ICON_COMPANY = "\uf1ba";
+
 	public static final SparseIntArray attrIconMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();

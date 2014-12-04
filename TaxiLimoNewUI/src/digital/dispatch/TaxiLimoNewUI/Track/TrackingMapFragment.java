@@ -271,17 +271,30 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 				Toast.makeText(getActivity(), "Car Location not availabe", Toast.LENGTH_LONG).show();
 			return;
 		}
-//		// first time, set up zoom level and camera location
-//		if (map!=null && this.carLatLng == null) {
-//			map.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
-//		}
 
 		this.carLatLng = carLatLng;
 		if (carMarker != null)
 			carMarker.remove();
 		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED
 				|| dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi);
+			
+			//TL-222 load car icon based on company car file color
+			String carFile = dbBook.getCompany_car_file();	
+			BitmapDescriptor icon = null;
+			if(carFile == null || carFile.isEmpty()){		
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow); 	//default			
+			}else if(MBDefinition.ICON_TRACK_TAXI_BLUE.equalsIgnoreCase(carFile)){
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_blue);
+			}else if(MBDefinition.ICON_TRACK_TAXI_RED.equalsIgnoreCase(carFile)){
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_red);			
+			}else if(MBDefinition.ICON_TRACK_TAXI_GREEN.equalsIgnoreCase(carFile)){
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_green);
+			}else if(MBDefinition.ICON_TRACK_TAXI_ORANGE.equalsIgnoreCase(carFile)){
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_orange);
+			}else{
+				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow);			
+			}
+
 			carMarker = map.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
 		}
 	}
