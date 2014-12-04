@@ -37,8 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="@dimen/tab_icon_size" />
 
                 <TextView
                     android:id="@+id/tab0_text"
@@ -48,7 +47,6 @@
                     android:layout_toRightOf="@+id/tab0_icon"
                     android:text="@string/search"
                     android:layout_marginLeft="@dimen/small_padding"
-                    android:textColor="@color/white"
                     android:textSize="@dimen/tab_font_size" />
             </RelativeLayout>
 
@@ -65,8 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="@dimen/tab_icon_size" />
 
                 <TextView
                     android:id="@+id/tab1_text"
@@ -93,8 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                      android:layout_centerVertical="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="@dimen/tab_font_size" />
+                    android:textSize="@dimen/tab_icon_size" />
 
                 <TextView
                     android:id="@+id/tab2_text"

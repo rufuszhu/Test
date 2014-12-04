@@ -27,42 +27,22 @@
 
             <TextView
                 android:id="@+id/add_fav_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:textSize="25sp"
-                android:layout_marginLeft="@dimen/big_margin"/>
+                android:textColor="@color/fav_color"/>
 
             <TextView
                 android:id="@+id/text_address"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/normal_padding"
                 android:layout_weight=".8"
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <ImageView
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/gray_extra_light" />
 
-            <LinearLayout
-                android:id="@+id/my_location_btn"
-                android:layout_width="@dimen/address_bar_icon_size"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/normal_padding"
-                android:paddingRight="@dimen/normal_padding" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/my_location_icon" />
-            </LinearLayout>
         </LinearLayout>
 
         
@@ -88,16 +68,44 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
-        
-
         <ImageView
             android:id="@+id/blue_pin"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="200dp"
+            android:layout_height="56dp"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/dummy_center"
+            android:layout_marginBottom="10dp"
             android:clickable="true"
-            android:src="@drawable/pin_blue" />
+            android:src="@drawable/pickup_btn_selector" />
+
+        <View
+            android:id="@+id/dummy_center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+        
+        
+         <FrameLayout
+            android:id="@+id/my_location_btn"
+            android:layout_width="@dimen/my_location_btn_size" 
+            android:layout_height="@dimen/my_location_btn_size"
+            android:layout_alignParentBottom="true" 
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:layout_marginRight="@dimen/big_margin"
+            android:background="@drawable/round_button_selector"
+            android:clickable="true" >
+
+            <TextView
+                android:id="@+id/my_location_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/current_location_icon_size"
+                android:textColor="@color/current_location_btn_color" />
+        </FrameLayout>
+
     </RelativeLayout>
 
     <View

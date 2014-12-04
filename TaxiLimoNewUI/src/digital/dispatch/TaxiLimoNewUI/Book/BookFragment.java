@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -162,8 +163,14 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		});
 
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-
-		LinearLayout current_location_btn = (LinearLayout) view.findViewById(R.id.my_location_btn);
+		Typeface rionaFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
+		address_bar_text.setTypeface(rionaFamily);
+		
+		TextView my_location_icon = (TextView) view.findViewById(R.id.my_location_icon);
+		my_location_icon.setTypeface(fontFamily);
+		my_location_icon.setText(MBDefinition.icon_current_location);
+		
+		FrameLayout current_location_btn = (FrameLayout) view.findViewById(R.id.my_location_btn);
 		current_location_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				onCurrentLocationClick();
@@ -398,7 +405,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			if (mMap != null) {
 				mMap.setMyLocationEnabled(true);
 				mMap.getUiSettings().setZoomControlsEnabled(false);
+				mMap.getUiSettings().setMyLocationButtonEnabled(true);
 				mMap.setOnCameraChangeListener(this);
+				
 			}
 		}
 	}

@@ -161,6 +161,9 @@
     <string name="search">SEARCH</string>
     <string name="add_favorite">Add Favorite</string>
     <string name="select">Select</string>
+    <string name="no_result_found">No results were found for</string>
+	<string name="enter_pickup_address">Enter pickup address</string>
+	<string name="enter_dropoff_address">Enter dropoff address</string>
 
     <!-- attribute -->
     <string name="please_select_one_company">Please select one company</string>
@@ -183,12 +186,12 @@
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>
     <string name="about">About</string>
-    <string name="book">Book</string>
-    <string name="track">Track</string>
-    <string name="history">History</string>
-    <string name="book_title">Book a trip</string>
-    <string name="track_title">Active Bookings</string>
-    <string name="history_title">Previous Bookings</string>
+    <string name="book">BOOK</string>
+    <string name="track">TRACK</string>
+    <string name="history">HISTORY</string>
+    <string name="book_title">BOOK A TRIP</string>
+    <string name="track_title">ACTIVE BOOKINGS</string>
+    <string name="history_title">PREVIOUS BOOKINGS</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_refresh">Refresh</string>
@@ -196,10 +199,10 @@
     <string name="title_activity_payment">Payment</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_profile">PROFILE</string>
-    <string name="title_activity_preference">Preference</string>
-    <string name="title_activity_about">About</string>
-    <string name="title_activity_destination">Destination</string>
-    <string name="title_activity_pick_up">Pick up Location</string>
+    <string name="title_activity_preference">PREFERENCE</string>
+    <string name="title_activity_about">ABOUT</string>
+    <string name="title_activity_destination">DESTINATION</string>
+    <string name="title_activity_pick_up">PICK UP LOCATION</string>
 
     <!-- Book Fragment -->
     <string name="pickup_time">PICKUP TIME</string>
@@ -214,7 +217,14 @@
     <string name="street_number_hint">Street No.</string>
     <string name="unit_number_hint">Unit No.</string>
     <string name="street_name">Street Name</string>
-
+    
+    <!-- Book Activity -->
+    <string name="date_title">Pickup Date &amp; Time</string>
+    <string name="note_title">Driver Note</string>
+    <string name="company_title">Company</string>
+	<string name="choose">Choose</string>
+	<string name="enter_for_est_fare">Enter your destination for fare estimate</string>
+	
     <!-- Payment -->
     <string name="add_credit_card">Add Credit Card</string>
     <string name="credit_card">Credit Card</string>
@@ -408,18 +418,18 @@
     <string name="stop_updates">Stop Updates</string>
     <string name="unknown">--Unknown--</string>
     <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.</string>
-    <string name="title_activity_attribute">Attributes</string>
-    <string name="title_activity_trip_detail">Trip Detail</string>
+    <string name="title_activity_attribute">BOOKING OPTIONS</string>
+    <string name="title_activity_trip_detail">TRIP DETAILS</string>
     <string name="title_activity_tracking_map">Track Your Taxi</string>
-    <string name="title_activity_track_detail">Trip Detail</string>
+    <string name="title_activity_track_detail">TRIP DETAIL</string>
     <string name="title_activity_edit_credit_card">Edit Credit Card</string>
     <string name="title_activity_register_credit_card">Register Credit Card</string>
     <string name="title_activity_pay">Pay</string>
     <string name="title_activity_register">REGISTER</string>
     <string name="title_activity_add_preference">AddPreferenceActivity</string>
     <string name="title_activity_book">YOUR TRIP</string>
-    <string name="title_activity_set_time">SetTimeActivity</string>
-    <string name="title_activity_driver_note">DriverNoteActivity</string>
+    <string name="title_activity_set_time">PICKUP DATE &amp; TIME</string>
+    <string name="title_activity_driver_note">DRIVER NOTE</string>
     <string name="title_activity_register_confirm">REGISTER</string>
 
 </resources>

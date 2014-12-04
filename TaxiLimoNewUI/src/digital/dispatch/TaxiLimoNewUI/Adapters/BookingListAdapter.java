@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.Adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,8 +79,12 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 		// fill data
 		ViewHolder holder = (ViewHolder) rowView.getTag();
+		Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+		holder.address.setTypeface(fontFamily);
 		holder.address.setText(values.get(position).getPickupAddress());
-
+		
+		Typeface exo2FontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf");
+		holder.status.setTypeface(exo2FontFamily);
 		if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
 			holder.status.setText(context.getString(R.string.completed));
 			holder.status.setTextColor(context.getResources().getColor(R.color.completed_color));

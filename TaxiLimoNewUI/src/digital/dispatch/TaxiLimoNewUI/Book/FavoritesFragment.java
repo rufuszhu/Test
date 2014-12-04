@@ -24,6 +24,9 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -107,7 +110,7 @@ public class FavoritesFragment extends ListFragment {
 	}
 
 	/**
-	 * Handle touch events to lock list view swiping during swipe and block multiple swipe
+	 * Handle touch events to lock list view scrolling during swipe and block multiple swipe
 	 */
 	private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
 
@@ -192,6 +195,8 @@ public class FavoritesFragment extends ListFragment {
 			public TextView edit_btn;
 			public RelativeLayout viewHeader;
 			public ViewGroup swipeContactView;
+			public TextView green_circle_edit;
+			public TextView green_circle_delete;
 		}
 
 		@Override
@@ -210,12 +215,15 @@ public class FavoritesFragment extends ListFragment {
 				viewHolder.edit_btn = (TextView) rowView.findViewById(R.id.edit_btn);
 				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
 				viewHolder.viewHeader = (RelativeLayout) rowView.findViewById(R.id.viewHeader);
+				
+				viewHolder.green_circle_edit = (TextView) rowView.findViewById(R.id.green_circle_edit);
+				viewHolder.green_circle_delete = (TextView) rowView.findViewById(R.id.green_circle_delete);
 				rowView.setTag(viewHolder);
 			}
 			
 			// fill data
 			
-			ViewHolder holder = (ViewHolder) rowView.getTag();
+			final ViewHolder holder = (ViewHolder) rowView.getTag();
 			
 			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
 			holder.title.setTypeface(RionaSansMedium);
@@ -235,7 +243,23 @@ public class FavoritesFragment extends ListFragment {
 
 			holder.edit_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					setUpEditNickNameDialog(values.get(position), position);
+					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener(){
+						@Override
+						public void onAnimationStart(Animation animation) {
+						}
+
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							setUpEditNickNameDialog(values.get(position), position);
+						}
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}});
+					holder.green_circle_edit.setVisibility(View.VISIBLE);
+					holder.green_circle_edit.startAnimation(pop);
+					
 				}
 			});
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
@@ -248,36 +272,52 @@ public class FavoritesFragment extends ListFragment {
 
 			holder.delete_btn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-					builder.setTitle(getActivity().getString(R.string.warning));
-					builder.setMessage(getActivity().getString(R.string.delete_confirmation));
-					builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener(){
 						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list()
-									.get(0);
-							values.remove(position);
-							addressDao.delete(dbAddress);
-							adapter.notifyDataSetChanged();
-							
-							Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful), Toast.LENGTH_SHORT)
-									.show();
-							((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
+						public void onAnimationStart(Animation animation) {
 						}
-					});
 
-					builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
+						public void onAnimationEnd(Animation animation) {
+							AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+							builder.setTitle(getActivity().getString(R.string.warning));
+							builder.setMessage(getActivity().getString(R.string.delete_confirmation));
+							builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list()
+											.get(0);
+									values.remove(position);
+									addressDao.delete(dbAddress);
+									adapter.notifyDataSetChanged();
+									
+									Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful), Toast.LENGTH_SHORT)
+											.show();
+									((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
+								}
+							});
+
+							builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							});
+							builder.show();
 						}
-					});
-					builder.show();
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}});
+					holder.green_circle_delete.setVisibility(View.VISIBLE);
+					holder.green_circle_delete.startAnimation(pop);
+					
 				}
 			});
 			
 			if(position%2==1){
-				holder.viewHeader.setBackgroundColor(context.getResources().getColor(R.color.list_background2));
+				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
 			holder.viewHeader.setOnClickListener(new OnClickListener() {

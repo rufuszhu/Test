@@ -21,6 +21,9 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -149,13 +152,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
-				if(selected==0){
+				if (selected == 0) {
 					selectTab0();
-				}
-				else if(selected==1){
+				} else if (selected == 1) {
 					selectTab1();
-				}
-				else if(selected==2){
+				} else if (selected == 2) {
 					selectTab2();
 				}
 				restoreActionBar();
@@ -189,6 +190,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		tab0_text = (TextView) findViewById(R.id.tab0_text);
 		tab1_text = (TextView) findViewById(R.id.tab1_text);
 		tab2_text = (TextView) findViewById(R.id.tab2_text);
+		
+		Typeface exoFamily = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		tab0_text.setTypeface(exoFamily);
+		tab1_text.setTypeface(exoFamily);
+		tab2_text.setTypeface(exoFamily);
 
 		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
@@ -310,14 +316,14 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 			intent = new Intent(this, ProfileActivity.class);
 			startActivityForAnim(intent);
 			break;
-//		case 1:
-//			intent = new Intent(this, PaymentActivity.class);
-//			startActivityForAnim(intent);
-//			break;
-//		case 2:
-//			intent = new Intent(this, PreferenceActivity.class);
-//			startActivityForAnim(intent);
-//			break;
+		// case 1:
+		// intent = new Intent(this, PaymentActivity.class);
+		// startActivityForAnim(intent);
+		// break;
+		// case 2:
+		// intent = new Intent(this, PreferenceActivity.class);
+		// startActivityForAnim(intent);
+		// break;
 		case 1:
 			intent = new Intent(this, AboutActivity.class);
 			startActivityForAnim(intent);
@@ -329,12 +335,21 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
-
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setIcon(R.color.transparent);
+		actionBar.setIcon(null);
+		int titleId = getResources().getIdentifier("action_bar_title", "id",
+	            "android");
+		Typeface face = Typeface.createFromAsset(_context.getAssets(), "fonts/Exo2-Light.ttf");
+	    TextView yourTextView = (TextView) findViewById(titleId);
+	    yourTextView.setTypeface(face);
 		// if we want customize action bar
-		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM |
-		// ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
 		// actionBar.setCustomView(R.layout.actionbar);
+		// actionBar.setDisplayShowTitleEnabled(true);
 		// actionBar.setDisplayUseLogoEnabled(false);
+		// getActionBar().setHomeButtonEnabled(true);
+		// getActionBar().setDisplayHomeAsUpEnabled(true);
 		// actionBar.setIcon(R.color.transparent);
 		// actionBar.setIcon(null);
 		switch (mPager.getCurrentItem()) {

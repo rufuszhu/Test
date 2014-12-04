@@ -3,9 +3,14 @@
  */
 package digital.dispatch.TaxiLimoNewUI;
 
+import java.util.Locale;
+
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.TextView;
 
 
 
@@ -18,11 +23,28 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        
+        setUpActionBar();
     }
     
     
-    public void startActivityForAnim(Intent intent) {
+    private void setUpActionBar() {
+    	ActionBar actionBar = getSupportActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setIcon(R.color.transparent);
+		actionBar.setIcon(null);
+		int titleId = getResources().getIdentifier("action_bar_title", "id",
+	            "android");
+		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/Exo2-Light.ttf");
+	    TextView yourTextView = (TextView) findViewById(titleId);
+
+	    yourTextView.setTypeface(face);
+		
+	}
+
+
+	public void startActivityForAnim(Intent intent) {
         startActivity(intent);
         overridePendingTransition(activityAnimEnter, activityAnimExit);
     }

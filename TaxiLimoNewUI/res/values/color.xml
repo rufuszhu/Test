@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<color name="actionbar_background">#3e3f48</color>
+    <color name="actionbar_background">#3e3f48</color>
     <color name="white">#ffffff</color>
     <color name="gray">#757575</color>
     <color name="gray_light">#9C9C9C</color>
@@ -14,7 +14,6 @@
     <color name="drawer_normal">#212125</color>
     <color name="drawer_selected">#3e3f48</color>
     <color name="transparent">#00000000</color>
-    
     <color name="completed_color">#409a9c</color>
     <color name="canceled_color">#aaaaaa</color>
     <color name="inservice_color">#4CBBBD</color>
@@ -38,26 +37,27 @@
     <color name="green_dark">#669900</color>
     <color name="orange_dark">#FF8800</color>
     <color name="red_dark">#CC0000</color>
-
-     <color name="background_tab">#c2c2c2</color>
- 	<color name="background_tab_selected">#6b7883</color>
- 	<color name="tab_text">#b5bcc1</color>
-	<color name="tab_text_selected">#ffffff</color>
-	
-	<color name="list_background2">#f5f6f7</color>
-	<color name="list_gray_text">#999999</color>
-	
-	
-	<color name="green">#66aeb0</color>
-	
-
- 	<color name="large_btn_text_color">#409A9C</color>
- 	<color name="large_btn_bg_color">#FCFCFC</color>
- 	<color name="large_btn_line_color">#6E6F76</color>
- 	<color name="blue_green_color">#409A9C</color>
- 	<color name="blue_grenn_color2">#469D9F</color>
- 	<color name="red_color">#C12F39</color>
- 	<color name="btn_bg_green_color">#71B4B5</color>
- 	
+    <color name="fav_color">#ff7e00</color>
+    <color name="green_circle">#459d9f</color>
+    <color name="background_tab">#c2c2c2</color>
+    <color name="background_tab_selected">#6b7883</color>
+    <color name="tab_text">#b5bcc1</color>
+    <color name="tab_text_selected">#ffffff</color>
+    <color name="list_background2">#f5f6f7</color>
+    <color name="list_gray_text">#999999</color>
+    <color name="dark_gray_text">#666666</color>
+    <color name="list_background_selected">#daebec</color>
+    <color name="green">#66aeb0</color>
+    <color name="large_btn_text_color">#409A9C</color>
+    <color name="large_btn_bg_color">#FCFCFC</color>
+    <color name="large_btn_line_color">#6E6F76</color>
+    <color name="blue_green_color">#409A9C</color>
+    <color name="blue_grenn_color2">#469D9F</color>
+    <color name="red_color">#C12F39</color>
+    <color name="btn_bg_green_color">#71B4B5</color>
+    
+    
+    <color name="current_location_btn_color">#48a0a2</color>
+    
 
 </resources>
