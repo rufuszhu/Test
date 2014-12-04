@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -49,6 +50,8 @@ public class BookActivity extends BaseActivity {
 	private Context _this;
 	private RelativeLayout rl_pick_up, rl_drop_off, rl_date, rl_driver_note, rl_company;
 	private TextView tv_pick_up, tv_drop_off, tv_date, tv_driver_note, tv_company, book_btn;
+	private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title
+	,angle_right3, angle_right2,angle_right1;
 	private static final int DEFAULT_FONT_SIZE = 20;
 	private static final int VALUE_FONT_SIZE = 13;
 
@@ -58,7 +61,43 @@ public class BookActivity extends BaseActivity {
 		setContentView(R.layout.activity_book);
 		_this = this;
 		findView();
+		styleView();
 		bindEvent();
+	}
+
+	private void styleView() {
+		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		icon_pickup.setTypeface(fontAwesome);
+		icon_dropoff.setTypeface(fontAwesome);
+		icon_date.setTypeface(fontAwesome);
+		icon_note.setTypeface(fontAwesome);
+		icon_company.setTypeface(fontAwesome);
+		angle_right1.setTypeface(fontAwesome);
+		angle_right2.setTypeface(fontAwesome);
+		angle_right3.setTypeface(fontAwesome);
+		
+		icon_pickup.setText(MBDefinition.ICON_MALE);
+		icon_dropoff.setText(MBDefinition.ICON_DROPOFF);
+		icon_date.setText(MBDefinition.icon_tab_calendar);
+		icon_note.setText(MBDefinition.ICON_COMMENT);
+		icon_company.setText(MBDefinition.ICON_COMPANY);
+		
+		angle_right1.setText(MBDefinition.ICON_ANGLE_RIGHT);
+		angle_right2.setText(MBDefinition.ICON_ANGLE_RIGHT);
+		angle_right3.setText(MBDefinition.ICON_ANGLE_RIGHT);
+		
+		tv_date_title.setTypeface(rionaSansRegular);
+		tv_note_title.setTypeface(rionaSansRegular);
+		tv_company_title.setTypeface(rionaSansRegular);
+		tv_pick_up.setTypeface(rionaSansRegular);
+		tv_drop_off.setTypeface(rionaSansRegular);
+		tv_date.setTypeface(rionaSansRegular);
+		tv_driver_note.setTypeface(rionaSansRegular);
+		tv_company.setTypeface(rionaSansRegular);
+		book_btn.setTypeface(rionaSansRegular);
+
+		
 	}
 
 	@Override
@@ -99,15 +138,12 @@ public class BookActivity extends BaseActivity {
 	private void setDriverNoteIfExist() {
 			if (Utils.driverNoteString.length() > 20) {
 				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
-				tv_driver_note.setTextSize(VALUE_FONT_SIZE);
 				tv_driver_note.setText(Utils.driverNoteString.substring(0, 20) + "...");
 			} else if (Utils.driverNoteString.length() == 0) {
 				tv_driver_note.setTextColor(getResources().getColor(R.color.gray_light));
-				tv_driver_note.setTextSize(DEFAULT_FONT_SIZE);
 				tv_driver_note.setText(getString(R.string.empty_note));
 			} else {
 				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
-				tv_driver_note.setTextSize(VALUE_FONT_SIZE);
 				tv_driver_note.setText(Utils.driverNoteString);
 			}
 		
@@ -116,20 +152,19 @@ public class BookActivity extends BaseActivity {
 	private void setTimeIfExist() {
 		if (Utils.pickupDate == null || Utils.pickupTime == null) {
 			tv_date.setText(_this.getResources().getString(R.string.now));
-			tv_date.setTextSize(20);
 			tv_date.setTextColor(_this.getResources().getColor(R.color.gray_light));
 		} else {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
-			SimpleDateFormat timeFormat = new SimpleDateFormat("hh: mm a", Locale.US);
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.US);
+			SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.US);
 			String date = dateFormat.format(Utils.pickupDate);
 			String time = timeFormat.format(Utils.pickupTime);
 			Calendar cal = Calendar.getInstance();
 
 			if (Utils.pickupDate.getDate() == cal.get(Calendar.DATE)) {
-				tv_date.setText("Today" + "\n" + time);
+				tv_date.setText(time + ", Today");
 			} else
-				tv_date.setText(date + "\n" + time);
-			tv_date.setTextSize(13);
+				tv_date.setText(time + ", " + date);
 			tv_date.setTextColor(_this.getResources().getColor(R.color.black));
 		}
 	}
@@ -140,7 +175,7 @@ public class BookActivity extends BaseActivity {
 			tv_drop_off.setText(LocationUtils.addressToString(_this, Utils.mDropoffAddress));
 		} else {
 			tv_drop_off.setTextColor(_this.getResources().getColor(R.color.gray_light));
-			tv_drop_off.setText(_this.getResources().getString(R.string.empty_note));
+			tv_drop_off.setText(_this.getResources().getString(R.string.enter_for_est_fare));
 		}
 	}
 
@@ -221,6 +256,18 @@ public class BookActivity extends BaseActivity {
 		tv_driver_note = (TextView) findViewById(R.id.tv_driver_note);
 		tv_company = (TextView) findViewById(R.id.tv_company);
 		book_btn = (TextView) findViewById(R.id.book_button);
+		
+		icon_pickup = (TextView) findViewById(R.id.icon_pickup);
+		icon_dropoff = (TextView) findViewById(R.id.icon_dropoff);
+		icon_date = (TextView) findViewById(R.id.icon_date);
+		icon_note = (TextView) findViewById(R.id.icon_note);
+		icon_company = (TextView) findViewById(R.id.icon_company);
+		tv_date_title = (TextView) findViewById(R.id.tv_date_title);
+		tv_note_title = (TextView) findViewById(R.id.tv_note_title);
+		tv_company_title = (TextView) findViewById(R.id.tv_company_title);
+		angle_right3 = (TextView) findViewById(R.id.angle_right3);
+		angle_right2 = (TextView) findViewById(R.id.angle_right2);
+		angle_right1 = (TextView) findViewById(R.id.angle_right1);
 	}
 
 	private void buildAlertMessageNoGps() {

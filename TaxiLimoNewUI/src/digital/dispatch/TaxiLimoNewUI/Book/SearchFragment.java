@@ -38,6 +38,7 @@ import android.widget.Filter.FilterListener;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
@@ -71,6 +72,9 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	private ContactResultAdapter contactAdapter;
 	private FavoriteResultAdapter favAdapter;
 	private PlacesAutoCompleteAdapter googleAdapter;
+	
+	private RelativeLayout rl_no_result;
+	private TextView no_result_icon, tv_no_result, tv_street, power_by_google;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -144,9 +148,29 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		listView_google = (ListView) view.findViewById(R.id.listView_google);
 		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete);
 		googleAdapter = new PlacesAutoCompleteAdapter(getActivity(), R.layout.search_list_item);
+		
+		rl_no_result = (RelativeLayout) view.findViewById(R.id.rl_no_result);
+		no_result_icon = (TextView) view.findViewById(R.id.no_result_icon);
+		tv_no_result = (TextView) view.findViewById(R.id.tv_no_result);
+		tv_street = (TextView) view.findViewById(R.id.tv_street);
+		power_by_google = (TextView) view.findViewById(R.id.power_by_google);
+		
 		listView_google.setAdapter(googleAdapter);
 		// autoCompView.setOnItemClickListener(this);
-
+		Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+		no_result_icon.setTypeface(fontFamily);
+		no_result_icon.setText(MBDefinition.icon_tab_search);
+		
+		Typeface rionaMediumFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		tv_no_result.setTypeface(rionaMediumFamily);
+		tv_street.setTypeface(rionaMediumFamily);
+		
+		Typeface rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
+		autoCompView.setTypeface(rionaRegularFamily);
+		if (((ModifyAddressActivity) getActivity()).getIsDesitination())
+			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
+		else
+			autoCompView.setHint(getActivity().getString(R.string.enter_pickup_address));
 		autoCompView.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -178,6 +202,8 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				
 				//listView_google.requestLayout();
 				googleAdapter.notifyDataSetChanged();
+				
+				
 			}
 		});
 
@@ -208,6 +234,27 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				new ValidateAddressTask(getActivity()).execute((String)listView_google.getItemAtPosition(position));
 			}
 		});
+	}
+	
+	//this function gets called in PlacesAutoCompleteAdapter when no result returned by google
+	public void displayNoResultFoundIfNoResultFound(){
+		if(checkNoLocalResultFound() && autoCompView.getText().toString().length()>0){
+			rl_no_result.setVisibility(View.VISIBLE);
+			tv_street.setText("\"" + autoCompView.getText().toString() + "\"");
+			power_by_google.setVisibility(View.GONE);
+		}
+		else{
+			hideNoResultFoundLayout();
+		}
+	}
+	
+	public void hideNoResultFoundLayout(){
+		rl_no_result.setVisibility(View.GONE);
+		power_by_google.setVisibility(View.VISIBLE);
+	}
+	
+	private boolean checkNoLocalResultFound(){
+		return (contactResults.size()==0 && favoriteResults.size()==0);
 	}
 
 	private void searchForContact(String string) {

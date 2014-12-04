@@ -26,6 +26,7 @@ import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -244,9 +245,21 @@ public class FavoritesFragment extends ListFragment {
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
 					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener(){
+						@Override
+						public void onAnimationStart(Animation animation) {
+						}
+
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							setUpEditNickNameDialog(values.get(position), position);
+						}
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}});
 					holder.green_circle_edit.setVisibility(View.VISIBLE);
 					holder.green_circle_edit.startAnimation(pop);
-					setUpEditNickNameDialog(values.get(position), position);
+					
 				}
 			});
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
@@ -261,33 +274,45 @@ public class FavoritesFragment extends ListFragment {
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
 					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener(){
+						@Override
+						public void onAnimationStart(Animation animation) {
+						}
+
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+							builder.setTitle(getActivity().getString(R.string.warning));
+							builder.setMessage(getActivity().getString(R.string.delete_confirmation));
+							builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list()
+											.get(0);
+									values.remove(position);
+									addressDao.delete(dbAddress);
+									adapter.notifyDataSetChanged();
+									
+									Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful), Toast.LENGTH_SHORT)
+											.show();
+									((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
+								}
+							});
+
+							builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							});
+							builder.show();
+						}
+						@Override
+						public void onAnimationRepeat(Animation animation) {
+						}});
 					holder.green_circle_delete.setVisibility(View.VISIBLE);
 					holder.green_circle_delete.startAnimation(pop);
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-					builder.setTitle(getActivity().getString(R.string.warning));
-					builder.setMessage(getActivity().getString(R.string.delete_confirmation));
-					builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list()
-									.get(0);
-							values.remove(position);
-							addressDao.delete(dbAddress);
-							adapter.notifyDataSetChanged();
-							
-							Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful), Toast.LENGTH_SHORT)
-									.show();
-							((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
-						}
-					});
-
-					builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					});
-					builder.show();
+					
 				}
 			});
 			

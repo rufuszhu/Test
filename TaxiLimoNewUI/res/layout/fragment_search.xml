@@ -8,7 +8,7 @@
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/map_addressBar_height"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/small_padding" >
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/searchbar_selector"
             android:ems="10"
-            android:hint="@string/street_name"
+            android:hint="@string/enter_pickup_address"
             android:imeOptions="actionDone"
             android:inputType="textPostalAddress"
             android:nextFocusLeft="@id/autocomplete"
@@ -47,44 +47,94 @@
             android:src="@drawable/icon_clearinput" />
     </FrameLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frameLayout1" >
+        android:layout_below="@+id/frameLayout1"
+        android:orientation="vertical" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/power_by_google"
+            android:layout_width="100dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/big_margin"
+            android:background="@drawable/power_by_google" />
+
+        <RelativeLayout
+            android:id="@+id/rl_no_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:visibility="gone" >
 
-            <ListView
-                android:id="@+id/listView_favorite"
+            <TextView
+            android:id="@+id/no_result_icon"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:textColor="@color/list_gray_text"
+            android:textSize="@dimen/no_result_icon_size" />
+            
+            <TextView
+            android:id="@+id/tv_no_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_result_icon"
+            android:layout_centerHorizontal="true"
+            android:text="@string/no_result_found"
+            android:textSize="@dimen/no_result_font_size"
+            android:textColor="@color/list_gray_text" />
+            
+            <TextView
+            android:id="@+id/tv_street"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_no_result"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/no_result_font_size"
+            android:textColor="@color/dark_gray_text" />
+            
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"
-                android:paddingTop="@dimen/normal_padding" >
-            </ListView>
+                android:orientation="vertical" >
 
-            <ListView
-                android:id="@+id/listView_contact"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"
-                android:paddingTop="@dimen/normal_padding" >
-            </ListView>
+                <ListView
+                    android:id="@+id/listView_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp"
+                    android:paddingTop="@dimen/normal_padding" >
+                </ListView>
 
-            <ListView
-                android:id="@+id/listView_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"
-                android:paddingTop="@dimen/normal_padding" >
-            </ListView>
-        </LinearLayout>
-    </ScrollView>
+                <ListView
+                    android:id="@+id/listView_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp"
+                    android:paddingTop="@dimen/normal_padding" >
+                </ListView>
+
+                <ListView
+                    android:id="@+id/listView_google"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp"
+                    android:paddingTop="@dimen/normal_padding" >
+                </ListView>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
 </RelativeLayout>
