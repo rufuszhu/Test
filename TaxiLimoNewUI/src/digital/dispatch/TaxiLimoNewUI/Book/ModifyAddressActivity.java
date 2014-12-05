@@ -123,13 +123,14 @@ public class ModifyAddressActivity extends BaseActivity {
 		tab1_text.setTypeface(exoFamily);
 		tab2_text.setTypeface(exoFamily);
 
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
 		tab0_icon.setTypeface(fontFamily);
 		tab0_icon.setText(MBDefinition.icon_tab_search);
 
+		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		tab1_icon = (TextView) findViewById(R.id.tab1_icon);
-		tab1_icon.setTypeface(fontFamily);
+		tab1_icon.setTypeface(fontAwesome);
 		tab1_icon.setText(MBDefinition.icon_tab_fav);
 
 		tab2_icon = (TextView) findViewById(R.id.tab2_icon);

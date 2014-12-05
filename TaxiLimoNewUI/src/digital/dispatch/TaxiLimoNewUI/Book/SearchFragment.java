@@ -75,6 +75,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	
 	private RelativeLayout rl_no_result;
 	private TextView no_result_icon, tv_no_result, tv_street, power_by_google;
+	private Typeface fontFamily,rionaSansMedium,rionaRegularFamily,fontAwesome;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -97,6 +98,11 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		view = inflater.inflate(R.layout.fragment_search, container, false);
 		Logger.e(TAG, "onCreateView");
 		findViewAndBindEvent();
+		
+		fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+		rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
+		fontAwesome = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
 
 		contactResults = new ArrayList<ListItem>();
 		favoriteResults = new ArrayList<ListItem>();
@@ -157,15 +163,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		
 		listView_google.setAdapter(googleAdapter);
 		// autoCompView.setOnItemClickListener(this);
-		Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+
 		no_result_icon.setTypeface(fontFamily);
 		no_result_icon.setText(MBDefinition.icon_tab_search);
 		
-		Typeface rionaMediumFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-		tv_no_result.setTypeface(rionaMediumFamily);
-		tv_street.setTypeface(rionaMediumFamily);
+
+		tv_no_result.setTypeface(rionaSansMedium);
+		tv_street.setTypeface(rionaSansMedium);
 		
-		Typeface rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
+		
 		autoCompView.setTypeface(rionaRegularFamily);
 		if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
@@ -332,16 +338,16 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			if(position%2==1){
 				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+			
 			holder.icon.setTypeface(fontFamily);
 			holder.icon.setText(MBDefinition.icon_phone);
 
 			String a = contactResults.get(position).bold;
-			Typeface RionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-			holder.bold.setTypeface(RionaSansMedium, Typeface.BOLD);
+			
+			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
 			holder.bold.setText(a);
 			
-			holder.notBold.setTypeface(RionaSansMedium, Typeface.NORMAL);
+			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(contactResults.get(position).notBold);
 
 			return rowView;
@@ -379,16 +385,16 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			if(position%2==1){
 				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
-			holder.icon.setTypeface(fontFamily);
+			
+			holder.icon.setTypeface(fontAwesome);
 			holder.icon.setText(MBDefinition.icon_tab_fav);
 
 			String a = favoriteResults.get(position).bold;
-			Typeface RionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-			holder.bold.setTypeface(RionaSansMedium, Typeface.BOLD);
+			
+			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
 			holder.bold.setText(a);
 			
-			holder.notBold.setTypeface(RionaSansMedium, Typeface.NORMAL);
+			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(favoriteResults.get(position).notBold);
 
 			return rowView;

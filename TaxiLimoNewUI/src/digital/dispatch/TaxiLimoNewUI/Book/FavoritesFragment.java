@@ -189,7 +189,7 @@ public class FavoritesFragment extends ListFragment {
 			super(context, R.layout.favorite_item, values);
 			this.context = context;
 			this.values = values;
-			fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
+			fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/icon_pack.ttf");
 			RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
 			RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
 		}

@@ -93,17 +93,17 @@ public class MBDefinition {
 	
 	//fontawesome icon Unicode
 	//eg. http://fortawesome.github.io/Font-Awesome/icon/question-circle/
-	public final static String icon_tab_calendar = "\uf073";
-	public final static String icon_tab_track = "\uf1ba";
-	public final static String icon_tab_clock = "\uf017";
-	public final static String icon_tab_search = "\uf002";
+	public final static String icon_tab_calendar = "\ue3e6";
+	public final static String icon_tab_track = "\ue0d3";
+	public final static String icon_tab_clock = "\ue3e7";
+	public final static String icon_tab_search = "\ue10d";
 	public final static String icon_tab_fav = "\uf005";
-	public final static String icon_tab_contact = "\uf1ea";
+	public final static String icon_tab_contact = "\ue451";
 	public final static String icon_star_hollow = "\uf006";
-	public final static String icon_pencil = "\uf040";
-	public final static String icon_delete = "\uf1f8";
-	public final static String icon_location = "\uf041";
-	public final static String icon_phone = "\uf095";
+	public final static String icon_pencil = "\ue0ec";
+	public final static String icon_delete = "\ue0e6";
+	public final static String icon_location = "\ue325";
+	public final static String icon_phone = "\ue061";
 	public final static String icon_current_location = "\uf124";
 	public final static String ICON_QUESTION_CIRCLE_CODE = "\uf059";
 	public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
@@ -113,10 +113,10 @@ public class MBDefinition {
 	public final static String ICON_PERSON = "\uf183";
 	public final static String ICON_DROPOFF = "\uf041";
 	public final static String ICON_ANGLE_RIGHT = "\uf105";
-	public final static String ICON_COMMENT = "\uf075";
+	public final static String ICON_COMMENT = "\ue01e";
 	public final static String ICON_COMPANY = "\uf1ba";
-	public final static String ICON_EXCLAMATION_CIRCLE_CODE = "\uf06a";
-
+	public final static String ICON_EXCLAMATION_CIRCLE_CODE = "\ue214";
+	public final static String ICON_CROSS = "\ue1f5";
 	
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";
