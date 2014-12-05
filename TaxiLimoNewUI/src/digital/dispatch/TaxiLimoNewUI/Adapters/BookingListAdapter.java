@@ -19,6 +19,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 	private final Context context;
 	private List<DBBooking> values;
+	private Typeface fontFamily,exo2FontFamily;
 
 	public List<DBBooking> getValues() {
 		return values;
@@ -47,6 +48,8 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		super(context, R.layout.booking_list_item, values);
 		this.context = context;
 		this.values = values;
+		fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+		exo2FontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf");
 	}
 
 	public static class ViewHolder {
@@ -63,55 +66,53 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View rowView = convertView;
+		ViewHolder viewHolder;
 		// reuse views
-		if (rowView == null) {
+		if (convertView == null) {
+			convertView = LayoutInflater.from(getContext()).inflate(R.layout.booking_list_item, null);
+			viewHolder = new ViewHolder();
 
-			rowView = LayoutInflater.from(getContext()).inflate(R.layout.booking_list_item, null);
-			// configure view holder
-			ViewHolder viewHolder = new ViewHolder();
-
-			viewHolder.address = (TextView) rowView.findViewById(R.id.text_address);
-			viewHolder.status = (TextView) rowView.findViewById(R.id.tv_status);
-			viewHolder.status_bar = (TextView) rowView.findViewById(R.id.tv_status_bar);
-			rowView.setTag(viewHolder);
+			viewHolder.address = (TextView) convertView.findViewById(R.id.text_address);
+			viewHolder.status = (TextView) convertView.findViewById(R.id.tv_status);
+			viewHolder.status_bar = (TextView) convertView.findViewById(R.id.tv_status_bar);
+			convertView.setTag(viewHolder);
+		}
+		else{
+			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
 		// fill data
-		ViewHolder holder = (ViewHolder) rowView.getTag();
-		Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
-		holder.address.setTypeface(fontFamily);
-		holder.address.setText(values.get(position).getPickupAddress());
+		viewHolder.address.setTypeface(fontFamily);
+		viewHolder.address.setText(values.get(position).getPickupAddress());
 		
-		Typeface exo2FontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf");
-		holder.status.setTypeface(exo2FontFamily);
+		viewHolder.status.setTypeface(exo2FontFamily);
 		if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_COMPLETED) {
-			holder.status.setText(context.getString(R.string.completed));
-			holder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
+			viewHolder.status.setText(context.getString(R.string.completed));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
-			holder.status.setText(context.getString(R.string.canceled));
-			holder.status.setTextColor(context.getResources().getColor(R.color.canceled_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.canceled_color));
+			viewHolder.status.setText(context.getString(R.string.canceled));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.canceled_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.canceled_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED) {
-			holder.status.setText(context.getString(R.string.dispatched));
-			holder.status.setTextColor(context.getResources().getColor(R.color.dispatched_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.dispatched_color));
+			viewHolder.status.setText(context.getString(R.string.dispatched));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.dispatched_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.dispatched_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_ARRIVED) {
-			holder.status.setText(context.getString(R.string.arrived));
-			holder.status.setTextColor(context.getResources().getColor(R.color.arrived_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.arrived_color));
+			viewHolder.status.setText(context.getString(R.string.arrived));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.arrived_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.arrived_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_BOOKED) {
-			holder.status.setText(context.getString(R.string.booked));
-			holder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
+			viewHolder.status.setText(context.getString(R.string.booked));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
 		} else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			holder.status.setText(context.getString(R.string.in_service));
-			holder.status.setTextColor(context.getResources().getColor(R.color.inservice_color));
-			holder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.inservice_color));
+			viewHolder.status.setText(context.getString(R.string.in_service));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.inservice_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.inservice_color));
 		}
 
-		return rowView;
+		return convertView;
 	}
 
 }

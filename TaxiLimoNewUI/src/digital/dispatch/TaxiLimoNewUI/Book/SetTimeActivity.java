@@ -18,6 +18,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,8 @@ public class SetTimeActivity extends BaseActivity {
 	private RadioButton later_btn;
 	private TextView save;
 	private TextView cancel;
+	private TextView question_exclamation;
+	private TextView info;
 	private DateAdapter dateAdapter;
 	private DateAdapter timeTodayAdapter;
 	private DateAdapter timeNotTodayAdapter;
@@ -43,10 +46,23 @@ public class SetTimeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_time);
 		findView();
+		setStyles();
 		setUpWheel();
 		bindEvents();
 	}
 	
+	private void setStyles() {
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+
+		Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+        question_exclamation.setTypeface(fontFamily);
+        question_exclamation.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+		info.setTypeface(rionaSansMedium);
+		now_btn.setTypeface(rionaSansRegular);
+		later_btn.setTypeface(rionaSansRegular);
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -64,6 +80,8 @@ public class SetTimeActivity extends BaseActivity {
 		later_btn = (RadioButton) findViewById(R.id.later);
 		save = (TextView) findViewById(R.id.save);
 		cancel = (TextView) findViewById(R.id.cancel);
+		info = (TextView) findViewById(R.id.info);
+		question_exclamation = (TextView) findViewById(R.id.question_exclamation);
 	}
 	
 	private void setUpWheel() {
@@ -78,7 +96,7 @@ public class SetTimeActivity extends BaseActivity {
 		times.setWheelBackground(R.drawable.wheel_bg_holo);
 		times.setWheelForeground(R.drawable.wheel_val_holo);
 		times.setShadowColor(transparent, transparent, transparent);
-		
+
 		boolean isToday = true;
 		boolean isDate = true;
 		dateAdapter = new DateAdapter(this, isDate, setupDateList());

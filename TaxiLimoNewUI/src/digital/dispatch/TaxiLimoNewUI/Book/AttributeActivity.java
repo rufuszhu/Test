@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
@@ -46,6 +48,7 @@ public class AttributeActivity extends BaseActivity {
 	private boolean refreshing;
 	private boolean shouldBookRightAfter;
 	private Context _context;
+	private Typeface rionaSansBold;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,11 @@ public class AttributeActivity extends BaseActivity {
 				}
 			}
 		});
-
+		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+		TextView textView1 = (TextView) findViewById(R.id.textView1);
+		TextView textView2 = (TextView) findViewById(R.id.textView2);
+		textView1.setTypeface(rionaSansBold);
+		textView2.setTypeface(rionaSansBold);
 	}
 
 	@Override

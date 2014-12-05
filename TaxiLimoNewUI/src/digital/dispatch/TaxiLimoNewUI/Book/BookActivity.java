@@ -154,7 +154,6 @@ public class BookActivity extends BaseActivity {
 			tv_date.setText(_this.getResources().getString(R.string.now));
 			tv_date.setTextColor(_this.getResources().getColor(R.color.gray_light));
 		} else {
-//			SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd", Locale.US);
 			SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.US);
 			SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.US);
 			String date = dateFormat.format(Utils.pickupDate);
@@ -540,13 +539,15 @@ public class BookActivity extends BaseActivity {
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String locality) {
 		Utils.last_city = locality;
 		if (tempCompList.length == 0) {
-			tv_company.setText("No company available in " + locality);
+			tv_company.setText("No fleets in " + locality);
 		} else if (tempCompList.length == 1) {
+			tv_company.setTextColor(_this.getResources().getColor(R.color.black));
 			Utils.mSelectedCompany = tempCompList[0];
 			tv_company.setText(Utils.mSelectedCompany.name);
 		} else {
 			// show please choose a company
-			tv_company.setText(tempCompList.length + " companies available in " + locality);
+			tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
+			tv_company.setText(getString(R.string.choose));
 		}
 		
 	}

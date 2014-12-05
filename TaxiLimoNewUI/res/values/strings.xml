@@ -100,8 +100,7 @@
 
         5. Disclaimer of Warranties and Technical Support\n
             The Software is provided to you on an "AS IS" basis, without any technical support or warranty of any kind including, 
-            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.\n
-                  </string>
+            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.\n</string>
     <string name="chk_agreement">I agree to the terms and conditions.</string>
     <string name="register_warning">You must agree in order to register.</string>
 
@@ -162,11 +161,12 @@
     <string name="add_favorite">Add Favorite</string>
     <string name="select">Select</string>
     <string name="no_result_found">No results were found for</string>
-	<string name="enter_pickup_address">Enter pickup address</string>
-	<string name="enter_dropoff_address">Enter dropoff address</string>
+    <string name="enter_pickup_address">Enter pickup address</string>
+    <string name="enter_dropoff_address">Enter dropoff address</string>
 
     <!-- attribute -->
-    <string name="please_select_one_company">Please select one company</string>
+    <string name="please_select_one_company">SELECT A COMPANY</string>
+    <string name="booking_options">BOOKING OPTIONS</string>
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
@@ -217,14 +217,14 @@
     <string name="street_number_hint">Street No.</string>
     <string name="unit_number_hint">Unit No.</string>
     <string name="street_name">Street Name</string>
-    
+
     <!-- Book Activity -->
     <string name="date_title">Pickup Date &amp; Time</string>
     <string name="note_title">Driver Note</string>
     <string name="company_title">Company</string>
-	<string name="choose">Choose</string>
-	<string name="enter_for_est_fare">Enter your destination for fare estimate</string>
-	
+    <string name="choose">Choose</string>
+    <string name="enter_for_est_fare">Enter your destination for fare estimate</string>
+
     <!-- Payment -->
     <string name="add_credit_card">Add Credit Card</string>
     <string name="credit_card">Credit Card</string>
@@ -341,7 +341,7 @@
     <string name="gcm">Notification</string>
 
     <!-- error messages -->
- 	<string name="nickName_cannot_be_empty">Nickname cannot be empty</string>
+    <string name="nickName_cannot_be_empty">Nickname cannot be empty</string>
     <string name="err_no_current_location">Cannot get current location, please check GPS setting</string>
     <string name="err_no_internet">Network unavailable. Please try again later</string>
     <string name="cannot_get_address_from_google">Can not get address from Google Server, Please try another address</string>

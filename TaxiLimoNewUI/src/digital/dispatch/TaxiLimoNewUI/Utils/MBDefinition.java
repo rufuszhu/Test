@@ -115,31 +115,44 @@ public class MBDefinition {
 	public final static String ICON_ANGLE_RIGHT = "\uf105";
 	public final static String ICON_COMMENT = "\uf075";
 	public final static String ICON_COMPANY = "\uf1ba";
+	public final static String ICON_EXCLAMATION_CIRCLE_CODE = "\uf06a";
 	public static final SparseIntArray attrIconMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.icon_attr_van);
-        aMap.put(2, R.drawable.icon_attr_wheelchair);
-        aMap.put(3, R.drawable.icon_attr_pet);
-        aMap.put(4, R.drawable.icon_attr_airport);
+        aMap.put(1, R.drawable.attrbutes_icon_van);
+        aMap.put(2, R.drawable.attrbutes_icon_wheelchair);
+        aMap.put(3, R.drawable.attrbutes_icon_pet);
+        aMap.put(4, R.drawable.attrbutes_icon_airport);
         
         attrIconMap = aMap;
     }
     
-    public static final SparseIntArray attrBtnMap;
+
 	public static final String EXTRA_CREDIT_CARD = "EXTRA_CREDIT_CARD";
 	
-	
+    public static final SparseIntArray attrBtnOnMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.ic_attr_van);
-        aMap.put(2, R.drawable.ic_attr_wheelchair);
-        aMap.put(3, R.drawable.ic_attr_pet);
-        aMap.put(4, R.drawable.ic_attr_airport);
+        aMap.put(1, R.drawable.attrbutes_filter_van_on);
+        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_on);
+        aMap.put(3, R.drawable.attrbutes_filter_pet_on);
+        aMap.put(4, R.drawable.attrbutes_filter_airport_on);
         
-        attrBtnMap = aMap;
+        attrBtnOnMap = aMap;
+    }
+    
+    public static final SparseIntArray attrBtnOffMap;
+    static {
+    	SparseIntArray  aMap = new SparseIntArray();
+        
+        aMap.put(1, R.drawable.attrbutes_filter_van_off);
+        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_off);
+        aMap.put(3, R.drawable.attrbutes_filter_pet_off);
+        aMap.put(4, R.drawable.attrbutes_filter_airport_off);
+        
+        attrBtnOffMap = aMap;
     }
     
 	public static enum ccRequestType {

@@ -9,8 +9,10 @@ import java.util.Locale;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
 
 /**
@@ -23,6 +25,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	private ArrayList<Date> timeList;
 	private ArrayList<Date> dateList;
 	private boolean isDate;
+	private Typeface rionaSansMedium;
 
 
 	/**
@@ -31,6 +34,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	public DateAdapter(Context context, boolean misDate, ArrayList<Date> list) {
 		super(context, R.layout.date_holo_layout, NO_RESOURCE);
 		setItemTextResource(R.id.date_text);
+		rionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
 		this.isDate = misDate;
 		if(isDate){
 			dateList = list;
@@ -44,6 +48,9 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	@Override
 	public View getItem(int index, View cachedView, ViewGroup parent) {
 		View view = super.getItem(index, cachedView, parent);
+		TextView date_text =  (TextView) view.findViewById(R.id.date_text);
+		
+		date_text.setTypeface(rionaSansMedium);
 		return view;
 	}
 
