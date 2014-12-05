@@ -319,8 +319,8 @@ public class Utils {
 		d.setAlpha(0);
 		progressDialog.getWindow().setBackgroundDrawable(d);
 		progressDialog.setContentView(R.layout.custom_dialog);
-		// This dialog can't be cancelled by pressing the back key
-		progressDialog.setCancelable(false);
+		// uncomment the next line if you want this dialog can't be cancelled by pressing the back key
+		//progressDialog.setCancelable(false);
 
 		DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
 			@Override
@@ -339,14 +339,25 @@ public class Utils {
 	}
 
 	public static void showMessageDialog(String message, Context _context) {
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(message);
-		messageDialog.show();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(message);
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	        	   dialog.dismiss();
+	           }
+	       });
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		//Dialog messageDialog = new Dialog(_context);
+		
+//		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		messageDialog.setContentView(R.layout.dialog_message);
+//		messageDialog.setCanceledOnTouchOutside(true);
+//		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+//		tv_message.setText(message);
+//		messageDialog.show();
 	
 	}
 

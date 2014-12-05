@@ -144,8 +144,8 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			mbook.setTripStatus(MBDefinition.MB_STATUS_BOOKED);
 
 			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat pickupTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
-			mbook.setTripCreationTime(pickupTimeFormat.format(cal.getTime()));
+			SimpleDateFormat createTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale.US);
+			mbook.setTripCreationTime(createTimeFormat.format(cal.getTime()));
 			mbook.setAlready_paid(false);
 
 			DaoManager daoManager = DaoManager.getInstance(_context);

@@ -53,6 +53,7 @@ import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter.ViewHolder;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
@@ -246,7 +247,10 @@ public class ContactsFragment extends ListFragment {
 
 		private final Context context;
 		private List<MyContact> values;
-
+		private Typeface fontFamily;
+		private Typeface RionaSansMedium;
+		private Typeface RionaSansRegular;
+		
 		public List<MyContact> getValues() {
 			return values;
 		}
@@ -259,6 +263,9 @@ public class ContactsFragment extends ListFragment {
 			super(context, R.layout.contact_item, values);
 			this.context = context;
 			this.values = values;
+			fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+			RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+			RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
 		}
 
 		public class ViewHolder {
@@ -276,43 +283,45 @@ public class ContactsFragment extends ListFragment {
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			View rowView = convertView;
+			ViewHolder viewHolder;
 			// reuse views
-			if (rowView == null) {
+			if (convertView == null) {
 
-				rowView = LayoutInflater.from(getContext()).inflate(R.layout.contact_item, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_item, null);
 				// configure view holder
-				ViewHolder viewHolder = new ViewHolder();
-				viewHolder.profile_icon = (ImageView) rowView.findViewById(R.id.profile_icon);
-				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
-				viewHolder.tv_name = (TextView) rowView.findViewById(R.id.tv_name);
-				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
-				viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
-				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
-				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
-				viewHolder.green_circle = (TextView) rowView.findViewById(R.id.green_circle);
-				rowView.setTag(viewHolder);
+				viewHolder = new ViewHolder();
+				viewHolder.profile_icon = (ImageView) convertView.findViewById(R.id.profile_icon);
+				viewHolder.address = (TextView) convertView.findViewById(R.id.tv_address);
+				viewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+				viewHolder.contact_option = (RelativeLayout) convertView.findViewById(R.id.contact_option);
+				viewHolder.add_fav_btn = (TextView) convertView.findViewById(R.id.add_fav_btn);
+				viewHolder.viewHeader = (LinearLayout) convertView.findViewById(R.id.viewHeader);
+				viewHolder.swipeContactView = (ViewGroup) convertView.findViewById(R.id.swipeContactView);
+				viewHolder.green_circle = (TextView) convertView.findViewById(R.id.green_circle);
+				convertView.setTag(viewHolder);
+			}
+			else{
+				viewHolder = (ViewHolder) convertView.getTag();
 			}
 
-			final View temp = rowView;
+			final View temp = convertView;
 
 			// fill data
-			Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
-			final ViewHolder holder = (ViewHolder) rowView.getTag();
-			holder.add_fav_btn.setTypeface(fontFamily);
-			holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
-			
-			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", holder.profile_icon);
 
-			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
-			holder.tv_name.setTypeface(RionaSansMedium);
-			holder.tv_name.setText(values.get(position).getName());
+			viewHolder.add_fav_btn.setTypeface(fontFamily);
+			viewHolder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
 			
-			Typeface RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
-			holder.address.setTypeface(RionaSansRegular);
-			holder.address.setText(values.get(position).getAddress());
-	
-			holder.contact_option.setOnClickListener(new OnClickListener() {
+			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", viewHolder.profile_icon);
+
+			
+			viewHolder.tv_name.setTypeface(RionaSansMedium);
+			viewHolder.tv_name.setText(values.get(position).getName());
+			
+			
+			viewHolder.address.setTypeface(RionaSansRegular);
+			viewHolder.address.setText(values.get(position).getAddress());
+			final TextView green_circle = viewHolder.green_circle;
+			viewHolder.contact_option.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
@@ -330,10 +339,9 @@ public class ContactsFragment extends ListFragment {
 						@Override
 						public void onAnimationRepeat(Animation animation) {
 						}});
-					holder.green_circle.setVisibility(View.VISIBLE);
-					holder.green_circle.startAnimation(pop);
 					
-					
+					green_circle.setVisibility(View.VISIBLE);
+					green_circle.startAnimation(pop);
 					
 					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
 					
@@ -341,17 +349,17 @@ public class ContactsFragment extends ListFragment {
 			});
 			
 			if(position%2==1){
-				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
+				viewHolder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-			holder.viewHeader.setOnClickListener(new OnClickListener() {
+			viewHolder.viewHeader.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getAddress());
 				}
 			});
 
-			holder.swipeContactView.setOnTouchListener(mTouchListener);
-			return rowView;
+			viewHolder.swipeContactView.setOnTouchListener(mTouchListener);
+			return convertView;
 		}
 	}
 

@@ -28,12 +28,14 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -43,6 +45,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
@@ -165,11 +168,11 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
 		Typeface rionaFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
 		address_bar_text.setTypeface(rionaFamily);
-		
+
 		TextView my_location_icon = (TextView) view.findViewById(R.id.my_location_icon);
 		my_location_icon.setTypeface(fontFamily);
 		my_location_icon.setText(MBDefinition.icon_current_location);
-		
+
 		FrameLayout current_location_btn = (FrameLayout) view.findViewById(R.id.my_location_btn);
 		current_location_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -293,9 +296,19 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		enterHouseNumDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		TextView tv_house_num = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.tv_street_address);
 		final EditText et_house_num = (EditText) enterHouseNumDialog.getWindow().findViewById(R.id.et_street_number);
-		TextView ok = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.ok);
+		final TextView ok = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.ok);
 		TextView cancel = (TextView) enterHouseNumDialog.getWindow().findViewById(R.id.cancel);
+		et_house_num.setOnEditorActionListener(new OnEditorActionListener() {
 
+	        @Override
+	        public boolean onEditorAction(TextView v, int actionId,
+	                KeyEvent event) {
+	            if (actionId == EditorInfo.IME_ACTION_DONE) {
+	            	ok.performClick();
+	            }
+	            return false;
+	        }
+	    });
 		tv_house_num.setText(LocationUtils.addressToString(getActivity(), Utils.mPickupAddress));
 		ok.setOnClickListener(new OnClickListener() {
 			@Override
@@ -329,9 +342,19 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		houseNumRangeDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		TextView tv_range_message = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.tv_range_message);
 		final EditText et_house_num = (EditText) houseNumRangeDialog.getWindow().findViewById(R.id.et_street_number);
-		TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);
+		final TextView ok = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.ok);
 		TextView cancel = (TextView) houseNumRangeDialog.getWindow().findViewById(R.id.cancel);
+		et_house_num.setOnEditorActionListener(new OnEditorActionListener() {
 
+	        @Override
+	        public boolean onEditorAction(TextView v, int actionId,
+	                KeyEvent event) {
+	            if (actionId == EditorInfo.IME_ACTION_DONE) {
+	            	ok.performClick();
+	            }
+	            return false;
+	        }
+	    });
 		tv_range_message.setText(start + " and " + end);
 		ok.setOnClickListener(new OnClickListener() {
 			@Override
@@ -357,6 +380,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		});
 		houseNumRangeDialog.setCanceledOnTouchOutside(true);
 		houseNumRangeDialog.show();
+		
 	}
 
 	@Override
@@ -407,7 +431,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				mMap.getUiSettings().setZoomControlsEnabled(false);
 				mMap.getUiSettings().setMyLocationButtonEnabled(true);
 				mMap.setOnCameraChangeListener(this);
-				
+
 			}
 		}
 	}
@@ -684,6 +708,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
 				else
 					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
+			}
+			else{
+				
 			}
 		}
 	}

@@ -6,6 +6,18 @@
     android:orientation="vertical"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity" >
 
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/TextDropShadowWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginLeft="@dimen/normal_margin"
+        android:text="@string/booking_options"
+        android:textColor="@color/list_gray_text"
+        android:textSize="@dimen/select_company_font_size"
+        android:textStyle="bold" />
+
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
@@ -20,16 +32,17 @@
     </GridView>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView2"
         style="@style/TextDropShadowWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
         android:layout_marginLeft="@dimen/normal_margin"
         android:text="@string/please_select_one_company"
-        android:textStyle="bold"
-        android:textColor="@color/blue_text"
-        android:layout_marginBottom="@dimen/normal_margin"
-        android:textSize="@dimen/select_company_font_size" />
+        android:textColor="@color/list_gray_text"
+        android:textSize="@dimen/select_company_font_size"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
@@ -39,7 +52,8 @@
     <ListView
         android:id="@+id/lv_company"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent" >
     </ListView>
 
 </LinearLayout>

@@ -79,7 +79,7 @@
     <dimen name="track_circle_holo_size">20dp</dimen>
 
     <!-- attribute -->
-    <dimen name="select_company_font_size">20sp</dimen>
+    <dimen name="select_company_font_size">14sp</dimen>
     <dimen name="attr_font_size">14sp</dimen>
     <dimen name="company_list_item_height">100dp</dimen>
     <dimen name="selection_btn_font_size">17sp</dimen>

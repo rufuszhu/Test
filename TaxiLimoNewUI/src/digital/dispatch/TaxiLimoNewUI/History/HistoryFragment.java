@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+import de.greenrobot.dao.query.QueryBuilder;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
@@ -29,6 +30,10 @@ public class HistoryFragment extends ListFragment {
 	 */
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "HistoryFragment";
+	// Maximun nubmer of jobs can be saved in Database
+	private static final int MAX_HISTORY_CAP = 20;
+	private QueryBuilder<DBBooking> qb;
+	private DBBookingDao bookingDao;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -45,21 +50,29 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		DaoManager daoManager = DaoManager.getInstance(getActivity());
+		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+		qb = bookingDao.queryBuilder()
+				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED))
+				.orderDesc(Properties.TripCreationTime).limit(MAX_HISTORY_CAP);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		DaoManager daoManager = DaoManager.getInstance(getActivity());
-		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-		List<DBBooking> values = bookingDao.queryBuilder()
-				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
-						 Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED)).orderDesc(Properties.TripCreationTime).list();
-		
+
+		List<DBBooking> values = qb.list();
+
+		// delete all older jobs
+		if (values.size() > 0) {
+			long smallestId = values.get(values.size() - 1).getId();
+			bookingDao.queryBuilder().where(Properties.Id.lt(smallestId)).buildDelete().executeDeleteWithoutDetachingEntities();
+		}
+
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
 		setListAdapter(adapter);
-		
+
 		Utils.isInternetAvailable(getActivity());
 	}
 

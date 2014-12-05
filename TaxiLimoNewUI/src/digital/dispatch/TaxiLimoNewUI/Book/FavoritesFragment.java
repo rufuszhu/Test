@@ -56,6 +56,7 @@ public class FavoritesFragment extends ListFragment {
 	private ListView mListView;
 	private boolean mSwiping = false;
 	private boolean mItemPressed = false;
+
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
@@ -81,13 +82,13 @@ public class FavoritesFragment extends ListFragment {
 		Logger.e(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_favorites, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
-		
+
 		setListAdapter(adapter);
 		return view;
 	}
 
 	private void initListeners() {
-		
+
 	}
 
 	public View mGetView() {
@@ -98,7 +99,6 @@ public class FavoritesFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		
 
 		Utils.isInternetAvailable(getActivity());
 	}
@@ -166,13 +166,16 @@ public class FavoritesFragment extends ListFragment {
 
 	public void notifyDataChange(DBAddress value) {
 		adapter.addValues(value);
-		//adapter.notifyDataSetChanged();
+		// adapter.notifyDataSetChanged();
 	}
 
 	private class FavoritesAdapter extends ArrayAdapter<DBAddress> {
 
 		private final Context context;
 		private List<DBAddress> values;
+		private Typeface fontFamily;
+		private Typeface RionaSansMedium;
+		private Typeface RionaSansRegular;
 
 		public List<DBAddress> getValues() {
 			return values;
@@ -186,6 +189,9 @@ public class FavoritesFragment extends ListFragment {
 			super(context, R.layout.favorite_item, values);
 			this.context = context;
 			this.values = values;
+			fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
+			RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+			RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
 		}
 
 		public class ViewHolder {
@@ -201,40 +207,40 @@ public class FavoritesFragment extends ListFragment {
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			View rowView = convertView;
+			ViewHolder viewHolder;
 			// reuse views
-			if (rowView == null) {
+			if (convertView == null) {
 
-				rowView = LayoutInflater.from(getContext()).inflate(R.layout.favorite_item, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.favorite_item, null);
 				// configure view holder
-				ViewHolder viewHolder = new ViewHolder();
+				viewHolder = new ViewHolder();
 
-				viewHolder.address = (TextView) rowView.findViewById(R.id.tv_address);
-				viewHolder.title = (TextView) rowView.findViewById(R.id.tv_title);
-				viewHolder.delete_btn = (TextView) rowView.findViewById(R.id.delete_btn);
-				viewHolder.edit_btn = (TextView) rowView.findViewById(R.id.edit_btn);
-				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
-				viewHolder.viewHeader = (RelativeLayout) rowView.findViewById(R.id.viewHeader);
-				
-				viewHolder.green_circle_edit = (TextView) rowView.findViewById(R.id.green_circle_edit);
-				viewHolder.green_circle_delete = (TextView) rowView.findViewById(R.id.green_circle_delete);
-				rowView.setTag(viewHolder);
+				viewHolder.address = (TextView) convertView.findViewById(R.id.tv_address);
+				viewHolder.title = (TextView) convertView.findViewById(R.id.tv_title);
+				viewHolder.delete_btn = (TextView) convertView.findViewById(R.id.delete_btn);
+				viewHolder.edit_btn = (TextView) convertView.findViewById(R.id.edit_btn);
+				viewHolder.swipeContactView = (ViewGroup) convertView.findViewById(R.id.swipeContactView);
+				viewHolder.viewHeader = (RelativeLayout) convertView.findViewById(R.id.viewHeader);
+
+				viewHolder.green_circle_edit = (TextView) convertView.findViewById(R.id.green_circle_edit);
+				viewHolder.green_circle_delete = (TextView) convertView.findViewById(R.id.green_circle_delete);
+				convertView.setTag(viewHolder);
+			} else {
+				viewHolder = (ViewHolder) convertView.getTag();
 			}
-			
+
 			// fill data
-			
-			final ViewHolder holder = (ViewHolder) rowView.getTag();
-			
-			Typeface RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+
+			final ViewHolder holder = (ViewHolder) convertView.getTag();
+
 			holder.title.setTypeface(RionaSansMedium);
 			holder.title.setText(values.get(position).getNickName());
-			
-			Typeface RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+
 			holder.address.setTypeface(RionaSansRegular);
 			holder.address.setText(values.get(position).getFullAddress());
-			
-			final View temp = rowView;
-			Typeface fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome.ttf");
+
+			final View temp = convertView;
+
 			holder.edit_btn.setTypeface(fontFamily);
 			holder.edit_btn.setText(MBDefinition.icon_pencil);
 
@@ -245,7 +251,7 @@ public class FavoritesFragment extends ListFragment {
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
 					pop.setFillAfter(true);
-					pop.setAnimationListener(new AnimationListener(){
+					pop.setAnimationListener(new AnimationListener() {
 						@Override
 						public void onAnimationStart(Animation animation) {
 						}
@@ -254,12 +260,14 @@ public class FavoritesFragment extends ListFragment {
 						public void onAnimationEnd(Animation animation) {
 							setUpEditNickNameDialog(values.get(position), position);
 						}
+
 						@Override
 						public void onAnimationRepeat(Animation animation) {
-						}});
+						}
+					});
 					holder.green_circle_edit.setVisibility(View.VISIBLE);
 					holder.green_circle_edit.startAnimation(pop);
-					
+
 				}
 			});
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
@@ -274,7 +282,7 @@ public class FavoritesFragment extends ListFragment {
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
 					pop.setFillAfter(true);
-					pop.setAnimationListener(new AnimationListener(){
+					pop.setAnimationListener(new AnimationListener() {
 						@Override
 						public void onAnimationStart(Animation animation) {
 						}
@@ -287,14 +295,13 @@ public class FavoritesFragment extends ListFragment {
 							builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list()
-											.get(0);
+									DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list().get(0);
 									values.remove(position);
 									addressDao.delete(dbAddress);
 									adapter.notifyDataSetChanged();
-									
-									Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful), Toast.LENGTH_SHORT)
-											.show();
+
+									Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful),
+											Toast.LENGTH_SHORT).show();
 									((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
 								}
 							});
@@ -307,16 +314,18 @@ public class FavoritesFragment extends ListFragment {
 							});
 							builder.show();
 						}
+
 						@Override
 						public void onAnimationRepeat(Animation animation) {
-						}});
+						}
+					});
 					holder.green_circle_delete.setVisibility(View.VISIBLE);
 					holder.green_circle_delete.startAnimation(pop);
-					
+
 				}
 			});
-			
-			if(position%2==1){
+
+			if (position % 2 == 1) {
 				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			holder.swipeContactView.setOnTouchListener(mTouchListener);
@@ -326,7 +335,7 @@ public class FavoritesFragment extends ListFragment {
 					new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getFullAddress());
 				}
 			});
-			return rowView;
+			return convertView;
 		}
 	}
 
@@ -493,7 +502,7 @@ public class FavoritesFragment extends ListFragment {
 					List<DBAddress> newValues = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).orderDesc(Properties.NickName).list();
 					adapter.values = newValues;
 					adapter.notifyDataSetChanged();
-					((SwipableListItem) mListView.getChildAt(position).findViewById(R.id.swipeContactView)).maximize(); 
+					((SwipableListItem) mListView.getChildAt(position).findViewById(R.id.swipeContactView)).maximize();
 					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
 					nicknameDialog.dismiss();

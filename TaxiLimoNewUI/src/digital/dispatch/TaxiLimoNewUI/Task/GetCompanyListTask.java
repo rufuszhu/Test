@@ -38,6 +38,8 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	// Before running code in separate thread
 	@Override
 	protected void onPreExecute() {
+		if(!isFromBooking)
+			Utils.showProcessingDialog(_context);
 	}
 
 	// The code to be executed in a background thread.
@@ -68,6 +70,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 		if(isFromBooking){
 			((BookActivity)_context).handleGetCompanyListResponse(tempCompList,mAddress.getLocality());
 		}else{	
+			Utils.stopProcessingDialog(_context);
 			((AttributeActivity)_context).loadCompanyList(tempCompList);	
 		}
 	}
