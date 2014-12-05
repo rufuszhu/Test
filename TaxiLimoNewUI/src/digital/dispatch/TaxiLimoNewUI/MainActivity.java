@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		tab1_text.setTypeface(exoFamily);
 		tab2_text.setTypeface(exoFamily);
 
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
 		tab0_icon.setTypeface(fontFamily);
 		tab0_icon.setText(MBDefinition.icon_tab_calendar);

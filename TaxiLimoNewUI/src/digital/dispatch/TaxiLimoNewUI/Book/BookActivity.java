@@ -67,11 +67,12 @@ public class BookActivity extends BaseActivity {
 
 	private void styleView() {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
-		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontAwesome.ttf");
 		icon_pickup.setTypeface(fontAwesome);
 		icon_dropoff.setTypeface(fontAwesome);
-		icon_date.setTypeface(fontAwesome);
-		icon_note.setTypeface(fontAwesome);
+		icon_date.setTypeface(icon_pack);
+		icon_note.setTypeface(icon_pack);
 		icon_company.setTypeface(fontAwesome);
 		angle_right1.setTypeface(fontAwesome);
 		angle_right2.setTypeface(fontAwesome);

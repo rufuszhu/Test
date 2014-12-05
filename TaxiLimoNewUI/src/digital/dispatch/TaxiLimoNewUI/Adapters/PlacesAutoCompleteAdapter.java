@@ -93,7 +93,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		if(position%2==1){
 			rowView.setBackgroundResource(R.drawable.list_background2_selector);
 		}
-		Typeface fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/fontawesome.ttf");
+		Typeface fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/icon_pack.ttf");
 		holder.icon.setTypeface(fontFamily);
 		holder.icon.setText(MBDefinition.icon_location);
 

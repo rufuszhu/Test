@@ -100,6 +100,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 	private GoogleMap mMap;
 	private TextView address_bar_text;
+	
+	private boolean setPickupButtonClicked;
 
 	private void buildAlertMessageNoGps() {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -131,12 +133,13 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		// only show refresh if drawer is not open.
 		if (!((MainActivity) getActivity()).getDrawerFragment().isDrawerOpen())
 			inflater.inflate(R.menu.main, menu);
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "on CREATEVIEW");
+		
+		setPickupButtonClicked = false;
 
 		mLocationRequest = LocationRequest.create();
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -194,7 +197,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		blue_pin.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (Utils.mPickupAddress == null || Utils.mPickupAddress.equals("")) {
-					Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
+					//Utils.showMessageDialog(getActivity().getString(R.string.err_no_pickup_address), getActivity());
+					address_bar_text.setText(getActivity().getString(R.string.err_no_pickup_address));
+					setPickupButtonClicked = true; 
 				}
 				// no house number in pickup address
 				else if (!validateHasHouseNumber()) {
@@ -684,6 +689,10 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		@Override
 		protected void onPostExecute(String address) {
 			address_bar_text.setText(address);
+			if(setPickupButtonClicked){
+				setPickupButtonClicked=false;
+				blue_pin.performClick();
+			}
 		}
 	}
 
