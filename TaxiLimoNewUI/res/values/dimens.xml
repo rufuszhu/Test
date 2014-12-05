@@ -92,7 +92,7 @@
     <dimen name="next_size">20sp</dimen>
 
     <!-- profile -->
-    <dimen name="profile_edit_text_height">40dp</dimen>
+    <dimen name="profile_edit_text_height">50dp</dimen>
     <dimen name="profile_row_width">300dp</dimen>
     <dimen name="profile_row_height">60dp</dimen>
 

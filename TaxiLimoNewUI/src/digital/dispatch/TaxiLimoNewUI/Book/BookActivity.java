@@ -77,7 +77,7 @@ public class BookActivity extends BaseActivity {
 		angle_right2.setTypeface(fontAwesome);
 		angle_right3.setTypeface(fontAwesome);
 		
-		icon_pickup.setText(MBDefinition.ICON_MALE);
+		icon_pickup.setText(MBDefinition.ICON_PERSON);
 		icon_dropoff.setText(MBDefinition.ICON_DROPOFF);
 		icon_date.setText(MBDefinition.icon_tab_calendar);
 		icon_note.setText(MBDefinition.ICON_COMMENT);

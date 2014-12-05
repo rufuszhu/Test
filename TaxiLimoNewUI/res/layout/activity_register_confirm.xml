@@ -88,6 +88,7 @@
    	    android:layout_alignParentBottom="true"
    	    android:layout_marginTop="@dimen/small_padding"
    	    android:background="@drawable/blue_green_btn_selector"
+   	    style="@style/TextDropShadow"
    	    android:clickable="true"
    	    android:gravity="center"
    	    android:text="@string/register"

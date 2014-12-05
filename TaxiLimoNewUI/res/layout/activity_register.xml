@@ -31,15 +31,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_marginLeft="-5dp"
         android:layout_below="@+id/register_title"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textPersonName"
@@ -52,9 +53,9 @@
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
@@ -65,9 +66,9 @@
         <EditText
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/phone_number"
             android:inputType="phone"
@@ -80,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_info_form"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="@dimen/normal_padding"
+        android:layout_marginTop="@dimen/small_padding"
         android:orientation="vertical" 
         android:visibility="gone">
 
@@ -94,11 +95,12 @@
         <EditText
             android:id="@+id/et_code"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:hint="@string/verify_hint"
+            android:layout_marginLeft="-5dp"
             android:paddingLeft="@dimen/normal_padding">
 			
             <requestFocus />
@@ -168,14 +170,16 @@
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/chk_bg"
+            android:background="@drawable/white_button_selector"
+            style="@style/TextDropShadowWhite"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/next"
             android:textColor="@color/large_btn_text_color"
             android:textSize="@dimen/large_button_font_size"
             android:textStyle="bold" 
-            android:visibility="gone" />
+            android:visibility="gone"
+             />
    
    <TextView
             android:id="@+id/verify_btn"
@@ -183,7 +187,8 @@
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/chk_bg"
+            android:background="@drawable/white_button_selector"
+            style="@style/TextDropShadowWhite"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/verify"

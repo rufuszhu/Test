@@ -32,15 +32,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_marginLeft="-5dp"
         android:layout_below="@+id/register_title"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/edt_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textPersonName"
@@ -52,9 +53,9 @@
         <EditText
             android:id="@+id/edt_userEmail"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
@@ -65,9 +66,9 @@
         <EditText
             android:id="@+id/edt_phoneNum"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/editbox_background"
             android:ems="10"
             android:hint="@string/phone_number"
             android:inputType="phone"
@@ -80,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_info_form"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="@dimen/normal_padding"
+        android:layout_marginTop="@dimen/small_padding"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -94,10 +95,11 @@
         <EditText
             android:id="@+id/et_code"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/edit_text_height"
+            android:layout_height="@dimen/profile_edit_text_height"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="@dimen/normal_padding"
-            android:background="@android:drawable/editbox_background"
+            android:layout_marginLeft="-5dp"
+            android:background="@drawable/editbox_background"
             android:hint="@string/verify_hint"
             android:paddingLeft="@dimen/normal_padding">
 			
@@ -179,7 +181,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/chk_bg"
+            android:background="@drawable/white_button_selector"
+            style="@style/TextDropShadowWhite"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/verify"
@@ -203,6 +206,7 @@
             android:layout_height="match_parent"
             android:layout_weight=".5"
             android:background="@drawable/white_button_selector"
+            style="@style/TextDropShadowWhite"
             android:orientation="horizontal"
             android:clickable="true"
             android:gravity="center"
@@ -239,6 +243,7 @@
             android:layout_weight=".5"
             android:layout_height="match_parent"
             android:background="@drawable/white_button_selector"
+            style="@style/TextDropShadowWhite"
             android:orientation="horizontal"
             android:clickable="true"
             android:gravity="center"
@@ -268,36 +273,5 @@
         
     </LinearLayout>
 </LinearLayout>
-    <!-- 
-   <TextView
-            android:id="@+id/profile_save_btn"
-            style="@style/TextDropShadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_book_btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/SAVE"
-            android:textColor="@color/white"
-            android:textSize="@dimen/large_button_font_size"
-            android:textStyle="bold" />
-   
-   <TextView
-            android:id="@+id/profile_verify_btn"
-            style="@style/TextDropShadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_book_btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/verify"
-            android:textColor="@color/white"
-            android:textSize="@dimen/large_button_font_size"
-            android:textStyle="bold" 
-            android:visibility="gone"/>
-	  -->
+ 
 </RelativeLayout>
