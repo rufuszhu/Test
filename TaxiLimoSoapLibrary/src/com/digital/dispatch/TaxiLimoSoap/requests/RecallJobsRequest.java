@@ -86,7 +86,7 @@ public class RecallJobsRequest extends Request {
 							
 							if (status != 0) {
 								if (errorCode != 3) {
-									iResponseListener.onErrorResponse(rWrapper.getErrorString());
+									iResponseListener.onErrorResponse(rWrapper);
 										
 									if (GlobalVar.logEnable) {
 										Log.v(TAG, "Response Status: " + rWrapper.getErrorString());
@@ -124,7 +124,7 @@ public class RecallJobsRequest extends Request {
 	
 	public interface IRecallJobsResponseListener {
 		public void onResponseReady(RecallJobsResponse response);
-		public void onErrorResponse(String errorString);
+		public void onErrorResponse(ResponseWrapper resWrapper);
 		public void onError();
 	}
 	

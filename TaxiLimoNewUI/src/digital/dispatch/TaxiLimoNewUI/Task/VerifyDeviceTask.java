@@ -1,6 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +14,7 @@ import android.preference.PreferenceManager;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest.IVerifySMSResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 import com.digital.dispatch.TaxiLimoSoap.responses.VerifySMSResponse;
 
 import digital.dispatch.TaxiLimoNewUI.Installation;
@@ -32,6 +32,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	private Context _context;
 	private String smsCode;
 	private boolean isFirstTime;
+	private static final int VERIFY_DEVICE_RESP_STATUS_BLACKLISTED = 2;
 
 	//TL-170  added flag isFirstTime to differentiate the call from register or profile page
 	public VerifyDeviceTask(Context context, boolean isFirstTime, String smsCode) {
@@ -66,17 +67,19 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		
 	}
 
-	@Override
-	public void onErrorResponse(String errorString) {
+	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
-		if(isFirstTime)
-			((RegisterActivity)_context).showVerifyFailedMessage();
-		else
-			((ProfileActivity)_context).showProfileVerifyFailedMessage();
-		/*
-		new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.verify_failed).setCancelable(false).setPositiveButton(R.string.ok, null).show();
-		*/
-		Logger.v(TAG, "RegDev: ResponseError - " + errorString);
+		//TL-248
+		if(resWrapper.getStatus() == VERIFY_DEVICE_RESP_STATUS_BLACKLISTED){
+			//TODO display UI Lock screen
+		}else{
+			
+			if(isFirstTime)
+				((RegisterActivity)_context).showVerifyFailedMessage();
+			else
+				((ProfileActivity)_context).showProfileVerifyFailedMessage();
+		}
+		Logger.v(TAG, "RegDev: ResponseError - " + resWrapper.getErrCode());
 
 	}
 
@@ -120,12 +123,9 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			return false;
 		}
 
-		/*
-		 * State mobile = conMan.getNetworkInfo(0).getState(); State wifi = conMan.getNetworkInfo(1).getState();
-		 * 
-		 * if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING) { //mobile } else if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) {
-		 * //wifi }
-		 */
+		
 	}
+
+	
 
 }
