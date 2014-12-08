@@ -42,7 +42,7 @@ public class VerifySMSRequest extends Request {
 							ResponseWrapper rWrapper = new ResponseWrapper(((SoapTypeWrapper)response).GetSoap());
 						    	
 							if (rWrapper.getStatus() != 0) {
-								iResponseListener.onErrorResponse(rWrapper.getErrorString());
+								iResponseListener.onErrorResponse(rWrapper);
 								
 								if (GlobalVar.logEnable) {
 									Log.v(TAG, "Response Status: " + rWrapper.getErrorString());
@@ -74,7 +74,7 @@ public class VerifySMSRequest extends Request {
 	
 	public interface IVerifySMSResponseListener {
 		public void onResponseReady(VerifySMSResponse atRes);
-		public void onErrorResponse(String errorString);
+		public void onErrorResponse(ResponseWrapper response);
 		public void onError();
 	}
 	

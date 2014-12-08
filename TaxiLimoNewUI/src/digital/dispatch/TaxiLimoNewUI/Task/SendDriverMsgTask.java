@@ -70,22 +70,14 @@ public class SendDriverMsgTask extends AsyncTask<Void, Integer, Void> implements
     @Override
     public void onResponseReady(SendDriverMsgResponse response) {
     	
-//    	new AlertDialog.Builder(ctx)
-//    	.setTitle(R.string.title_send_driver_msg)
-//    	.setMessage(R.string.track_send_msg_success) // TODO: change to more detail error msg when come up
-//    	.setPositiveButton(R.string.positive_button, null)
-//    	.show();
+
     	Utils.showMessageDialog(_context.getString(R.string.message_track_send_msg_success), _context);
     }
 
 	@Override
 	public void onErrorResponse(String errorString) {
 
-//		new AlertDialog.Builder(ctx)
-//        	.setTitle(R.string.err_error_response)
-//        	.setMessage(R.string.err_msg_no_response) // TODO: change to more detail error msg when come up
-//        	.setPositiveButton(R.string.positive_button, null)
-//        	.show();
+
 		
 		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 			Logger.v(TAG, "error response: " + errorString);
@@ -94,11 +86,6 @@ public class SendDriverMsgTask extends AsyncTask<Void, Integer, Void> implements
 	@Override
 	public void onError() {
 
-//		new AlertDialog.Builder(ctx)
-//        	.setTitle(R.string.err_no_response_error)
-//        	.setMessage(R.string.err_msg_no_response)
-//        	.setPositiveButton(R.string.positive_button, null)
-//        	.show();
 		
 		Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 			Logger.v(TAG, "no response");

@@ -8,10 +8,10 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.AttributeItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.GetMBParamResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.MGParam;
+import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -75,16 +75,15 @@ public void saveAttributeListToDB(ArrayList<AttributeItem> attributeList) {
 }
 
 @Override
-public void onErrorResponse(String errorString) {
-
-	//((MainActivity)_context).showMessageDialog(R.string.err_msg_get_param);
-	Logger.e(TAG, "error response: " + errorString);
+public void onErrorResponse(ResponseWrapper resWrapper) {
+	//TL-248
+	Utils.showErrorDialog(_context.getString(R.string.err_msg_get_param), _context);
+	Logger.e(TAG, "error response: " + resWrapper.getErrorString());
 }
 
 @Override
 public void onError() {
-
-	//((MainActivity)_context).showMessageDialog(R.string.err_msg_get_param);
+	Utils.showErrorDialog(_context.getString(R.string.err_msg_get_param), _context);
 	Logger.e(TAG, "no response");
 }
 

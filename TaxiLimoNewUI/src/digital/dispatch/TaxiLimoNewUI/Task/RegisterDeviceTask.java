@@ -32,7 +32,8 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	private Context _context;
 	private String GCMRegisterID;
 	private boolean isFirstTime, sendVerifySMS;
-	private static final int REQEUST_STATUS_INVALID_EMAIL = 2;
+	private static final int RESPONSE_STATUS_INVALID_EMAIL = 2;
+	private static final int RESPONSE_STATUS_BLACKLISTED = 3;
 
 	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime, boolean sendVerifySMS) {
 		rdReq = new RegDevRequest(this, this);
@@ -96,12 +97,17 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	@Override
 	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
-		//TL-241
-		if(resWrapper.getStatus() == REQEUST_STATUS_INVALID_EMAIL){
+		//TL-241 check API documents first MB has status beyond 0 or 1 but OSP only has status 0 or 1
+		if(resWrapper.getStatus() == RESPONSE_STATUS_INVALID_EMAIL){
 			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_email).setCancelable(false).setPositiveButton(R.string.ok, null).show();
-		}else{
+		}else if(resWrapper.getStatus() == RESPONSE_STATUS_BLACKLISTED){ //TL-248
+			//TODO display UI lock screen
+		}
+		else{
 			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 		}
+		
+		
 		Logger.v(TAG, "RegDev: ResponseError - " + resWrapper.getErrorString());
 
 	} 

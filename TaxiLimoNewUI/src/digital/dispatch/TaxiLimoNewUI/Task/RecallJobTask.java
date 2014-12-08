@@ -14,6 +14,7 @@ import com.digital.dispatch.TaxiLimoSoap.requests.RecallJobsRequest.IRecallJobsR
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
+import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 import com.google.android.gms.maps.model.LatLng;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
@@ -174,18 +175,18 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 	}
 
 	@Override
-	public void onErrorResponse(String errorString) {
+	public void onErrorResponse(ResponseWrapper resWrapper) {
 		if (which == MBDefinition.IS_FOR_ONE_JOB) {
 			((TrackDetailActivity) _context).stopUpdateAnimation();
 		} else if (which == MBDefinition.IS_FOR_LIST) {
 			((MainActivity) _context).trackFragment.stopUpdateAnimation();
 		}
 		try {
-			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
+			Utils.showErrorDialog(_context.getString(R.string.err_msg_no_response), _context);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Logger.v(TAG, "error response: " + errorString);
+		Logger.v(TAG, "error response: " + resWrapper.getErrorString());
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class GetMBParamRequest extends Request {
 				    		ResponseWrapper rWrapper = new ResponseWrapper(((SoapTypeWrapper)response).GetSoap());
 				    			
 				    		if (rWrapper.getStatus() != 0) {
-				    			iResponseListener.onErrorResponse(rWrapper.getErrorString());
+				    			iResponseListener.onErrorResponse(rWrapper);
 				    				
 				    			if (GlobalVar.logEnable) {
 				    				Log.v(TAG, "Response Status: " + rWrapper.getErrorString());
@@ -84,7 +84,7 @@ public class GetMBParamRequest extends Request {
 	
 	public interface IMGParamResponseListener {
 		public void onResponseReady(GetMBParamResponse response);
-		public void onErrorResponse(String errorString);
+		public void onErrorResponse(ResponseWrapper resWrapper);
 		public void onError();
 	}
 	
