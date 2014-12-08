@@ -73,6 +73,8 @@ public class MBDefinition {
 	public static final String SHARE_PHONE_NUMBER = "SHARE_PHONE_NUMBER";
 	public static final String SHARE_ALREADY_REGISTER = "SHARE_ALREADY_REGISTER";
 	public static final String SHARE_CC_PIN = "SHARE_CC_PIN";
+	public static final String SHARE_ALREADY_SMS_VERIFY = "SHARE_ALREADY_SMS_VERIFY";
+	public static final String SHARE_START_REGISTER = "SHARE_START_REGISTER";
 	
 	public static final int MDT_MAX_SEQUENCE_NUM = 255;
 	//GCM notification event
@@ -105,9 +107,12 @@ public class MBDefinition {
 	public final static String icon_location = "\ue325";
 	public final static String icon_phone = "\ue061";
 	public final static String icon_current_location = "\uf124";
-	public final static String ICON_QUESTION_CIRCLE_CODE = "\uf059";
-	public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
-	public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
+	//public final static String ICON_QUESTION_CIRCLE_CODE = "\uf059";
+	public final static String ICON_QUESTION_CIRCLE_CODE = "\ue213";
+	//public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
+	public final static String ICON_TIMES_CODE = "\ue39f";
+	//public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
+	public final static String ICON_CHECK_CODE = "\ue396";
 	public final static String ICON_CHECK_SQUARE_CODE = "\uf14a"; //http://fortawesome.github.io/Font-Awesome/icon/check-square/
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
 	public final static String ICON_PERSON = "\uf183";

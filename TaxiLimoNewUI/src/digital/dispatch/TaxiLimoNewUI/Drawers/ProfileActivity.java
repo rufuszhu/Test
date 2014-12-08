@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -48,6 +49,8 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 	boolean sendVerifySMS = false;
 	boolean isChanged = false;
 	boolean mBlockCompletion = false; // use this to bypass assigning existing value
+	boolean isBlcoked = false; //disable back button if it sets true
+	SharedPreferences sharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,10 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 
 	@Override
 	public void onResume() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+	
+		boolean alreadySMSVerify = SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
+		
 		if (sharedPreferences != null) {
 			curPhoneNum = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 			mBlockCompletion = true;
@@ -70,10 +76,27 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			curEmail = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
 			edtUEmail.setText(curEmail);
 			mBlockCompletion = false;
+			if(!alreadySMSVerify){
+				//SMS verify is not done or successful
+				ll_sms_verify.setVisibility(View.VISIBLE);
+				button_groups.setVisibility(View.GONE);
+				et_code.requestFocus();
+				getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			}
 
 		}
 		super.onResume();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		
+		boolean alreadySMSVerify = SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
+		if(alreadySMSVerify){
+			super.onBackPressed();
+		}
+	}
+	
 
 	private void findAndBindView() {
 
@@ -93,18 +116,23 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 
 		button_groups = (LinearLayout) findViewById(R.id.profile_btn_group);
+		
 		// set up fontawesome icons
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+	
+		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		question_ic = (TextView) findViewById(R.id.question_circle);
-		question_ic.setTypeface(fontFamily);
+
+		question_ic.setTypeface(icon_pack);
 		question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
 
 		cancel_ic = (TextView) findViewById(R.id.cancel_close_icon);
-		cancel_ic.setTypeface(fontFamily);
+
+		cancel_ic.setTypeface(icon_pack);
 		cancel_ic.setText(MBDefinition.ICON_TIMES_CODE);
 		save_ic = (TextView) findViewById(R.id.save_check_icon);
 		save_ic.setText(MBDefinition.ICON_CHECK_CODE);
-		save_ic.setTypeface(fontFamily);
+
+		save_ic.setTypeface(icon_pack);
 
 		edtName.setOnFocusChangeListener(this);
 		edtUEmail.setOnFocusChangeListener(this);
@@ -160,7 +188,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 					boolean isFirstTime = false; // set this parameter to false when called from profile page
 					sendVerifySMS = true;
 					String regid = getRegistrationId(_context);
-					//new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
+			
 					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
 					String[] params = {edtName.getText().toString(), edtUEmail.getText().toString(), edtPhone.getText().toString()};
 					task.execute(params);
@@ -290,7 +318,12 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 
 	// callback by VerifyDeviceTask
 	public void showProfileVerifySuccessMessage() {
-
+		
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(_context);
+		SharedPreferencesManager.savePreferences(sharedPreferences,
+				MBDefinition.SHARE_ALREADY_SMS_VERIFY, true);
+		
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -298,16 +331,28 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
 		tv_message.setText(_context.getString(R.string.verify_success));
+		
+		messageDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				//flow to register confirmation page
+				Intent intent = new Intent(_context, MainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 
 		messageDialog.show();
 		// restore original profile layout
 		ll_sms_verify.setVisibility(View.GONE);
 		verify_btn.setVisibility(View.GONE);
 		button_groups.setVisibility(View.GONE);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 
 	public void showProfileVerifyFailedMessage() {
+		
 		et_code.setText("");
 		verify_btn.setVisibility(View.GONE);
 		Dialog messageDialog = new Dialog(_context);
@@ -335,6 +380,12 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 
 		if (sendVerifySMS == true) {
+			//reset already SMS verify to false
+			SharedPreferencesManager.savePreferences(sharedPreferences,
+					MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
+		
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			
 			tv_message.setText(_context.getString(R.string.verify_dialog_text, phone));
 		} else {
 			tv_message.setText(_context.getString(R.string.profile_update_text));
