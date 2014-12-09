@@ -67,6 +67,9 @@ public class RegisterConfirmActivity extends BaseActivity {
 						.getDefaultSharedPreferences(context);
 				SharedPreferencesManager.savePreferences(sharedPreferences,
 						MBDefinition.SHARE_ALREADY_REGISTER, true);
+				//TL-250
+				SharedPreferencesManager.savePreferences(sharedPreferences,
+						MBDefinition.SHARE_ALREADY_SMS_VERIFY, true);
 				Intent intent = new Intent(context, MainActivity.class);
 				startActivity(intent);
 				finish();

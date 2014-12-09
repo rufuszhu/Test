@@ -290,10 +290,10 @@ public class Utils {
 			}
 		});
 
-		// Get the error dialog from Google Play services
+
 		Dialog errorDialog = builder.create();
 
-		// If Google Play services can provide an error dialog
+
 		if (errorDialog != null) {
 
 			// Create a new DialogFragment in which to show the error dialog

@@ -1,21 +1,18 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import com.digital.dispatch.TaxiLimoSoap.requests.CancelJobRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.CancelJobRequest.ICancelResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.CancelJobResponse;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 
 public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICancelResponseListener, IRequestTimerListener {
 	private static final String TAG = "CancelJobTask";
@@ -61,25 +58,26 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	@Override
 	public void onResponseReady(CancelJobResponse response) {
-		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
+		
 		Utils.stopProcessingDialog(_context);
-		((TrackDetailActivity)_context).showCancelDialog();
+		Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
+		
 		Logger.v(TAG, "Cancel Job: " + response.getStatus() + " :: " + response.getErrorString());
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
-		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
-		((TrackDetailActivity)_context).showCancelDialog();
+		Utils.showErrorDialog(_context.getString(R.string.err_cancel_failed), _context);
+		
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
 	}
 
 	@Override
 	public void onError() {
 		Utils.stopProcessingDialog(_context);
-		//Utils.showErrorDialog(_context.getString(R.string.message_cancel_successful), _context);
-		((TrackDetailActivity)_context).showCancelDialog();
+		Utils.showErrorDialog(_context.getString(R.string.err_cancel_failed), _context);
+		
 		Logger.v(TAG, "cancelJob: Error");
 	}
 

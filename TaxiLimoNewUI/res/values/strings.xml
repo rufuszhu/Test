@@ -367,7 +367,8 @@
     <string name="err_msg_no_internet">Please make sure you are connected to a wireless network.</string>
     <string name="err_empty_msg">Cannot send empty message</string>
     <string name="err_msg_no_same_loc">You already booked a taxi on this address. Please cancel the previous job before booking another trip.</string>
-
+	<string name="err_cancel_failed">Cancel trip failed.</string>
+	
     <!-- successful messages -->
     <string name="message_cancel_successful">The trip was successfully canceled</string>
     <string name="message_book_successful">Thank you. We\'re looking for a Taxi. Please stand by.</string>

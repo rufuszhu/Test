@@ -31,6 +31,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
@@ -54,7 +55,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	private Context _context;
 	private EditText et_code;
 	private TextView question_ic;
-	//boolean mBlockCompletion = false; //use this to bypass assigning existing value
+	private String curPhoneNum = "";
+	private String curName = "";
+	private String curEmail = "";
+	boolean mBlockCompletion = false; //use this to bypass assigning existing value
 
 
 	@Override
@@ -87,11 +91,48 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		super.onResume();
 		
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, false)) {
+		boolean alreadyRegister = SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_REGISTER, false);
+		boolean alreadySMSVerify = SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
+		boolean startRegister = SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_START_REGISTER, false);
+		
+		if (alreadyRegister && alreadySMSVerify	) {
 			Intent intent = new Intent(_context, MainActivity.class);
 			startActivity(intent);
 			finish();
 		}
+		else if (alreadyRegister && !alreadySMSVerify)
+		{
+			//show profile page if SMS is not verified
+			Intent intent = new Intent(_context, ProfileActivity.class);
+			startActivity(intent);
+			finish();
+			
+		}else if (!alreadyRegister && alreadySMSVerify)
+		{
+			//show register confirmation page if SMS is verified but registration is not completed
+			Intent intent = new Intent(_context, RegisterConfirmActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		
+		if(startRegister && !alreadySMSVerify)
+		{		
+			//loaded store info if user registered but not sms verified
+			curPhoneNum = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
+			mBlockCompletion = true;
+			phone_number.setText(curPhoneNum);
+			curName = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME);
+			name.setText(curName);
+			curEmail = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL);
+			email.setText(curEmail);
+			mBlockCompletion = false;
+			
+			ll_sms_verify.setVisibility(View.VISIBLE);
+			next_btn.setVisibility(View.GONE);
+			et_code.requestFocus();
+		}
+			
+		
 	}
 
 	
@@ -109,9 +150,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		next_btn = (TextView) findViewById(R.id.next_btn);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		
+		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
         question_ic = (TextView) findViewById(R.id.question_circle);
-        question_ic.setTypeface(fontFamily);
+        question_ic.setTypeface(icon_pack);
         question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
 
 
@@ -170,6 +212,12 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	//callback by RegisterDeviceTask
 	public void showRegisterSuccessMessage(){
 		storeInfo();
+		//register info stored
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(_context);
+		SharedPreferencesManager.savePreferences(sharedPreferences,
+				MBDefinition.SHARE_START_REGISTER, true);
+		
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -185,6 +233,9 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 				et_code.requestFocus();
 			}});
 		messageDialog.show();
+		
+		
+		
 	}
 	
 	private void storeInfo() {
@@ -385,6 +436,12 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 	//callback by RegisterDevice Task
 	public void showVerifySuccessMessage() {
+		//SMS Verified
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(_context);
+		SharedPreferencesManager.savePreferences(sharedPreferences,
+				MBDefinition.SHARE_ALREADY_SMS_VERIFY, true);
+		
 		Dialog messageDialog = new Dialog(_context);
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_message);
@@ -424,7 +481,11 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	        this.view = view;
 	    }
 
-	    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+	    
+	    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+			if (mBlockCompletion)
+				return;
+		}
 	    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
 	    public void afterTextChanged(Editable editable) {
