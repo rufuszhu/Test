@@ -52,10 +52,8 @@ public class BookActivity extends BaseActivity {
 	private TextView tv_pick_up, tv_drop_off, tv_date, tv_driver_note, tv_company, book_btn;
 	private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title
 	,angle_right3, angle_right2,angle_right1;
-	private static final int DEFAULT_FONT_SIZE = 20;
-	private static final int VALUE_FONT_SIZE = 13;
 
-	@Override
+	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book);
@@ -68,7 +66,7 @@ public class BookActivity extends BaseActivity {
 	private void styleView() {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
 		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontAwesome.ttf");
+		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		icon_pickup.setTypeface(fontAwesome);
 		icon_dropoff.setTypeface(fontAwesome);
 		icon_date.setTypeface(icon_pack);
@@ -97,8 +95,6 @@ public class BookActivity extends BaseActivity {
 		tv_driver_note.setTypeface(rionaSansRegular);
 		tv_company.setTypeface(rionaSansRegular);
 		book_btn.setTypeface(rionaSansRegular);
-
-		
 	}
 
 	@Override

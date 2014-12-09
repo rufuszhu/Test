@@ -83,13 +83,9 @@ public class InfoFragment extends Fragment {
 	private void findView() {
 		tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);
 		tv_company_description = (TextView) view.findViewById(R.id.tv_company_description);
-		tv_company_address = (TextView) view.findViewById(R.id.tv_company_address);
-		tv_company_website = (TextView) view.findViewById(R.id.tv_company_website);
-		tv_company_phone = (TextView) view.findViewById(R.id.tv_company_phone);
 		call_company_btn = (TextView) view.findViewById(R.id.call_company_btn);
 		tv_driver = (TextView) view.findViewById(R.id.tv_driver);
 		text_driver_btn = (TextView) view.findViewById(R.id.text_driver_btn);
-		tv_car_type = (TextView) view.findViewById(R.id.tv_car_type);
 		tv_car_num = (TextView) view.findViewById(R.id.tv_car_num);
 		ll_attr = (LinearLayout) view.findViewById(R.id.ll_attr);
 		company_icon = (NetworkImageView) view.findViewById(R.id.company_icon);
@@ -115,18 +111,18 @@ public class InfoFragment extends Fragment {
 	public void updateDriverAndVehicle(){
 		book = ((TrackDetailActivity)getActivity()).getDBBook();
 		if(book.getDispatchedDriver()==null || book.getDispatchedDriver().length()==0){
-			tv_driver.setText(getActivity().getString(R.string.driver_info_not_available));
+			tv_driver.setText("");
 			text_driver_btn.setVisibility(View.GONE);
 		}
 		else{
-			tv_driver.setText(book.getDispatchedDriver());
+			tv_driver.setText("Driver # " + book.getDispatchedDriver());
 			text_driver_btn.setVisibility(View.VISIBLE);
 		}
 		
 		if(book.getDispatchedCar()==null || book.getDispatchedCar().length()==0)
-			tv_car_num.setText(getActivity().getString(R.string.vehicle_info_not_available));
+			tv_car_num.setText("");
 		else
-			tv_car_num.setText(book.getDispatchedCar());
+			tv_car_num.setText("Car # " + book.getDispatchedCar());
 	}
 
 	private void bindEvent() {
