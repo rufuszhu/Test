@@ -4,14 +4,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +29,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -51,6 +56,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 	boolean mBlockCompletion = false; // use this to bypass assigning existing value
 	boolean isBlcoked = false; //disable back button if it sets true
 	SharedPreferences sharedPreferences;
+	private BroadcastReceiver bcReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +91,20 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 			}
 
 		}
+		
+		//TL-235
+		boolean isTrackDetail = false;
+		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
 	}
+	
+	@Override
+	public void onPause(){
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+		super.onPause();
+	}
+	
 	
 	@Override
 	public void onBackPressed() {

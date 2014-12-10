@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -100,9 +101,12 @@ public class TrackDetailActivity extends ActionBarActivity {
 
 	private BroadcastReceiver bcReceiver;
 
-	private LinearLayout ll_btn_group, ll_cancel_btn, ll_cancel_btn_small, ll_pay_btn;
+	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
+	private FrameLayout ll_cancel_btn;
 	private ImageView zoom_btn;
 	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome;
+
+	private View cancel_cover;
 
 	private boolean isRefreshing;
 
@@ -186,13 +190,14 @@ public class TrackDetailActivity extends ActionBarActivity {
 
 	@Override
 	public void onPause() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
 	}
 
 	@Override
 	protected void onDestroy() {
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+
 		super.onDestroy();
 	}
 
@@ -374,11 +379,11 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_completed_circle = (TextView) findViewById(R.id.tv_completed_circle);
 		tv_inservice_circle = (TextView) findViewById(R.id.tv_inservice_circle);
 		tv_dispatched_circle = (TextView) findViewById(R.id.tv_dispatched_circle);
-		
+
 		arrow_right = (TextView) findViewById(R.id.arrow_right);
 		arrow_right.setTypeface(fontawesome);
 		arrow_right.setText(MBDefinition.ICON_ARROW_RIGHT);
-		
+
 		tv_arrived_circle.setTypeface(exo2SemiBold);
 		tv_completed_circle.setTypeface(exo2SemiBold);
 		tv_inservice_circle.setTypeface(exo2SemiBold);
@@ -395,10 +400,11 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_id.setTypeface(exo2SemiBold);
 		tv_book_time.setTypeface(exo2SemiBold);
 
-		ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
-		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
-		ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
-		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		// ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
+		ll_cancel_btn = (FrameLayout) findViewById(R.id.ll_cancel_btn);
+		// ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
+		// ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		cancel_cover = findViewById(R.id.cancel_cover);
 	}
 
 	private void checkAndDisablePayBtns() {
@@ -468,9 +474,9 @@ public class TrackDetailActivity extends ActionBarActivity {
 		};
 
 		ll_cancel_btn.setOnClickListener(cancelListener);
-		ll_cancel_btn_small.setOnClickListener(cancelListener);
-		ll_pay_btn.setOnClickListener(payListener);
-
+//		ll_cancel_btn_small.setOnClickListener(cancelListener);
+//		ll_pay_btn.setOnClickListener(payListener);
+//
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
 		zoom_btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -591,9 +597,19 @@ public class TrackDetailActivity extends ActionBarActivity {
 		}
 	}
 
+	private void disableCancelBtn() {
+
+		cancel_cover.setVisibility(View.VISIBLE);
+	}
+
+	private void enableCancelBtn() {
+
+		cancel_cover.setVisibility(View.GONE);
+	}
+
 	private void setUpCanceledUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.GONE);
+		disableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -613,8 +629,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setupBookedUI() {
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_btn_group.setVisibility(View.GONE);
+		enableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -634,8 +650,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpAcceptedUI() {
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_btn_group.setVisibility(View.GONE);
+		enableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -656,8 +672,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpArrivedUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+//		ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -677,8 +693,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpInServiceUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+//		ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -698,8 +714,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpInCompletedUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+		//ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));

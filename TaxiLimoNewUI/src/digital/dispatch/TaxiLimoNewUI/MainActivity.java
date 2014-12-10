@@ -67,6 +67,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 	private BookFragment bookFragment;
 	public TrackFragment trackFragment;
 	private HistoryFragment historyFragment;
+	
+	private BroadcastReceiver bcReceiver;
 
 	private TextView tab0_icon;
 	private TextView tab1_icon;
@@ -117,6 +119,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
 	@Override
 	protected void onResume() {
+		//TL-235
+		boolean isTrackDetail = false;
+		bcReceiver = CommonUtilities.getGenericReceiver(this, isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
 		Logger.d(TAG, "onReusme");
 		CommonUtilities.checkLateTrip(this, -1);
@@ -125,6 +131,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
 	@Override
 	protected void onPause() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 		Logger.d(TAG, "onPause");
 		if (locBCManager != null) {

@@ -223,55 +223,56 @@
         android:layout_below="@+id/tabs"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:padding="@dimen/normal_padding"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="@dimen/normal_padding" >
 
         <TextView
             android:id="@+id/tv_id"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|left"
             android:layout_weight=".5"
+            android:gravity="center_vertical|left"
             android:singleLine="true"
-            android:textSize="@dimen/info_bar_text_size"
-            android:textColor="@color/background_tab_selected" />
-        
+            android:textColor="@color/background_tab_selected"
+            android:textSize="@dimen/info_bar_text_size" />
+
         <TextView
             android:id="@+id/arrow_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:visibility="gone"
+            android:textColor="@color/background_tab_selected"
             android:textSize="15sp"
-            android:textColor="@color/background_tab_selected" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_book_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
+            android:gravity="center_vertical|right"
             android:singleLine="true"
-            android:textSize="@dimen/info_bar_text_size"
-            android:gravity="center_vertical|right" />
+            android:textSize="@dimen/info_bar_text_size" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_btns"
+    <FrameLayout
+        android:id="@+id/ll_cancel_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bot_button_height"
         android:layout_alignParentBottom="true"
-        android:minHeight="@dimen/bot_button_height"
         android:layout_marginTop="@dimen/normal_padding"
+        android:background="@drawable/searchbar_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:minHeight="@dimen/bot_button_height"
         android:orientation="horizontal" >
 
         <LinearLayout
-            android:id="@+id/ll_cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="@drawable/white_button_selector"
             android:clickable="true"
             android:gravity="center"
+            android:minHeight="@dimen/bot_button_height"
             android:orientation="horizontal" >
 
             <ImageView
@@ -290,81 +291,138 @@
                 android:text="@string/cancel_trip" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_btn_group"
+        <View
+            android:id="@+id/cancel_cover"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bot_button_height"
-            android:visibility="gone"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"
+            android:alpha=".7"
+            android:background="@color/background"
+            android:clickable="true"
+            android:visibility="gone" />
+    </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_cancel_btn_small"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".5"
-                android:background="@drawable/gray_button_selector"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="horizontal" >
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/ll_btns" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="@dimen/bot_button_height" -->
+    <!-- android:layout_alignParentBottom="true" -->
+    <!-- android:minHeight="@dimen/bot_button_height" -->
+    <!-- android:layout_marginTop="@dimen/normal_padding" -->
+    <!-- android:orientation="horizontal" > -->
 
-                <ImageView
-                    android:layout_width="@dimen/gray_btn_icon_size"
-                    android:layout_height="@dimen/gray_btn_icon_size"
-                    android:src="@drawable/icon_canceltrip" />
 
-                <Space
-                    android:layout_width="@dimen/normal_padding"
-                    android:layout_height="match_parent" />
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/ll_cancel_btn" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:visibility="gone" -->
+    <!-- android:background="@drawable/white_button_selector" -->
+    <!-- android:clickable="true" -->
+    <!-- android:gravity="center" -->
+    <!-- android:orientation="horizontal" > -->
 
-                <TextView
-                    style="@style/RedBtnText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cancel_trip" />
-            </LinearLayout>
-            
-            <Space
-                    android:layout_width="@dimen/normal_padding"
-                    android:layout_height="match_parent" />
 
-            <LinearLayout
-                android:id="@+id/ll_pay_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".5"
-                android:background="@drawable/green_btn_selector"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="horizontal" >
+    <!-- <ImageView -->
+    <!-- android:layout_width="@dimen/gray_btn_icon_size" -->
+    <!-- android:layout_height="@dimen/gray_btn_icon_size" -->
+    <!-- android:src="@drawable/icon_canceltrip" /> -->
 
-                <ImageView
-                    android:layout_width="@dimen/gray_btn_icon_size"
-                    android:layout_height="@dimen/gray_btn_icon_size"
-                    android:src="@drawable/icon_pay" />
 
-                <Space
-                    android:layout_width="@dimen/normal_padding"
-                    android:layout_height="match_parent" />
+    <!-- <Space -->
+    <!-- android:layout_width="@dimen/normal_padding" -->
+    <!-- android:layout_height="match_parent" /> -->
 
-                <TextView
-                    style="@style/WhiteBtnText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pay" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+
+    <!-- <TextView -->
+    <!-- style="@style/RedBtnText" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="@string/cancel_trip" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/ll_btn_group" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="@dimen/bot_button_height" -->
+    <!-- android:visibility="gone" -->
+    <!-- android:orientation="horizontal" > -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/ll_cancel_btn_small" -->
+    <!-- android:layout_width="0dp" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:layout_weight=".5" -->
+    <!-- android:background="@drawable/gray_button_selector" -->
+    <!-- android:clickable="true" -->
+    <!-- android:gravity="center" -->
+    <!-- android:orientation="horizontal" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:layout_width="@dimen/gray_btn_icon_size" -->
+    <!-- android:layout_height="@dimen/gray_btn_icon_size" -->
+    <!-- android:src="@drawable/icon_canceltrip" /> -->
+
+
+    <!-- <Space -->
+    <!-- android:layout_width="@dimen/normal_padding" -->
+    <!-- android:layout_height="match_parent" /> -->
+
+
+    <!-- <TextView -->
+    <!-- style="@style/RedBtnText" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="@string/cancel_trip" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <Space -->
+    <!-- android:layout_width="@dimen/normal_padding" -->
+    <!-- android:layout_height="match_parent" /> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:id="@+id/ll_pay_btn" -->
+    <!-- android:layout_width="0dp" -->
+    <!-- android:layout_height="match_parent" -->
+    <!-- android:layout_weight=".5" -->
+    <!-- android:background="@drawable/green_btn_selector" -->
+    <!-- android:clickable="true" -->
+    <!-- android:gravity="center" -->
+    <!-- android:orientation="horizontal" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:layout_width="@dimen/gray_btn_icon_size" -->
+    <!-- android:layout_height="@dimen/gray_btn_icon_size" -->
+    <!-- android:src="@drawable/icon_pay" /> -->
+
+
+    <!-- <Space -->
+    <!-- android:layout_width="@dimen/normal_padding" -->
+    <!-- android:layout_height="match_parent" /> -->
+
+
+    <!-- <TextView -->
+    <!-- style="@style/WhiteBtnText" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="@string/pay" /> -->
+    <!-- </LinearLayout> -->
+    <!-- </LinearLayout> -->
+    <!-- </LinearLayout> -->
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_btns"
+        android:layout_above="@+id/ll_cancel_btn"
         android:layout_below="@+id/info_bar"
         android:isScrollContainer="false" >
-        
-        
     </android.support.v4.view.ViewPager>
 
     <ImageView
@@ -376,7 +434,7 @@
         android:layout_marginLeft="21dp"
         android:layout_marginTop="24dp"
         android:alpha=".8"
-        android:background="@drawable/round_button_selector" 
+        android:background="@drawable/round_button_selector"
         android:clickable="true"
         android:padding="@dimen/small_padding"
         android:src="@drawable/icon_track_toggle"
