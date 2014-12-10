@@ -219,7 +219,7 @@ public class TrackFragment extends ListFragment {
 		setListAdapter(null);
 		List<DBBooking> activeJobs = getActiveJobs();
 		if( activeJobs.size() > 0){	
-			BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
+			BookingListAdapter adapter = new BookingListAdapter(getActivity(), activeJobs);
 			if(adapter.getCount()>0)
 			Logger.e(TAG,"trip status: " + adapter.getItem(0).getTripStatus());
 			setListAdapter(adapter);
