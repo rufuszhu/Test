@@ -164,13 +164,14 @@ public class TrackDetailActivity extends ActionBarActivity {
 
 	@Override
 	public void onPause() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
 	}
 
 	@Override
 	protected void onDestroy() {
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+		
 		super.onDestroy();
 	}
 

@@ -6,19 +6,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.location.Address;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,8 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -52,8 +55,7 @@ public class BookActivity extends BaseActivity {
 	private TextView tv_pick_up, tv_drop_off, tv_date, tv_driver_note, tv_company, book_btn;
 	private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title
 	,angle_right3, angle_right2,angle_right1;
-	private static final int DEFAULT_FONT_SIZE = 20;
-	private static final int VALUE_FONT_SIZE = 13;
+	private BroadcastReceiver bcReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,10 @@ public class BookActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
+		//TL-235
+		boolean isTrackDetail = false;
+		bcReceiver = CommonUtilities.getGenericReceiver(_this, isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
 		//checkGPSEnable();
@@ -112,6 +118,13 @@ public class BookActivity extends BaseActivity {
 		setTimeIfExist();
 		setDriverNoteIfExist();
 		setCompanyIfExist();
+	}
+	
+	@Override
+	public void onPause(){
+		//TL-235
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+		super.onPause();
 	}
 	
 	@Override
@@ -269,7 +282,7 @@ public class BookActivity extends BaseActivity {
 		angle_right2 = (TextView) findViewById(R.id.angle_right2);
 		angle_right1 = (TextView) findViewById(R.id.angle_right1);
 	}
-
+	/*
 	private void buildAlertMessageNoGps() {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
@@ -287,14 +300,14 @@ public class BookActivity extends BaseActivity {
 	}
 
 
-
+	
 	private void checkGPSEnable() {
 		final LocationManager manager = (LocationManager) _this.getSystemService(Context.LOCATION_SERVICE);
 
 		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			buildAlertMessageNoGps();
 		}
-	}
+	}*/
 
 	private void checkInternet() {
 		Utils.isInternetAvailable(_this);
