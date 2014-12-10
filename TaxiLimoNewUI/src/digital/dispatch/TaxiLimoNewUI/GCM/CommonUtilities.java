@@ -192,8 +192,10 @@ public final class CommonUtilities {
 								removeNotification(gcmID, ctx);
 								if(isTrackDetail)
 	        						((TrackDetailActivity)ctx).startRecallJobTask();
-								if(((MainActivity)ctx).trackFragment.isAdded())
-									((MainActivity)ctx).trackFragment.startRecallJobTask();
+								if(ctx instanceof MainActivity){
+									if(((MainActivity)ctx).trackFragment.isAdded())
+										((MainActivity)ctx).trackFragment.startRecallJobTask();
+								}
 							}
 		    			});
 	        		}
