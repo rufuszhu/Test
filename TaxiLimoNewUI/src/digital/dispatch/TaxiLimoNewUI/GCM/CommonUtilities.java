@@ -22,6 +22,7 @@ import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -190,7 +191,9 @@ public final class CommonUtilities {
 							public void onClick(DialogInterface arg0, int arg1) {
 								removeNotification(gcmID, ctx);
 								if(isTrackDetail)
-	        						((TrackDetailActivity)ctx).startRecallJobTask(); 
+	        						((TrackDetailActivity)ctx).startRecallJobTask();
+								if(((MainActivity)ctx).trackFragment.isAdded())
+									((MainActivity)ctx).trackFragment.startRecallJobTask();
 							}
 		    			});
 	        		}

@@ -1,11 +1,15 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +20,8 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
@@ -31,6 +37,9 @@ public class ModifyAddressActivity extends BaseActivity {
 	public FavoritesFragment favoritesFragment;
 	public ContactsFragment contactsFragment;
 	public SearchFragment searchFragment;
+	
+	private BroadcastReceiver bcReceiver;
+	private Context _context;
 
 	private TextView tab0_icon;
 	private TextView tab1_icon;
@@ -45,7 +54,7 @@ public class ModifyAddressActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_modify_address);
-
+		_context = this;
 		findViews();
 
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
@@ -260,11 +269,16 @@ public class ModifyAddressActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
+		//TL-235
+		boolean isTrackDetail = false;
+		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 	}
 

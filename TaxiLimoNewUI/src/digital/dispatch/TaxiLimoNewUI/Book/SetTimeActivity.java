@@ -6,27 +6,24 @@ import java.util.Date;
 
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.WheelView;
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
-import digital.dispatch.TaxiLimoNewUI.R.color;
-import digital.dispatch.TaxiLimoNewUI.R.drawable;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import android.app.Activity;
-import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class SetTimeActivity extends BaseActivity {
 
@@ -41,10 +38,14 @@ public class SetTimeActivity extends BaseActivity {
 	private DateAdapter dateAdapter;
 	private DateAdapter timeTodayAdapter;
 	private DateAdapter timeNotTodayAdapter;
+	private BroadcastReceiver bcReceiver;
+	private Context _context;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_time);
+		_context = this;
 		findView();
 		setStyles();
 		setUpWheel();
@@ -72,6 +73,23 @@ public class SetTimeActivity extends BaseActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public void onResume() {
+		//TL-235
+		boolean isTrackDetail = false;
+		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
+		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
+		super.onResume();
+		
+	}
+	
+	@Override
+	public void onPause(){
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+		super.onPause();
+	}
+	
 	
 	private void findView() {
 		dates = (WheelView) findViewById(R.id.dates);

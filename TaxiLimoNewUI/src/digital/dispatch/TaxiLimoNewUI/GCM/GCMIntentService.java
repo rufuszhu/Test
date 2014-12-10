@@ -130,6 +130,7 @@ public class GCMIntentService extends GCMBaseIntentService
 		boolean isCancelJobBySupervisor = false;
 		boolean isJobPaid = false;
 		boolean isPayable = true;
+		boolean isMeterOn = false;
 		String amt = "";
 		String Lat = "";
 		String Long = "";
@@ -179,6 +180,10 @@ public class GCMIntentService extends GCMBaseIntentService
 			
 				isCancelJobBySupervisor = true;
 				break;
+			case MBDefinition.METER_ON_EVENT:
+				isMeterOn = true;
+				Logger.v(TAG, "Meter On:" + trID);
+				break;
 			default:
 				break;
 				
@@ -208,7 +213,11 @@ public class GCMIntentService extends GCMBaseIntentService
 				}else if (dbBook.getAlready_paid() && !amt.isEmpty()){
 					isJobPaid = true;
 				}
-				
+				//TL-255
+				if(isMeterOn){
+					dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+					bookingDao.update(dbBook);
+				}
 			}
 		}
 
@@ -217,6 +226,8 @@ public class GCMIntentService extends GCMBaseIntentService
 		} else if(isJobPaid){
 			return false;
 		} else if (!isPayable){
+			return false;
+		}else if (isMeterOn){
 			return false;
 		}
 		else {
