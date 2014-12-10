@@ -48,13 +48,13 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 	private GoogleMap map;
 	private LocationClient mLocationClient;
 	private View view;
-	
+
 	private DBBooking dbBook;
 	private LatLng pickupLatLng;
 	private LatLng carLatLng;
 	private Marker pickupMarker;
 	private Marker carMarker;
-	
+
 	private Runnable mHandlerTask;
 	private Handler mHandler;
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000) // 5 seconds
@@ -64,31 +64,29 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 
 	public static TrackingMapFragment newInstance() {
 		TrackingMapFragment fragment = new TrackingMapFragment();
-		
+
 		return fragment;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_map, container, false);
-		dbBook = ((TrackDetailActivity)getActivity()).getDBBook();
+		dbBook = ((TrackDetailActivity) getActivity()).getDBBook();
 		pickupLatLng = new LatLng(dbBook.getPickup_latitude(), dbBook.getPickup_longitude());
-		
+
 		mHandler = new Handler();
 		mHandlerTask = new Runnable() {
 			@Override
 			public void run() {
-				//Toast.makeText(_context, "getting location", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(_context, "getting location", Toast.LENGTH_SHORT).show();
 				startRecallJobTask();
 				mHandler.postDelayed(mHandlerTask, INTERVAL);
 			}
 		};
-		
-		
-		
+
 		return view;
 	}
-	
+
 	private void startRecallJobTask() {
 		new RecallJobTask(getActivity(), dbBook.getTaxi_ride_id().toString(), MBDefinition.IS_FOR_MAP).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
 				dbBook.getDestID(), dbBook.getSysId());
@@ -121,7 +119,6 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 
 		startRepeatingTask();
 	}
-
 
 	@Override
 	public void onPause() {
@@ -195,7 +192,6 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 
 	}
 
-
 	private void setUpLocationClientIfNeeded() {
 		if (mLocationClient == null) {
 			mLocationClient = new LocationClient(getActivity(), this, this); // OnConnectionFailedListener
@@ -214,7 +210,7 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		/*
@@ -243,12 +239,12 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 		}
 
 	}
-	
-	public void toggleCamera(){
-		//toggle between focus on taxi and fit both taxi location and pickup location
-		if (map!=null && map.getCameraPosition().zoom != MBDefinition.DEFAULT_ZOOM) {
+
+	public void toggleCamera() {
+		// toggle between focus on taxi and fit both taxi location and pickup location
+		if (map != null && map.getCameraPosition().zoom != MBDefinition.DEFAULT_ZOOM && carLatLng!=null) {
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
-		} else if (map!=null && carMarker != null && pickupMarker != null) {
+		} else if (map != null && carMarker != null && pickupMarker != null) {
 			LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
 			builder.include(carMarker.getPosition());
@@ -261,41 +257,42 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 			map.moveCamera(cu);
 		}
 	}
-	
-	// get called from recall job task
-	public void updateCarMarker(LatLng carLatLng, List<DBBooking> book) {
-		
-		this.dbBook = book.get(0);
-		if (carLatLng == null || (dbBook.getCarLatitude()==0 && dbBook.getCarLongitude()==0)) {
-			if(((TrackDetailActivity)getActivity()).mPager.getCurrentItem()==1)
-				Toast.makeText(getActivity(), "Car Location not availabe", Toast.LENGTH_LONG).show();
-			return;
-		}
 
-		this.carLatLng = carLatLng;
-		if (carMarker != null)
-			carMarker.remove();
-		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED
-				|| dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
-			
-			//TL-222 load car icon based on company car file color
-			String carFile = dbBook.getCompany_car_file();	
-			BitmapDescriptor icon = null;
-			if(carFile == null || carFile.isEmpty()){		
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow); 	//default			
-			}else if(MBDefinition.ICON_TRACK_TAXI_BLUE.equalsIgnoreCase(carFile)){
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_blue);
-			}else if(MBDefinition.ICON_TRACK_TAXI_RED.equalsIgnoreCase(carFile)){
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_red);			
-			}else if(MBDefinition.ICON_TRACK_TAXI_GREEN.equalsIgnoreCase(carFile)){
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_green);
-			}else if(MBDefinition.ICON_TRACK_TAXI_ORANGE.equalsIgnoreCase(carFile)){
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_orange);
-			}else{
-				icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow);			
+	// get called from recall job task
+	public void updateCarMarker(LatLng carLatLng, DBBooking book) {
+		if (isAdded()) {
+			this.dbBook = book;
+			if (carLatLng == null || (dbBook.getCarLatitude() == 0 && dbBook.getCarLongitude() == 0)) {
+				if (((TrackDetailActivity) getActivity()).mPager.getCurrentItem() == 1)
+					Toast.makeText(getActivity(), "Car Location not availabe", Toast.LENGTH_LONG).show();
+				return;
 			}
 
-			carMarker = map.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+			this.carLatLng = carLatLng;
+			if (carMarker != null)
+				carMarker.remove();
+			if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED
+					|| dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
+
+				// TL-222 load car icon based on company car file color
+				String carFile = dbBook.getCompany_car_file();
+				BitmapDescriptor icon = null;
+				if (carFile == null || carFile.isEmpty()) {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow); // default
+				} else if (MBDefinition.ICON_TRACK_TAXI_BLUE.equalsIgnoreCase(carFile)) {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_blue);
+				} else if (MBDefinition.ICON_TRACK_TAXI_RED.equalsIgnoreCase(carFile)) {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_red);
+				} else if (MBDefinition.ICON_TRACK_TAXI_GREEN.equalsIgnoreCase(carFile)) {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_green);
+				} else if (MBDefinition.ICON_TRACK_TAXI_ORANGE.equalsIgnoreCase(carFile)) {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_orange);
+				} else {
+					icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow);
+				}
+
+				carMarker = map.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+			}
 		}
 	}
 

@@ -2,6 +2,7 @@
 <resources>
 
     <color name="actionbar_background">#3e3f48</color>
+    <color name="black_text">#3e3f48</color>
     <color name="white">#ffffff</color>
     <color name="gray">#757575</color>
     <color name="gray_light">#9C9C9C</color>
@@ -56,8 +57,13 @@
     <color name="red_color">#C12F39</color>
     <color name="btn_bg_green_color">#71B4B5</color>
     
+     <color name="tracking_map_404_font_color">#c2c2c2</color>
     
     <color name="current_location_btn_color">#48a0a2</color>
+    
+    
+    <color name="search_bar_selected_color">#e0e0e0</color>
+    
     
 
 </resources>

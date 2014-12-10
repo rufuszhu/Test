@@ -77,7 +77,19 @@
     <!-- track detail -->
     <dimen name="track_circle_size">20dp</dimen>
     <dimen name="track_circle_holo_size">20dp</dimen>
-
+    <dimen name="track_detail_tab_font_size">10sp</dimen>
+ 	<dimen name="track_detail_tab_icon_size">25sp</dimen>
+ 	<dimen name="company_font_size">17sp</dimen>
+ 	<dimen name="company_description_font_size">17sp</dimen>
+ 	<dimen name="call_btn_font_size">17sp</dimen>
+ 	<dimen name="info_bar_text_size">11sp</dimen>
+ 	
+ 	<!-- trip detail -->
+ 	<dimen name="history_status_size">20sp</dimen>
+ 	<dimen name="history_pickup_icon_size">20sp</dimen>
+ 	<dimen name="history_info_bar_text_size">13sp</dimen>
+ 	<dimen name="history_pickup_font_size">18sp</dimen>
+ 
     <!-- attribute -->
     <dimen name="select_company_font_size">14sp</dimen>
     <dimen name="attr_font_size">14sp</dimen>

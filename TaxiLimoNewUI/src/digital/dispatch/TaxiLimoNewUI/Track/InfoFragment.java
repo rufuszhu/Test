@@ -7,6 +7,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,17 +44,20 @@ public class InfoFragment extends Fragment {
 	private View view;
 	private TextView tv_company_name;
 	private TextView tv_company_description;
-	private TextView tv_company_address;
-	private TextView tv_company_website;
-	private TextView tv_company_phone;
-	private TextView call_company_btn;
+	private LinearLayout call_company_btn;
 	private TextView tv_driver;
-	private TextView text_driver_btn;
-	private TextView tv_car_type;
+	private TextView icon_text;
+	private TextView icon_call;
+	private TextView tv_text;
+	private TextView tv_call;
+	private LinearLayout text_driver_btn;
 	private TextView tv_car_num;
 	private LinearLayout ll_attr;
 	private NetworkImageView company_icon;
 	private DBBooking book;
+	private TextView company_title;
+	private TextView driver_title;
+	private TextView option_title;
 	
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -73,22 +77,52 @@ public class InfoFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_info, container, false);
 		book = ((TrackDetailActivity)getActivity()).getDBBook();
-		findView();
+		findViewAndSetFont();
 		fillValue();
 		bindEvent();
 		
 		return view;
 	}
 
-	private void findView() {
+	private void findViewAndSetFont() {
 		tv_company_name = (TextView) view.findViewById(R.id.tv_company_name);
 		tv_company_description = (TextView) view.findViewById(R.id.tv_company_description);
-		call_company_btn = (TextView) view.findViewById(R.id.call_company_btn);
+		call_company_btn = (LinearLayout) view.findViewById(R.id.call_company_btn);
 		tv_driver = (TextView) view.findViewById(R.id.tv_driver);
-		text_driver_btn = (TextView) view.findViewById(R.id.text_driver_btn);
+		text_driver_btn = (LinearLayout) view.findViewById(R.id.text_driver_btn);
 		tv_car_num = (TextView) view.findViewById(R.id.tv_car_num);
 		ll_attr = (LinearLayout) view.findViewById(R.id.ll_attr);
 		company_icon = (NetworkImageView) view.findViewById(R.id.company_icon);
+		icon_text = (TextView) view.findViewById(R.id.icon_text);
+		icon_call = (TextView) view.findViewById(R.id.icon_call);
+		tv_text = (TextView) view.findViewById(R.id.tv_text);
+		tv_call = (TextView) view.findViewById(R.id.tv_call);
+		company_title = (TextView) view.findViewById(R.id.company_title);
+		driver_title = (TextView) view.findViewById(R.id.driver_title);
+		option_title = (TextView) view.findViewById(R.id.option_title);
+		
+		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+//		Typeface fontawesome = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+//		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface exo2Light = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Exo2-Light.ttf");
+		Typeface exo2SemiBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Exo2-SemiBold.ttf");
+		
+		tv_company_name.setTypeface(exo2SemiBold,Typeface.BOLD);
+		tv_company_description.setTypeface(exo2Light, Typeface.ITALIC);
+		tv_driver.setTypeface(exo2SemiBold,Typeface.BOLD);
+		tv_car_num.setTypeface(exo2SemiBold,Typeface.BOLD);
+		tv_text.setTypeface(exo2SemiBold,Typeface.BOLD);
+		tv_call.setTypeface(exo2SemiBold,Typeface.BOLD);
+		company_title.setTypeface(exo2SemiBold);
+		driver_title.setTypeface(exo2SemiBold);
+		option_title.setTypeface(exo2SemiBold);
+		
+		icon_text.setTypeface(icon_pack);
+		icon_call.setTypeface(icon_pack);
+		
+
+		icon_text.setText(MBDefinition.ICON_COMMENT);
+		icon_call.setText(MBDefinition.icon_phone);
 	}
 	
 	private void fillValue() {
@@ -98,10 +132,7 @@ public class InfoFragment extends Fragment {
 		company_icon.setImageUrl(prefixURL + book.getCompany_icon(), AppController.getInstance().getImageLoader());
 		
 		tv_company_name.setText(book.getCompany_name());
-		tv_company_phone.setText(book.getCompany_phone_number());
 		tv_company_description.setText(book.getCompany_description());
-		//tv_company_address.setText(text);
-		
 		
 		updateDriverAndVehicle();
 		

@@ -122,7 +122,12 @@ public class MBDefinition {
 	public final static String ICON_COMPANY = "\uf1ba";
 	public final static String ICON_EXCLAMATION_CIRCLE_CODE = "\ue214";
 	public final static String ICON_CROSS = "\ue1f5";
-	
+	public final static String ICON_FUNNEL = "\ue3ea";
+	public final static String ICON_INFO = "\ue214";
+	public final static String ICON_ARROW_RIGHT = "\uf178";
+	public final static String ICON_CHECK_CIRCLE = "\ue38d";
+	public final static String ICON_CROSS_CIRCLE = "\ue1fd";
+
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";
 	public final static String ICON_TRACK_TAXI_RED = "red";

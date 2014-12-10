@@ -151,7 +151,7 @@
     <string name="remove">Remove</string>
     <string name="ask_register_cc">There is no registered credit card. Do you want to register a credit card now?</string>
     <string name="auth_code">Auth Code</string>
-    <string name="driver_info_not_available">Driver information will be available after dispatch</string>
+    <string name="tracking_map_not_available">Tracking map will be available\nas soon as your taxi is dispatched.</string>
     <string name="vehicle_info_not_available">Vehicle information will be available after dispatch</string>
 
     <!-- modify address -->
