@@ -123,7 +123,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 					queryResults = autocomplete(constraint.toString());
 					// Assign the data to the FilterResults
 					filterResults.values = queryResults;
-					filterResults.count = queryResults.size();
+					if(queryResults!=null)
+						filterResults.count = queryResults.size();
+					else
+						filterResults.count=0;
 				}
 				
 				return filterResults;

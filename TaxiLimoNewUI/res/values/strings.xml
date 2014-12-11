@@ -171,10 +171,10 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
 
-    <!-- <string name="url">http://192.168.50.161:188/Service.asmx</string> -->
-    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+    <string name="url">http://192.168.50.160:76/Service.asmx</string>
+<!--     <string name="url">http://192.168.50.161:192/Service.asmx</string> -->
 
-    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+<!--     <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
     <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>

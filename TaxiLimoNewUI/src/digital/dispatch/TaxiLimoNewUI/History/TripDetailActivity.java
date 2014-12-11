@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.History;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +41,8 @@ import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
+import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
@@ -68,6 +71,7 @@ public class TripDetailActivity extends BaseActivity {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
 		Typeface exo2Light = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Light.ttf");
 		Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		Typeface exo2Bold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
 		Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
 		
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
@@ -90,6 +94,20 @@ public class TripDetailActivity extends BaseActivity {
 		
 		TextView route_title = (TextView) findViewById(R.id.route_title);
 		TextView company_title = (TextView) findViewById(R.id.company_title);
+		
+		
+		TextView delete_icon = (TextView) findViewById(R.id.delete_icon);
+		TextView bookAgain_icon = (TextView) findViewById(R.id.bookAgain_icon);
+		TextView tv_delete = (TextView) findViewById(R.id.tv_delete);
+		TextView tv_bookAgain = (TextView) findViewById(R.id.tv_bookAgain);
+		
+		
+		delete_icon.setTypeface(icon_pack);
+		bookAgain_icon.setTypeface(icon_pack);
+		delete_icon.setText(MBDefinition.ICON_CROSS);
+		bookAgain_icon.setText(MBDefinition.ICON_BOOK_AGAIN);
+		tv_delete.setTypeface(exo2Bold);
+		tv_bookAgain.setTypeface(exo2Bold);
 		
 		route_title.setTypeface(rionaSansBold);
 		company_title.setTypeface(rionaSansBold);
@@ -188,17 +206,7 @@ public class TripDetailActivity extends BaseActivity {
 		LinearLayout ll_remove_btn = (LinearLayout) findViewById(R.id.ll_remove_btn);
 		ll_bookAgain_btn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				CompanyItem company = new CompanyItem();
-				company.description = dbBook.getCompany_description();
-				company.attributes = dbBook.getCompany_attribute_list();
-				company.logo = dbBook.getCompany_icon();
-				company.name = dbBook.getCompany_name();
-				company.phoneNr = dbBook.getCompany_phone_number();
-				company.destID = dbBook.getDestID();
-				company.systemID = Integer.parseInt(dbBook.getSysId());
 				
-				Utils.mSelectedCompany = company;
-				Utils.selected_attribute_from_bookAgain = dbBook.getAttributeList();
 				boolean isPickup = true;
 				new GetAddressTask(_context, isPickup).execute(dbBook.getPickupAddress());
 			}
@@ -338,14 +346,11 @@ public class TripDetailActivity extends BaseActivity {
 					if(dbBook.getDropoffAddress()!=null && dbBook.getDropoffAddress().length()>0)
 						new GetAddressTask(_context, isPickup).execute(dbBook.getDropoffAddress());
 					else{
-						Utils.currentTab=0;
-						finish();
+						setUpCompanyAndGoToBook();
 					}
 				}
 				else{
-					Utils.mDropoffAddress = addresses.get(0);
-					Utils.currentTab=0;
-					finish();
+					setUpCompanyAndGoToBook();
 				}
 			} else {
 				Utils.showMessageDialog(_context.getString(R.string.cannot_get_address_from_google), _context);
@@ -353,5 +358,28 @@ public class TripDetailActivity extends BaseActivity {
 			}
 
 		}
+	}
+	
+	private void setUpCompanyAndGoToBook(){
+		CompanyItem company = new CompanyItem();
+		company.description = dbBook.getCompany_description();
+		company.attributes = dbBook.getCompany_attribute_list();
+		company.logo = dbBook.getCompany_icon();
+		company.name = dbBook.getCompany_name();
+		company.phoneNr = dbBook.getCompany_phone_number();
+		company.destID = dbBook.getDestID();
+		company.systemID = Integer.parseInt(dbBook.getSysId());
+		
+		Utils.mSelectedCompany = company;
+		String[] stringList = dbBook.getAttributeList().split(",");
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+		for(int i = 0 ; i < stringList.length; i++){
+			temp.add(Integer.parseInt(stringList[i]));
+		}
+		Utils.selected_attribute = temp;
+		Utils.last_city = dbBook.getPickup_district();
+		Intent intent = new Intent(_context, BookActivity.class);
+		((TripDetailActivity) _context).startActivityForAnim(intent);
+		finish();
 	}
 }

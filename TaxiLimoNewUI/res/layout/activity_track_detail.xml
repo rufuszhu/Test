@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/big_margin"
-        android:paddingRight="@dimen/big_margin" >
+        android:paddingLeft="@dimen/small_padding"
+        android:paddingRight="@dimen/small_padding" >
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -256,35 +256,40 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/ll_cancel_btn"
+        android:id="@+id/fl_cancel_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bot_button_height"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/normal_padding"
-        android:background="@drawable/searchbar_selector"
-        android:clickable="true"
+        
         android:gravity="center"
         android:minHeight="@dimen/bot_button_height"
         android:orientation="horizontal" >
 
         <LinearLayout
+            android:id="@+id/ll_cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
             android:minHeight="@dimen/bot_button_height"
-            android:orientation="horizontal" >
+            android:background="@drawable/searchbar_selector"
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_canceltrip" />
+            <TextView
+                android:id="@+id/cancel_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/btn_icon_size" />
 
             <Space
-                android:layout_width="@dimen/normal_padding"
+                android:layout_width="@dimen/small_padding"
                 android:layout_height="match_parent" />
 
             <TextView
+                android:id="@+id/tv_cancel"
                 style="@style/RedBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -420,7 +425,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_cancel_btn"
+        android:layout_above="@+id/fl_cancel_btn"
         android:layout_below="@+id/info_bar"
         android:isScrollContainer="false" >
     </android.support.v4.view.ViewPager>

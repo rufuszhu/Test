@@ -159,7 +159,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 			Utils.mDropoffAddress = null;
 			Utils.mPickupAddress = null;
 			Utils.pickupHouseNumber = "";
-			Utils.selected_attribute_from_bookAgain = null;
+			Utils.last_city = "";
 			Utils.selected_attribute = null;
 			Utils.pickup_unit_number = null;
 			Utils.dropoff_unit_number = null;

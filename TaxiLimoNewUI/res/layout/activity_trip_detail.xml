@@ -17,12 +17,13 @@
             android:id="@+id/status_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-			android:layout_gravity="center"
+            android:layout_gravity="center"
             android:textColor="@color/gray_line"
             android:textSize="@dimen/history_status_size" />
+
         <View
             android:layout_width="@dimen/small_padding"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_trip_status"
@@ -53,8 +54,8 @@
 
             <TextView
                 android:id="@+id/tv_history_id"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:singleLine="true"
@@ -63,8 +64,8 @@
 
             <TextView
                 android:id="@+id/tv_history_receive"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:singleLine="true"
@@ -98,43 +99,43 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/route_title"
                 android:layout_below="@+id/route_title"
-                android:textSize="@dimen/history_pickup_icon_size"
                 android:layout_marginLeft="@dimen/big_margin"
+                android:layout_marginTop="@dimen/small_padding"
                 android:textColor="@color/green"
-                android:layout_marginTop="@dimen/small_padding" />
+                android:textSize="@dimen/history_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_pickup_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/route_title"
-                android:textSize="@dimen/history_pickup_font_size"
                 android:layout_marginLeft="@dimen/big_margin"
                 android:layout_marginTop="@dimen/small_padding"
                 android:layout_toRightOf="@+id/icon_pickup"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/history_pickup_font_size" />
 
             <TextView
                 android:id="@+id/icon_dropoff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/icon_pickup"
-                android:textSize="@dimen/history_pickup_icon_size"
                 android:layout_alignLeft="@+id/route_title"
-                android:layout_marginTop="@dimen/big_margin"
+                android:layout_below="@+id/icon_pickup"
                 android:layout_marginLeft="12dp"
+                android:layout_marginTop="@dimen/big_margin"
+                android:singleLine="true"
                 android:textColor="@color/red_color"
-                android:singleLine="true" />
+                android:textSize="@dimen/history_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_dropoff_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_pickup_address"
-                android:textSize="@dimen/history_pickup_font_size"
-                android:layout_marginTop="@dimen/normal_padding"
                 android:layout_alignLeft="@+id/tv_pickup_address"
-                android:layout_toRightOf="@+id/icon_dropoff" />
+                android:layout_below="@+id/tv_pickup_address"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/icon_dropoff"
+                android:textSize="@dimen/history_pickup_font_size" />
         </RelativeLayout>
 
         <View
@@ -227,20 +228,20 @@
                 android:id="@+id/tv_driver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/iv_tracking_company_icon"
                 android:layout_below="@+id/iv_tracking_company_icon"
+                android:layout_marginTop="@dimen/normal_padding"
                 android:text="Large Text"
                 android:textColor="@color/black_text"
-                android:layout_marginTop="@dimen/normal_padding"
-                android:layout_alignLeft="@+id/iv_tracking_company_icon"
                 android:textSize="@dimen/company_font_size" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/iv_tracking_company_icon"
                 android:layout_below="@+id/tv_driver"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="@dimen/normal_padding"
-                android:layout_alignLeft="@+id/iv_tracking_company_icon"
                 android:orientation="vertical" >
 
                 <TextView
@@ -267,6 +268,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bot_button_height"
         android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/normal_padding"
         android:baselineAligned="false"
         android:orientation="horizontal" >
 
@@ -275,47 +277,57 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
+            android:background="@drawable/searchbar_selector"
             android:clickable="true"
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_book_again" />
+            <TextView
+                android:id="@+id/bookAgain_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/completed_color"
+                android:textSize="@dimen/btn_icon_size" />
 
             <Space
-                android:layout_width="@dimen/normal_padding"
+                android:layout_width="@dimen/small_padding"
                 android:layout_height="match_parent" />
 
             <TextView
+                android:id="@+id/tv_bookAgain"
                 style="@style/GreenBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/book_again" />
         </LinearLayout>
 
+        <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
+
         <LinearLayout
             android:id="@+id/ll_remove_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
+            android:background="@drawable/searchbar_selector"
             android:clickable="true"
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_remove" />
+            <TextView
+                android:id="@+id/delete_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/btn_icon_size" />
 
             <Space
-                android:layout_width="@dimen/normal_padding"
+                android:layout_width="@dimen/small_padding"
                 android:layout_height="match_parent" />
 
             <TextView
+                android:id="@+id/tv_delete"
                 style="@style/RedBtnText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

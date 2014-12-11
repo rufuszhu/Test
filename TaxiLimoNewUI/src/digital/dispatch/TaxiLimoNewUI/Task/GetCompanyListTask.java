@@ -78,6 +78,8 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	@Override
 	public void onErrorResponse(String errorString) {
 			Log.v(TAG, "ResponseError - " + errorString);
+			if(!isFromBooking)
+				Utils.stopProcessingDialog(_context);
 			try{
 				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 			}
@@ -89,6 +91,8 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	@Override
 	public void onError() {
 			Log.v(TAG, "Error");
+			if(!isFromBooking)
+				Utils.stopProcessingDialog(_context);
 			try{
 				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
 			}

@@ -72,10 +72,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	private ContactResultAdapter contactAdapter;
 	private FavoriteResultAdapter favAdapter;
 	private PlacesAutoCompleteAdapter googleAdapter;
-	
+
 	private RelativeLayout rl_no_result;
 	private TextView no_result_icon, tv_no_result, tv_street, power_by_google;
-	private Typeface fontFamily,rionaSansMedium,rionaRegularFamily,fontAwesome;
+	private Typeface fontFamily, rionaSansMedium, rionaRegularFamily, fontAwesome;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -97,12 +97,11 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_search, container, false);
 		Logger.e(TAG, "onCreateView");
-		findViewAndBindEvent();
-		
 		fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
 		rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
 		rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
 		fontAwesome = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+		findViewAndBindEvent();
 
 		contactResults = new ArrayList<ListItem>();
 		favoriteResults = new ArrayList<ListItem>();
@@ -154,24 +153,22 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		listView_google = (ListView) view.findViewById(R.id.listView_google);
 		autoCompView = (AutoCompleteTextView) view.findViewById(R.id.autocomplete);
 		googleAdapter = new PlacesAutoCompleteAdapter(getActivity(), R.layout.search_list_item);
-		
+
 		rl_no_result = (RelativeLayout) view.findViewById(R.id.rl_no_result);
 		no_result_icon = (TextView) view.findViewById(R.id.no_result_icon);
 		tv_no_result = (TextView) view.findViewById(R.id.tv_no_result);
 		tv_street = (TextView) view.findViewById(R.id.tv_street);
 		power_by_google = (TextView) view.findViewById(R.id.power_by_google);
-		
+
 		listView_google.setAdapter(googleAdapter);
 		// autoCompView.setOnItemClickListener(this);
 
-		no_result_icon.setTypeface(fontFamily);
-		no_result_icon.setText(MBDefinition.icon_tab_search);
-		
+		no_result_icon.setTypeface(fontAwesome);
+		no_result_icon.setText(MBDefinition.ICON_SEARCH_AWESOME);
 
 		tv_no_result.setTypeface(rionaSansMedium);
 		tv_street.setTypeface(rionaSansMedium);
-		
-		
+
 		autoCompView.setTypeface(rionaRegularFamily);
 		if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
@@ -195,72 +192,72 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 					searchForContact(s.toString());
 					searchForFavorite(s.toString());
 				}
-//				googleAdapter.notifyDataSetChanged();
-//				googleAdapter.getFilter().filter(s.toString(), new FilterListener(){
-//					@Override
-//					public void onFilterComplete(int count) {
-//						googleAdapter.notifyDataSetChanged();
-//					}});
+				// googleAdapter.notifyDataSetChanged();
+				// googleAdapter.getFilter().filter(s.toString(), new FilterListener(){
+				// @Override
+				// public void onFilterComplete(int count) {
+				// googleAdapter.notifyDataSetChanged();
+				// }});
 				contactAdapter.notifyDataSetChanged();
 				favAdapter.notifyDataSetChanged();
 				setListViewHeightBasedOnChildren(listView_contact);
 				setListViewHeightBasedOnChildren(listView_favorite);
-				
-				//listView_google.requestLayout();
+
+				// listView_google.requestLayout();
 				googleAdapter.notifyDataSetChanged();
-				
-				
+
 			}
 		});
 
-		ImageView clear = (ImageView) view.findViewById(R.id.clear_autocomplete);
+		TextView clear = (TextView) view.findViewById(R.id.clear_autocomplete);
+		clear.setTypeface(fontFamily);
+		clear.setText(MBDefinition.ICON_CROSS);
 		clear.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				autoCompView.setText("");
 			}
 		});
-		
-		listView_contact.setOnItemClickListener(new OnItemClickListener(){
+
+		listView_contact.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				new ValidateAddressTask(getActivity()).execute(contactResults.get(position).notBold);
 			}
 		});
-		
-		listView_favorite.setOnItemClickListener(new OnItemClickListener(){
+
+		listView_favorite.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				new ValidateAddressTask(getActivity()).execute(favoriteResults.get(position).notBold);
 			}
 		});
-		
-		listView_google.setOnItemClickListener(new OnItemClickListener(){
+
+		listView_google.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				new ValidateAddressTask(getActivity()).execute((String)listView_google.getItemAtPosition(position));
+				new ValidateAddressTask(getActivity()).execute((String) listView_google.getItemAtPosition(position));
 			}
 		});
 	}
-	
-	//this function gets called in PlacesAutoCompleteAdapter when no result returned by google
-	public void displayNoResultFoundIfNoResultFound(){
-		if(checkNoLocalResultFound() && autoCompView.getText().toString().length()>0){
+
+	// this function gets called in PlacesAutoCompleteAdapter when no result returned by google
+	public void displayNoResultFoundIfNoResultFound() {
+		if (checkNoLocalResultFound() && autoCompView.getText().toString().length() > 0) {
 			rl_no_result.setVisibility(View.VISIBLE);
 			tv_street.setText("\"" + autoCompView.getText().toString() + "\"");
 			power_by_google.setVisibility(View.GONE);
-		}
-		else{
+		} else {
 			hideNoResultFoundLayout();
 		}
 	}
-	
-	public void hideNoResultFoundLayout(){
+
+	public void hideNoResultFoundLayout() {
 		rl_no_result.setVisibility(View.GONE);
 		power_by_google.setVisibility(View.VISIBLE);
 	}
-	
-	private boolean checkNoLocalResultFound(){
-		return (contactResults.size()==0 && favoriteResults.size()==0);
+
+	private boolean checkNoLocalResultFound() {
+		return (contactResults.size() == 0 && favoriteResults.size() == 0);
 	}
 
 	private void searchForContact(String string) {
@@ -335,18 +332,18 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			// fill data
 			ViewHolder holder = (ViewHolder) rowView.getTag();
-			if(position%2==1){
+			if (position % 2 == 1) {
 				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-			
+
 			holder.icon.setTypeface(fontFamily);
 			holder.icon.setText(MBDefinition.icon_phone);
 
 			String a = contactResults.get(position).bold;
-			
+
 			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
 			holder.bold.setText(a);
-			
+
 			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(contactResults.get(position).notBold);
 
@@ -382,18 +379,18 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			// fill data
 			ViewHolder holder = (ViewHolder) rowView.getTag();
-			if(position%2==1){
+			if (position % 2 == 1) {
 				rowView.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-			
+
 			holder.icon.setTypeface(fontAwesome);
 			holder.icon.setText(MBDefinition.icon_tab_fav);
 
 			String a = favoriteResults.get(position).bold;
-			
+
 			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
 			holder.bold.setText(a);
-			
+
 			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(favoriteResults.get(position).notBold);
 
@@ -444,10 +441,13 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	}
 
 	private int dpToPx(int dp) {
-		float density = getActivity().getApplicationContext().getResources().getDisplayMetrics().density;
-		return Math.round((float) dp * density);
+		if (isAdded()) {
+			float density = getActivity().getApplicationContext().getResources().getDisplayMetrics().density;
+			return Math.round((float) dp * density);
+		} else
+			return 0;
 	}
-	
+
 	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
@@ -492,7 +492,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			} catch (IOException exception1) {
 
 				// Log an error and return an error message
-				if(isAdded())
+				if (isAdded())
 					Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
 
 				// print the stack trace
@@ -505,9 +505,9 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			} catch (IllegalArgumentException exception2) {
 
 				// Construct a message containing the invalid arguments
-				if(isAdded()){
+				if (isAdded()) {
 					String errorString = getString(R.string.illegal_argument_exception, locationName);
-				// Log the error and print the stack trace
+					// Log the error and print the stack trace
 					Log.e(LocationUtils.APPTAG, errorString);
 				}
 				exception2.printStackTrace();

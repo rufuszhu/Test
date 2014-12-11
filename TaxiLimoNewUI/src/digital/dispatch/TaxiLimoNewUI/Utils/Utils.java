@@ -53,7 +53,6 @@ public class Utils {
 	public static Address mDropoffAddress;
 	public static CompanyItem mSelectedCompany;
 	public static ArrayList<Integer> selected_attribute;
-	public static String selected_attribute_from_bookAgain;
 	public static String pickup_unit_number;
 	public static String dropoff_unit_number;
 	public static int currentTab = 0;
@@ -221,11 +220,9 @@ public class Utils {
 		//TL-222
 		mbook.setCompany_car_file(selectedCompany.carFile);
 
-		if (selected_attribute_from_bookAgain == null)
-			mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
-		else {
-			mbook.setAttributeList(selected_attribute_from_bookAgain);
-		}
+		
+		mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
+		
 
 		if (selectedCompany.multiPay.equalsIgnoreCase("Y"))
 			mbook.setMulti_pay_allow(true);

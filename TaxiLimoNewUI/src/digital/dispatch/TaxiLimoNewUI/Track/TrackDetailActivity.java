@@ -41,6 +41,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
@@ -55,7 +56,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class TrackDetailActivity extends ActionBarActivity {
+public class TrackDetailActivity extends BaseActivity {
 
 	private static final String TAG = "TrackDetailActivity";
 	private static final int RED_TOTAL_DIFF = 194 - 107;
@@ -102,9 +103,9 @@ public class TrackDetailActivity extends ActionBarActivity {
 	private BroadcastReceiver bcReceiver;
 
 	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
-	private FrameLayout ll_cancel_btn;
+	private LinearLayout ll_cancel_btn;
 	private ImageView zoom_btn;
-	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome;
+	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome, exo2Bold;
 
 	private View cancel_cover;
 
@@ -121,6 +122,7 @@ public class TrackDetailActivity extends ActionBarActivity {
 		rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
 		rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
 		exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		exo2Bold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
 		fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		setUpTab();
 		findView();
@@ -379,15 +381,25 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_completed_circle = (TextView) findViewById(R.id.tv_completed_circle);
 		tv_inservice_circle = (TextView) findViewById(R.id.tv_inservice_circle);
 		tv_dispatched_circle = (TextView) findViewById(R.id.tv_dispatched_circle);
+		
+		
+		
+		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon); 
+		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel); 
+		
 
 		arrow_right = (TextView) findViewById(R.id.arrow_right);
 		arrow_right.setTypeface(fontawesome);
 		arrow_right.setText(MBDefinition.ICON_ARROW_RIGHT);
-
-		tv_arrived_circle.setTypeface(exo2SemiBold);
-		tv_completed_circle.setTypeface(exo2SemiBold);
-		tv_inservice_circle.setTypeface(exo2SemiBold);
-		tv_dispatched_circle.setTypeface(exo2SemiBold);
+		cancel_icon.setTypeface(icon_pack);
+		cancel_icon.setText(MBDefinition.ICON_CROSS);
+		tv_cancel.setTypeface(exo2Bold);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		
+		
 
 		arrived_circle = (ImageView) findViewById(R.id.arrived_circle);
 		completed_circle = (ImageView) findViewById(R.id.completed_circle);
@@ -401,7 +413,7 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_book_time.setTypeface(exo2SemiBold);
 
 		// ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
-		ll_cancel_btn = (FrameLayout) findViewById(R.id.ll_cancel_btn);
+		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
 		// ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
 		// ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
 		cancel_cover = findViewById(R.id.cancel_cover);
@@ -598,12 +610,12 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void disableCancelBtn() {
-
+		ll_cancel_btn.setVisibility(View.VISIBLE);
 		cancel_cover.setVisibility(View.VISIBLE);
 	}
 
 	private void enableCancelBtn() {
-
+		ll_cancel_btn.setVisibility(View.VISIBLE);
 		cancel_cover.setVisibility(View.GONE);
 	}
 
@@ -672,7 +684,7 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpArrivedUI() {
-		disableCancelBtn();
+		enableCancelBtn();
 //		ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 

@@ -237,7 +237,6 @@
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:layout_weight=".55"
             android:background="@drawable/green_btn_selector"
             android:clickable="true"
             android:gravity="center"

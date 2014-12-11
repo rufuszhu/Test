@@ -73,7 +73,7 @@ public class AttributeItemAdapter extends BaseAdapter {
 		
 		toggleButton.setBackgroundDrawable(states);
 		
-		if(Utils.selected_attribute!=null && Utils.selected_attribute.contains(Integer.parseInt(attrList.get(position).getAttributeId()))){
+		if((Utils.selected_attribute!=null && Utils.selected_attribute.contains(Integer.parseInt(attrList.get(position).getAttributeId())))){
 			toggleButton.setChecked(true);
 		}
 
