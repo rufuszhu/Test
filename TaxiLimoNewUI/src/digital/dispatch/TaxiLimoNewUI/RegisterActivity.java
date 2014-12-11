@@ -14,8 +14,11 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +53,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	String regid;
 	
 	private EditText name, email, phone_number;
-	private TextView next_btn, verify_btn;
+	private TextView next_btn, verify_btn, register_title, request_new_btn;
 	private LinearLayout ll_sms_verify;
 	private Context _context;
 	private EditText et_code;
@@ -68,8 +71,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		setContentView(R.layout.activity_register);
 		getActionBar().setTitle(R.string.title_activity_register);
 		
-		findAndBindView();
-		
+		findView();
+		styleView();
+		bindView();
+		updateActionBar();
 		_context = this;
 		
 		// Check device for Play Services APK. If check succeeds, proceed with
@@ -131,32 +136,34 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			next_btn.setVisibility(View.GONE);
 			et_code.requestFocus();
 		}
-			
+		
 		
 	}
 
 	
 
-	private void findAndBindView() {
+	private void findView() {
 		
-		name = (EditText) findViewById(R.id.name);
-		name.addTextChangedListener(new GenericTextWatcher(name));
-		email = (EditText) findViewById(R.id.email);
-		email.addTextChangedListener(new GenericTextWatcher(email));
-		phone_number = (EditText) findViewById(R.id.phone_number);
-		phone_number.addTextChangedListener(new GenericTextWatcher(phone_number));
-		
-		
-		next_btn = (TextView) findViewById(R.id.next_btn);
+		name = (EditText) findViewById(R.id.name);		
+		email = (EditText) findViewById(R.id.email);	
+		phone_number = (EditText) findViewById(R.id.phone_number);	
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
+		question_ic = (TextView) findViewById(R.id.question_circle);
+		register_title = (TextView)findViewById(R.id.register_title);
 		
+		et_code = (EditText) findViewById(R.id.et_code);
+		request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+		next_btn = (TextView) findViewById(R.id.next_btn);
+		verify_btn = (TextView) findViewById(R.id.verify_btn);
+	}
+	
+	private void bindView(){
+
+		name.addTextChangedListener(new GenericTextWatcher(name));
+		email.addTextChangedListener(new GenericTextWatcher(email));
+		phone_number.addTextChangedListener(new GenericTextWatcher(phone_number));
+		et_code.addTextChangedListener(new GenericTextWatcher(et_code));
 		
-		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-        question_ic = (TextView) findViewById(R.id.question_circle);
-        question_ic.setTypeface(icon_pack);
-        question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
-
-
 		name.setOnFocusChangeListener(this);
 		email.setOnFocusChangeListener(this);
 		phone_number.setOnFocusChangeListener(this);
@@ -179,9 +186,9 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 		});
 		
-		et_code = (EditText) findViewById(R.id.et_code);
-		et_code.addTextChangedListener(new GenericTextWatcher(et_code));
-		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+		
+		
+		
 		//request new verification code, here need to refresh the phone number in case number is updated
 		request_new_btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -198,7 +205,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			}
 		}});
 
-		verify_btn = (TextView) findViewById(R.id.verify_btn);
+		
 		verify_btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -208,6 +215,39 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			}
 		});
 	}
+	
+	
+	private void styleView() {
+		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		
+		name.setTypeface(rionaSansRegular);
+		phone_number.setTypeface(rionaSansRegular);
+		email.setTypeface(rionaSansRegular);
+        question_ic.setTypeface(icon_pack);
+        question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
+        
+        register_title.setTypeface(rionaSansRegular);
+		
+		SpannableString spanString = new SpannableString(register_title.getText());
+		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+		register_title.setText(spanString);	
+		
+	}
+	
+	private void updateActionBar(){
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayUseLogoEnabled(false);
+		actionBar.setIcon(R.color.transparent);
+		actionBar.setIcon(null);
+		int titleId = getResources().getIdentifier("action_bar_title", "id",
+	            "android");
+		Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Light.ttf");
+	    TextView yourTextView = (TextView) findViewById(titleId);
+	    yourTextView.setTypeface(face);
+	}
+		
 	
 	//callback by RegisterDeviceTask
 	public void showRegisterSuccessMessage(){
@@ -448,7 +488,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		messageDialog.setCanceledOnTouchOutside(true);
 		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_success));
+		tv_message.setText(_context.getString(R.string.verify_success_confirm));
 		messageDialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {

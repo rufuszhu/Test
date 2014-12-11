@@ -155,7 +155,7 @@
 	            android:clickable="true"
 	            android:text="@string/verify_request_new"
 	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textColor="@color/large_btn_text_color"
+	            android:textColor="@drawable/request_new_selector"
 	            android:textSize="12sp" />
 
         </LinearLayout>

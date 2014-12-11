@@ -104,7 +104,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 			//TODO display UI lock screen
 		}
 		else{
-			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_device).setCancelable(false).setPositiveButton(R.string.ok, null).show();
+			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 		}
 		
 		
