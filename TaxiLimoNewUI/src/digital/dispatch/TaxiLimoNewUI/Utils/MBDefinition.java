@@ -112,7 +112,7 @@ public class MBDefinition {
 	//public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
 	public final static String ICON_TIMES_CODE = "\ue39f";
 	//public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
-	public final static String ICON_CHECK_CODE = "\ue396";
+	public final static String ICON_CHECK_CODE = "\ue387";
 	public final static String ICON_CHECK_SQUARE_CODE = "\uf14a"; //http://fortawesome.github.io/Font-Awesome/icon/check-square/
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
 	public final static String ICON_PERSON = "\uf183";

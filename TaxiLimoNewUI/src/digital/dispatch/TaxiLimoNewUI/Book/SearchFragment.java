@@ -170,10 +170,13 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		tv_street.setTypeface(rionaSansMedium);
 
 		autoCompView.setTypeface(rionaRegularFamily);
-		if (((ModifyAddressActivity) getActivity()).getIsDesitination())
+		if (((ModifyAddressActivity) getActivity()).getIsDesitination()){
 			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
-		else
+		}
+		else{
 			autoCompView.setHint(getActivity().getString(R.string.enter_pickup_address));
+		}
+		autoCompView.setText(((ModifyAddressActivity) getActivity()).getAddressFromMap());
 		autoCompView.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {

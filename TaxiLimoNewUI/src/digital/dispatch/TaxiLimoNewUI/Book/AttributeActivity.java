@@ -48,7 +48,6 @@ public class AttributeActivity extends BaseActivity {
 	private boolean refreshing;
 	private boolean shouldBookRightAfter;
 	private Context _context;
-	private Typeface rionaSansBold;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -2,276 +2,260 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:padding="@dimen/normal_margin"
-    android:background="@color/background"  
     tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity" >
-    
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:paddingLeft="@dimen/normal_margin"
-    	android:paddingRight="@dimen/normal_margin"
-    	android:paddingTop="@dimen/normal_margin"
-        android:layout_alignParentTop="true">
+        android:paddingRight="@dimen/normal_margin"
+        android:paddingTop="@dimen/normal_margin" >
 
         <TextView
             android:id="@+id/register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"            
+            android:layout_alignParentLeft="true"
             android:layout_marginRight="120dp"
             android:text="@string/personal_info"
             android:textSize="19sp"
-            android:textStyle="bold"/>
-  
-    
+            android:textStyle="bold" />
 
-    <LinearLayout
-        android:id="@+id/ll_info_form"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="-5dp"
-        android:layout_below="@+id/register_title"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/edt_name"
+        <LinearLayout
+            android:id="@+id/ll_info_form"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_edit_text_height"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/editbox_background"
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textPersonName"
-            android:paddingLeft="@dimen/normal_padding" >
-        </EditText>
-
- 
-
-        <EditText
-            android:id="@+id/edt_userEmail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_edit_text_height"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/editbox_background"
-            android:ems="10"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/normal_padding" />
-
-        
-
-        <EditText
-            android:id="@+id/edt_phoneNum"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_edit_text_height"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:background="@drawable/editbox_background"
-            android:ems="10"
-            android:hint="@string/phone_number"
-            android:inputType="phone"
-            android:paddingLeft="@dimen/normal_padding" />
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/ll_sms_verify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_info_form"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="@dimen/small_padding"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enter_verification"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/et_code"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_edit_text_height"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="@dimen/normal_padding"
+            android:layout_below="@+id/register_title"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="-5dp"
-            android:background="@drawable/editbox_background"
-            android:hint="@string/verify_hint"
-            android:paddingLeft="@dimen/normal_padding">
-			
-            <requestFocus
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            android:orientation="vertical" >
 
-        </EditText>
-		
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:orientation="horizontal" >
-            
-        <TextView
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:id="@+id/question_circle"
-        	android:textColor="@color/gray_light"
-        	android:layout_marginRight="@dimen/small_padding"
-        	android:layout_marginTop="@dimen/small_padding"	
-        	android:layout_gravity="center"
-        	android:textSize="28sp"
-        	android:text="@string/name" />
-        	
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edt_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:background="@drawable/editbox_background"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:paddingLeft="@dimen/big_margin" >
+            </EditText>
 
-        <TextView
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edt_userEmail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:background="@drawable/editbox_background"
+                android:ems="10"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="@dimen/big_margin" />
+
+            <EditText
+                android:id="@+id/edt_phoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:background="@drawable/editbox_background"
+                android:ems="10"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:paddingLeft="@dimen/big_margin" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sms_verify"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:text="@string/verify_not_receive"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="12sp" />
-        
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:orientation="horizontal">
+            android:layout_below="@+id/ll_info_form"
+            android:layout_marginTop="@dimen/small_padding"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/verify_check_phone"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textSize="12sp" />
-	
-	        <TextView
-	            android:id="@+id/request_new_btn"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:clickable="true"
-	            android:text="@string/verify_request_new"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	            android:textColor="@color/blue_text"
-	            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/enter_verification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_verification"
+                android:textSize="14sp" />
 
+            <EditText
+                android:id="@+id/et_code"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_edit_text_height"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:background="@drawable/editbox_background"
+                android:hint="@string/verify_hint"
+                android:paddingLeft="@dimen/big_margin" >
+
+                <requestFocus
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/question_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:layout_marginTop="@dimen/small_padding"
+                    android:text="@string/name"
+                    android:textColor="@color/gray_light"
+                    android:textSize="28sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/verify_not_receive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/normal_padding"
+                        android:text="@string/verify_not_receive"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/verify_check_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/verify_check_phone"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/request_new_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:clickable="true"
+                            android:text="@string/verify_request_new"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/blue_text"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-        </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-   </RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_btns"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_row_height"
         android:layout_alignParentBottom="true"
-        android:minHeight="@dimen/profile_row_height"
         android:layout_marginTop="@dimen/normal_padding"
+        android:minHeight="@dimen/profile_row_height"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/profile_verify_btn"
+            style="@style/TextDropShadowWhite"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/small_padding"
             android:background="@drawable/white_button_selector"
-            style="@style/TextDropShadowWhite"
             android:clickable="true"
             android:gravity="center"
             android:text="@string/verify"
             android:textColor="@color/large_btn_text_color"
             android:textSize="@dimen/large_button_font_size"
-            android:textStyle="bold" 
-            android:visibility="gone"
-            />
-        
-    <LinearLayout
-        android:id="@+id/profile_btn_group"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/small_padding"
-        android:orientation="horizontal"
-        android:visibility="gone" >
-    
-        <LinearLayout 
-            android:id="@+id/profile_cancel_btn"
-            android:layout_width="0dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/profile_btn_group"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="@drawable/white_button_selector"
-            style="@style/TextDropShadowWhite"
+            android:layout_marginTop="@dimen/small_padding"
             android:orientation="horizontal"
-            android:clickable="true"
-            android:gravity="center"
-   
-            >
-            
-            <TextView
-                android:id="@+id/cancel_close_icon"
-                android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:textColor="@color/red_color"
-                android:layout_gravity="center"
-        		android:textSize="28sp"
-                android:text="A"
-                 />
+            android:visibility="gone" >
 
-            <Space
-                android:layout_width="@dimen/normal_padding"
-                android:layout_height="match_parent" />
+            <LinearLayout
+                android:id="@+id/profile_cancel_btn"
+                style="@style/TextDropShadowWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/searchbar_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal" >
 
-            <TextView
-                style="@style/RedBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_cancel" />
-            
-        </LinearLayout>
-        <Space
+                <TextView
+                    android:id="@+id/cancel_close_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/red_color"
+                    android:textSize="32sp" />
+
+                <Space
                     android:layout_width="@dimen/normal_padding"
                     android:layout_height="match_parent" />
-        <LinearLayout 
-            android:id="@+id/profile_save_btn"
-            android:layout_width="0dp"
-            android:layout_weight=".5"
-            android:layout_height="match_parent"
-            android:background="@drawable/white_button_selector"
-            style="@style/TextDropShadowWhite"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:gravity="center"
-            >
-            
-            <TextView
-                android:id="@+id/save_check_icon"
-                android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:textColor="@color/blue_grenn_color2"
-                android:layout_gravity="center"
-        		android:textSize="28sp"
-                android:text="B"
-                 />
+
+                <TextView
+                    android:id="@+id/tv_cancel"
+                    style="@style/RedBtnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_cancel" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="@dimen/normal_padding"
                 android:layout_height="match_parent" />
 
-            <TextView
-                style="@style/GreenBlueBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_save" />
-            
+            <LinearLayout
+                android:id="@+id/profile_save_btn"
+                style="@style/TextDropShadowWhite"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/searchbar_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/save_check_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/blue_grenn_color2"
+                    android:textSize="24sp" />
+
+                <Space
+                    android:layout_width="@dimen/normal_padding"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/tv_save"
+                    style="@style/GreenBlueBtnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_save" />
+            </LinearLayout>
         </LinearLayout>
-        
     </LinearLayout>
-</LinearLayout>
- 
+
 </RelativeLayout>

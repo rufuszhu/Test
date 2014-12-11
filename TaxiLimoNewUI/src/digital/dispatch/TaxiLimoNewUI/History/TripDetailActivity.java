@@ -356,7 +356,6 @@ public class TripDetailActivity extends BaseActivity {
 				Utils.showMessageDialog(_context.getString(R.string.cannot_get_address_from_google), _context);
 				// Toast.makeText(_context, "invalid address", Toast.LENGTH_SHORT).show();
 			}
-
 		}
 	}
 	
@@ -374,7 +373,15 @@ public class TripDetailActivity extends BaseActivity {
 		String[] stringList = dbBook.getAttributeList().split(",");
 		ArrayList<Integer> temp = new ArrayList<Integer>();
 		for(int i = 0 ; i < stringList.length; i++){
-			temp.add(Integer.parseInt(stringList[i]));
+			int attr = -1;
+			try{
+				attr = Integer.parseInt(stringList[i]);
+			}
+			catch (NumberFormatException e){
+				Logger.e(TAG,"No valid attribute found, e: " + e.getMessage());
+			}
+			if(attr!=-1)
+				temp.add(attr);
 		}
 		Utils.selected_attribute = temp;
 		Utils.last_city = dbBook.getPickup_district();

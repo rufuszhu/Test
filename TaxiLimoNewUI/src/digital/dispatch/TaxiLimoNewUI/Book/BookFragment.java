@@ -222,7 +222,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-
+				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				((MainActivity) getActivity()).startActivityForAnim(intent);
 			}
