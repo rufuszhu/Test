@@ -33,6 +33,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	private String smsCode;
 	private boolean isFirstTime;
 	private static final int VERIFY_DEVICE_RESP_STATUS_BLACKLISTED = 2;
+	private static final int VERIFY_DEVICE_RESP_STATUS_SMS_NOT_MATCH = 3;
 
 	//TL-170  added flag isFirstTime to differentiate the call from register or profile page
 	public VerifyDeviceTask(Context context, boolean isFirstTime, String smsCode) {
@@ -72,12 +73,18 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		//TL-248
 		if(resWrapper.getStatus() == VERIFY_DEVICE_RESP_STATUS_BLACKLISTED){
 			//TODO display UI Lock screen
-		}else{
+		}
+		else if (resWrapper.getStatus() == VERIFY_DEVICE_RESP_STATUS_SMS_NOT_MATCH){
 			
 			if(isFirstTime)
 				((RegisterActivity)_context).showVerifyFailedMessage();
 			else
 				((ProfileActivity)_context).showProfileVerifyFailedMessage();
+		}else{
+			//default error code
+			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null)
+			.show();
+			
 		}
 		Logger.v(TAG, "RegDev: ResponseError - " + resWrapper.getErrCode());
 

@@ -58,12 +58,13 @@
     <string name="verify_hint">Verification Code form SMS Message</string>
     <string name="verify_not_receive">Did not receive your Verification Code?</string>
     <string name="verify_check_phone">Check your phone number and  </string>
-    <string name="verify_request_new"><u>Request a new one.</u></string>
+    <string name="verify_request_new"><u>request a new one.</u></string>
     <string name="verify_dialog_text">A Verification SMS message is generated and sent to you at %1$s.\n\nPlease check your message for Verification code</string>
     <string name="verify">VERIFY</string>
     <string name="next">NEXT</string>
     <string name="register">REGISTER</string>
-    <string name="verify_success">Your phone number is successfully verified\n\nThank you!</string>
+    <string name="verify_success">You can now begin to use Zoro</string>
+    <string name="verify_success_confirm">You phone number is successfully verified\n\nThank you!</string>
     <string name="verify_failed">Please enter the correct verification code</string>
     <string name="eula">END USER LICENSE FOR ANDROID MOBILE BOOKER SOFTWARE\n\n
         PLEASE READ THIS DOCUMENT CAREFULLY BEFORE USING THIS SOFTWARE. THIS LICENSE PROVIDES IMPORTANT INFORMATION 
@@ -185,7 +186,7 @@
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>
-    <string name="about">About</string>
+    <string name="about">About</string> 
     <string name="book">BOOK</string>
     <string name="track">TRACK</string>
     <string name="history">HISTORY</string>

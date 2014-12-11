@@ -84,6 +84,9 @@
             android:label="@string/title_activity_profile"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
             android:name=".Drawers.PreferenceActivity"
