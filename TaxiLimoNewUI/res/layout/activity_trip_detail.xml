@@ -6,231 +6,270 @@
     tools:context="digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity" >
 
     <LinearLayout
+        android:id="@+id/ll_status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/normal_padding"
-        android:paddingRight="@dimen/normal_padding" >
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/status_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/gray_line"
+            android:textSize="@dimen/history_status_size" />
+
+        <View
+            android:layout_width="@dimen/small_padding"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_trip_status"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/gray_light"
-            android:gravity="center"
-            android:padding="@dimen/normal_padding"
             android:text="@string/trip_cancled"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white" />
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_table" >
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/trip_id" />
-
-                <TextView
-                    android:id="@+id/tv_history_id"
-                    style="@style/TripTableValueColumn" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/received" />
-
-                <TextView
-                    android:id="@+id/tv_history_receive"
-                    style="@style/TripTableValueColumn" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/route" />
-
-                <LinearLayout
-                    style="@style/TripTableValueColumn"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/small_padding" >
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight=".5"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/little_guy_icon" />
-
-                        <TextView
-                            android:id="@+id/tv_pickup_address"
-                            android:layout_marginLeft="@dimen/normal_padding"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/small_padding"
-                        android:layout_weight=".5"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/icon_drop_off" />
-
-                        <TextView
-                            android:id="@+id/tv_dropoff_address"
-                            android:layout_marginLeft="@dimen/normal_padding"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-                </LinearLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/fleet" />
-
-                <LinearLayout
-                    style="@style/TripTableValueColumn"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="@dimen/normal_padding" >
-
-                    <ImageView
-                        android:id="@+id/iv_tracking_company_icon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:layout_marginLeft="@dimen/normal_padding"
-                        android:orientation="vertical" >
-
-                        <TextView
-                            android:id="@+id/tv_company_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight=".6"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_company_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight=".4"
-                            android:textColor="@color/gray_line" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/call_btn"
-                        android:layout_width="66.9dp"
-                        android:layout_height="33.6dp"
-                        android:layout_marginRight="@dimen/normal_padding"
-                        android:layout_gravity="center_vertical|right"
-                        android:gravity="right"
-                        android:background="@drawable/call_btn" />
-                </LinearLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/option" />
-
-                <LinearLayout
-                    android:id="@+id/ll_attr"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
-                    android:background="@drawable/shape_table_cell"
-                    android:minHeight="@dimen/table_row_min_height"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/normal_margin" >
-                </LinearLayout>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/payment_row"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/payment" />
-
-                <TextView
-                    android:id="@+id/tv_payment"
-                    style="@style/TripTableValueColumn" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/auth_code_row"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/table_row_min_height"
-                android:orientation="horizontal" >
-
-                <TextView
-                    style="@style/TripTableTitleColumn"
-                    android:text="@string/auth_code" />
-
-                <TextView
-                    android:id="@+id/tv_auth_code"
-                    style="@style/TripTableValueColumn" />
-            </TableRow>
-        </TableLayout>
+            android:textColor="@color/gray_line"
+            android:textSize="@dimen/history_status_size" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_bot_btns"
+        android:layout_below="@+id/ll_status"
+        android:layout_marginLeft="@dimen/normal_padding"
+        android:layout_marginRight="@dimen/normal_padding"
+        android:background="@drawable/shape_textview_border"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/info_bar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="@dimen/normal_padding"
+            android:paddingRight="@dimen/normal_padding" >
+
+            <TextView
+                android:id="@+id/tv_history_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:textColor="@color/background_tab_selected"
+                android:textSize="@dimen/history_info_bar_text_size" />
+
+            <TextView
+                android:id="@+id/tv_history_receive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:textColor="@color/gray_line"
+                android:textSize="@dimen/history_info_bar_text_size" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp" >
+
+            <TextView
+                android:id="@+id/route_title"
+                style="@style/InfoLabelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_marginTop="@dimen/small_padding"
+                android:text="@string/route" />
+
+            <TextView
+                android:id="@+id/icon_pickup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/route_title"
+                android:layout_below="@+id/route_title"
+                android:layout_marginLeft="@dimen/big_margin"
+                android:layout_marginTop="@dimen/small_padding"
+                android:textColor="@color/green"
+                android:textSize="@dimen/history_pickup_icon_size" />
+
+            <TextView
+                android:id="@+id/tv_pickup_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/route_title"
+                android:layout_marginLeft="@dimen/big_margin"
+                android:layout_marginTop="@dimen/small_padding"
+                android:layout_toRightOf="@+id/icon_pickup"
+                android:singleLine="true"
+                android:textSize="@dimen/history_pickup_font_size" />
+
+            <TextView
+                android:id="@+id/icon_dropoff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/route_title"
+                android:layout_below="@+id/icon_pickup"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="@dimen/big_margin"
+                android:singleLine="true"
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/history_pickup_icon_size" />
+
+            <TextView
+                android:id="@+id/tv_dropoff_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_pickup_address"
+                android:layout_below="@+id/tv_pickup_address"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/icon_dropoff"
+                android:textSize="@dimen/history_pickup_font_size" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/company_title"
+                style="@style/InfoLabelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_marginTop="@dimen/small_padding"
+                android:text="@string/fleet" />
+
+            <TextView
+                android:id="@+id/tv_company_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/iv_tracking_company_icon"
+                android:layout_toLeftOf="@+id/call_company_btn"
+                android:layout_toRightOf="@+id/iv_tracking_company_icon"
+                android:singleLine="true"
+                android:text="Large Text"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/company_font_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_company_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_company_name"
+                android:layout_below="@+id/tv_company_name"
+                android:layout_toLeftOf="@+id/call_company_btn"
+                android:singleLine="true"
+                android:textColor="@color/background_tab_selected"
+                android:textSize="@dimen/company_description_font_size"
+                android:textStyle="italic" />
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/iv_tracking_company_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignLeft="@+id/company_title"
+                android:layout_below="@+id/company_title"
+                android:layout_marginLeft="@dimen/big_margin"
+                android:layout_marginRight="@dimen/big_margin"
+                android:layout_marginTop="@dimen/normal_padding" />
+
+            <LinearLayout
+                android:id="@+id/call_company_btn"
+                android:layout_width="80dp"
+                android:layout_height="34dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/tv_company_name"
+                android:layout_marginRight="@dimen/big_margin"
+                android:background="@drawable/searchbar_selector"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/icon_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue_grenn_color2"
+                    android:textSize="@dimen/call_btn_font_size" />
+
+                <TextView
+                    android:id="@+id/tv_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CALL"
+                    android:textColor="@color/blue_grenn_color2"
+                    android:textSize="@dimen/call_btn_font_size" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_driver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/iv_tracking_company_icon"
+                android:layout_below="@+id/iv_tracking_company_icon"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:text="Large Text"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/company_font_size" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/iv_tracking_company_icon"
+                android:layout_below="@+id/tv_driver"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_car_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Small Text"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/company_font_size" />
+
+                <LinearLayout
+                    android:id="@+id/ll_attr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bot_btns"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/bot_button_height"
         android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/normal_padding"
+        android:baselineAligned="false"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -238,51 +277,61 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
+            android:background="@drawable/searchbar_selector"
             android:clickable="true"
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_book_again" />
-            
-            <Space
-            android:layout_width="@dimen/normal_padding"
-            android:layout_height="match_parent" />
-
             <TextView
+                android:id="@+id/bookAgain_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/book_again"
-                style="@style/GreenBtnText" />
+                android:textColor="@color/completed_color"
+                android:textSize="@dimen/btn_icon_size" />
+
+            <Space
+                android:layout_width="@dimen/small_padding"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_bookAgain"
+                style="@style/GreenBtnText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/book_again" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/ll_remove_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:background="@drawable/gray_button_selector"
+            android:background="@drawable/searchbar_selector"
             android:clickable="true"
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <ImageView
-                android:layout_width="@dimen/gray_btn_icon_size"
-                android:layout_height="@dimen/gray_btn_icon_size"
-                android:src="@drawable/icon_remove" />
-            
-            <Space
-            android:layout_width="@dimen/normal_padding"
-            android:layout_height="match_parent" />
-
             <TextView
+                android:id="@+id/delete_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/remove"
-                style="@style/RedBtnText"/>
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/btn_icon_size" />
+
+            <Space
+                android:layout_width="@dimen/small_padding"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_delete"
+                style="@style/RedBtnText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remove" />
         </LinearLayout>
     </LinearLayout>
 

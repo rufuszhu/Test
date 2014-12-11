@@ -108,9 +108,11 @@
         
         <TextView
             android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/angle_right1"
+            android:layout_toRightOf="@+id/tv_date_title"
+            android:gravity="right"
             android:singleLine="true"
             android:layout_centerVertical="true"
             android:textColor="@color/list_gray_text"
@@ -163,11 +165,13 @@
         
         <TextView
             android:id="@+id/tv_driver_note"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/angle_right2"
+            android:layout_toRightOf="@+id/tv_note_title"
             android:singleLine="true"
             android:layout_centerVertical="true"
+            android:gravity="right"
             android:textColor="@color/list_gray_text"
             android:textSize="@dimen/book_activity_font_size"
             android:layout_marginRight="@dimen/normal_padding"/>
@@ -237,7 +241,6 @@
             android:layout_height="@dimen/map_book_btn_height"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/small_padding"
-            android:layout_weight=".55"
             android:background="@drawable/green_btn_selector"
             android:clickable="true"
             android:gravity="center"

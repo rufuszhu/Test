@@ -2,10 +2,12 @@ package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -23,6 +26,8 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -35,6 +40,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
@@ -60,9 +67,13 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
@@ -101,7 +112,15 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	private GoogleMap mMap;
 	private TextView address_bar_text;
 	
+	
 	private boolean setPickupButtonClicked;
+	
+	private ArrayList<LatLng> carPos;
+	private ArrayList<Marker> carMarkers;
+	private final static int INTERVAL = 1000 * 5; // 5 second
+	private Runnable mHandlerTask;
+	private Handler mHandler;
+	private int counter = 0;
 
 	private void buildAlertMessageNoGps() {
 		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -140,6 +159,22 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Logger.e(TAG, "on CREATEVIEW");
 		
 		setPickupButtonClicked = false;
+		
+		mHandler = new Handler();
+		mHandlerTask = new Runnable() {
+			@Override
+			public void run() {
+				if(carPos!=null && carMarkers!=null &&carPos.size()==12 && carMarkers.size()==12){
+					
+					moveCar(counter);
+					if(counter==11)
+						counter = 0;
+					else
+						counter++;
+				}
+				mHandler.postDelayed(mHandlerTask, (long) (4000*Math.random()));
+			}
+		};
 
 		mLocationRequest = LocationRequest.create();
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -187,7 +222,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);
-
+				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, address_bar_text.getText().toString());
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				((MainActivity) getActivity()).startActivityForAnim(intent);
 			}
@@ -394,15 +429,23 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Logger.e(TAG, "on RESUME");
 		checkGPSEnable();
 		checkInternet();
-
+		
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		Logger.e(TAG, "on PAUSE");
+		stopRepeatingTask();
 	}
 
+	private void startRepeatingTask() {
+		mHandlerTask.run();
+	}
+
+	private void stopRepeatingTask() {
+		mHandler.removeCallbacks(mHandlerTask);
+	}
 	private void checkGPSEnable() {
 		final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -653,7 +696,10 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				exception1.printStackTrace();
 
 				// Return an error message
-				return (getString(R.string.IO_Exception_getFromLocation));
+				if(isAdded())
+					return (getString(R.string.IO_Exception_getFromLocation));
+				else
+					return "";
 
 				// Catch incorrect latitude or longitude values
 			} catch (IllegalArgumentException exception2) {
@@ -664,8 +710,10 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				Log.e(LocationUtils.APPTAG, errorString);
 				exception2.printStackTrace();
 
-				//
-				return errorString;
+				if(isAdded())
+					return errorString;
+				else
+					return "";
 			}
 			// If the reverse geocode returned an address
 			if (addresses != null && addresses.size() > 0) {
@@ -673,13 +721,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
-
-				return LocationUtils.addressToString(getActivity(), address);
-
+				if(isAdded())
+					return LocationUtils.addressToString(getActivity(), address);
+				else
+					return "";
 				// If there aren't any addresses, post a message
 			} else {
 				Utils.mPickupAddress = null;
-				return getString(R.string.no_address_found);
+				if(isAdded())
+					return getString(R.string.no_address_found);
+				else
+					return "";
 			}
 		}
 
@@ -701,20 +753,25 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Logger.e(TAG, "onConnected");
 		setUpMapIfNeeded();
 		Address address = Utils.mPickupAddress;
+		
 		if (address != null) {
 			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
+				cleanUP();
+				generate12CarsWithin5MilesRandom(address.getLatitude(),address.getLongitude());
+				startRepeatingTask();
 			}
-			// boolean isFromBooking = true;
-			// new GetCompanyListTask(getActivity(), address, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			// setupCompanyUI();
 		} else {
 			if (checkReady() && servicesConnected()) {
 				// Get the current location
 				Location currentLocation = mLocationClient.getLastLocation();
-				if (currentLocation != null)
+				if (currentLocation != null){
+					cleanUP();
+					generate12CarsWithin5MilesRandom(currentLocation.getLatitude(),currentLocation.getLongitude());
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
+					startRepeatingTask();
+				}
 				else
 					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
 			}
@@ -723,6 +780,134 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		}
 	}
+	
+	private void moveCar(int carNum){
+		double MOVE_AMOUNT = 0.005;
+		LatLng pos = carPos.get(carNum);
+		Marker marker = carMarkers.get(carNum);
+		double sign = randomePosNegative();
+		LatLng newPos;
+		
+		
+		if(randomePosNegative()>0.5){
+			newPos = new LatLng( pos.latitude + MOVE_AMOUNT * sign, pos.longitude);
+			if(sign>0)
+				animateRotateAndMoveMarker(marker,0f,newPos);
+			else
+				animateRotateAndMoveMarker(marker,180f,newPos);
+			carPos.set(carNum, newPos);
+		}
+		else
+		{
+			newPos = new LatLng( pos.latitude , pos.longitude + MOVE_AMOUNT * sign);
+			if(sign>0){
+				animateRotateAndMoveMarker(marker,90f,newPos);
+				}
+			else
+				animateRotateAndMoveMarker(marker,270f,newPos);
+			carPos.set(carNum, newPos);
+			
+		}
+		
+	}
+
+	private void cleanUP(){
+		if(carPos!=null && carPos.size()>0 && carMarkers!=null && carMarkers.size()>0){
+			for(int i=0;i<carMarkers.size();i++){
+				carMarkers.get(i).remove();
+			}
+			carPos.clear();
+			carMarkers.clear();
+		}
+	}
+	
+	private void generate12CarsWithin5MilesRandom(double mLat, double mLong){
+		double FIVE_MILES_IN_LAT = (double) 0.022346;
+		double FIVE_MILES_IN_LONG = (double) 0.033341;
+		
+		carPos = new ArrayList<LatLng>();
+		carMarkers = new ArrayList<Marker>();
+		
+		for(int i=0;i<12;i++){
+			double xLat = (double)Math.random() * FIVE_MILES_IN_LAT * randomePosNegative();
+			double xLong = (double)Math.random() * FIVE_MILES_IN_LONG * randomePosNegative();
+			double lat = xLat + mLat;
+			double longi = xLong + mLong;
+			LatLng a = new LatLng(lat,longi);
+			carPos.add(a);
+			Marker carMarker = mMap.addMarker(new MarkerOptions().position(a).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_on_map)).rotation(90*(i%4)));
+			carMarkers.add(carMarker);
+		}
+	}
+	
+	private long randomePosNegative(){
+		if(Math.random()>0.5)
+			return (long) 1.0;
+		else
+			return (long) -1.0;
+	}
+	
+	
+	private void animateMarker(final Marker marker, final LatLng toPosition) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mMap.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 5000;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                	marker.setVisible(true);
+                }
+            }
+        });
+    }
+	//animate rotation after, and move the marker after rotation
+	private void animateRotateAndMoveMarker(final Marker marker, final float endDegree,final LatLng newPos) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final float startDegree = marker.getRotation();
+        
+        final long duration = 1000;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                float degree = t * endDegree + (1 - t) * startDegree;
+                marker.setRotation(degree);
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                	marker.setVisible(true);
+                	animateMarker(marker, newPos);
+                }
+            }
+        });
+    }
 
 	@Override
 	public void onDisconnected() {

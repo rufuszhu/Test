@@ -10,6 +10,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CancelJobResponse;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -60,7 +61,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	public void onResponseReady(CancelJobResponse response) {
 		
 		Utils.stopProcessingDialog(_context);
-		Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
+		((TrackDetailActivity)_context).showCancelDialog();
 		
 		Logger.v(TAG, "Cancel Job: " + response.getStatus() + " :: " + response.getErrorString());
 	}
@@ -68,7 +69,8 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	@Override
 	public void onErrorResponse(String errorString) {
 		Utils.stopProcessingDialog(_context);
-		Utils.showErrorDialog(_context.getString(R.string.err_cancel_failed), _context);
+		//we force cancel the job even if the request fail
+		((TrackDetailActivity)_context).showCancelDialog();
 		
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
 	}
@@ -76,7 +78,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	@Override
 	public void onError() {
 		Utils.stopProcessingDialog(_context);
-		Utils.showErrorDialog(_context.getString(R.string.err_cancel_failed), _context);
+		((TrackDetailActivity)_context).showCancelDialog();
 		
 		Logger.v(TAG, "cancelJob: Error");
 	}

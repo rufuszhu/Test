@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
@@ -42,7 +43,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 
-public class ProfileActivity extends ActionBarActivity implements OnFocusChangeListener {
+public class ProfileActivity extends BaseActivity implements OnFocusChangeListener {
 
 	private EditText edtPhone, edtName, edtUEmail, et_code;
 	private LinearLayout save_btn, cancel_btn;
@@ -122,19 +123,51 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 	}
 	
 
+
+		
+
 	private void findView() {
+		Typeface rionaRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
 
 		edtPhone = (EditText) findViewById(R.id.edt_phoneNum);
 		edtPhone.addTextChangedListener(new GenericTextWatcher(edtPhone));
+		edtPhone.setTypeface(rionaRegular);
+		
 		edtName = (EditText) findViewById(R.id.edt_name);
+
+		edtName.setTypeface(rionaRegular);
+		edtName.addTextChangedListener(new GenericTextWatcher(edtName));
+		
+		edtUEmail = (EditText) findViewById(R.id.edt_userEmail);
+		edtUEmail.addTextChangedListener(new GenericTextWatcher(edtUEmail));
+		edtUEmail.setTypeface(rionaRegular);
+		
+		et_code = (EditText) findViewById(R.id.et_code);
+		et_code.addTextChangedListener(new GenericTextWatcher(et_code));
+		et_code.setTypeface(rionaRegular);
+		
+		
+		TextView verify_not_receive = (TextView) findViewById(R.id.verify_not_receive);
+		TextView verify_check_phone = (TextView) findViewById(R.id.verify_check_phone);
+		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+		TextView enter_verification = (TextView) findViewById(R.id.enter_verification);
+		verify_not_receive.setTypeface(rionaRegular);
+		verify_check_phone.setTypeface(rionaRegular);
+		request_new_btn.setTypeface(rionaRegular);
+		enter_verification.setTypeface(rionaRegular);
+		
+
 		
 		edtUEmail = (EditText) findViewById(R.id.edt_userEmail);
 		
 		et_code = (EditText) findViewById(R.id.et_code);
+
 		
 		save_btn = (LinearLayout) findViewById(R.id.profile_save_btn);
 		cancel_btn = (LinearLayout) findViewById(R.id.profile_cancel_btn);
 		verify_btn = (TextView) findViewById(R.id.profile_verify_btn);
+		Typeface rionaBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+		verify_btn.setTypeface(rionaBold);
 		_context = this;
 
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
@@ -219,6 +252,26 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		
 		question_ic.setTypeface(icon_pack);
 		cancel_ic.setTypeface(icon_pack);
+
+		cancel_ic.setText(MBDefinition.ICON_CROSS);
+		save_ic = (TextView) findViewById(R.id.save_check_icon);
+		save_ic.setText(MBDefinition.ICON_CHECK_CODE);
+		save_ic.setTypeface(icon_pack);
+		
+		
+		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel);
+		TextView tv_save = (TextView) findViewById(R.id.tv_save);
+		Typeface exoBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
+		tv_cancel.setTypeface(exoBold);
+		tv_save.setTypeface(exoBold);
+		
+		Typeface rionaMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
+		TextView register_title = (TextView) findViewById(R.id.register_title);
+		register_title.setTypeface(rionaMedium);
+		
+		
+
+
 		save_ic.setTypeface(icon_pack);
 		question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
 		cancel_ic.setText(MBDefinition.ICON_TIMES_CODE);
@@ -238,7 +291,7 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 	}
 	
 	private void bindEvent(){
-		
+
 		edtName.setOnFocusChangeListener(this);
 		edtUEmail.setOnFocusChangeListener(this);
 		edtPhone.setOnFocusChangeListener(this);
@@ -287,7 +340,9 @@ public class ProfileActivity extends ActionBarActivity implements OnFocusChangeL
 		});
 
 		
-		
+
+		request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+
 		// request new verification code, here need to refresh the phone number in case number is updated
 		request_new_btn.setOnClickListener(new OnClickListener() {
 			@Override

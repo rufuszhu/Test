@@ -152,7 +152,7 @@
     <string name="remove">Remove</string>
     <string name="ask_register_cc">There is no registered credit card. Do you want to register a credit card now?</string>
     <string name="auth_code">Auth Code</string>
-    <string name="driver_info_not_available">Driver information will be available after dispatch</string>
+    <string name="tracking_map_not_available">Tracking map will be available\nas soon as your taxi is dispatched.</string>
     <string name="vehicle_info_not_available">Vehicle information will be available after dispatch</string>
 
     <!-- modify address -->
@@ -172,10 +172,10 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
 
-    <!-- <string name="url">http://192.168.50.161:188/Service.asmx</string> -->
-    <string name="url">http://192.168.50.160:76/Service.asmx?wsdl</string>
+    <string name="url">http://192.168.50.160:76/Service.asmx</string>
+<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
 
-    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+<!--     <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
     <!-- <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
     <string name="protocol">3.0</string>
@@ -186,7 +186,7 @@
     <string name="profile">Profile</string>
     <string name="payment">Payment</string>
     <string name="preference">Preference</string>
-    <string name="about">About</string>
+    <string name="about">About</string> 
     <string name="book">BOOK</string>
     <string name="track">TRACK</string>
     <string name="history">HISTORY</string>

@@ -57,7 +57,7 @@ public class BookActivity extends BaseActivity {
 	,angle_right3, angle_right2,angle_right1;
 	private BroadcastReceiver bcReceiver;
 
-	@Override
+	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book);
@@ -71,6 +71,8 @@ public class BookActivity extends BaseActivity {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
 		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+		
 		icon_pickup.setTypeface(fontAwesome);
 		icon_dropoff.setTypeface(fontAwesome);
 		icon_date.setTypeface(icon_pack);
@@ -98,9 +100,7 @@ public class BookActivity extends BaseActivity {
 		tv_date.setTypeface(rionaSansRegular);
 		tv_driver_note.setTypeface(rionaSansRegular);
 		tv_company.setTypeface(rionaSansRegular);
-		book_btn.setTypeface(rionaSansRegular);
-
-		
+		book_btn.setTypeface(rionaSansBold);
 	}
 
 	@Override

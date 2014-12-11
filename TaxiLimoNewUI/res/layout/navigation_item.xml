@@ -16,7 +16,11 @@
             android:layout_height="@dimen/drawer_icon_size"
             android:contentDescription="@string/clear"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/big_margin"/>        
+            android:layout_marginLeft="@dimen/big_margin"/>   
+            
+        <View
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent"/>
         
         <TextView
             android:id="@+id/title"

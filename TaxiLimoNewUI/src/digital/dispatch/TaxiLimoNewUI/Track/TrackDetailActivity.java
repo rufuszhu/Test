@@ -1,6 +1,10 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +20,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -28,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,6 +41,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
@@ -49,7 +56,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class TrackDetailActivity extends ActionBarActivity {
+public class TrackDetailActivity extends BaseActivity {
 
 	private static final String TAG = "TrackDetailActivity";
 	private static final int RED_TOTAL_DIFF = 194 - 107;
@@ -66,6 +73,7 @@ public class TrackDetailActivity extends ActionBarActivity {
 
 	public static FragmentManager fragmentManager;
 	private static TrackingMapFragment trackingMapFragment;
+	private static MapNotAvailableFragment map404Fragment;
 	private RelativeLayout tab0, tab1;
 	private PagerAdapter mAdapter;
 	public ViewPager mPager;
@@ -85,16 +93,21 @@ public class TrackDetailActivity extends ActionBarActivity {
 	private TextView tv_dispatched_circle;
 	private TextView tv_book_time;
 	private TextView tv_id;
-	
+	private TextView arrow_right;
+
 	private ImageView arrived_circle;
 	private ImageView completed_circle;
 	private ImageView inservice_circle;
 	private ImageView dispatched_circle;
 
 	private BroadcastReceiver bcReceiver;
-	
-	private LinearLayout ll_btn_group,ll_cancel_btn,ll_cancel_btn_small,ll_pay_btn;
+
+	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
+	private LinearLayout ll_cancel_btn;
 	private ImageView zoom_btn;
+	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome, exo2Bold;
+
+	private View cancel_cover;
 
 	private boolean isRefreshing;
 
@@ -105,30 +118,49 @@ public class TrackDetailActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
+		icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
+		rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+		exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		exo2Bold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
+		fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		setUpTab();
 		findView();
 		setTab0Text();
-		// fillTable();
 		initListener();
 		isRefreshing = false;
 	}
-	
-	
-	public DBBooking getDBBook(){
+
+	public DBBooking getDBBook() {
 		return dbBook;
 	}
-	
-	private void setTab0Text(){
-		tv_book_time.setText("Received at " + dbBook.getTripCreationTime());
+
+	private void setTab0Text() {
+
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+			Date date = format.parse(dbBook.getTripCreationTime());
+			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm MMM dd, yyyy", Locale.US);
+			String dateString = dateFormat.format(date);
+			tv_book_time.setText("Received at " + dateString);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		tv_book_time.setTextColor(getResources().getColor(R.color.background_tab));
+		arrow_right.setVisibility(View.GONE);
+
 		tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
 	}
-	
-	private void setTab1Text(){
+
+	private void setTab1Text() {
 		tv_id.setText(dbBook.getPickupAddress());
-		if(dbBook.getDropoffAddress()==null || dbBook.getDropoffAddress().length()==0)	
+		if (dbBook.getDropoffAddress() == null || dbBook.getDropoffAddress().length() == 0)
 			tv_book_time.setText("Not Given");
 		else
 			tv_book_time.setText(dbBook.getDropoffAddress());
+		tv_book_time.setTextColor(getResources().getColor(R.color.background_tab_selected));
+		arrow_right.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -157,10 +189,6 @@ public class TrackDetailActivity extends ActionBarActivity {
 			}
 		}
 	}
-	
-	public void updateCarMarker(LatLng carLatLng, List<DBBooking> book){
-		trackingMapFragment.updateCarMarker(carLatLng, book);
-	}
 
 	@Override
 	public void onPause() {
@@ -171,7 +199,7 @@ public class TrackDetailActivity extends ActionBarActivity {
 
 	@Override
 	protected void onDestroy() {
-		
+
 		super.onDestroy();
 	}
 
@@ -205,23 +233,38 @@ public class TrackDetailActivity extends ActionBarActivity {
 	private void setUpTab() {
 		mPager = (ViewPager) findViewById(R.id.pager);
 		setTabListener();
+		TextView icon_info = (TextView) findViewById(R.id.icon_info);
+		TextView tv_info = (TextView) findViewById(R.id.tv_info);
+		TextView icon_track = (TextView) findViewById(R.id.icon_track);
+		TextView tv_track = (TextView) findViewById(R.id.tv_track);
+
+		icon_info.setTypeface(icon_pack);
+		icon_track.setTypeface(icon_pack);
+
+		icon_info.setText(MBDefinition.ICON_INFO);
+		icon_track.setText(MBDefinition.icon_tab_track);
+
+		tv_info.setTypeface(rionaSansBold);
+		tv_track.setTypeface(rionaSansBold);
+
 		trackingMapFragment = TrackingMapFragment.newInstance();
 		infoFragment = new InfoFragment();
-
+		map404Fragment = new MapNotAvailableFragment();
 		mAdapter = new PagerAdapter(getSupportFragmentManager());
+
 		fragmentManager = getSupportFragmentManager();
 		pageChangeListener = new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int selected) {
 				Log.e(TAG, "onPageSelected: " + selected);
-				if(selected==0){
+				if (selected == 0) {
 					setTab0Text();
 					zoom_btn.setVisibility(View.GONE);
 				}
-				if(selected==1){
+				if (selected == 1) {
 					setTab1Text();
-					if(dbBook.getCarLatitude()!=0 && dbBook.getCarLongitude()!=0){
+					if (dbBook.getCarLatitude() != null && dbBook.getCarLatitude() != 0 && dbBook.getCarLongitude() != 0) {
 						zoom_btn.setVisibility(View.VISIBLE);
 					}
 				}
@@ -233,8 +276,9 @@ public class TrackDetailActivity extends ActionBarActivity {
 				// do not animate tab color transition for clicking on tab
 				if (!isScolling) {
 					if (position == 0) {
-						Log.e(TAG, "setting alpha");
-						trackingMapFragment.mGetView().setAlpha(positionOffset);
+						if (trackingMapFragment != null && trackingMapFragment.mGetView() != null)
+							trackingMapFragment.mGetView().setAlpha(positionOffset);
+
 						infoFragment.mGetView().setAlpha(1 - positionOffset);
 
 						if (mPager.getCurrentItem() == 0) {
@@ -302,10 +346,10 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private class PagerAdapter extends FragmentPagerAdapter {
-		private final String[] TITLES = { "INFO", "TRACk" };
 
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
+
 		}
 
 		@Override
@@ -314,17 +358,17 @@ public class TrackDetailActivity extends ActionBarActivity {
 		}
 
 		@Override
-		public CharSequence getPageTitle(int position) {
-			return TITLES[position];
-		}
-
-		@Override
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
 				return infoFragment;
 			case 1:
-				return trackingMapFragment;
+				// if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED
+				// || dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE)
+				// return trackingMapFragment;
+				// else
+				// return map404Fragment;
+				return new RootFragment();
 			default:
 				return null;
 			}
@@ -337,19 +381,42 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_completed_circle = (TextView) findViewById(R.id.tv_completed_circle);
 		tv_inservice_circle = (TextView) findViewById(R.id.tv_inservice_circle);
 		tv_dispatched_circle = (TextView) findViewById(R.id.tv_dispatched_circle);
+		
+		
+		
+		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon); 
+		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel); 
+		
+
+		arrow_right = (TextView) findViewById(R.id.arrow_right);
+		arrow_right.setTypeface(fontawesome);
+		arrow_right.setText(MBDefinition.ICON_ARROW_RIGHT);
+		cancel_icon.setTypeface(icon_pack);
+		cancel_icon.setText(MBDefinition.ICON_CROSS);
+		tv_cancel.setTypeface(exo2Bold);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		
+		
 
 		arrived_circle = (ImageView) findViewById(R.id.arrived_circle);
 		completed_circle = (ImageView) findViewById(R.id.completed_circle);
 		inservice_circle = (ImageView) findViewById(R.id.inservice_circle);
 		dispatched_circle = (ImageView) findViewById(R.id.dispatched_circle);
-		
+
 		tv_id = (TextView) findViewById(R.id.tv_id);
 		tv_book_time = (TextView) findViewById(R.id.tv_book_time);
-		
-		ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
+
+		tv_id.setTypeface(exo2SemiBold);
+		tv_book_time.setTypeface(exo2SemiBold);
+
+		// ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
 		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
-		ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
-		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		// ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
+		// ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		cancel_cover = findViewById(R.id.cancel_cover);
 	}
 
 	private void checkAndDisablePayBtns() {
@@ -363,8 +430,6 @@ public class TrackDetailActivity extends ActionBarActivity {
 			// inService_pay_btn.setClickable(false);
 		}
 	}
-
-
 
 	private void initListener() {
 
@@ -421,9 +486,9 @@ public class TrackDetailActivity extends ActionBarActivity {
 		};
 
 		ll_cancel_btn.setOnClickListener(cancelListener);
-		ll_cancel_btn_small.setOnClickListener(cancelListener);
-		ll_pay_btn.setOnClickListener(payListener);
-		
+//		ll_cancel_btn_small.setOnClickListener(cancelListener);
+//		ll_pay_btn.setOnClickListener(payListener);
+//
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
 		zoom_btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -454,11 +519,11 @@ public class TrackDetailActivity extends ActionBarActivity {
 			return true;
 		}
 		if (id == android.R.id.home) {
-			Utils.currentTab=1;
+			Utils.currentTab = 1;
 			finish();
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -483,18 +548,42 @@ public class TrackDetailActivity extends ActionBarActivity {
 		}
 	}
 
-	public void parseRecallJobResponse(List<DBBooking> dbBook1) {
+	public void parseRecallJobResponse(List<DBBooking> dbBook1, LatLng carLatLng) {
 		stopUpdateAnimation();
 		this.dbBook = dbBook1.get(0);
-		if(mPager.getCurrentItem()==1 && (dbBook.getCarLatitude()!=0 || dbBook.getCarLongitude()!=0)){
-			zoom_btn.setVisibility(View.VISIBLE);
+
+		if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED
+				|| dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			/*
+			 * IMPORTANT: We use the "root frame" defined in "root_fragment.xml" as the reference to replace fragment
+			 */
+			trans.replace(R.id.root_frame, trackingMapFragment);
+
+			/*
+			 * IMPORTANT: The following lines allow us to add the fragment to the stack and return to it later, by pressing back
+			 */
+			// trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			// trans.addToBackStack(null);
+
+			trans.commit();
+			trackingMapFragment.updateCarMarker(carLatLng, dbBook);
+		} else {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			/*
+			 * IMPORTANT: We use the "root frame" defined in "root_fragment.xml" as the reference to replace fragment
+			 */
+			trans.replace(R.id.root_frame, map404Fragment);
+			trans.commit();
 		}
-		else{
+
+		if (mPager.getCurrentItem() == 1 && (dbBook.getCarLatitude() != 0 || dbBook.getCarLongitude() != 0)) {
+			zoom_btn.setVisibility(View.VISIBLE);
+		} else {
 			tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
 			zoom_btn.setVisibility(View.GONE);
 		}
 
-		
 		checkAndDisablePayBtns();
 		switch (dbBook.getTripStatus()) {
 		case MBDefinition.MB_STATUS_BOOKED:
@@ -520,20 +609,30 @@ public class TrackDetailActivity extends ActionBarActivity {
 		}
 	}
 
+	private void disableCancelBtn() {
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		cancel_cover.setVisibility(View.VISIBLE);
+	}
+
+	private void enableCancelBtn() {
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		cancel_cover.setVisibility(View.GONE);
+	}
+
 	private void setUpCanceledUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.GONE);
+		disableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
-		
+
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_line));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.NORMAL);
-		tv_arrived_circle.setTypeface(null, Typeface.NORMAL);
-		tv_inservice_circle.setTypeface(null, Typeface.NORMAL);
-		tv_completed_circle.setTypeface(null, Typeface.NORMAL);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 
 		dispatched_circle.setBackground(getResources().getDrawable(R.drawable.shape_holo_circle));
 		arrived_circle.setBackground(getResources().getDrawable(R.drawable.shape_holo_circle));
@@ -542,19 +641,19 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setupBookedUI() {
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_btn_group.setVisibility(View.GONE);
+		enableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
-		
+
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_arrived_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_line));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.NORMAL);
-		tv_arrived_circle.setTypeface(null, Typeface.NORMAL);
-		tv_inservice_circle.setTypeface(null, Typeface.NORMAL);
-		tv_completed_circle.setTypeface(null, Typeface.NORMAL);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 
 		dispatched_circle.setBackground(getResources().getDrawable(R.drawable.shape_holo_circle));
 		arrived_circle.setBackground(getResources().getDrawable(R.drawable.shape_holo_circle));
@@ -563,8 +662,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpAcceptedUI() {
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_btn_group.setVisibility(View.GONE);
+		enableCancelBtn();
+		//ll_btn_group.setVisibility(View.GONE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -572,10 +671,10 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_line));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.BOLD);
-		tv_arrived_circle.setTypeface(null, Typeface.NORMAL);
-		tv_inservice_circle.setTypeface(null, Typeface.NORMAL);
-		tv_completed_circle.setTypeface(null, Typeface.NORMAL);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.BOLD);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 
 		dispatched_circle.setImageResource(R.drawable.shape_solid_circle);
 		arrived_circle.setImageResource(R.drawable.shape_holo_circle);
@@ -585,8 +684,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpArrivedUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		enableCancelBtn();
+//		ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -594,10 +693,10 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_line));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_line));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.NORMAL);
-		tv_arrived_circle.setTypeface(null, Typeface.BOLD);
-		tv_inservice_circle.setTypeface(null, Typeface.NORMAL);
-		tv_completed_circle.setTypeface(null, Typeface.NORMAL);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.BOLD);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 
 		dispatched_circle.setImageResource(R.drawable.shape_solid_circle);
 		arrived_circle.setImageResource(R.drawable.shape_solid_circle);
@@ -606,8 +705,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpInServiceUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+//		ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -615,10 +714,10 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_line));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.NORMAL);
-		tv_arrived_circle.setTypeface(null, Typeface.NORMAL);
-		tv_inservice_circle.setTypeface(null, Typeface.BOLD);
-		tv_completed_circle.setTypeface(null, Typeface.NORMAL);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.BOLD);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 
 		dispatched_circle.setImageResource(R.drawable.shape_solid_circle);
 		arrived_circle.setImageResource(R.drawable.shape_solid_circle);
@@ -627,8 +726,8 @@ public class TrackDetailActivity extends ActionBarActivity {
 	}
 
 	private void setUpInCompletedUI() {
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_btn_group.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+		//ll_btn_group.setVisibility(View.VISIBLE);
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -636,10 +735,10 @@ public class TrackDetailActivity extends ActionBarActivity {
 		tv_inservice_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 		tv_completed_circle.setTextColor(getResources().getColor(R.color.gray_circle));
 
-		tv_dispatched_circle.setTypeface(null, Typeface.NORMAL);
-		tv_arrived_circle.setTypeface(null, Typeface.NORMAL);
-		tv_inservice_circle.setTypeface(null, Typeface.NORMAL);
-		tv_completed_circle.setTypeface(null, Typeface.BOLD);
+		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
+		tv_completed_circle.setTypeface(exo2SemiBold, Typeface.BOLD);
 
 		dispatched_circle.setImageResource(R.drawable.shape_solid_circle);
 		arrived_circle.setImageResource(R.drawable.shape_solid_circle);
@@ -666,7 +765,5 @@ public class TrackDetailActivity extends ActionBarActivity {
 		});
 		builder.show();
 	}
-
-
 
 }

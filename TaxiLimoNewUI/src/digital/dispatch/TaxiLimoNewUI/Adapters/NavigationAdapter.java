@@ -1,6 +1,7 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,12 @@ import digital.dispatch.TaxiLimoNewUI.R;
 public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 
 	private ViewHolder holder;	
+	private static Context context;
+	private Typeface ex2Medium;
 	public NavigationAdapter(Context context) {
 		super(context, 0);
+		this.context = context;
+		ex2Medium = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Medium.ttf");
 	}
 
 
@@ -32,11 +37,13 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 		public final ImageView icon;		
 		public final TextView title;		
 		public final LinearLayout colorLinear;
+		private Typeface ex2Medium;
 
 		public ViewHolder(TextView title, ImageView icon, LinearLayout colorLinear) {
 			this.title = title;
 			this.icon = icon;			
 			this.colorLinear = colorLinear;
+			
 		}
 	}
 
@@ -56,7 +63,7 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 
 			TextView txttitle = (TextView) view.findViewById(R.id.title);
 			ImageView imgIcon = (ImageView) view.findViewById(R.id.icon);
-			
+			txttitle.setTypeface(ex2Medium);
 			LinearLayout linearColor = (LinearLayout) view.findViewById(R.id.ns_menu_row);
 			view.setTag(new ViewHolder(txttitle, imgIcon, linearColor));
 		}

@@ -40,10 +40,12 @@ public class ModifyAddressActivity extends BaseActivity {
 	
 	private BroadcastReceiver bcReceiver;
 	private Context _context;
+	
+	public String addressFromMap;
 
 	private TextView tab0_icon;
 	private TextView tab1_icon;
-	private TextView tab2_icon;
+	private TextView tab2_icon; 
 	private TextView tab0_text;
 	private TextView tab1_text;
 	private TextView tab2_text;
@@ -58,7 +60,7 @@ public class ModifyAddressActivity extends BaseActivity {
 		findViews();
 
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
-
+		addressFromMap = getIntent().getStringExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA);
 		setupActionBarTitle();
 		setUpTab();
 		bindEvents();
@@ -76,6 +78,10 @@ public class ModifyAddressActivity extends BaseActivity {
 
 	public boolean getIsDesitination() {
 		return isDesitination;
+	}
+	
+	public CharSequence getAddressFromMap(){
+		return addressFromMap;
 	}
 
 	private void setupActionBarTitle() {
@@ -281,5 +287,6 @@ public class ModifyAddressActivity extends BaseActivity {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 	}
+
 
 }
