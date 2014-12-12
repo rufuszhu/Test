@@ -85,12 +85,14 @@
         android:orientation="vertical" 
         android:visibility="gone">
 
+
         <TextView
+            android:id="@+id/enter_verification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/enter_verification"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="14sp" />
+	        
 
         <EditText
             android:id="@+id/et_code"
@@ -128,11 +130,11 @@
             android:orientation="vertical">
 
         <TextView
+            android:id="@+id/verify_not_receive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_padding"
             android:text="@string/verify_not_receive"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="12sp" />
         
         <LinearLayout
@@ -141,10 +143,10 @@
             android:orientation="horizontal">
 
 	        <TextView
+	            android:id="@+id/verify_check_phone"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/verify_check_phone"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
 	            android:textSize="12sp" />
 	
 	        <TextView
@@ -154,7 +156,6 @@
 	            android:layout_marginLeft="5dp"
 	            android:clickable="true"
 	            android:text="@string/verify_request_new"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
 	            android:textColor="@drawable/request_new_selector"
 	            android:textSize="12sp" />
 
