@@ -54,7 +54,7 @@
     <string name="pin_warning">Without PIN, payment can be used by anyone having access to this phone.\n\nAre you sure you want to continue?</string>
     <string name="warning">WARNING</string>
     <string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
-    <string name="enter_verification">Enter the Verification Code, then click Verify</string>
+    <string name="enter_verification">Enter the Verification Code, then click <b>Verify</b></string>
     <string name="verify_hint">Verification Code form SMS Message</string>
     <string name="verify_not_receive">Did not receive your Verification Code?</string>
     <string name="verify_check_phone">Check your phone number and  </string>

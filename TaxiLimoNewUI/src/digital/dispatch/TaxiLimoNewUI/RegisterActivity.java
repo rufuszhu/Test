@@ -74,7 +74,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		findView();
 		styleView();
 		bindView();
-		updateActionBar();
+		//updateActionBar();
 		_context = this;
 		
 		// Check device for Play Services APK. If check succeeds, proceed with
@@ -220,33 +220,48 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	private void styleView() {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
 		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		Typeface rionaBold = Typeface.createFromAsset(getAssets(),
+				"fonts/RionaSansBold.otf");
+		Typeface rionaMedium = Typeface.createFromAsset(getAssets(),
+				"fonts/RionaSansMedium.otf");
 		
 		name.setTypeface(rionaSansRegular);
 		phone_number.setTypeface(rionaSansRegular);
 		email.setTypeface(rionaSansRegular);
+		et_code.setTypeface(rionaSansRegular);
         question_ic.setTypeface(icon_pack);
         question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
         
-        register_title.setTypeface(rionaSansRegular);
+        TextView verify_not_receive = (TextView) findViewById(R.id.verify_not_receive);
+		TextView verify_check_phone = (TextView) findViewById(R.id.verify_check_phone);
+		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
+		TextView enter_verification = (TextView) findViewById(R.id.enter_verification);
+
+		verify_not_receive.setTypeface(rionaSansRegular);
+		verify_check_phone.setTypeface(rionaSansRegular);
+		request_new_btn.setTypeface(rionaSansRegular);
+		enter_verification.setTypeface(rionaSansRegular);
+	
 		
-		SpannableString spanString = new SpannableString(register_title.getText());
-		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
-		register_title.setText(spanString);	
+		verify_btn.setTypeface(rionaBold);
+		next_btn.setTypeface(rionaBold);
+		
+		TextView register_title = (TextView) findViewById(R.id.register_title);
+		register_title.setTypeface(rionaMedium);
+        
+        
 		
 	}
 	
+	/*
 	private void updateActionBar(){
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(false);
 		actionBar.setIcon(R.color.transparent);
 		actionBar.setIcon(null);
-		int titleId = getResources().getIdentifier("action_bar_title", "id",
-	            "android");
-		Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Light.ttf");
-	    TextView yourTextView = (TextView) findViewById(titleId);
-	    yourTextView.setTypeface(face);
-	}
+	
+	}*/
 		
 	
 	//callback by RegisterDeviceTask
