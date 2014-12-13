@@ -56,6 +56,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
 import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
 
@@ -567,7 +568,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 				}
 
 				kExReq = new KeyExchangeRequest(this, this);
-				kExReq.setDeviceID(Installation.id(context));
+				kExReq.setDeviceID(Utils.getHardWareId(context));
 
 				PublicKey pubKey;
 				byte[] tmpMyPublicKeyBytes = null;
@@ -717,7 +718,7 @@ public class RegisterCreditCardActivity extends BaseActivity implements TextWatc
 				Integer sequenceNum = Integer.valueOf((int) (Math.random() * (MBDefinition.MDT_MAX_SEQUENCE_NUM + 1)));
 
 				tokenReq = new TokenizationRequest(this, this);
-				tokenReq.setDeviceID(Installation.id(context));
+				tokenReq.setDeviceID(Utils.getHardWareId(context));
 				tokenReq.setSequenceNum(sequenceNum.toString());
 				tokenReq.setReqType(params[0]);
 

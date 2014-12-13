@@ -42,6 +42,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
+import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -53,11 +54,11 @@ public class BookActivity extends BaseActivity {
 	private Context _this;
 	private RelativeLayout rl_pick_up, rl_drop_off, rl_date, rl_driver_note, rl_company;
 	private TextView tv_pick_up, tv_drop_off, tv_date, tv_driver_note, tv_company, book_btn;
-	private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title
-	,angle_right3, angle_right2,angle_right1;
+	private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title, angle_right3, angle_right2,
+			angle_right1;
 	private BroadcastReceiver bcReceiver;
 
-	@Override 
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book);
@@ -72,7 +73,7 @@ public class BookActivity extends BaseActivity {
 		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
 		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
-		
+
 		icon_pickup.setTypeface(fontAwesome);
 		icon_dropoff.setTypeface(fontAwesome);
 		icon_date.setTypeface(icon_pack);
@@ -81,17 +82,17 @@ public class BookActivity extends BaseActivity {
 		angle_right1.setTypeface(fontAwesome);
 		angle_right2.setTypeface(fontAwesome);
 		angle_right3.setTypeface(fontAwesome);
-		
+
 		icon_pickup.setText(MBDefinition.ICON_PERSON);
 		icon_dropoff.setText(MBDefinition.ICON_DROPOFF);
 		icon_date.setText(MBDefinition.icon_tab_calendar);
 		icon_note.setText(MBDefinition.ICON_COMMENT);
 		icon_company.setText(MBDefinition.ICON_COMPANY);
-		
+
 		angle_right1.setText(MBDefinition.ICON_ANGLE_RIGHT);
 		angle_right2.setText(MBDefinition.ICON_ANGLE_RIGHT);
 		angle_right3.setText(MBDefinition.ICON_ANGLE_RIGHT);
-		
+
 		tv_date_title.setTypeface(rionaSansRegular);
 		tv_note_title.setTypeface(rionaSansRegular);
 		tv_company_title.setTypeface(rionaSansRegular);
@@ -105,28 +106,28 @@ public class BookActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
-		//TL-235
+		// TL-235
 		boolean isTrackDetail = false;
 		bcReceiver = CommonUtilities.getGenericReceiver(_this, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		//checkGPSEnable();
 		checkInternet();
+		setEstFareIfExist(null);
 		setPickupIfExist();
 		setDropOffIfExist();
 		setTimeIfExist();
 		setDriverNoteIfExist();
 		setCompanyIfExist();
 	}
-	
+
 	@Override
-	public void onPause(){
-		//TL-235
+	public void onPause() {
+		// TL-235
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Logger.e("onActivityResult");
@@ -138,29 +139,83 @@ public class BookActivity extends BaseActivity {
 		}
 	}
 
+	private void setEstFareIfExist(CompanyItem[] tempCompList) {
+		// TL-88 add fare estimate if drop off address is set and baseRate set up
+		RelativeLayout rl_fare = (RelativeLayout) findViewById(R.id.rl_fare);
+		//if there is a selected company
+		if (Utils.mDropoffAddress != null && Utils.mSelectedCompany != null && Utils.mSelectedCompany.baseRate != 0
+				&& Utils.mSelectedCompany.ratePerDistance != 0) {
+			Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
+			Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+			Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+			TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
+			TextView tv_est = (TextView) findViewById(R.id.tv_est);
+			TextView tv_mark = (TextView) findViewById(R.id.tv_mark);
+			
+			tv_est_fare.setTypeface(exo2Regular);
+			tv_est.setTypeface(exo2SemiBold);
+			tv_mark.setTypeface(icon_pack);
+			tv_mark.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+			
+			rl_fare.setVisibility(View.VISIBLE);
+			rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_with_fare_selector));
+			rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_with_fare_selector));
+			// --post GB use serial executor by default --
+			new GetEstimateFareTask(tv_est_fare, Utils.mSelectedCompany.baseRate, Utils.mSelectedCompany.ratePerDistance).executeOnExecutor(
+					AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
+					Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
+		}
+		else if(tempCompList!=null && tempCompList.length>0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mDropoffAddress != null){
+			Logger.e(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
+			Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
+			Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+			Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+			TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
+			TextView tv_est = (TextView) findViewById(R.id.tv_est);
+			TextView tv_mark = (TextView) findViewById(R.id.tv_mark);
+			
+			tv_est_fare.setTypeface(exo2Regular);
+			tv_est.setTypeface(exo2SemiBold);
+			tv_mark.setTypeface(icon_pack);
+			tv_mark.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+			
+			rl_fare.setVisibility(View.VISIBLE);
+			rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_with_fare_selector));
+			rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_with_fare_selector));
+			// --post GB use serial executor by default --
+			new GetEstimateFareTask(tv_est_fare, tempCompList[0].baseRate, tempCompList[0].ratePerDistance).executeOnExecutor(
+					AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
+					Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
+		}
+		else {
+			rl_fare.setVisibility(View.GONE);
+			rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_selector));
+			rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_selector));
+		}
+	}
+
 	private void setCompanyIfExist() {
 		// no need to get company list again if pick up city is not changed
-		if(Utils.mSelectedCompany!=null && Utils.last_city.equals(Utils.mPickupAddress.getLocality())){
+		if (Utils.mSelectedCompany != null && Utils.last_city.equals(Utils.mPickupAddress.getLocality())) {
 			tv_company.setText(Utils.mSelectedCompany.name);
-		}
-		else{
+		} else {
 			boolean isFromBooking = true;
 			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
 	private void setDriverNoteIfExist() {
-			if (Utils.driverNoteString.length() > 20) {
-				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
-				tv_driver_note.setText(Utils.driverNoteString.substring(0, 20) + "...");
-			} else if (Utils.driverNoteString.length() == 0) {
-				tv_driver_note.setTextColor(getResources().getColor(R.color.gray_light));
-				tv_driver_note.setText(getString(R.string.empty_note));
-			} else {
-				tv_driver_note.setTextColor(getResources().getColor(R.color.black));
-				tv_driver_note.setText(Utils.driverNoteString);
-			}
-		
+		if (Utils.driverNoteString.length() > 20) {
+			tv_driver_note.setTextColor(getResources().getColor(R.color.black));
+			tv_driver_note.setText(Utils.driverNoteString.substring(0, 20) + "...");
+		} else if (Utils.driverNoteString.length() == 0) {
+			tv_driver_note.setTextColor(getResources().getColor(R.color.gray_light));
+			tv_driver_note.setText(getString(R.string.empty_note));
+		} else {
+			tv_driver_note.setTextColor(getResources().getColor(R.color.black));
+			tv_driver_note.setText(Utils.driverNoteString);
+		}
+
 	}
 
 	private void setTimeIfExist() {
@@ -193,9 +248,10 @@ public class BookActivity extends BaseActivity {
 	}
 
 	private void setPickupIfExist() {
-		if(Utils.mPickupAddress!=null){
-			if(Utils.pickupHouseNumber!=null && !Utils.pickupHouseNumber.equals(""))
-				tv_pick_up.setText(Utils.pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " " + Utils.mPickupAddress.getLocality());
+		if (Utils.mPickupAddress != null) {
+			if (Utils.pickupHouseNumber != null && !Utils.pickupHouseNumber.equals(""))
+				tv_pick_up.setText(Utils.pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " "
+						+ Utils.mPickupAddress.getLocality());
 			else
 				tv_pick_up.setText(LocationUtils.addressToString(_this, Utils.mPickupAddress));
 		}
@@ -258,6 +314,7 @@ public class BookActivity extends BaseActivity {
 
 	private void findView() {
 		rl_pick_up = (RelativeLayout) findViewById(R.id.rl_pickup);
+
 		rl_drop_off = (RelativeLayout) findViewById(R.id.rl_drop_off);
 		rl_date = (RelativeLayout) findViewById(R.id.rl_date);
 		rl_driver_note = (RelativeLayout) findViewById(R.id.rl_driver_note);
@@ -269,7 +326,7 @@ public class BookActivity extends BaseActivity {
 		tv_driver_note = (TextView) findViewById(R.id.tv_driver_note);
 		tv_company = (TextView) findViewById(R.id.tv_company);
 		book_btn = (TextView) findViewById(R.id.book_button);
-		
+
 		icon_pickup = (TextView) findViewById(R.id.icon_pickup);
 		icon_dropoff = (TextView) findViewById(R.id.icon_dropoff);
 		icon_date = (TextView) findViewById(R.id.icon_date);
@@ -282,32 +339,20 @@ public class BookActivity extends BaseActivity {
 		angle_right2 = (TextView) findViewById(R.id.angle_right2);
 		angle_right1 = (TextView) findViewById(R.id.angle_right1);
 	}
+
 	/*
-	private void buildAlertMessageNoGps() {
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					public void onClick(final DialogInterface dialog, final int id) {
-						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					public void onClick(final DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
-		final AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-
-	
-	private void checkGPSEnable() {
-		final LocationManager manager = (LocationManager) _this.getSystemService(Context.LOCATION_SERVICE);
-
-		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			buildAlertMessageNoGps();
-		}
-	}*/
+	 * private void buildAlertMessageNoGps() { final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	 * builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false) .setPositiveButton(R.string.yes, new
+	 * DialogInterface.OnClickListener() { public void onClick(final DialogInterface dialog, final int id) { startActivity(new
+	 * Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)); } }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() { public
+	 * void onClick(final DialogInterface dialog, int which) { dialog.cancel(); } }); final AlertDialog alert = builder.create(); alert.show(); }
+	 * 
+	 * 
+	 * 
+	 * private void checkGPSEnable() { final LocationManager manager = (LocationManager) _this.getSystemService(Context.LOCATION_SERVICE);
+	 * 
+	 * if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { buildAlertMessageNoGps(); } }
+	 */
 
 	private void checkInternet() {
 		Utils.isInternetAvailable(_this);
@@ -530,7 +575,7 @@ public class BookActivity extends BaseActivity {
 		houseNumRangeDialog.setCanceledOnTouchOutside(true);
 		houseNumRangeDialog.show();
 	}
-	
+
 	public void showBookSuccessDialog() {
 		Dialog messageDialog = new Dialog(this);
 		Context _this = this;
@@ -540,14 +585,14 @@ public class BookActivity extends BaseActivity {
 		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
 		tv_message.setText(_this.getString(R.string.message_book_successful));
-		messageDialog.setOnCancelListener(new OnCancelListener(){
+		messageDialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				finish();
 			}
 		});
 		messageDialog.show();
-	
+
 	}
 
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String locality) {
@@ -563,6 +608,6 @@ public class BookActivity extends BaseActivity {
 			tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
 			tv_company.setText(getString(R.string.choose));
 		}
-		
+		setEstFareIfExist(tempCompList);
 	}
 }

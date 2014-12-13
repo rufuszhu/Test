@@ -40,6 +40,7 @@ import digital.dispatch.TaxiLimoNewUI.Task.DeleteCreditCardTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -551,7 +552,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 				}
 
 				kExReq = new KeyExchangeRequest(this, this);
-				kExReq.setDeviceID(Installation.id(EditCreditCardActivity.this));
+				kExReq.setDeviceID(Utils.getHardWareId(EditCreditCardActivity.this));
 
 				PublicKey pubKey;
 				byte[] tmpMyPublicKeyBytes = null;
@@ -702,7 +703,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 				Integer sequenceNum = Integer.valueOf((int) (Math.random() * (MBDefinition.MDT_MAX_SEQUENCE_NUM + 1)));
 
 				tokenReq = new TokenizationRequest(this, this);
-				tokenReq.setDeviceID(Installation.id(EditCreditCardActivity.this));
+				tokenReq.setDeviceID(Utils.getHardWareId(EditCreditCardActivity.this));
 				tokenReq.setSequenceNum(sequenceNum.toString());
 				tokenReq.setReqType(params[0]);
 

@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
@@ -18,6 +19,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
 import digital.dispatch.TaxiLimoNewUI.Installation;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
@@ -31,16 +33,18 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 	private RegDevRequest rdReq;
 	private Context _context;
 	private String GCMRegisterID;
-	private boolean isFirstTime, sendVerifySMS;
+	private boolean isFirstTime, sendVerifySMS, isUpdateGCM;
 	private static final int RESPONSE_STATUS_INVALID_EMAIL = 2;
 	private static final int RESPONSE_STATUS_BLACKLISTED = 3;
 
-	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime, boolean sendVerifySMS) {
+	public RegisterDeviceTask(Context context, String GCMRegisterID, boolean isFirstTime, boolean sendVerifySMS, boolean isUpdateGCM) {
 		rdReq = new RegDevRequest(this, this);
 		_context = context;
 		this.GCMRegisterID = GCMRegisterID;
 		this.isFirstTime = isFirstTime;
 		this.sendVerifySMS = sendVerifySMS;
+		//this is used only when old users to update the GCM id after they update the app 
+		this.isUpdateGCM = isUpdateGCM;
 	}
 
 	// The code to be executed in a background thread.
@@ -77,7 +81,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 				rdReq.setSmsverify("N");
 			rdReq.setVersion(versionName);
 			rdReq.setProtocol(_context.getString(R.string.protocol));
-			rdReq.setHardwareID(Installation.id(_context));
+			rdReq.setHardwareID(Utils.getHardWareId(_context));
 			rdReq.settype("Android " + Build.VERSION.RELEASE);
 			rdReq.sendRequest(_context.getString(R.string.name_space), _context.getString(R.string.url));
 
@@ -131,7 +135,10 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		Utils.stopProcessingDialog(_context);
 		String str = "";
 		str = response.getStatus() + " :: " + response.getErrorString();
-		if(isFirstTime)
+		if(isUpdateGCM){
+			//do nothing
+		}
+		else if(isFirstTime)
 			((RegisterActivity)_context).showRegisterSuccessMessage();
 		else
 			((ProfileActivity)_context).showResendSuccessMessage();
@@ -159,5 +166,9 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		 * //wifi }
 		 */
 	}
+	
+
+	
+
 
 }

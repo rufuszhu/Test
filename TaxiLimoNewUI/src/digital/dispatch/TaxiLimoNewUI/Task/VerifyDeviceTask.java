@@ -52,7 +52,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 			rdReq.setPhoneNr(phone);
 			rdReq.setProtocol(_context.getString(R.string.protocol));
-			rdReq.setHardwareID(Installation.id(_context));
+			rdReq.setHardwareID(Utils.getHardWareId(_context));
 			rdReq.setSmsCode(smsCode);
 			rdReq.sendRequest(_context.getString(R.string.name_space), _context.getString(R.string.url));
 		} catch (Exception e) {

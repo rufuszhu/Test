@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
@@ -38,6 +40,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
@@ -65,6 +68,23 @@ public class Utils {
 	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_about };
 	public static String pickupHouseNumber = "";
 
+	
+	//use the old hardwareId if exist, otherwise create a new one and save it in share preference
+	public static String getHardWareId(Context _context) {
+		final SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(_context);
+		String hardwareId = prefs.getString(MBDefinition.PROPERTY_HARDWARE_ID, "");
+		
+		if (hardwareId.isEmpty()) {
+			Logger.i("HardwareID not found, first time install.");
+			hardwareId = Installation.id(_context);
+			SharedPreferencesManager.savePreferences(prefs, MBDefinition.PROPERTY_HARDWARE_ID, hardwareId);
+			return hardwareId;
+		}
+		
+		else{
+			return hardwareId;
+		}
+	}
 	// get title of the item navigation
 	public static String getTitleItem(Context context, int posicao) {
 		String[] titulos = context.getResources().getStringArray(R.array.nav_menu_items);
@@ -113,7 +133,7 @@ public class Utils {
 		 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 		 				urlc.setRequestProperty("User-Agent", "test");
 		 				urlc.setRequestProperty("Connection", "close");
-		 				urlc.setConnectTimeout(1000); // mTimeout is in seconds
+		 				urlc.setConnectTimeout(5000); // mTimeout is in 5 seconds
 		 				urlc.connect();
 		 				if (urlc.getResponseCode() == 200) {
 		 					return true;

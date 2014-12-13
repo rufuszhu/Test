@@ -309,10 +309,11 @@ public class ProfileActivity extends BaseActivity implements OnFocusChangeListen
 					
 					// send register device again
 					boolean isFirstTime = false; // set this parameter to false when called from profile page
+					boolean isUpdateGCM = false;
 					String regid = getRegistrationId(_context);
 					
 					//new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS).execute();
-					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS,isUpdateGCM);
 					String[] params = {edtName.getText().toString(), edtUEmail.getText().toString(), edtPhone.getText().toString()};
 					task.execute(params);
 					Utils.showProcessingDialog(_context);
@@ -351,9 +352,10 @@ public class ProfileActivity extends BaseActivity implements OnFocusChangeListen
 					
 					boolean isFirstTime = false; // set this parameter to false when called from profile page
 					sendVerifySMS = true;
+					boolean isUpdateGCM = false;
 					String regid = getRegistrationId(_context);
 			
-					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS);
+					RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, sendVerifySMS,isUpdateGCM);
 					String[] params = {edtName.getText().toString(), edtUEmail.getText().toString(), edtPhone.getText().toString()};
 					task.execute(params);
 					Utils.showProcessingDialog(_context);

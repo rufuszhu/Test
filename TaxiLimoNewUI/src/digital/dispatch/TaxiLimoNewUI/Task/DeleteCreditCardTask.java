@@ -13,6 +13,7 @@ import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class DeleteCreditCardTask extends AsyncTask<String, Integer, Void> implements ITokenizationResponseListener, IRequestTimerListener {
 	private static final String TAG = "DeleteCreditCardTask";
@@ -30,7 +31,7 @@ public class DeleteCreditCardTask extends AsyncTask<String, Integer, Void> imple
 			Integer sequenceNum = Integer.valueOf((int) (Math.random() * (MBDefinition.MDT_MAX_SEQUENCE_NUM + 1)));
 
 			tokenReq = new TokenizationRequest(this, this);
-			tokenReq.setDeviceID(Installation.id(context));
+			tokenReq.setDeviceID(Utils.getHardWareId(context));
 			tokenReq.setSequenceNum(sequenceNum.toString());
 			tokenReq.setReqType("3");
 			tokenReq.setToken(params[0]);
