@@ -68,7 +68,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 		bjReq.setAdviseArrival("1");
 		bjReq.setForcedAddressFlag("Y");
 		bjReq.setPriority("N");
-		bjReq.setHardwareID(Installation.id(_context));
+		bjReq.setHardwareID(Utils.getHardWareId(_context));
 		bjReq.setOSPVersion("3.0");
 
 		String multiPay_allow = "";

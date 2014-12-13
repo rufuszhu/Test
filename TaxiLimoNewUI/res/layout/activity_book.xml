@@ -6,248 +6,290 @@
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" >
 
     <RelativeLayout
-        android:id="@+id/rl_pickup"
+        android:id="@+id/address_box"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/book_activity_box_height"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/searchbar_selector">
-        
-        <TextView
-            android:id="@+id/icon_pickup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/green"
-            android:textSize="@dimen/book_activity_icon_size"
-            android:layout_marginLeft="@dimen/normal_padding"/>
+        android:layout_height="@dimen/book_activity_addres_box_height"
+        android:layout_alignParentTop="true" >
 
-        <TextView
-            android:id="@+id/tv_pickup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/icon_pickup"
-            android:singleLine="true"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/book_activity_font_size"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-        
+        <RelativeLayout
+            android:id="@+id/rl_pickup"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/book_activity_box_height"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/rl_fare"
+            android:background="@drawable/pickup_selector" >
+
+            <TextView
+                android:id="@+id/icon_pickup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:textColor="@color/green"
+                android:textSize="@dimen/book_activity_icon_size" />
+
+            <TextView
+                android:id="@+id/tv_pickup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/icon_pickup"
+                android:singleLine="true"
+                android:textSize="@dimen/book_activity_font_size" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_drop_off"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/book_activity_box_height"
+            android:layout_below="@+id/rl_pickup"
+            android:layout_toLeftOf="@+id/rl_fare"
+            android:background="@drawable/dropoff_selector" >
+
+            <TextView
+                android:id="@+id/icon_dropoff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:textColor="@color/red_color"
+                android:textSize="@dimen/book_activity_icon_size" />
+
+            <TextView
+                android:id="@+id/tv_drop_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/icon_dropoff"
+                android:singleLine="true"
+                android:text="@string/enter_for_est_fare"
+                android:textColor="@color/list_gray_text"
+                android:textSize="@dimen/book_activity_font_size" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_fare"
+            android:layout_width="@dimen/fare_est_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/fare_estimate_selector"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/tv_est_fare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:singleLine="true"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_est_fare"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tv_est"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/estimate"
+                    android:textSize="12sp" />
+				                
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/tv_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red_color"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
-    
-    <RelativeLayout
-        android:id="@+id/rl_drop_off"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_pickup"
-        android:background="@drawable/searchbar_selector">
-        
-        <TextView
-            android:id="@+id/icon_dropoff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/red_color"
-            android:textSize="@dimen/book_activity_icon_size"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-        
-        <TextView
-            android:id="@+id/tv_drop_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/icon_dropoff"
-            android:singleLine="true"
-            android:layout_centerVertical="true"
-            android:text="@string/enter_for_est_fare"
-            android:textSize="@dimen/book_activity_font_size"
-            android:textColor="@color/list_gray_text"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-    </RelativeLayout>
-    
+
     <RelativeLayout
         android:id="@+id/rl_date"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
-        android:layout_below="@+id/rl_drop_off"
+        android:layout_below="@+id/address_box"
         android:layout_marginTop="@dimen/normal_padding"
-        android:background="@drawable/searchbar_selector">
-        
+        android:background="@drawable/searchbar_selector" >
+
         <TextView
             android:id="@+id/icon_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:textSize="@dimen/book_activity_icon_size"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-        
+            android:textSize="@dimen/book_activity_icon_size" />
+
         <TextView
             android:id="@+id/tv_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:layout_toRightOf="@+id/icon_date"
             android:singleLine="true"
-            android:layout_centerVertical="true"
+            android:text="@string/date_title"
             android:textColor="@color/green"
-            android:layout_marginLeft="@dimen/normal_padding"
-            android:textSize="@dimen/book_activity_font_size"
-            android:text="@string/date_title"/>
-        
-        
+            android:textSize="@dimen/book_activity_font_size" />
+
         <TextView
             android:id="@+id/angle_right1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:textSize="@dimen/angle_right_size"
-            android:layout_marginRight="@dimen/normal_padding"/>
-        
-        
+            android:textSize="@dimen/angle_right_size" />
+
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/normal_padding"
             android:layout_toLeftOf="@+id/angle_right1"
             android:layout_toRightOf="@+id/tv_date_title"
             android:gravity="right"
             android:singleLine="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/list_gray_text"
-            android:textSize="@dimen/book_activity_font_size"
             android:text="@string/now"
-            android:layout_marginRight="@dimen/normal_padding"/>
+            android:textColor="@color/list_gray_text"
+            android:textSize="@dimen/book_activity_font_size" />
     </RelativeLayout>
-    
+
     <RelativeLayout
         android:id="@+id/rl_driver_note"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
         android:layout_below="@+id/rl_date"
         android:layout_marginTop="@dimen/normal_padding"
-        android:background="@drawable/searchbar_selector">
-        
+        android:background="@drawable/searchbar_selector" >
+
         <TextView
             android:id="@+id/icon_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/book_activity_icon_size"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-        
+            android:textSize="@dimen/book_activity_icon_size" />
+
         <TextView
             android:id="@+id/tv_note_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:layout_toRightOf="@+id/icon_note"
             android:singleLine="true"
-            android:layout_centerVertical="true"
+            android:text="@string/note_title"
             android:textColor="@color/green"
-            android:textSize="@dimen/book_activity_font_size"
-            android:layout_marginLeft="@dimen/normal_padding"
-            android:text="@string/note_title"/>
-        
-        
+            android:textSize="@dimen/book_activity_font_size" />
+
         <TextView
             android:id="@+id/angle_right2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/angle_right_size"
+            android:layout_marginRight="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:layout_marginRight="@dimen/normal_padding"/>
-        
-        
+            android:textSize="@dimen/angle_right_size" />
+
         <TextView
             android:id="@+id/tv_driver_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/normal_padding"
             android:layout_toLeftOf="@+id/angle_right2"
             android:layout_toRightOf="@+id/tv_note_title"
-            android:singleLine="true"
-            android:layout_centerVertical="true"
             android:gravity="right"
+            android:singleLine="true"
             android:textColor="@color/list_gray_text"
-            android:textSize="@dimen/book_activity_font_size"
-            android:layout_marginRight="@dimen/normal_padding"/>
+            android:textSize="@dimen/book_activity_font_size" />
     </RelativeLayout>
-    
-   <RelativeLayout
+
+    <RelativeLayout
         android:id="@+id/rl_company"
         android:layout_width="match_parent"
         android:layout_height="@dimen/book_activity_box_height"
         android:layout_below="@+id/rl_driver_note"
-        android:background="@drawable/searchbar_selector"
-        android:layout_marginTop="@dimen/normal_padding">
+        android:layout_marginTop="@dimen/normal_padding"
+        android:background="@drawable/searchbar_selector" >
 
-        
         <TextView
             android:id="@+id/icon_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/book_activity_icon_size"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:layout_marginLeft="@dimen/normal_padding"/>
-        
+            android:textSize="@dimen/book_activity_icon_size" />
+
         <TextView
             android:id="@+id/tv_company_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:layout_toRightOf="@+id/icon_company"
             android:singleLine="true"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/book_activity_font_size"
+            android:text="@string/company_title"
             android:textColor="@color/green"
-            android:layout_marginLeft="@dimen/normal_padding"
-            android:text="@string/company_title"/>
-        
-        
+            android:textSize="@dimen/book_activity_font_size" />
+
         <TextView
             android:id="@+id/angle_right3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/angle_right_size"
+            android:layout_marginRight="@dimen/normal_padding"
             android:textColor="@color/green"
-            android:layout_marginRight="@dimen/normal_padding"/>
-        
-        
+            android:textSize="@dimen/angle_right_size" />
+
         <TextView
             android:id="@+id/tv_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/normal_padding"
             android:layout_toLeftOf="@+id/angle_right3"
             android:singleLine="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/list_gray_text"
             android:text="@string/choose"
-            android:textSize="@dimen/book_activity_font_size"
-            android:layout_marginRight="@dimen/normal_padding"/>
+            android:textColor="@color/list_gray_text"
+            android:textSize="@dimen/book_activity_font_size" />
     </RelativeLayout>
-    
-    
+
     <TextView
-            android:id="@+id/book_button"
-            style="@style/TextDropShadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_book_btn_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/small_padding"
-            android:background="@drawable/green_btn_selector"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="@string/book"
-            android:textColor="@color/white"
-            android:textSize="@dimen/book_font_size"
-            android:textStyle="bold" />
-    
+        android:id="@+id/book_button"
+        style="@style/TextDropShadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/map_book_btn_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/small_padding"
+        android:background="@drawable/green_btn_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/book"
+        android:textColor="@color/white"
+        android:textSize="@dimen/book_font_size"
+        android:textStyle="bold" />
 
 </RelativeLayout>

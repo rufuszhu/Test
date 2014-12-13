@@ -170,10 +170,9 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		tv_street.setTypeface(rionaSansMedium);
 
 		autoCompView.setTypeface(rionaRegularFamily);
-		if (((ModifyAddressActivity) getActivity()).getIsDesitination()){
+		if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
 			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
-		}
-		else{
+		} else {
 			autoCompView.setHint(getActivity().getString(R.string.enter_pickup_address));
 		}
 		autoCompView.setText(((ModifyAddressActivity) getActivity()).getAddressFromMap());
@@ -565,12 +564,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
-				if (((ModifyAddressActivity) getActivity()).getIsDesitination())
-					Utils.mDropoffAddress = addressesObj.get(which);
-				else
-					Utils.mPickupAddress = addressesObj.get(which);
-				getActivity().finish();
+				if (isAdded()) {
+					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
+						Utils.mDropoffAddress = addressesObj.get(which);
+					else
+						Utils.mPickupAddress = addressesObj.get(which);
+					getActivity().finish();
+				} else {
+					dialog.dismiss();
+				}
 			}
 		});
 		builderSingle.show();

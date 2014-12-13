@@ -225,6 +225,8 @@
     <string name="company_title">Company</string>
     <string name="choose">Choose</string>
     <string name="enter_for_est_fare">Enter your destination for fare estimate</string>
+    <string name="estimate">ESTIMATE</string>
+    
 
     <!-- Payment -->
     <string name="add_credit_card">Add Credit Card</string>

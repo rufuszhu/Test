@@ -92,9 +92,11 @@ public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {
 			double baseRateInCents = (double) baseRate;
 			double dynamicRateCentPerKM = (double) ratePerDistance;
 			double finalFare = (baseRateInCents + (dynamicRateCentPerKM * distance / 1000)) / 100;
-			
-			fareView.setText("$" + new DecimalFormat("##.00").format(finalFare));
-			
+//			int finalFare = baseRate + (ratePerDistance * (int)distance/1000);
+			Logger.e("finalFare: " + finalFare);
+			Logger.e("distance: " + distance);
+			//fareView.setText("$" + new DecimalFormat("##.00").format(finalFare));
+			fareView.setText("$" + (int)Math.ceil(finalFare));
 		}
 		
 	}

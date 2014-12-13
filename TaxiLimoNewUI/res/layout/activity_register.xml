@@ -44,7 +44,7 @@
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textPersonName"
-            android:paddingLeft="@dimen/normal_padding"
+            android:paddingLeft="@dimen/big_margin"
             android:selectAllOnFocus="true" >
         </EditText>
 
@@ -59,7 +59,7 @@
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/normal_padding" />
+            android:paddingLeft="@dimen/big_margin" />
 
         
 
@@ -72,7 +72,7 @@
             android:ems="10"
             android:hint="@string/phone_number"
             android:inputType="phone"
-            android:paddingLeft="@dimen/normal_padding" />
+            android:paddingLeft="@dimen/big_margin" />
     </LinearLayout>
     
     <LinearLayout
@@ -103,7 +103,7 @@
             android:background="@drawable/editbox_background"
             android:hint="@string/verify_hint"
             android:layout_marginLeft="-5dp"
-            android:paddingLeft="@dimen/normal_padding">
+            android:paddingLeft="@dimen/big_margin">
 			
             <requestFocus />
         </EditText>

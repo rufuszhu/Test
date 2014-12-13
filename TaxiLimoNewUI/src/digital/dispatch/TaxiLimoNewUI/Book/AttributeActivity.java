@@ -61,7 +61,7 @@ public class AttributeActivity extends BaseActivity {
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
-		
+
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
@@ -88,32 +88,35 @@ public class AttributeActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		refreshing = true;
+//		refreshing = true;
+		boolean isFromBooking = false;
+		new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if(id==android.R.id.home){
+		if (id == android.R.id.home) {
 			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		Logger.e(TAG, "onCreateOptionsMenu");
-		getMenuInflater().inflate(R.menu.attribute, menu);
-		refresh_icon = menu.findItem(R.id.action_refresh);
-		if (refreshing) {
-			boolean isFromBooking = false;
-			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			startUpdateAnimation(refresh_icon);
-		} else {
-			refresh_icon.setVisible(false);
-		}
-		return true;
-	}
-
+//
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		Logger.e(TAG, "onCreateOptionsMenu");
+//		getMenuInflater().inflate(R.menu.attribute, menu);
+//		refresh_icon = menu.findItem(R.id.action_refresh);
+//		if (refreshing) {
+//			boolean isFromBooking = false;
+//			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//			startUpdateAnimation(refresh_icon);
+//		} else {
+//			refresh_icon.setVisible(false);
+//		}
+//		return true;
+//	}
 
 	public void startUpdateAnimation(MenuItem item) {
 		// Do animation start
@@ -151,38 +154,40 @@ public class AttributeActivity extends BaseActivity {
 	public void filterCompany(ArrayList<Integer> positive_attribute_IDs) {
 		// selected_attributes = positive_attribute_IDs;
 		Utils.selected_attribute = positive_attribute_IDs;
-		if (positive_attribute_IDs.size() == 0) {
+		if (positive_attribute_IDs.size() == 0 && companyArr!=null) {
 			cp_adapter = new CompanyListAdapter(this, companyArr, shouldBookRightAfter);
 			lv_company.setAdapter(cp_adapter);
 		} else {
-			ArrayList<CompanyItem> temp = new ArrayList<CompanyItem>();
+			if (companyArr!=null && companyArr.length > 0) {
+				ArrayList<CompanyItem> temp = new ArrayList<CompanyItem>();
 
-			for (int i = 0; i < companyArr.length; i++) {
-				boolean hasEverything = true;
-				for (int j = 0; j < positive_attribute_IDs.size(); j++) {
-					if (!companyArr[i].attributes.contains(positive_attribute_IDs.get(j) + "")) {
-						hasEverything = false;
-						break;
+				for (int i = 0; i < companyArr.length; i++) {
+					boolean hasEverything = true;
+					for (int j = 0; j < positive_attribute_IDs.size(); j++) {
+						if (!companyArr[i].attributes.contains(positive_attribute_IDs.get(j) + "")) {
+							hasEverything = false;
+							break;
+						}
 					}
+					if (hasEverything)
+						temp.add(companyArr[i]);
 				}
-				if (hasEverything)
-					temp.add(companyArr[i]);
-			}
 
-			// arrayList to array
-			CompanyItem[] compArr = new CompanyItem[temp.size()];
-			for (int i = 0; i < temp.size(); i++) {
-				compArr[i] = temp.get(i);
-			}
+				// arrayList to array
+				CompanyItem[] compArr = new CompanyItem[temp.size()];
+				for (int i = 0; i < temp.size(); i++) {
+					compArr[i] = temp.get(i);
+				}
 
-			cp_adapter = new CompanyListAdapter(this, compArr, shouldBookRightAfter);
-			lv_company.setAdapter(cp_adapter);
+				cp_adapter = new CompanyListAdapter(this, compArr, shouldBookRightAfter);
+				lv_company.setAdapter(cp_adapter);
+			}
 		}
 	}
 
 	// called from getCompanyListResponse, load attribute grid here to prevent user filter before get company request is done
 	public void loadCompanyList(CompanyItem[] tempCompList) {
-		stopUpdateAnimation();
+		//stopUpdateAnimation();
 		companyArr = tempCompList;
 
 		for (int i = 0; i < tempCompList.length; i++) {

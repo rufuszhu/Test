@@ -22,7 +22,7 @@ public class RegisterConfirmActivity extends BaseActivity {
 
 	private Context _context;
 	private CheckBox check_box;
-	private TextView register_btn, confirmTitle, chkWarning;
+	private TextView register_btn, confirmTitle, chkWarning, eula;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,8 @@ public class RegisterConfirmActivity extends BaseActivity {
 		register_btn = (TextView) findViewById(R.id.register_confirm_btn);
 		confirmTitle = (TextView) findViewById(R.id.confirm_title);
 		chkWarning = (TextView) findViewById(R.id.chk_warning);
-
+		eula = (TextView) findViewById(R.id.eula);
+		
 		register_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (!check_box.isChecked()) {
@@ -61,14 +62,17 @@ public class RegisterConfirmActivity extends BaseActivity {
 	
 	private void styleView() {
 		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+		Typeface rionaSansLight = Typeface.createFromAsset(getAssets(), "fonts/RionaSans-Light.otf");
+		
 		confirmTitle.setTypeface(rionaSansRegular);
 		SpannableString spanString = new SpannableString(confirmTitle.getText());
 		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
 		confirmTitle.setText(spanString);	
 		
 		chkWarning.setTypeface(rionaSansRegular);
-		
-			
+		eula.setTypeface(rionaSansLight);
+		register_btn.setTypeface(rionaSansBold);
 	}
 	
 	

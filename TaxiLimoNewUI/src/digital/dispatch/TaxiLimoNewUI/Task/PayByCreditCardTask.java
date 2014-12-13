@@ -56,7 +56,7 @@ public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implemen
 			pbtReq.setSysPassword(MBDefinition.SYSTEM_PASSWORD);
 			pbtReq.setSysID(dbBook.getSysId());
 			pbtReq.setDestID(dbBook.getDestID());
-			pbtReq.setDeviceID(Installation.id(_context));
+			pbtReq.setDeviceID(Utils.getHardWareId(_context));
 			pbtReq.setSeqenceNum(sequenceNum.toString());
 			pbtReq.setReqType("1");
 			pbtReq.setToken(cCard.getToken());
