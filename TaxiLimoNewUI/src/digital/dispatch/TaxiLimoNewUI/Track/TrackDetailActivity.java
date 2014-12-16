@@ -448,9 +448,7 @@ public class TrackDetailActivity extends BaseActivity {
 				builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-						dbBook.setTripCancelledTime(System.currentTimeMillis() + "");
-						bookingDao.update(dbBook);
+						
 						new CancelJobTask(_context, dbBook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 					}
 				});
@@ -782,7 +780,7 @@ public class TrackDetailActivity extends BaseActivity {
 
 	public void showCancelDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-		builder.setMessage("Cancel Successful!").setNegativeButton("OK", new DialogInterface.OnClickListener() {
+		builder.setMessage(R.string.message_cancel_successful).setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
 				finish();
