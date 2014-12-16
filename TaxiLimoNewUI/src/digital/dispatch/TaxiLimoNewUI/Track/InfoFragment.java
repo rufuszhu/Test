@@ -7,9 +7,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -36,6 +38,7 @@ import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class InfoFragment extends Fragment {
@@ -146,7 +149,13 @@ public class InfoFragment extends Fragment {
 		}
 		else{
 			tv_driver.setText("Driver # " + book.getDispatchedDriver());
-			text_driver_btn.setVisibility(View.VISIBLE);
+			//TL-261 if company allow send message to driver then show the button
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			if(SharedPreferencesManager.loadBooleanPreferences(sp, MBDefinition.SHARE_SND_MSG_DRV, false)){
+				text_driver_btn.setVisibility(View.VISIBLE);
+			}else{
+				text_driver_btn.setVisibility(View.INVISIBLE);
+			}
 		}
 		
 		if(book.getDispatchedCar()==null || book.getDispatchedCar().length()==0)
