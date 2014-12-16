@@ -236,6 +236,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					address_bar_text.setText(getActivity().getString(R.string.err_no_pickup_address));
 					setPickupButtonClicked = true; 
 				}
+				
+				//TODO: decide if we should check pickup here
 				// no house number in pickup address
 				else if (!validateHasHouseNumber()) {
 					showEnterHouseNumberDialog();
@@ -245,7 +247,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					Address address = Utils.mPickupAddress;
 					String[] houseNumberRange = TextUtils.split(AddressDaoManager.getHouseNumberFromAddress(address), "-");
 					showHouseRangeDialog(houseNumberRange[0], houseNumberRange[1]);
-				} else {
+				} 
+				else {
 					Intent intent = new Intent(getActivity(), BookActivity.class);
 					((MainActivity) getActivity()).startActivityForAnim(intent);
 				}

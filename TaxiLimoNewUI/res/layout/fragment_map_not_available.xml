@@ -23,8 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/big_margin"
+        android:layout_marginBottom="@dimen/very_big_margin"
         android:textColor="@color/tracking_map_404_font_color"
-        android:text="@string/tracking_map_not_available" />
+        android:text="@string/tracking_map_not_available"
+        android:textSize="@dimen/map_404_font_size" />
 
 </RelativeLayout>

@@ -3,112 +3,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity" >
-    
-    <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:padding="@dimen/very_big_margin"
-         android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/tvVersion"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/version"
-        android:textColor="@color/blue_text"
-        android:textSize="19sp"
-        android:textStyle="bold" />
-    
-    <TextView
-        android:id="@+id/tvVersionNum"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"      
-        android:text="@string/versionNum"
-        android:layout_below="@+id/tvVersion"
-        android:layout_marginTop="@dimen/big_margin"
-        android:textSize="19sp"/>
-    
-    <TextView
-        android:id="@+id/tvContact"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:textColor="@color/blue_text"
-        android:textSize="19sp"
-        android:textStyle="bold" 
-        android:text="@string/contact"
-        android:layout_marginTop="@dimen/big_margin"
-        android:layout_below="@+id/tvVersionNum"/>
-    
-     <TextView
-         android:id="@+id/tvContactNum"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/tvContact"
-         android:gravity="center_vertical|left"
-         android:layout_marginTop="@dimen/big_margin"
-         android:text="@string/contactNum"
-         android:textSize="19sp" />
-     
-     
-
-     <TextView
-         android:id="@+id/tvContactEmail"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/tvContactNum"
-         android:layout_below="@+id/about_call_btn"
-         android:layout_marginTop="36dp"
-         android:text="@string/contactEmail"
-         android:textSize="19sp"/>
-
-     <Button
-         android:id="@+id/about_call_btn"
-         android:layout_width="100dp"
-         android:layout_height="39dp"
-         android:layout_alignBaseline="@+id/tvContactNum"
-         android:layout_alignBottom="@+id/tvContactNum"
-         android:layout_alignRight="@+id/tvVersionNum"
-         android:background="@drawable/btn_call" />
-
-     <Button
-         android:id="@+id/about_email_btn"
-         android:layout_width="100dp"
-         android:layout_height="39dp"
-         android:layout_alignBaseline="@+id/tvContactEmail"
-         android:layout_alignBottom="@+id/tvContactEmail"
-         android:layout_alignLeft="@+id/about_call_btn"
-         android:background="@drawable/btn_email"
-         android:gravity="center_vertical|center_horizontal" />
-
-     
-     
-     </RelativeLayout>
-     
     <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_marginBottom="@dimen/big_margin"
-         android:orientation="horizontal"
-         android:gravity="center" >
-     
-        <TextView
-         android:id="@+id/tvAboutFooter"
-         style="@style/TextDropShadowWhite"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         
-         android:text="@string/aboutFooter"
-         android:textColor="@color/gray_light"
-         android:textStyle="bold"
-         android:textSize="15sp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/very_big_margin" >
 
-     <ImageView
-         android:id="@+id/imageView1"
-         android:layout_height="15dp"
-         android:layout_width="40dp"
-         android:src="@drawable/dds_logo" />
-     </LinearLayout>
-     
-    
+        <TextView
+            android:id="@+id/tvVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version"
+            android:textColor="@color/actionbar_background"
+            android:textSize="@dimen/about_font_size" />
+
+        <TextView
+            android:id="@+id/tv_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:text="@string/update"
+            android:textColor="@color/actionbar_background"
+            android:textSize="@dimen/about_font_size"  />
+
+        <TextView
+            android:id="@+id/tvSupport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/support"
+            android:textColor="@color/actionbar_background"
+            android:layout_marginTop="@dimen/big_margin"
+            android:textSize="@dimen/about_font_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_phone_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/actionbar_background"
+                android:textSize="@dimen/about_font_size"  />
+
+            <TextView
+                android:id="@+id/tvContactNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contactNum"
+                android:textColor="@drawable/request_new_selector"
+                android:clickable="true"
+                android:layout_marginLeft="@dimen/small_padding"
+                android:textSize="@dimen/about_font_size"  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_email_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/actionbar_background"
+                android:textSize="@dimen/about_font_size"  />
+
+            <TextView
+                android:id="@+id/tvContactEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contactEmail"
+                android:textSize="@dimen/about_font_size" 
+                
+                android:clickable="true"
+                android:layout_marginLeft="@dimen/small_padding"
+                android:textColor="@drawable/request_new_selector"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAboutFooter"
+        style="@style/TextDropShadowWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:text="@string/aboutFooter"
+        android:textColor="@color/actionbar_background"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

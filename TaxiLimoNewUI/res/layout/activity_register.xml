@@ -179,8 +179,7 @@
             android:textColor="@color/large_btn_text_color"
             android:textSize="@dimen/large_button_font_size"
             android:textStyle="bold" 
-            android:visibility="gone"
-             />
+            android:visibility="gone"/>
    
    <TextView
             android:id="@+id/verify_btn"

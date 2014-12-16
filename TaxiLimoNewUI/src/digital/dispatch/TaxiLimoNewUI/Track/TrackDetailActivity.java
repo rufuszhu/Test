@@ -103,7 +103,7 @@ public class TrackDetailActivity extends BaseActivity {
 	private BroadcastReceiver bcReceiver;
 
 	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
-	private LinearLayout ll_cancel_btn;
+	private LinearLayout ll_cancel_btn, ll_pay_btn;
 	private ImageView zoom_btn;
 	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome, exo2Bold;
 
@@ -156,7 +156,7 @@ public class TrackDetailActivity extends BaseActivity {
 	private void setTab1Text() {
 		tv_id.setText(dbBook.getPickupAddress());
 		if (dbBook.getDropoffAddress() == null || dbBook.getDropoffAddress().length() == 0)
-			tv_book_time.setText("Not Given");
+			tv_book_time.setText("Destination Not Given");
 		else
 			tv_book_time.setText(dbBook.getDropoffAddress());
 		tv_book_time.setTextColor(getResources().getColor(R.color.background_tab_selected));
@@ -264,7 +264,7 @@ public class TrackDetailActivity extends BaseActivity {
 				}
 				if (selected == 1) {
 					setTab1Text();
-					if (dbBook.getCarLatitude() != null && dbBook.getCarLatitude() != 0 && dbBook.getCarLongitude() != 0) {
+					if (shouldShowCar()) {
 						zoom_btn.setVisibility(View.VISIBLE);
 					}
 				}
@@ -387,6 +387,8 @@ public class TrackDetailActivity extends BaseActivity {
 		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon); 
 		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel); 
 		
+		TextView pay_icon = (TextView) findViewById(R.id.pay_icon); 
+		TextView tv_pay = (TextView) findViewById(R.id.tv_pay); 
 
 		arrow_right = (TextView) findViewById(R.id.arrow_right);
 		arrow_right.setTypeface(fontawesome);
@@ -394,6 +396,12 @@ public class TrackDetailActivity extends BaseActivity {
 		cancel_icon.setTypeface(icon_pack);
 		cancel_icon.setText(MBDefinition.ICON_CROSS);
 		tv_cancel.setTypeface(exo2Bold);
+		
+		pay_icon.setTypeface(icon_pack);
+		pay_icon.setText("V");
+		tv_pay.setTypeface(exo2Bold);
+		
+		
 		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 		tv_arrived_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
 		tv_inservice_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
@@ -412,11 +420,9 @@ public class TrackDetailActivity extends BaseActivity {
 		tv_id.setTypeface(exo2SemiBold);
 		tv_book_time.setTypeface(exo2SemiBold);
 
-		// ll_btn_group = (LinearLayout) findViewById(R.id.ll_btn_group);
 		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
-		// ll_cancel_btn_small = (LinearLayout) findViewById(R.id.ll_cancel_btn_small);
-		// ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
-		cancel_cover = findViewById(R.id.cancel_cover);
+		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		//cancel_cover = findViewById(R.id.cancel_cover);
 	}
 
 	private void checkAndDisablePayBtns() {
@@ -577,10 +583,9 @@ public class TrackDetailActivity extends BaseActivity {
 			trans.commit();
 		}
 
-		if (mPager.getCurrentItem() == 1 && (dbBook.getCarLatitude() != 0 || dbBook.getCarLongitude() != 0)) {
+		if (mPager.getCurrentItem() == 1 && (shouldShowCar())) {
 			zoom_btn.setVisibility(View.VISIBLE);
 		} else {
-			tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
 			zoom_btn.setVisibility(View.GONE);
 		}
 
@@ -618,10 +623,19 @@ public class TrackDetailActivity extends BaseActivity {
 		ll_cancel_btn.setVisibility(View.VISIBLE);
 		cancel_cover.setVisibility(View.GONE);
 	}
+	
+	private boolean shouldShowCar(){
+		return (dbBook.getTripStatus()==MBDefinition.MB_STATUS_ARRIVED 
+				|| dbBook.getTripStatus()==MBDefinition.MB_STATUS_ACCEPTED
+				|| dbBook.getTripStatus()==MBDefinition.MB_STATUS_IN_SERVICE) &&
+				dbBook.getCarLatitude() != 0 && dbBook.getCarLongitude() != 0;
+	}
 
 	private void setUpCanceledUI() {
-		disableCancelBtn();
-		//ll_btn_group.setVisibility(View.GONE);
+		//disableCancelBtn();
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_pay_btn.setVisibility(View.GONE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -641,8 +655,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setupBookedUI() {
-		enableCancelBtn();
-		//ll_btn_group.setVisibility(View.GONE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_line));
@@ -662,8 +678,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpAcceptedUI() {
-		enableCancelBtn();
-		//ll_btn_group.setVisibility(View.GONE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -684,8 +702,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpArrivedUI() {
-		enableCancelBtn();
-//		ll_btn_group.setVisibility(View.VISIBLE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -705,8 +725,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInServiceUI() {
-		disableCancelBtn();
-//		ll_btn_group.setVisibility(View.VISIBLE);
+		//disableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));
@@ -726,8 +748,11 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInCompletedUI() {
-		disableCancelBtn();
-		//ll_btn_group.setVisibility(View.VISIBLE);
+		//disableCancelBtn();
+		
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
+		
 		infoFragment.updateDriverAndVehicle();
 
 		tv_dispatched_circle.setTextColor(getResources().getColor(R.color.gray_circle));

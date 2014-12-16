@@ -80,6 +80,16 @@ public class MapNotAvailableFragment extends Fragment {
 		textView.setTypeface(rionaSansMedium);
 		icon.setTypeface(icon_pack);
 		icon.setText(MBDefinition.ICON_FUNNEL);
+		
+		
+		DBBooking book = ((TrackDetailActivity) getActivity()).getDBBook();
+		
+		if(book.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED)
+			textView.setText(getActivity().getString(R.string.map_not_available_complete));
+		else if(book.getTripStatus()==MBDefinition.MB_STATUS_CANCELLED)
+			textView.setText(getActivity().getString(R.string.map_not_available_cancel));
+		else
+			textView.setText(getActivity().getString(R.string.tracking_map_not_available));
 	}
 	
 

@@ -174,7 +174,7 @@ public class TripDetailActivity extends BaseActivity {
 				tv_to.setText(dbBook.getDropoffAddress());
 		}
 		else
-			tv_to.setText("Not Given");
+			tv_to.setText("Destination Not Given");
 		
 
 		String prefixURL = getResources().getString(R.string.url);

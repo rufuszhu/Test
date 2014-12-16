@@ -120,7 +120,6 @@ public class InfoFragment extends Fragment {
 		icon_text.setTypeface(icon_pack);
 		icon_call.setTypeface(icon_pack);
 		
-
 		icon_text.setText(MBDefinition.ICON_COMMENT);
 		icon_call.setText(MBDefinition.icon_phone);
 	}

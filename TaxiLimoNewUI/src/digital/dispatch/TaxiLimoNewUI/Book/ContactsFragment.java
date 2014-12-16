@@ -128,7 +128,7 @@ public class ContactsFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		Logger.e(TAG, "on RESUME");
-		//Utils.isInternetAvailable(getActivity());
+		// Utils.isInternetAvailable(getActivity());
 	}
 
 	@Override
@@ -250,7 +250,7 @@ public class ContactsFragment extends ListFragment {
 		private Typeface fontFamily;
 		private Typeface RionaSansMedium;
 		private Typeface RionaSansRegular;
-		
+
 		public List<MyContact> getValues() {
 			return values;
 		}
@@ -277,7 +277,6 @@ public class ContactsFragment extends ListFragment {
 			public LinearLayout viewHeader;
 			public ViewGroup swipeContactView;
 			public TextView green_circle;
-			
 
 		}
 
@@ -299,8 +298,7 @@ public class ContactsFragment extends ListFragment {
 				viewHolder.swipeContactView = (ViewGroup) convertView.findViewById(R.id.swipeContactView);
 				viewHolder.green_circle = (TextView) convertView.findViewById(R.id.green_circle);
 				convertView.setTag(viewHolder);
-			}
-			else{
+			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}
 
@@ -310,14 +308,12 @@ public class ContactsFragment extends ListFragment {
 
 			viewHolder.add_fav_btn.setTypeface(fontFamily);
 			viewHolder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
-			
+
 			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", viewHolder.profile_icon);
 
-			
 			viewHolder.tv_name.setTypeface(RionaSansMedium);
 			viewHolder.tv_name.setText(values.get(position).getName());
-			
-			
+
 			viewHolder.address.setTypeface(RionaSansRegular);
 			viewHolder.address.setText(values.get(position).getAddress());
 			final TextView green_circle = viewHolder.green_circle;
@@ -326,7 +322,7 @@ public class ContactsFragment extends ListFragment {
 				public void onClick(View v) {
 					Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
 					pop.setFillAfter(true);
-					pop.setAnimationListener(new AnimationListener(){
+					pop.setAnimationListener(new AnimationListener() {
 
 						@Override
 						public void onAnimationStart(Animation animation) {
@@ -334,21 +330,23 @@ public class ContactsFragment extends ListFragment {
 
 						@Override
 						public void onAnimationEnd(Animation animation) {
-							((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();	
+							((SwipableListItem) (temp.findViewById(R.id.swipeContactView))).maximize();
 						}
+
 						@Override
 						public void onAnimationRepeat(Animation animation) {
-						}});
-					
+						}
+					});
+
 					green_circle.setVisibility(View.VISIBLE);
 					green_circle.startAnimation(pop);
-					
+
 					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
-					
+
 				}
 			});
-			
-			if(position%2==1){
+
+			if (position % 2 == 1) {
 				viewHolder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
 			viewHolder.viewHeader.setOnClickListener(new OnClickListener() {
@@ -480,7 +478,7 @@ public class ContactsFragment extends ListFragment {
 			} catch (IOException exception1) {
 
 				// Log an error and return an error message
-				if(isAdded())
+				if (isAdded())
 					Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
 
 				// print the stack trace
@@ -491,11 +489,11 @@ public class ContactsFragment extends ListFragment {
 
 				// Catch incorrect latitude or longitude values
 			} catch (IllegalArgumentException exception2) {
-				if(isAdded()){
-				// Construct a message containing the invalid arguments
-				String errorString = getString(R.string.illegal_argument_exception, locationName);
-				// Log the error and print the stack trace
-				Log.e(LocationUtils.APPTAG, errorString);
+				if (isAdded()) {
+					// Construct a message containing the invalid arguments
+					String errorString = getString(R.string.illegal_argument_exception, locationName);
+					// Log the error and print the stack trace
+					Log.e(LocationUtils.APPTAG, errorString);
 				}
 				exception2.printStackTrace();
 
@@ -510,18 +508,16 @@ public class ContactsFragment extends ListFragment {
 		 */
 		@Override
 		protected void onPostExecute(final List<Address> addresses) {
-			if (addresses.size() > 1) {
+			if (addresses == null) {
+				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+			} else if (addresses.size() > 1) {
 				// pop up list
 				boolean isSave = false;
 				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
 			} else if (addresses.size() == 1) {
-				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-					setUpEnterNickNameDialog(addresses.get(0));
-				} else {
-					// street number is invalid
-				}
+				setUpEnterNickNameDialog(addresses.get(0));
 			} else {
-				// R.string.err_invalid_street_name
+				Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
 			}
 		}
 	}
@@ -599,7 +595,7 @@ public class ContactsFragment extends ListFragment {
 
 				// Catch network or other I/O problems.
 			} catch (IOException exception1) {
-				if(isAdded()){
+				if (isAdded()) {
 					// Log an error and return an error message
 					Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
 				}
@@ -611,7 +607,7 @@ public class ContactsFragment extends ListFragment {
 
 				// Catch incorrect latitude or longitude values
 			} catch (IllegalArgumentException exception2) {
-				if(isAdded()){
+				if (isAdded()) {
 					// Construct a message containing the invalid arguments
 					String errorString = getString(R.string.illegal_argument_exception, locationName);
 					// Log the error and print the stack trace
@@ -637,17 +633,14 @@ public class ContactsFragment extends ListFragment {
 				boolean isSave = true;
 				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
 			} else if (addresses.size() == 1) {
-				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
-						Utils.mDropoffAddress = addresses.get(0);
-					else
-						Utils.mPickupAddress = addresses.get(0);
-					getActivity().finish();
-				} else {
-					setUpEnterNickNameDialog(addresses.get(0));
-				}
+				if (((ModifyAddressActivity) getActivity()).getIsDesitination())
+					Utils.mDropoffAddress = addresses.get(0);
+				else
+					Utils.mPickupAddress = addresses.get(0);
+				getActivity().finish();
+
 			} else {
-				Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_name), getActivity());
+				Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
 
 			}
 		}
@@ -686,10 +679,10 @@ public class ContactsFragment extends ListFragment {
 					DBAddressDao addressDao = daoManager.getAddressDao(DaoManager.TYPE_WRITE);
 					DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
 					Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-					
+
 					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-					((ModifyAddressActivity)getActivity()).favoritesFragment.notifyChange();
+					((ModifyAddressActivity) getActivity()).favoritesFragment.notifyChange();
 					nicknameDialog.dismiss();
 				}
 			}
