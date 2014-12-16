@@ -72,7 +72,9 @@ public class TrackFragment extends ListFragment {
 		DaoManager daoManager = DaoManager.getInstance(getActivity());
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
 		return bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED))
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), 
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_UNKNOWN)) //TL-264
 				.orderDesc(Properties.TripCreationTime).list();
 	}
 
@@ -198,7 +200,9 @@ public class TrackFragment extends ListFragment {
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_READ);
 		CloseableListIterator<DBBooking> iterator = bookingDao
 				.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), 
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_UNKNOWN),
 						Properties.DestID.eq(destId)).listIterator();
 		String rideIdList = "";
 		while (iterator.hasNext()) {

@@ -365,7 +365,9 @@ public class BookActivity extends BaseActivity {
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		CompanyItem selectedCompany = Utils.mSelectedCompany;
 		List<DBBooking> activeBookingList = bookingDao.queryBuilder()
-				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED)).list();
+				.where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED), 
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
+						Properties.TripStatus.notEq(MBDefinition.MB_STATUS_UNKNOWN)).list();
 
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_this);
 

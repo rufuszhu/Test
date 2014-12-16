@@ -358,6 +358,8 @@ public class TrackingMapActivity extends android.support.v4.app.FragmentActivity
 			tv_status.setText("Booked");
 		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE) {
 			tv_status.setText("Trip in Progress");
+		} else if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_UNKNOWN) { //TL-264
+			tv_status.setText("Reached destination");
 		}
 
 	}

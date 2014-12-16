@@ -35,7 +35,8 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		for (int i = 0; i < values.size(); i++) {
 			if (values.get(i).getTaxi_ride_id() == trid) {
 				if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED
-						||dbBook.getTripStatus()==MBDefinition.MB_STATUS_CANCELLED)
+						||dbBook.getTripStatus()==MBDefinition.MB_STATUS_CANCELLED
+						||dbBook.getTripStatus()==MBDefinition.MB_STATUS_UNKNOWN) //TL-264
 					values.remove(i);
 				else
 					values.set(i, dbBook);
@@ -110,8 +111,11 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 			viewHolder.status.setText(context.getString(R.string.in_service));
 			viewHolder.status.setTextColor(context.getResources().getColor(R.color.inservice_color));
 			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.inservice_color));
+		}else if (values.get(position).getTripStatus() == MBDefinition.MB_STATUS_UNKNOWN) { //TL-264
+			viewHolder.status.setText(context.getString(R.string.completed));
+			viewHolder.status.setTextColor(context.getResources().getColor(R.color.completed_color));
+			viewHolder.status_bar.setBackgroundColor(context.getResources().getColor(R.color.completed_color));
 		}
-
 		return convertView;
 	}
 
