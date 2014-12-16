@@ -130,7 +130,7 @@ public class MBDefinition {
 	public final static String ICON_CROSS_CIRCLE = "\ue1fd";
 	public final static String ICON_BOOK_AGAIN = "\ue0db";
 	public final static String ICON_SEARCH_AWESOME = "\uf002";
-	
+	public final static String ICON_MESSAGE = "\ue04d";
 	
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";

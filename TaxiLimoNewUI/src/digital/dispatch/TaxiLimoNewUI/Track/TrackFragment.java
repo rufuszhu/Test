@@ -174,8 +174,10 @@ public class TrackFragment extends ListFragment {
 
 	private ArrayList<Pair<String, String>> getUniqueActiveJobDestIdList() {
 		List<DBBooking> values = getActiveJobs();
-		if(values.size()==0)
-			((BookingListAdapter)getListView().getAdapter()).clear();
+		if(values.size()==0){
+			if((BookingListAdapter)getListView().getAdapter()!=null)
+				((BookingListAdapter)getListView().getAdapter()).clear();
+		}
 		
 		ArrayList<Pair<String, String>> activeDestIdSysIdPairList = new ArrayList<Pair<String, String>>();
 		String oldId = "";

@@ -423,16 +423,13 @@ public class FavoritesFragment extends ListFragment {
 				// pop up list
 				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses);
 			} else if (addresses.size() == 1) {
-				if (Utils.isNumeric(AddressDaoManager.getHouseNumberFromAddress(addresses.get(0)))) {
-					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
-						Utils.mDropoffAddress = addresses.get(0);
-					else
-						Utils.mPickupAddress = addresses.get(0);
-					getActivity().finish();
-				} else {
-					Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_number), getActivity());
 
-				}
+				if (((ModifyAddressActivity) getActivity()).getIsDesitination())
+					Utils.mDropoffAddress = addresses.get(0);
+				else
+					Utils.mPickupAddress = addresses.get(0);
+				getActivity().finish();
+
 			} else {
 				Utils.showErrorDialog(getActivity().getString(R.string.err_invalid_street_name), getActivity());
 
