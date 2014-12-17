@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    
+    android:layout_height="320dp"
+    android:background="@color/background"
+    android:padding="@dimen/normal_padding">
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/warning_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red_color"
+            style="@style/TextDropShadow"
+            android:textSize="@dimen/lock_screen_title_font_size"/>
+        
+        <View
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_denied"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red_color"
+            style="@style/TextDropShadow"
+            android:text="@string/access_denied"
+            android:textSize="@dimen/lock_screen_title_font_size" />
+        
+    </LinearLayout> 
+
+    <TextView
+        android:id="@+id/tv_lock_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_title"
+        android:layout_above="@+id/ll_call"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:layout_marginTop="@dimen/normal_padding"
+        android:layout_marginLeft="@dimen/big_margin"
+        android:layout_marginRight="@dimen/big_margin"
+        android:text="@string/lock_screen_text"
+        android:textColor="@color/actionbar_background"
+        android:textSize="@dimen/lock_screen_text_font_size" />
+
+    <LinearLayout
+        android:id="@+id/ll_call"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:orientation="horizontal"
+        android:layout_above="@+id/ll_email" 
+        android:gravity="center"
+        android:background="@drawable/searchbar_selector">
+
+        <TextView
+            android:id="@+id/icon_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/completed_color"
+            style="@style/TextDropShadow"
+            android:textSize="@dimen/lock_screen_btn_font_size" />
+        
+        <View
+            android:layout_width="@dimen/normal_padding"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_call_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/completed_color"
+            style="@style/TextDropShadow"
+            android:text="@string/call_us"
+            android:textSize="@dimen/lock_screen_btn_font_size" />
+
+    </LinearLayout>
+ 
+    <LinearLayout
+        android:id="@+id/ll_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bot_button_height"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/normal_padding"
+        android:layout_alignParentBottom="true"
+        android:gravity="center" 
+        android:background="@drawable/searchbar_selector">
+
+        <TextView
+            android:id="@+id/icon_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/completed_color"
+            style="@style/TextDropShadow" 
+            android:textSize="@dimen/lock_screen_btn_font_size"/>
+        
+        <View
+            android:layout_width="@dimen/small_padding"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_email_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextDropShadow"
+            android:textColor="@color/completed_color"
+            android:text="@string/email_us" 
+            android:textSize="@dimen/lock_screen_btn_font_size"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -132,14 +132,14 @@ public class MBDefinition {
 	public final static String ICON_BOOK_AGAIN = "\ue0db";
 	public final static String ICON_SEARCH_AWESOME = "\uf002";
 	public final static String ICON_MESSAGE = "\ue04d";
+	public final static String ICON_PHONE_CIRCLE = "\ue062";
+	public final static String ICON_WARNNING = "\ue1ed";
 	
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";
 	public final static String ICON_TRACK_TAXI_RED = "red";
 	public final static String ICON_TRACK_TAXI_ORANGE = "orange";
 	public final static String ICON_TRACK_TAXI_GREEN = "green";
-	
-
 
 	public static final SparseIntArray attrIconMap;
     static {

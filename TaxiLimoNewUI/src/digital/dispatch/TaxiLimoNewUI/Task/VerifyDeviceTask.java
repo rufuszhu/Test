@@ -73,6 +73,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		//TL-248
 		if(resWrapper.getStatus() == VERIFY_DEVICE_RESP_STATUS_BLACKLISTED){
 			//TODO display UI Lock screen
+			Utils.showUILockScreen(_context);
 		}
 		else if (resWrapper.getStatus() == VERIFY_DEVICE_RESP_STATUS_SMS_NOT_MATCH){
 			

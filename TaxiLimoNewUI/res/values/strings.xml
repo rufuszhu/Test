@@ -176,7 +176,7 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx</string>
-    <!-- <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
 
 
     <!-- <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
@@ -390,6 +390,11 @@
     <string name="time_is_local_time">Your selected pickup time is the local time at the pickup location.</string>
     <string name="charaters_left">256 Characters Left</string>
 
+    <string name="lock_screen_text">Your phone number has been blocked from the Zoro service at the request of one of our transportation providers.\n\nIf you need assistance in resolving this issue, please contact us.</string>
+
+    <string name="access_denied">ACCESS DENIED</string>
+    <string name="call_us">CALL US</string>
+    <string name="email_us">EMAIL US</string>
     <!-- Address format -->
 
 

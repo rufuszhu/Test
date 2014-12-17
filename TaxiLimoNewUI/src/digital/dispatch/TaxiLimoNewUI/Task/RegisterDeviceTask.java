@@ -105,7 +105,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		if(resWrapper.getStatus() == RESPONSE_STATUS_INVALID_EMAIL){
 			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_reg_email).setCancelable(false).setPositiveButton(R.string.ok, null).show();
 		}else if(resWrapper.getStatus() == RESPONSE_STATUS_BLACKLISTED){ //TL-248
-			//TODO display UI lock screen
+			Utils.showUILockScreen(_context);
 		}
 		else{
 			new AlertDialog.Builder(_context).setTitle(R.string.err_error_response).setMessage(R.string.err_msg_no_response).setCancelable(false).setPositiveButton(R.string.ok, null).show();
