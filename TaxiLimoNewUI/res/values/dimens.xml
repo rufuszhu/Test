@@ -124,7 +124,7 @@
     <dimen name="cardit_card_form_lable_width">130dp</dimen>
     
     <!-- lock screen -->
-    <dimen name="lock_screen_title_font_size">20sp</dimen>
+    <dimen name="lock_screen_title_font_size">24sp</dimen>
     <dimen name="lock_screen_text_font_size">16sp</dimen>
     <dimen name="lock_screen_btn_font_size">18sp</dimen>
 

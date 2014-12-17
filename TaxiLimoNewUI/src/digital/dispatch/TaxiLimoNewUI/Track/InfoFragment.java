@@ -201,7 +201,7 @@ public class InfoFragment extends Fragment {
 		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		messageDialog.setContentView(R.layout.dialog_driver_message);
 		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		messageDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		messageDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		driverMessage = (EditText) messageDialog.getWindow().findViewById(R.id.message);
 		textRemaining = (TextView) messageDialog.getWindow().findViewById(R.id.text_remaining);
