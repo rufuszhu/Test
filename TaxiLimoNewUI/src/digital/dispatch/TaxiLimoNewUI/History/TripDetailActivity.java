@@ -157,7 +157,8 @@ public class TripDetailActivity extends BaseActivity {
 			tv_from.setText(dbBook.getPickupAddress());
 		
 		//It is safe to assume that the job in this activity is either completed or cancel
-		if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED){
+		if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED ||
+				dbBook.getTripStatus()==MBDefinition.MB_STATUS_UNKNOWN){//TL-264
 			tv_trip_status.setText("Trip Completed");
 			status_icon.setText(MBDefinition.ICON_CHECK_CIRCLE);
 		}
