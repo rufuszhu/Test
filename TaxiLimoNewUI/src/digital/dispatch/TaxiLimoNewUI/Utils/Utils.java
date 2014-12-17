@@ -447,7 +447,7 @@ public class Utils {
 		lockScreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		lockScreenDialog.setContentView(R.layout.dialog_lock_screen);
 		lockScreenDialog.setCanceledOnTouchOutside(false);
-		lockScreenDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lockScreenDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		Typeface icon_pack = Typeface.createFromAsset(context.getAssets(), "fonts/icon_pack.ttf");
 		Typeface rionaMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
 		Typeface exoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Bold.ttf");

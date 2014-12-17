@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/small_padding"
         android:gravity="center">
 
         <TextView
@@ -33,6 +34,7 @@
             android:textColor="@color/red_color"
             style="@style/TextDropShadow"
             android:text="@string/access_denied"
+            
             android:textSize="@dimen/lock_screen_title_font_size" />
         
     </LinearLayout> 
@@ -43,8 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_title"
         android:layout_above="@+id/ll_call"
-        android:layout_marginBottom="@dimen/big_margin"
-        android:layout_marginTop="@dimen/normal_padding"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/big_margin"
         android:layout_marginLeft="@dimen/big_margin"
         android:layout_marginRight="@dimen/big_margin"
         android:text="@string/lock_screen_text"
