@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -22,14 +23,20 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -44,7 +51,9 @@ import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
+import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 
 public class Utils {
 
@@ -62,29 +71,28 @@ public class Utils {
 	// public static boolean mainActivityIsActivated = true;
 	private static Dialog progressDialog;
 
-
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
-//	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
+	// public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
 	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_about };
 	public static String pickupHouseNumber = "";
 
-	
-	//use the old hardwareId if exist, otherwise create a new one and save it in share preference
+	// use the old hardwareId if exist, otherwise create a new one and save it in share preference
 	public static String getHardWareId(Context _context) {
-		final SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(_context);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(_context);
 		String hardwareId = prefs.getString(MBDefinition.PROPERTY_HARDWARE_ID, "");
-		
+
 		if (hardwareId.isEmpty()) {
 			Logger.i("HardwareID not found, first time install.");
 			hardwareId = Installation.id(_context);
 			SharedPreferencesManager.savePreferences(prefs, MBDefinition.PROPERTY_HARDWARE_ID, hardwareId);
 			return hardwareId;
 		}
-		
-		else{
+
+		else {
 			return hardwareId;
 		}
 	}
+
 	// get title of the item navigation
 	public static String getTitleItem(Context context, int posicao) {
 		String[] titulos = context.getResources().getStringArray(R.array.nav_menu_items);
@@ -119,41 +127,40 @@ public class Utils {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 	}
 
-
 	public static void isInternetAvailable(final Context context) {
-		
-		 new AsyncTask<URL, Integer, Boolean>(){
-		     protected Boolean doInBackground(URL... urls) {
-		    	 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-		 		if (activeNetwork != null && activeNetwork.isConnected()) {
-		 			try {
-		 				URL url = new URL("http://www.google.com/");
-		 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-		 				urlc.setRequestProperty("User-Agent", "test");
-		 				urlc.setRequestProperty("Connection", "close");
-		 				urlc.setConnectTimeout(5000); // mTimeout is in 5 seconds
-		 				urlc.connect();
-		 				if (urlc.getResponseCode() == 200) {
-		 					return true;
-		 				} else {
-		 					return false;
-		 				}
-		 			} catch (IOException e) {
-		 				Log.i("warning", "Error checking internet connection", e);
-		 				return false;
-		 			}
-		 		}
+		new AsyncTask<URL, Integer, Boolean>() {
+			protected Boolean doInBackground(URL... urls) {
+				ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		 		return false;
-		     }
+				NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+				if (activeNetwork != null && activeNetwork.isConnected()) {
+					try {
+						URL url = new URL("http://www.google.com/");
+						HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+						urlc.setRequestProperty("User-Agent", "test");
+						urlc.setRequestProperty("Connection", "close");
+						urlc.setConnectTimeout(5000); // mTimeout is in 5 seconds
+						urlc.connect();
+						if (urlc.getResponseCode() == 200) {
+							return true;
+						} else {
+							return false;
+						}
+					} catch (IOException e) {
+						Log.i("warning", "Error checking internet connection", e);
+						return false;
+					}
+				}
 
-		     protected void onPostExecute(Boolean result) {
-		         if(!result)
-		        	 Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
-		     }
-		 }.execute();
+				return false;
+			}
+
+			protected void onPostExecute(Boolean result) {
+				if (!result)
+					Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
+			}
+		}.execute();
 
 	}
 
@@ -203,7 +210,8 @@ public class Utils {
 			mbook.setPickupAddress(LocationUtils.addressToString(context, Utils.mPickupAddress));
 		} else {
 			mbook.setPickup_house_number(pickupHouseNumber);
-			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " " + Utils.mPickupAddress.getLocality());
+			mbook.setPickupAddress(pickupHouseNumber + " " + AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress) + " "
+					+ Utils.mPickupAddress.getLocality());
 		}
 		if (pickup_unit_number != null && pickup_unit_number.length() > 0)
 			mbook.setPickup_unit(pickup_unit_number);
@@ -234,15 +242,13 @@ public class Utils {
 		mbook.setCompany_icon(selectedCompany.logo);
 		mbook.setCompany_name(selectedCompany.name);
 		mbook.setCompany_phone_number(selectedCompany.phoneNr);
-		mbook.setCompany_dupChk_time(selectedCompany.dupChkTime); //added duplicate check time frame to DBBooking table
+		mbook.setCompany_dupChk_time(selectedCompany.dupChkTime); // added duplicate check time frame to DBBooking table
 		mbook.setDestID(selectedCompany.destID);
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
-		//TL-222
+		// TL-222
 		mbook.setCompany_car_file(selectedCompany.carFile);
 
-		
 		mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
-		
 
 		if (selectedCompany.multiPay.equalsIgnoreCase("Y"))
 			mbook.setMulti_pay_allow(true);
@@ -269,10 +275,6 @@ public class Utils {
 		}
 		new BookJobTask(context, mbook).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
-
-
-
-
 
 	/**
 	 * Get ISO 3166-1 alpha-2 country code for this device (or null if not available)
@@ -307,9 +309,7 @@ public class Utils {
 			}
 		});
 
-
 		Dialog errorDialog = builder.create();
-
 
 		if (errorDialog != null) {
 
@@ -338,7 +338,7 @@ public class Utils {
 		progressDialog.getWindow().setBackgroundDrawable(d);
 		progressDialog.setContentView(R.layout.custom_dialog);
 		// uncomment the next line if you want this dialog can't be cancelled by pressing the back key
-		//progressDialog.setCancelable(false);
+		// progressDialog.setCancelable(false);
 
 		DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
 			@Override
@@ -357,71 +357,77 @@ public class Utils {
 	}
 
 	public static void showMessageDialog(String message, Context _context) {
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
 		builder.setMessage(message);
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-	           public void onClick(DialogInterface dialog, int id) {
-	        	   dialog.dismiss();
-	           }
-	       });
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		//Dialog messageDialog = new Dialog(_context);
-		
-//		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		messageDialog.setContentView(R.layout.dialog_message);
-//		messageDialog.setCanceledOnTouchOutside(true);
-//		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-//		tv_message.setText(message);
-//		messageDialog.show();
-	
-	}
+		// Dialog messageDialog = new Dialog(_context);
 
+		// messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// messageDialog.setContentView(R.layout.dialog_message);
+		// messageDialog.setCanceledOnTouchOutside(true);
+		// messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		// TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
+		// tv_message.setText(message);
+		// messageDialog.show();
+
+	}
 
 	public static boolean isNumeric(String str) {
 		// match a number with optional '-'(or '.') in the middle. this is for street number return by google Geo
 		return str.matches("-?\\d+(\\-\\d+)?") || str.matches("-?\\d+(\\.\\d+)?");
 	}
-	
-	//TL-23 check duplicate address
+
+	// TL-23 check duplicate address
 	public static boolean compareAddr(DBBooking booking) {
-		
+
 		String district = Utils.mPickupAddress.getLocality();
-		if(district != null && booking.getPickup_district() != null){
-			if(!district.equalsIgnoreCase(booking.getPickup_district())){ return false; }
+		if (district != null && booking.getPickup_district() != null) {
+			if (!district.equalsIgnoreCase(booking.getPickup_district())) {
+				return false;
+			}
 		}
-		
+
 		String houseNumber = null;
 		if (pickupHouseNumber.equals("")) {
 			houseNumber = AddressDaoManager.getHouseNumberFromAddress(Utils.mPickupAddress);
-		}else{
+		} else {
 			houseNumber = pickupHouseNumber;
 		}
-		
-		if(houseNumber != null && booking.getPickup_house_number() != null){
-			if(!houseNumber.equalsIgnoreCase(booking.getPickup_house_number())){ return false; }
+
+		if (houseNumber != null && booking.getPickup_house_number() != null) {
+			if (!houseNumber.equalsIgnoreCase(booking.getPickup_house_number())) {
+				return false;
+			}
 		}
-		
+
 		String unitNumber = null;
-		if (pickup_unit_number != null && pickup_unit_number.length() > 0){
-			unitNumber = pickup_unit_number;		
+		if (pickup_unit_number != null && pickup_unit_number.length() > 0) {
+			unitNumber = pickup_unit_number;
 		}
-		
-		if(unitNumber != null && booking.getPickup_unit()!= null){
-			if(!unitNumber.equalsIgnoreCase(booking.getPickup_unit())){ return false; }
+
+		if (unitNumber != null && booking.getPickup_unit() != null) {
+			if (!unitNumber.equalsIgnoreCase(booking.getPickup_unit())) {
+				return false;
+			}
 		}
-		
+
 		String streetName = AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress);
-		if(streetName != null && booking.getPickup_street_name() != null){
-			if(!streetName.equalsIgnoreCase(booking.getPickup_street_name())){ return false; }
+		if (streetName != null && booking.getPickup_street_name() != null) {
+			if (!streetName.equalsIgnoreCase(booking.getPickup_street_name())) {
+				return false;
+			}
 		}
-		
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * @return Application's version code from the {@code PackageManager}.
 	 */
@@ -434,5 +440,64 @@ public class Utils {
 			throw new RuntimeException("Could not get package name: " + e);
 		}
 	}
-	
+
+	public static void showUILockScreen(final Context context) {
+
+		final Dialog lockScreenDialog = new Dialog(context);
+		lockScreenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		lockScreenDialog.setContentView(R.layout.dialog_lock_screen);
+		lockScreenDialog.setCanceledOnTouchOutside(false);
+		lockScreenDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		Typeface icon_pack = Typeface.createFromAsset(context.getAssets(), "fonts/icon_pack.ttf");
+		Typeface rionaMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface exoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Bold.ttf");
+		
+		TextView icon_call = (TextView) lockScreenDialog.getWindow().findViewById(R.id.icon_call);
+		TextView icon_email = (TextView) lockScreenDialog.getWindow().findViewById(R.id.icon_email);
+		TextView tv_email_us = (TextView) lockScreenDialog.getWindow().findViewById(R.id.tv_email_us);
+		TextView tv_call_us = (TextView) lockScreenDialog.getWindow().findViewById(R.id.tv_call_us);
+		TextView warning_icon = (TextView) lockScreenDialog.getWindow().findViewById(R.id.warning_icon);
+		TextView tv_denied = (TextView) lockScreenDialog.getWindow().findViewById(R.id.tv_denied);
+		TextView tv_lock_text = (TextView) lockScreenDialog.getWindow().findViewById(R.id.tv_lock_text);
+
+		tv_denied.setTypeface(exoBold);
+		tv_lock_text.setTypeface(rionaMedium);
+		tv_call_us.setTypeface(exoBold);
+		tv_email_us.setTypeface(exoBold);
+		
+		icon_call.setTypeface(icon_pack);
+		icon_email.setTypeface(icon_pack);
+		warning_icon.setTypeface(icon_pack);
+		
+		icon_call.setText(MBDefinition.ICON_PHONE_CIRCLE); 
+		warning_icon.setText(MBDefinition.ICON_WARNNING);
+		icon_email.setText(MBDefinition.ICON_MESSAGE);
+		
+		LinearLayout ll_call = (LinearLayout) lockScreenDialog.getWindow().findViewById(R.id.ll_call);
+		LinearLayout ll_email = (LinearLayout) lockScreenDialog.getWindow().findViewById(R.id.ll_email);
+
+		ll_call.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +"18773378008"));
+				context.startActivity(intent);
+			}
+		});
+
+		ll_email.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "support@zoroapp.com" });
+				i.putExtra(Intent.EXTRA_SUBJECT, "");
+				i.putExtra(Intent.EXTRA_TEXT, "");
+				try {
+					context.startActivity(Intent.createChooser(i, "Send mail..."));
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+
+		lockScreenDialog.show();
+	}
 }
