@@ -25,33 +25,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Filter.FilterListener;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
-import digital.dispatch.TaxiLimoNewUI.Book.FavoritesFragment.ValidateAddressTask;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
+import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 
 public class SearchFragment extends Fragment implements OnItemClickListener {
 
@@ -76,6 +79,11 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	private RelativeLayout rl_no_result;
 	private TextView no_result_icon, tv_no_result, tv_street, power_by_google;
 	private Typeface fontFamily, rionaSansMedium, rionaRegularFamily, fontAwesome;
+	
+	private ScrollView scrollView1;
+	
+	private boolean mSwiping = false;
+	private boolean mItemPressed = false;
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -97,6 +105,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_search, container, false);
 		Logger.e(TAG, "onCreateView");
+		scrollView1 = (ScrollView) view.findViewById(R.id.scrollView1);
 		fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
 		rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
 		rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
@@ -161,7 +170,6 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		power_by_google = (TextView) view.findViewById(R.id.power_by_google);
 
 		listView_google.setAdapter(googleAdapter);
-		// autoCompView.setOnItemClickListener(this);
 
 		no_result_icon.setTypeface(fontAwesome);
 		no_result_icon.setText(MBDefinition.ICON_SEARCH_AWESOME);
@@ -194,18 +202,13 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 					searchForContact(s.toString());
 					searchForFavorite(s.toString());
 				}
-				// googleAdapter.notifyDataSetChanged();
-				// googleAdapter.getFilter().filter(s.toString(), new FilterListener(){
-				// @Override
-				// public void onFilterComplete(int count) {
-				// googleAdapter.notifyDataSetChanged();
-				// }});
+				
 				contactAdapter.notifyDataSetChanged();
 				favAdapter.notifyDataSetChanged();
 				setListViewHeightBasedOnChildren(listView_contact);
 				setListViewHeightBasedOnChildren(listView_favorite);
 
-				// listView_google.requestLayout();
+
 				googleAdapter.notifyDataSetChanged();
 
 			}
@@ -220,26 +223,30 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			}
 		});
 
-		listView_contact.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				new ValidateAddressTask(getActivity()).execute(contactResults.get(position).notBold);
-			}
-		});
-
-		listView_favorite.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				new ValidateAddressTask(getActivity()).execute(favoriteResults.get(position).notBold);
-			}
-		});
-
-		listView_google.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				new ValidateAddressTask(getActivity()).execute((String) listView_google.getItemAtPosition(position));
-			}
-		});
+//		listView_contact.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				new ValidateAddressTask(getActivity()).execute(contactResults.get(position).notBold);
+//			}
+//		});
+//
+//		listView_favorite.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				new ValidateAddressTask(getActivity()).execute(favoriteResults.get(position).notBold);
+//			}
+//		});
+//
+//		listView_google.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				new ValidateAddressTask(getActivity()).execute((String) listView_google.getItemAtPosition(position));
+//			}
+//		});
+	}
+	
+	public void callValidateAddressTask(String address){
+		new ValidateAddressTask(getActivity()).execute(address);
 	}
 
 	// this function gets called in PlacesAutoCompleteAdapter when no result returned by google
@@ -316,10 +323,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			public TextView icon;
 			public TextView bold;
 			public TextView notBold;
+			public RelativeLayout contact_option;
+			public LinearLayout viewHeader;
+			public ViewGroup swipeContactView;
+			public TextView green_circle;
+			public TextView add_fav_btn;
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View rowView = convertView;
 			// reuse views
 			if (rowView == null) {
@@ -329,14 +341,49 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				viewHolder.icon = (TextView) rowView.findViewById(R.id.icon);
 				viewHolder.bold = (TextView) rowView.findViewById(R.id.bold);
 				viewHolder.notBold = (TextView) rowView.findViewById(R.id.notBold);
+				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
+				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
+				viewHolder.green_circle = (TextView) rowView.findViewById(R.id.green_circle);
+				viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
 				rowView.setTag(viewHolder);
 			}
 
 			// fill data
-			ViewHolder holder = (ViewHolder) rowView.getTag();
+			final ViewHolder holder = (ViewHolder) rowView.getTag();
+			
+			holder.add_fav_btn.setTypeface(fontAwesome);
+			holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
+			
+			
 			if (position % 2 == 1) {
-				rowView.setBackgroundResource(R.drawable.list_background2_selector);
+				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
+			
+			final TextView green_circle = holder.green_circle;
+			holder.contact_option.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Animation pop = AnimationUtils.loadAnimation(getActivity(), R.anim.pop);
+					pop.setFillAfter(true);
+					pop.setAnimationListener(new AnimationListener() {
+						@Override
+						public void onAnimationStart(Animation animation) {}
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							((SwipableListItem) (holder.swipeContactView.findViewById(R.id.swipeContactView))).maximize();
+						}
+						@Override
+						public void onAnimationRepeat(Animation animation) {}
+					});
+
+					green_circle.setVisibility(View.VISIBLE);
+					green_circle.startAnimation(pop);
+
+					new AddFavoriteTask(getActivity()).execute(contactResults.get(position).notBold);
+
+				}
+			});
 
 			holder.icon.setTypeface(fontFamily);
 			holder.icon.setText(MBDefinition.icon_phone);
@@ -348,6 +395,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(contactResults.get(position).notBold);
+			
+			holder.viewHeader.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					callValidateAddressTask(contactResults.get(position).notBold);
+				}
+			});
+
+			holder.swipeContactView.setOnTouchListener(mTouchListener);
 
 			return rowView;
 		}
@@ -363,10 +419,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			public TextView icon;
 			public TextView bold;
 			public TextView notBold;
+			public RelativeLayout contact_option;
+			public LinearLayout viewHeader;
+			public ViewGroup swipeContactView;
+			public TextView green_circle;
+			public TextView add_fav_btn;
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View rowView = convertView;
 			// reuse views
 			if (rowView == null) {
@@ -376,15 +437,49 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				viewHolder.icon = (TextView) rowView.findViewById(R.id.icon);
 				viewHolder.bold = (TextView) rowView.findViewById(R.id.bold);
 				viewHolder.notBold = (TextView) rowView.findViewById(R.id.notBold);
+				viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+				viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
+				viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
+				viewHolder.green_circle = (TextView) rowView.findViewById(R.id.green_circle);
+				viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
 				rowView.setTag(viewHolder);
 			}
 
 			// fill data
-			ViewHolder holder = (ViewHolder) rowView.getTag();
+			final ViewHolder holder = (ViewHolder) rowView.getTag();
+//			holder.add_fav_btn.setTypeface(fontAwesome);
+//			holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
+			
+			
 			if (position % 2 == 1) {
-				rowView.setBackgroundResource(R.drawable.list_background2_selector);
+				holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 			}
-
+			
+//			final TextView green_circle = holder.green_circle;
+//			holder.contact_option.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					Animation pop = AnimationUtils.loadAnimation(getActivity(), R.anim.pop);
+//					pop.setFillAfter(true);
+//					pop.setAnimationListener(new AnimationListener() {
+//						@Override
+//						public void onAnimationStart(Animation animation) {}
+//						@Override
+//						public void onAnimationEnd(Animation animation) {
+//							((SwipableListItem) (holder.swipeContactView.findViewById(R.id.swipeContactView))).maximize();
+//						}
+//						@Override
+//						public void onAnimationRepeat(Animation animation) {}
+//					});
+//
+//					green_circle.setVisibility(View.VISIBLE);
+//					green_circle.startAnimation(pop);
+//
+//					new AddFavoriteTask(getActivity()).execute(favoriteResults.get(position).notBold);
+//
+//				}
+//			});
+//
 			holder.icon.setTypeface(fontAwesome);
 			holder.icon.setText(MBDefinition.icon_tab_fav);
 
@@ -395,6 +490,15 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
 			holder.notBold.setText(favoriteResults.get(position).notBold);
+			
+			holder.viewHeader.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					callValidateAddressTask(favoriteResults.get(position).notBold);
+				}
+			});
+
+//			holder.swipeContactView.setOnTouchListener(mTouchListener);
 
 			return rowView;
 		}
@@ -450,7 +554,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			return 0;
 	}
 
-	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
+	public class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
@@ -572,5 +676,63 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		});
 		builderSingle.show();
 	}
+	
+	/**
+	 * Handle touch events to lock list view swiping during swipe and block multiple swipe
+	 */
+	private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+
+		float mDownX;
+		private int mSwipeSlop = -1;
+
+		@Override
+		public boolean onTouch(final View v, MotionEvent event) {
+			if (mSwipeSlop < 0) {
+				mSwipeSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
+			}
+
+			// ((SwipableListItem)
+			// (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+			((SwipableListItem) (v)).processDragEvent(event);
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				if (mItemPressed) {
+					// Multi-item swipes not handled
+					return false;
+				}
+				mItemPressed = true;
+				mDownX = event.getX();
+				break;
+			case MotionEvent.ACTION_CANCEL:
+				mSwiping = false;
+				mItemPressed = false;
+				break;
+			case MotionEvent.ACTION_MOVE: {
+				float x = event.getX() + v.getTranslationX();
+				float deltaX = x - mDownX;
+				float deltaXAbs = Math.abs(deltaX);
+				if (!mSwiping) {
+					if (deltaXAbs > mSwipeSlop) {
+						mSwiping = true;
+						scrollView1.requestDisallowInterceptTouchEvent(true);
+					}
+				}
+				// if (mSwiping) {
+				// //
+				// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+				// }
+			}
+				break;
+			case MotionEvent.ACTION_UP: {
+				mSwiping = false;
+				mItemPressed = false;
+				break;
+			}
+			default:
+				return false;
+			}
+			return true;
+		}
+	};
 
 }

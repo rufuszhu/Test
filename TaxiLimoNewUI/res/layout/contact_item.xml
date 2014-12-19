@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/list_background_selector"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="visible" >
 
             <ImageView
                 android:id="@+id/profile_icon"

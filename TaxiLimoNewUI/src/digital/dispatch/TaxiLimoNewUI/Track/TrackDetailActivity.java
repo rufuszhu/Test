@@ -491,7 +491,7 @@ public class TrackDetailActivity extends BaseActivity {
 
 		ll_cancel_btn.setOnClickListener(cancelListener);
 //		ll_cancel_btn_small.setOnClickListener(cancelListener);
-//		ll_pay_btn.setOnClickListener(payListener);
+		ll_pay_btn.setOnClickListener(payListener);
 //
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
 		zoom_btn.setOnClickListener(new OnClickListener() {
@@ -583,8 +583,10 @@ public class TrackDetailActivity extends BaseActivity {
 
 		if (mPager.getCurrentItem() == 1 && (shouldShowCar())) {
 			zoom_btn.setVisibility(View.VISIBLE);
+			setTab1Text();
 		} else {
 			zoom_btn.setVisibility(View.GONE);
+			setTab0Text();
 		}
 
 		checkAndDisablePayBtns();

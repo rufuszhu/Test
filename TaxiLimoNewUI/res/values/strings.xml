@@ -168,7 +168,8 @@
     <string name="no_result_found">No results were found for</string>
     <string name="enter_pickup_address">Enter pickup address</string>
     <string name="enter_dropoff_address">Enter dropoff address</string>
-
+    <string name="fav404_text">You don’t have any favorites yet.\nYou can save a search result or contact\nas a favorite.</string>
+	<string name="con404_text">Your contacts don’t have an address.\nOnce you add an address, it will show\nup here.</string>
     <!-- attribute -->
     <string name="please_select_one_company">SELECT A COMPANY</string>
     <string name="booking_options">BOOKING OPTIONS</string>
