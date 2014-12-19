@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -580,22 +581,23 @@ public class BookActivity extends BaseActivity {
 	}
 
 	public void showBookSuccessDialog() {
-		Dialog messageDialog = new Dialog(this);
-		Context _this = this;
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(_this.getString(R.string.message_book_successful));
-		messageDialog.setOnCancelListener(new OnCancelListener() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_this);
+		builder.setMessage(_this.getString(R.string.message_book_successful));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				finish();
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				finish();
 			}
 		});
-		messageDialog.show();
-
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
 	}
 
 	public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String locality) {
