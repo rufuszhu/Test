@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.Drawers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -418,18 +419,18 @@ public class ProfileActivity extends BaseActivity implements
 				.getDefaultSharedPreferences(_context);
 		SharedPreferencesManager.savePreferences(sharedPreferences,
 				MBDefinition.SHARE_ALREADY_SMS_VERIFY, true);
-
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow()
-				.findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_success));
-
-		messageDialog.setOnCancelListener(new OnCancelListener() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(_context.getString(R.string.verify_success));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// flow to register confirmation page
+				Intent intent = new Intent(_context, MainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				// flow to register confirmation page
@@ -438,8 +439,10 @@ public class ProfileActivity extends BaseActivity implements
 				finish();
 			}
 		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
 
-		messageDialog.show();
+		
 		// restore original profile layout
 		ll_sms_verify.setVisibility(View.GONE);
 		verify_btn.setVisibility(View.GONE);
@@ -452,36 +455,51 @@ public class ProfileActivity extends BaseActivity implements
 
 		et_code.setText("");
 		verify_btn.setVisibility(View.GONE);
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow()
-				.findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_failed));
-
-		messageDialog.show();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(_context.getString(R.string.verify_failed));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+		
 	}
 
 	// callback by RegisterDeviceTask for successful update
 	public void showResendSuccessMessage() {
 		storeInfo();// update local database
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow()
-				.findViewById(R.id.tv_message);
+		
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(_context);
 
 		String phone = SharedPreferencesManager.loadStringPreferences(
 				sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				if (sendVerifySMS == true) {
+					ll_sms_verify.setVisibility(View.VISIBLE);
+					button_groups.setVisibility(View.GONE);
+					et_code.requestFocus();
 
+				} else {
+					// save is done hide all buttons
+					button_groups.setVisibility(View.GONE);
+				}
+				dialog.dismiss();
+			}
+		});
 		if (sendVerifySMS == true) {
 			// reset already SMS verify to false
 			SharedPreferencesManager.savePreferences(sharedPreferences,
@@ -489,15 +507,15 @@ public class ProfileActivity extends BaseActivity implements
 
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-			tv_message.setText(_context.getString(R.string.verify_dialog_text,
+			builder.setMessage(_context.getString(R.string.verify_dialog_text,
 					phone));
 		} else {
-			tv_message
-					.setText(_context.getString(R.string.profile_update_text));
+			builder
+					.setMessage(_context.getString(R.string.profile_update_text));
 
 		}
 
-		messageDialog.setOnCancelListener(new OnCancelListener() {
+		builder.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				if (sendVerifySMS == true) {
@@ -512,7 +530,12 @@ public class ProfileActivity extends BaseActivity implements
 
 			}
 		});
-		messageDialog.show();
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+		
+		
+		
 	}
 
 	// inner class implements TextWatcher for show and hide button when user
