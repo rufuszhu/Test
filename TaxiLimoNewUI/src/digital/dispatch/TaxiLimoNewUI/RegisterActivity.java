@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -244,26 +245,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		
 	}
 	
-	/*
-	private void updateActionBar(){
->>>>>>> fa8c662ca692b55fbb50d31de0354ce74c7e38d1
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(false);
-		actionBar.setIcon(R.color.transparent);
-		actionBar.setIcon(null);
-<<<<<<< HEAD
-		int titleId = getResources().getIdentifier("action_bar_title", "id", "android");
-		Typeface face = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Light.ttf");
-		TextView yourTextView = (TextView) findViewById(titleId);
-		yourTextView.setTypeface(face);
-	}
-
-	// callback by RegisterDeviceTask
-	public void showRegisterSuccessMessage() {
-=======
-	
-	}*/
 		
 	
 	//callback by RegisterDeviceTask
@@ -273,15 +254,18 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		// register info stored
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_START_REGISTER, true);
-
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_dialog_text, phone_number.getText().toString()));
-		messageDialog.setOnCancelListener(new OnCancelListener() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(_context.getString(R.string.verify_dialog_text, phone_number.getText().toString()));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				ll_sms_verify.setVisibility(View.VISIBLE);
+				next_btn.setVisibility(View.GONE);
+				et_code.requestFocus();
+				dialog.dismiss();
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				ll_sms_verify.setVisibility(View.VISIBLE);
@@ -289,8 +273,10 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 				et_code.requestFocus();
 			}
 		});
-		messageDialog.show();
+		AlertDialog dialog = builder.create();
+		dialog.show();
 
+	
 	}
 
 	private void storeInfo() {
@@ -493,15 +479,17 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		// SMS Verified
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 		SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_ALREADY_SMS_VERIFY, true);
-
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_success_confirm));
-		messageDialog.setOnCancelListener(new OnCancelListener() {
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(_context.getString(R.string.verify_success_confirm));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				// flow to register confirmation page
+				Intent intent = new Intent(_context, RegisterConfirmActivity.class);
+				startActivity(intent);
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				// flow to register confirmation page
@@ -509,20 +497,31 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 				startActivity(intent);
 			}
 		});
-		messageDialog.show();
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
+	
 	}
 
 	public void showVerifyFailedMessage() {
 		et_code.setText("");
-		Dialog messageDialog = new Dialog(_context);
-		messageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		messageDialog.setContentView(R.layout.dialog_message);
-		messageDialog.setCanceledOnTouchOutside(true);
-		messageDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		TextView tv_message = (TextView) messageDialog.getWindow().findViewById(R.id.tv_message);
-		tv_message.setText(_context.getString(R.string.verify_failed));
-
-		messageDialog.show();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+		builder.setMessage(_context.getString(R.string.verify_failed));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+		builder.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+		
 	}
 
 	// inner class implements TextWatcher for show and hide button when user enter something
