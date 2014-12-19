@@ -73,8 +73,21 @@ public class FavoritesFragment extends ListFragment {
 		daoManager = DaoManager.getInstance(getActivity());
 		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
 		List<DBAddress> values = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).orderDesc(Properties.NickName).list();
-
+		
 		adapter = new FavoritesAdapter(getActivity(), values);
+	}
+
+	private void setUp404(View view) {
+		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+		TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
+		TextView tv_fav404_text = (TextView) view.findViewById(R.id.tv_fav404_text);
+		tv_fav404_text.setTypeface(rionaSansMedium);
+		attention_icon.setTypeface(icon_pack);
+		attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+		RelativeLayout llfav404 = (RelativeLayout) view.findViewById(R.id.llfav404);
+		llfav404.setVisibility(View.VISIBLE);
+		mListView.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -82,10 +95,21 @@ public class FavoritesFragment extends ListFragment {
 		Logger.e(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_favorites, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
-
-		setListAdapter(adapter);
+//		RelativeLayout llfav404 = (RelativeLayout) view.findViewById(R.id.llfav404);
+//		
+//		if(adapter.getValues().size()==0){ 
+//			setUp404(view);
+//		}else{
+//			setListAdapter(adapter);
+//			llfav404.setVisibility(View.GONE); 
+//			mListView.setVisibility(View.VISIBLE);
+//		}
+		notifyChange();
+		
 		return view;
 	}
+
+
 
 	private void initListeners() {
 
@@ -298,7 +322,7 @@ public class FavoritesFragment extends ListFragment {
 									DBAddress dbAddress = addressDao.queryBuilder().where(Properties.Id.eq(values.get(position).getId())).list().get(0);
 									values.remove(position);
 									addressDao.delete(dbAddress);
-									adapter.notifyDataSetChanged();
+									notifyChange();
 
 									Toast.makeText(getActivity(), dbAddress.getNickName() + getActivity().getString(R.string.delete_successful),
 											Toast.LENGTH_SHORT).show();
@@ -343,6 +367,16 @@ public class FavoritesFragment extends ListFragment {
 		List<DBAddress> values = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).orderDesc(Properties.NickName).list();
 		adapter = new FavoritesAdapter(getActivity(), values);
 		setListAdapter(adapter);
+		RelativeLayout llfav404 = (RelativeLayout) view.findViewById(R.id.llfav404);
+		if(adapter.getValues().size()==0){ 
+			setUp404(view);
+			llfav404.setVisibility(View.VISIBLE);
+			mListView.setVisibility(View.GONE);
+		}else{
+			setListAdapter(adapter);
+			llfav404.setVisibility(View.GONE); 
+			mListView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	protected class ValidateAddressTask extends AsyncTask<String, Void, List<Address>> {

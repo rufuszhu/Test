@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,27 +34,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
-import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter.ViewHolder;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -111,12 +103,32 @@ public class ContactsFragment extends ListFragment {
 		adapter = new ContactsAdapter(getActivity(), mContactList);
 		setListAdapter(adapter);
 	}
+	
+	private void setUp404(View view) {
+		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+		TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
+		TextView tv_contact404_text = (TextView) view.findViewById(R.id.tv_contact404_text);
+		tv_contact404_text.setTypeface(rionaSansMedium);
+		attention_icon.setTypeface(icon_pack);
+		attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+		RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
+		llcontact404.setVisibility(View.VISIBLE);
+		mListView.setVisibility(View.GONE);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Logger.e(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_contacts, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
+		if(mContactList.size()==0)
+			setUp404(view);
+		else{
+			RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
+			llcontact404.setVisibility(View.GONE);
+			mListView.setVisibility(View.VISIBLE);
+		}
 		return view;
 	}
 
@@ -341,7 +353,7 @@ public class ContactsFragment extends ListFragment {
 					green_circle.setVisibility(View.VISIBLE);
 					green_circle.startAnimation(pop);
 
-					new addFavoriteTask(getActivity()).execute(values.get(position).getAddress());
+					new AddFavoriteTask(getActivity()).execute(values.get(position).getAddress());
 
 				}
 			});
@@ -360,6 +372,7 @@ public class ContactsFragment extends ListFragment {
 			return convertView;
 		}
 	}
+	
 
 	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
@@ -434,93 +447,6 @@ public class ContactsFragment extends ListFragment {
 		return null;
 	}
 
-	protected class addFavoriteTask extends AsyncTask<String, Void, List<Address>> {
-
-		// Store the context passed to the AsyncTask when the system
-		// instantiates it.
-		Context localContext;
-
-		// Constructor called by the system to instantiate the task
-		public addFavoriteTask(Context context) {
-			// Required by the semantics of AsyncTask
-			super();
-			// Set a Context for the background task
-			localContext = context;
-		}
-
-		/**
-		 * Get a geocoding service instance, pass latitude and longitude to it, format the returned address, and return the address to the UI thread.
-		 */
-		@Override
-		protected List<Address> doInBackground(String... params) {
-			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
-			 * to address standards can also be used.
-			 */
-			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
-
-			// Get the current location from the input parameter list
-			String locationName = params[0];
-
-			// Create a list to contain the result address
-			List<Address> addresses = null;
-
-			// Try to get an address for the current location. Catch IO or
-			// network problems.
-			try {
-
-				/*
-				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
-				 */
-				addresses = geocoder.getFromLocationName(locationName, 10);
-
-				// Catch network or other I/O problems.
-			} catch (IOException exception1) {
-
-				// Log an error and return an error message
-				if (isAdded())
-					Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-
-				// print the stack trace
-				exception1.printStackTrace();
-
-				// Return an error message
-				// return (getString(R.string.IO_Exception_getFromLocation));
-
-				// Catch incorrect latitude or longitude values
-			} catch (IllegalArgumentException exception2) {
-				if (isAdded()) {
-					// Construct a message containing the invalid arguments
-					String errorString = getString(R.string.illegal_argument_exception, locationName);
-					// Log the error and print the stack trace
-					Log.e(LocationUtils.APPTAG, errorString);
-				}
-				exception2.printStackTrace();
-
-				//
-				// return errorString;
-			}
-			return addresses;
-		}
-
-		/**
-		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
-		 */
-		@Override
-		protected void onPostExecute(final List<Address> addresses) {
-			if (addresses == null) {
-				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
-			} else if (addresses.size() > 1) {
-				// pop up list
-				boolean isSave = false;
-				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
-			} else if (addresses.size() == 1) {
-				setUpEnterNickNameDialog(addresses.get(0));
-			} else {
-				Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
-			}
-		}
-	}
 
 	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final boolean isSave) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
@@ -545,7 +471,7 @@ public class ContactsFragment extends ListFragment {
 						Utils.mPickupAddress = addressesObj.get(0);
 					getActivity().finish();
 				} else
-					new addFavoriteTask(getActivity()).execute(addresses.get(which));
+					new AddFavoriteTask(getActivity()).execute(addresses.get(which));
 			}
 		});
 		builderSingle.show();
@@ -646,48 +572,4 @@ public class ContactsFragment extends ListFragment {
 		}
 	}
 
-	private void setUpEnterNickNameDialog(final Address address) {
-		final EditText nickname_edit;
-		TextView address_text;
-		TextView cancel;
-		TextView add;
-		final Dialog nicknameDialog = new Dialog(getActivity());
-		nicknameDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		nicknameDialog.setContentView(R.layout.nickname_dialog);
-		nicknameDialog.setCanceledOnTouchOutside(true);
-
-		address_text = (TextView) nicknameDialog.getWindow().findViewById(R.id.addr);
-		nickname_edit = (EditText) nicknameDialog.getWindow().findViewById(R.id.nickname);
-		address_text.setText(LocationUtils.addressToString(getActivity(), address));
-
-		cancel = (TextView) nicknameDialog.getWindow().findViewById(R.id.cancel);
-		cancel.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-				nicknameDialog.dismiss();
-			}
-		});
-		add = (TextView) nicknameDialog.getWindow().findViewById(R.id.add);
-		add.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				String nickname = nickname_edit.getText().toString();
-				if (nickname.length() == 0) {
-					nickname_edit.setError(getActivity().getString(R.string.nickName_cannot_be_empty));
-				} else {
-					DaoManager daoManager = DaoManager.getInstance(getActivity());
-					DBAddressDao addressDao = daoManager.getAddressDao(DaoManager.TYPE_WRITE);
-					DBAddress dbAddress = AddressDaoManager.addDaoAddressByAddress(address, "", nickname, true, addressDao);
-					Toast.makeText(getActivity(), dbAddress.getNickName() + " is successfully added", Toast.LENGTH_SHORT).show();
-
-					InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
-					((ModifyAddressActivity) getActivity()).favoritesFragment.notifyChange();
-					nicknameDialog.dismiss();
-				}
-			}
-		});
-		nicknameDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-		nicknameDialog.show();
-	}
 }

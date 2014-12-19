@@ -13,22 +13,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
+import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -40,8 +52,13 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 	private static final String OUT_JSON = "/json";
 	private static Context _context;
 	private Typeface RionaSansMedium;
+	private Typeface fontFamily;
+	private Typeface icon_pack;
 	private static final String API_KEY = "AIzaSyB-yx9i6UXvIObombR7xr1gQutmCBye2no";
 	private static final String TAG = "PlacesAutoCompleteAdapter";
+	
+	private boolean mSwiping = false;
+	private boolean mItemPressed = false;
 
 	// private TextView _streetNumber;
 
@@ -51,18 +68,20 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		_context = context;
 		resultList = new ArrayList<String>();
 		RionaSansMedium = Typeface.createFromAsset(_context.getAssets(), "fonts/RionaSansMedium.otf");
+		fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/fontawesome.ttf");
+		icon_pack = Typeface.createFromAsset(_context.getAssets(), "fonts/icon_pack.ttf");
 	}
 
 	@Override
 	public int getCount() {
-		if(resultList==null)
+		if (resultList == null)
 			return 0;
 		return resultList.size();
 	}
 
 	@Override
 	public String getItem(int index) {
-		if(resultList==null)
+		if (resultList == null)
 			return "";
 		return resultList.get(index);
 	}
@@ -71,10 +90,15 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		public TextView icon;
 		public TextView bold;
 		public TextView notBold;
+		public RelativeLayout contact_option;
+		public LinearLayout viewHeader;
+		public ViewGroup swipeContactView;
+		public TextView green_circle;
+		public TextView add_fav_btn;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 
 		// reuse views
@@ -85,29 +109,75 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 			viewHolder.icon = (TextView) rowView.findViewById(R.id.icon);
 			viewHolder.bold = (TextView) rowView.findViewById(R.id.bold);
 			viewHolder.notBold = (TextView) rowView.findViewById(R.id.notBold);
+			viewHolder.contact_option = (RelativeLayout) rowView.findViewById(R.id.contact_option);
+			viewHolder.viewHeader = (LinearLayout) rowView.findViewById(R.id.viewHeader);
+			viewHolder.swipeContactView = (ViewGroup) rowView.findViewById(R.id.swipeContactView);
+			viewHolder.green_circle = (TextView) rowView.findViewById(R.id.green_circle);
+			viewHolder.add_fav_btn = (TextView) rowView.findViewById(R.id.add_fav_btn);
 			rowView.setTag(viewHolder);
 		}
 
 		// fill data
-		ViewHolder holder = (ViewHolder) rowView.getTag();
-		if(position%2==1){
-			rowView.setBackgroundResource(R.drawable.list_background2_selector);
+		final ViewHolder holder = (ViewHolder) rowView.getTag();
+		holder.add_fav_btn.setTypeface(fontFamily);
+		holder.add_fav_btn.setText(MBDefinition.icon_tab_fav);
+		
+		
+		if (position % 2 == 1) {
+			holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
 		}
-		Typeface fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/icon_pack.ttf");
-		holder.icon.setTypeface(fontFamily);
+		
+		final TextView green_circle = holder.green_circle;
+		holder.contact_option.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Animation pop = AnimationUtils.loadAnimation(_context, R.anim.pop);
+				pop.setFillAfter(true);
+				pop.setAnimationListener(new AnimationListener() {
+
+					@Override
+					public void onAnimationStart(Animation animation) {
+					}
+
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						((SwipableListItem) (holder.swipeContactView.findViewById(R.id.swipeContactView))).maximize();
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+					}
+				});
+
+				green_circle.setVisibility(View.VISIBLE);
+				green_circle.startAnimation(pop);
+
+				new AddFavoriteTask(_context).execute(resultList.get(position));
+
+			}
+		});
+		
+		holder.icon.setTypeface(icon_pack);
 		holder.icon.setText(MBDefinition.icon_location);
 
 		holder.notBold.setVisibility(View.GONE);
-		
+
 		if (position < resultList.size()) {
 			holder.bold.setTypeface(RionaSansMedium, Typeface.NORMAL);
 			holder.bold.setText(resultList.get(position));
 		}
+		
+		holder.viewHeader.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((ModifyAddressActivity) _context).searchFragment.callValidateAddressTask(resultList.get(position));
+			}
+		});
+
+		holder.swipeContactView.setOnTouchListener(mTouchListener);
 
 		return rowView;
 	}
-	
-
 
 	@Override
 	public Filter getFilter() {
@@ -123,18 +193,18 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 					queryResults = autocomplete(constraint.toString());
 					// Assign the data to the FilterResults
 					filterResults.values = queryResults;
-					if(queryResults!=null)
+					if (queryResults != null)
 						filterResults.count = queryResults.size();
 					else
-						filterResults.count=0;
+						filterResults.count = 0;
 				}
-				
+
 				return filterResults;
 			}
 
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
-				resultList = (ArrayList<String>)results.values;
+				resultList = (ArrayList<String>) results.values;
 				if (results != null && results.count > 0) {
 					((ModifyAddressActivity) _context).searchFragment.resetGoogleListViewHight();
 					((ModifyAddressActivity) _context).searchFragment.hideNoResultFoundLayout();
@@ -144,8 +214,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 					notifyDataSetInvalidated();
 				}
 			}
-			
-			
+
 		};
 		return filter;
 	}
@@ -156,9 +225,14 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		HttpURLConnection conn = null;
 		StringBuilder jsonResults = new StringBuilder();
 		try {
+			String RADIS = "200000";// 200 KM
 			StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
 			sb.append("?key=" + API_KEY);
-			//sb.append("&components=country:" + _context.getString(R.string.default_country_code));
+			// sb.append("&components=country:" + _context.getString(R.string.default_country_code));
+			if (Utils.mPickupAddress != null) {
+				sb.append("&location=" + Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude());
+				sb.append("&radius=" + RADIS);
+			}
 			sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
 			URL url = new URL(sb.toString());
@@ -199,4 +273,62 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 
 		return resultList;
 	}
+	
+	/**
+	 * Handle touch events to lock list view swiping during swipe and block multiple swipe
+	 */
+	private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+
+		float mDownX;
+		private int mSwipeSlop = -1;
+
+		@Override
+		public boolean onTouch(final View v, MotionEvent event) {
+			if (mSwipeSlop < 0) {
+				mSwipeSlop = ViewConfiguration.get(_context).getScaledTouchSlop();
+			}
+
+			// ((SwipableListItem)
+			// (v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+			((SwipableListItem) (v)).processDragEvent(event);
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				if (mItemPressed) {
+					// Multi-item swipes not handled
+					return false;
+				}
+				mItemPressed = true;
+				mDownX = event.getX();
+				break;
+			case MotionEvent.ACTION_CANCEL:
+				mSwiping = false;
+				mItemPressed = false;
+				break;
+			case MotionEvent.ACTION_MOVE: {
+				float x = event.getX() + v.getTranslationX();
+				float deltaX = x - mDownX;
+				float deltaXAbs = Math.abs(deltaX);
+				if (!mSwiping) {
+					if (deltaXAbs > mSwipeSlop) {
+//						mSwiping = true;
+//						mListView.requestDisallowInterceptTouchEvent(true);
+					}
+				}
+				// if (mSwiping) {
+				// //
+				// ((SwipableListItem)(v.findViewById(R.id.swipeContactView))).processDragEvent(event);
+				// }
+			}
+				break;
+			case MotionEvent.ACTION_UP: {
+				mSwiping = false;
+				mItemPressed = false;
+				break;
+			}
+			default:
+				return false;
+			}
+			return true;
+		}
+	};
 }

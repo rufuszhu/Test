@@ -262,9 +262,7 @@ public class BookActivity extends BaseActivity {
 		rl_pick_up.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(_this, ModifyAddressActivity.class);
-
 				intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, tv_pick_up.getText().toString());
-
 				intent.putExtra(MBDefinition.IS_DESTINATION, false);
 				((BookActivity) _this).startActivityForAnim(intent);
 			}
@@ -274,6 +272,9 @@ public class BookActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(_this, ModifyAddressActivity.class);
 				intent.putExtra(MBDefinition.IS_DESTINATION, true);
+				if(!tv_drop_off.getText().toString().startsWith("Enter your")){
+					intent.putExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA, tv_drop_off.getText().toString());
+				}
 				((BookActivity) _this).startActivityForAnim(intent);
 			}
 		});
