@@ -114,7 +114,7 @@ public class MBDefinition {
 	//public final static String ICON_TIMES_CODE = "\uf00d";//http://fortawesome.github.io/Font-Awesome/icon/times/
 	public final static String ICON_TIMES_CODE = "\ue39f";
 	//public final static String ICON_CHECK_CODE = "\uf00c";//http://fortawesome.github.io/Font-Awesome/icon/check/
-	public final static String ICON_CHECK_CODE = "\ue387";
+	public final static String ICON_CHECK_CODE = "\ue396";
 	public final static String ICON_CHECK_SQUARE_CODE = "\uf14a"; //http://fortawesome.github.io/Font-Awesome/icon/check-square/
 	public final static String ICON_QUARE_O_CODE = "\uf096"; //http://fortawesome.github.io/Font-Awesome/icon/square-o/
 	public final static String ICON_PERSON = "\uf183";
@@ -123,7 +123,8 @@ public class MBDefinition {
 	public final static String ICON_COMMENT = "\ue01e";
 	public final static String ICON_COMPANY = "\uf1ba";
 	public final static String ICON_EXCLAMATION_CIRCLE_CODE = "\ue214";
-	public final static String ICON_CROSS = "\ue1f5";
+	public final static String ICON_CROSS = "\ue3a2";
+	public final static String ICON_CROSS_SMALL = "\ue1f5";
 	public final static String ICON_FUNNEL = "\ue3ea";
 	public final static String ICON_INFO = "\ue214";
 	public final static String ICON_ARROW_RIGHT = "\uf178";

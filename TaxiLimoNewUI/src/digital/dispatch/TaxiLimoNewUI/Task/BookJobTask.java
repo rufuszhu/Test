@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Context;
 
 import android.content.SharedPreferences;
@@ -134,6 +135,15 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	public void onResponseReady(BookJobResponse response) {
 		Logger.v(TAG, "++BookingJob response");
 		Utils.stopProcessingDialog(_context);
+		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
+		
+		
 		JobIDListItem[] jobResp = response.GetList();
 
 		Logger.v(TAG, "**Book Job response =" + jobResp.length);
@@ -179,6 +189,13 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	public void onErrorResponse(ResponseWrapper resWrapper) {
 		Utils.stopProcessingDialog(_context);
+		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
 
 		if (resWrapper.getStatus() == 3) {
 			// new AlertDialog.Builder(getActivity())
@@ -221,6 +238,13 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 	@Override
 	public void onError() {
 		Utils.stopProcessingDialog(_context);
+		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
 		// alertMsgWithCallOption(R.string.booking_failed_title, R.string.booking_failed_generic_msg);
 		Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_area_not_bookable).replace("[company phone]", mbook.getCompany_phone_number()),
 				_context);

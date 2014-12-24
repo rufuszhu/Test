@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/profile_icon"
-                android:layout_width="@dimen/list_item_height"
-                android:layout_height="@dimen/list_item_height"
+                android:layout_width="?android:attr/listPreferredItemHeight"
+                android:layout_height="?android:attr/listPreferredItemHeight"
                 android:background="@drawable/ic_contact_picture_holo_light" />
 
             <LinearLayout

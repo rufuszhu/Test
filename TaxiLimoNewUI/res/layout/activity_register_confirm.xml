@@ -45,10 +45,9 @@
 		        android:id="@+id/eula"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:layout_marginTop="@dimen/normal_margin"
-		        android:paddingLeft="@dimen/normal_padding"
+		        android:padding="@dimen/small_padding"
 		        android:text="@string/eula"
-		        android:textSize= "14sp" />
+		        android:textSize= "12sp" />
 		   
 		
 		</ScrollView> 

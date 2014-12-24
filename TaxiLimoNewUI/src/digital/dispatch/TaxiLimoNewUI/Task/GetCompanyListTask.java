@@ -2,6 +2,7 @@ package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
@@ -38,7 +39,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	// Before running code in separate thread
 	@Override
 	protected void onPreExecute() {
-		if(!isFromBooking)
+		if (!isFromBooking)
 			Utils.showProcessingDialog(_context);
 	}
 
@@ -66,44 +67,63 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 
 	@Override
 	public void onResponseReady(CompanyListResponse response) {
+		if (_context instanceof Activity) {
+			Activity activity = (Activity) _context;
+			if (activity.isFinishing()) {
+				return;
+			}
+		}
+
 		CompanyItem[] tempCompList = response.GetList();
-		if(isFromBooking){
-			((BookActivity)_context).handleGetCompanyListResponse(tempCompList,mAddress.getLocality());
-		}else{	
+		if (isFromBooking) {
+			((BookActivity) _context).handleGetCompanyListResponse(tempCompList, mAddress.getLocality());
+		} else {
 			Utils.stopProcessingDialog(_context);
-			((AttributeActivity)_context).loadCompanyList(tempCompList);	
+			((AttributeActivity) _context).loadCompanyList(tempCompList);
 		}
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
-			Log.v(TAG, "ResponseError - " + errorString);
-			if(!isFromBooking)
-				Utils.stopProcessingDialog(_context);
-			try{
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
+		if (_context instanceof Activity) {
+			Activity activity = (Activity) _context;
+			if (activity.isFinishing()) {
+				return;
 			}
-			catch(Exception e){
-				e.printStackTrace();
-			}
+		}
+
+		Log.v(TAG, "ResponseError - " + errorString);
+		if (!isFromBooking)
+			Utils.stopProcessingDialog(_context);
+		try {
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onError() {
-			Log.v(TAG, "Error");
-			if(!isFromBooking)
-				Utils.stopProcessingDialog(_context);
-			try{
-				Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response),_context);
-			}
-			catch(Exception e){
-				e.printStackTrace();
-			}
+		Log.v(TAG, "Error");
+		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
+		
+		if (!isFromBooking)
+			Utils.stopProcessingDialog(_context);
+		try {
+			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onProgressUpdate(int progress) {
 	}
-
 
 }

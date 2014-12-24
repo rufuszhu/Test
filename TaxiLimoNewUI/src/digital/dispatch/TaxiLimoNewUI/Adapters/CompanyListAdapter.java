@@ -103,9 +103,9 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		int marginRight = 10;
 		Utils.showOption(viewHolder.ll_attr, attrs, context, marginRight);
 		
-		if(position%2==1){
-			rowView.setBackgroundResource(R.drawable.list_background2_selector);
-		}
+//		if(position%2==1){
+//			rowView.setBackgroundResource(R.drawable.list_background2_selector);
+//		}
 		
 		
 		// TL-88 add fare estimate if drop off address is set and baseRate set up

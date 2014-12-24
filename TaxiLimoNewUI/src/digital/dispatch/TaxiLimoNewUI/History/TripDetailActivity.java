@@ -159,11 +159,11 @@ public class TripDetailActivity extends BaseActivity {
 		//It is safe to assume that the job in this activity is either completed or cancel
 		if(dbBook.getTripStatus()==MBDefinition.MB_STATUS_COMPLETED ||
 				dbBook.getTripStatus()==MBDefinition.MB_STATUS_UNKNOWN){//TL-264
-			tv_trip_status.setText("Trip Completed");
+			tv_trip_status.setText(getString(R.string.trip_completed));
 			status_icon.setText(MBDefinition.ICON_CHECK_CIRCLE);
 		}
 		else{
-			tv_trip_status.setText("Trip Canceled");
+			tv_trip_status.setText(getString(R.string.trip_cancled));
 			status_icon.setText(MBDefinition.ICON_CROSS_CIRCLE);
 		}
 		

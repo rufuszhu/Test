@@ -103,17 +103,18 @@ public class ContactsFragment extends ListFragment {
 		adapter = new ContactsAdapter(getActivity(), mContactList);
 		setListAdapter(adapter);
 	}
-	
+
 	private void setUp404(View view) {
 		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
 		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
-		TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
+		// TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
 		TextView tv_contact404_text = (TextView) view.findViewById(R.id.tv_contact404_text);
 		tv_contact404_text.setTypeface(rionaSansMedium);
-		attention_icon.setTypeface(icon_pack);
-		attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
-		RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
-		llcontact404.setVisibility(View.VISIBLE);
+		// attention_icon.setTypeface(icon_pack);
+		// attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+		// RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
+
+		tv_contact404_text.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.GONE);
 	}
 
@@ -122,13 +123,14 @@ public class ContactsFragment extends ListFragment {
 		Logger.e(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_contacts, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
-		if(mContactList.size()==0)
+		if (mContactList.size() == 0)
 			setUp404(view);
-		else{
-			RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
-			llcontact404.setVisibility(View.GONE);
+		else {
+			TextView tv_contact404_text = (TextView) view.findViewById(R.id.tv_contact404_text);
+			tv_contact404_text.setVisibility(View.GONE);
 			mListView.setVisibility(View.VISIBLE);
 		}
+
 		return view;
 	}
 
@@ -372,7 +374,6 @@ public class ContactsFragment extends ListFragment {
 			return convertView;
 		}
 	}
-	
 
 	private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
 
@@ -406,13 +407,19 @@ public class ContactsFragment extends ListFragment {
 			// more about this
 			// feature, read the reference documentation for
 			// ContentResolver#openAssetFileDescriptor.
-			afd = getActivity().getContentResolver().openAssetFileDescriptor(thumbUri, "r");
-
-			// Gets a FileDescriptor from the AssetFileDescriptor. A
-			// BitmapFactory object can
-			// decode the contents of a file pointed to by a FileDescriptor into
-			// a Bitmap.
-			FileDescriptor fileDescriptor = afd.getFileDescriptor();
+			FileDescriptor fileDescriptor;
+			if (getActivity()!=null && !getActivity().isFinishing()){
+				afd = getActivity().getContentResolver().openAssetFileDescriptor(thumbUri, "r");
+				// Gets a FileDescriptor from the AssetFileDescriptor. A
+				// BitmapFactory object can
+				// decode the contents of a file pointed to by a FileDescriptor into
+				// a Bitmap.
+				fileDescriptor = afd.getFileDescriptor();
+			}
+			else{
+				fileDescriptor = null;
+			}
+			
 
 			if (fileDescriptor != null) {
 				// Decodes a Bitmap from the image pointed to by the
@@ -446,7 +453,6 @@ public class ContactsFragment extends ListFragment {
 		// If the decoding failed, returns null
 		return null;
 	}
-
 
 	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj, final boolean isSave) {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
@@ -552,6 +558,9 @@ public class ContactsFragment extends ListFragment {
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
+			if(getActivity()==null)
+				return;
+			
 			if (addresses == null) {
 				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
 			} else if (addresses.size() > 1) {

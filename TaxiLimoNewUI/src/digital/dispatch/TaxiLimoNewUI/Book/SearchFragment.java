@@ -216,7 +216,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 		TextView clear = (TextView) view.findViewById(R.id.clear_autocomplete);
 		clear.setTypeface(fontFamily);
-		clear.setText(MBDefinition.ICON_CROSS);
+		clear.setText(MBDefinition.ICON_CROSS_SMALL);
 		clear.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				autoCompView.setText("");

@@ -908,7 +908,7 @@ public class WheelView extends View {
 	 * @param index the item index
 	 * @return item view or empty view if index is out of bounds
 	 */
-	private View getItemView(int index) {
+	public View getItemView(int index) {
 		if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
 			return null;
 		}

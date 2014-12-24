@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -101,6 +102,13 @@ public class AddFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 	 */
 	@Override
 	protected void onPostExecute(final List<Address> addresses) {
+		if ( localContext instanceof Activity ) {
+		    Activity activity = (Activity)localContext;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
+		
 		if (addresses == null) {
 			Utils.showMessageDialog(localContext.getString(R.string.cannot_get_address_from_google), localContext);
 		} else if (addresses.size() > 1) {

@@ -26,6 +26,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	private ArrayList<Date> dateList;
 	private boolean isDate;
 	private Typeface rionaSansMedium;
+	private Context context;
 
 
 	/**
@@ -42,7 +43,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 		else{
 			timeList = list;
 		}
-		
+		this.context = context;
 	}
 
 	@Override
@@ -51,6 +52,8 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 		TextView date_text =  (TextView) view.findViewById(R.id.date_text);
 		
 		date_text.setTypeface(rionaSansMedium);
+		
+
 		return view;
 	}
 

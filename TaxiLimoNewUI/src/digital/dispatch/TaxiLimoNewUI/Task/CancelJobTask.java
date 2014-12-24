@@ -1,5 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -26,7 +27,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	public CancelJobTask(Context context, DBBooking dbBook) {
 		this.dbBook = dbBook;
-		
+
 		_context = context;
 	}
 
@@ -38,13 +39,13 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	// The code to be executed in a background thread.
 	@Override
 	protected Void doInBackground(Void... params) {
-		//set job's status in database to canceled 
+		// set job's status in database to canceled
 		dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
 		dbBook.setTripCancelledTime(System.currentTimeMillis() + "");
 		DaoManager daoManager = DaoManager.getInstance(_context);
 		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		bookingDao.update(dbBook);
-		
+
 		try {
 			cjReq = new CancelJobRequest(this, this);
 			cjReq.setSysID(dbBook.getSysId() + "");
@@ -69,37 +70,60 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 
 	@Override
 	public void onResponseReady(CancelJobResponse response) {
-		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
+
 		Utils.stopProcessingDialog(_context);
-		if(_context instanceof TrackDetailActivity)
-			((TrackDetailActivity)_context).showCancelDialog();
-		else
+		if (_context instanceof TrackDetailActivity) {
+				((TrackDetailActivity) _context).showCancelDialog();
+			
+		} else
 			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
-				
-		
+
 		Logger.v(TAG, "Cancel Job: " + response.getStatus() + " :: " + response.getErrorString());
 	}
 
 	@Override
 	public void onErrorResponse(String errorString) {
-		Utils.stopProcessingDialog(_context);
-		//we force cancel the job even if the request fail
-		if(_context instanceof TrackDetailActivity)
-			((TrackDetailActivity)_context).showCancelDialog();
-		else
-			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
 		
+		Utils.stopProcessingDialog(_context);
+		
+		// we force cancel the job even if the request fail
+		if (_context instanceof TrackDetailActivity)
+			((TrackDetailActivity) _context).showCancelDialog();
+		else{
+			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
+		}
+
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
 	}
 
 	@Override
 	public void onError() {
+		
+		if ( _context instanceof Activity ) {
+		    Activity activity = (Activity)_context;
+		    if ( activity.isFinishing() ) {
+		        return;
+		    }
+		}
+		
 		Utils.stopProcessingDialog(_context);
-		if(_context instanceof TrackDetailActivity)
-			((TrackDetailActivity)_context).showCancelDialog();
+		if (_context instanceof TrackDetailActivity)
+			((TrackDetailActivity) _context).showCancelDialog();
 		else
 			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
-		
+
 		Logger.v(TAG, "cancelJob: Error");
 	}
 
@@ -107,6 +131,5 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	public void onProgressUpdate(int progress) {
 
 	}
-	
 
 }
