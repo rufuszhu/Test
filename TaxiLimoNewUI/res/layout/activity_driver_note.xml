@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_textview_border"
                 android:gravity="start"
-                android:hint="I will be down in a sec!"
+                android:hint="@string/driver_note_hint"
                 android:inputType="textMultiLine"
                 android:maxLength="256"
                 android:padding="10dp"
@@ -49,7 +49,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/charaters_left"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textColor="@color/gray_light" />
         </LinearLayout>
 
         <LinearLayout

@@ -14,26 +14,15 @@
         android:padding="@dimen/normal_padding" >
 
         <TextView
-            android:id="@+id/attention_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:textSize="@dimen/modify_address_404_icon_size"
-            android:layout_marginLeft="@dimen/big_margin"
-            android:textColor="@color/list_gray_text"
-            android:layout_marginTop="@dimen/big_margin" />
-
-        <TextView
             android:id="@+id/tv_fav404_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/attention_icon"
-            android:layout_toRightOf="@+id/attention_icon"
-            android:textSize="@dimen/modify_address_404_font_size"
-            android:layout_marginLeft="@dimen/small_padding"
+            android:text="@string/fav404_text"
             android:textColor="@color/list_gray_text"
-            android:text="@string/fav404_text" />
+            android:layout_marginTop="@dimen/very_big_margin"
+            android:lineSpacingExtra="@dimen/normal_padding"
+            android:textSize="@dimen/modify_address_404_font_size"
+            style="@style/TextDropShadowWhite"  />
 
         <ImageView
             android:id="@+id/imageView1"
@@ -42,7 +31,6 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:src="@drawable/fav404" />
-        
     </RelativeLayout>
 
     <ListView
@@ -54,6 +42,5 @@
         android:listSelector="@drawable/list_selector"
         android:visibility="gone" >
     </ListView>
-
 
 </RelativeLayout>

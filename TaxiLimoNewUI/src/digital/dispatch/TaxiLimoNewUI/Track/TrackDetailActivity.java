@@ -387,8 +387,8 @@ public class TrackDetailActivity extends BaseActivity {
 		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon); 
 		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel); 
 		
-		TextView pay_icon = (TextView) findViewById(R.id.pay_icon); 
-		TextView tv_pay = (TextView) findViewById(R.id.tv_pay); 
+//		TextView pay_icon = (TextView) findViewById(R.id.pay_icon); 
+//		TextView tv_pay = (TextView) findViewById(R.id.tv_pay); 
 
 		arrow_right = (TextView) findViewById(R.id.arrow_right);
 		arrow_right.setTypeface(fontawesome);
@@ -397,9 +397,9 @@ public class TrackDetailActivity extends BaseActivity {
 		cancel_icon.setText(MBDefinition.ICON_CROSS);
 		tv_cancel.setTypeface(exo2Bold);
 		
-		pay_icon.setTypeface(icon_pack);
-		pay_icon.setText("V");
-		tv_pay.setTypeface(exo2Bold);
+//		pay_icon.setTypeface(icon_pack);
+//		pay_icon.setText("V");
+//		tv_pay.setTypeface(exo2Bold);
 		
 		
 		tv_dispatched_circle.setTypeface(exo2SemiBold, Typeface.NORMAL);
@@ -421,8 +421,8 @@ public class TrackDetailActivity extends BaseActivity {
 		tv_book_time.setTypeface(exo2SemiBold);
 
 		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
-		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
-		//cancel_cover = findViewById(R.id.cancel_cover);
+		//ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		cancel_cover = findViewById(R.id.cancel_cover); 
 	}
 
 	private void checkAndDisablePayBtns() {
@@ -491,8 +491,8 @@ public class TrackDetailActivity extends BaseActivity {
 
 		ll_cancel_btn.setOnClickListener(cancelListener);
 //		ll_cancel_btn_small.setOnClickListener(cancelListener);
-		ll_pay_btn.setOnClickListener(payListener);
-//
+//		ll_pay_btn.setOnClickListener(payListener);
+
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
 		zoom_btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -633,9 +633,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpCanceledUI() {
-		//disableCancelBtn();
-		ll_cancel_btn.setVisibility(View.GONE);
-		ll_pay_btn.setVisibility(View.GONE);
+		disableCancelBtn();
+		//ll_cancel_btn.setVisibility(View.GONE);
+		//ll_pay_btn.setVisibility(View.GONE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -656,9 +656,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setupBookedUI() {
-		//enableCancelBtn();
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_pay_btn.setVisibility(View.VISIBLE);
+		enableCancelBtn();
+		//ll_cancel_btn.setVisibility(View.VISIBLE);
+		//ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -679,9 +679,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpAcceptedUI() {
-		//enableCancelBtn();
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_pay_btn.setVisibility(View.VISIBLE);
+		enableCancelBtn();
+//		ll_cancel_btn.setVisibility(View.VISIBLE);
+//		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -703,9 +703,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpArrivedUI() {
-		//enableCancelBtn();
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_pay_btn.setVisibility(View.VISIBLE);
+		enableCancelBtn();
+//		ll_cancel_btn.setVisibility(View.VISIBLE);
+//		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -726,9 +726,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInServiceUI() {
-		//disableCancelBtn();
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_pay_btn.setVisibility(View.VISIBLE);
+		disableCancelBtn();
+//		ll_cancel_btn.setVisibility(View.VISIBLE);
+//		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -749,10 +749,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInCompletedUI() {
-		//disableCancelBtn();
+		disableCancelBtn();
 		
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		ll_pay_btn.setVisibility(View.VISIBLE);
+//		ll_cancel_btn.setVisibility(View.VISIBLE);
+//		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 

@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/shape_searchbar"
-        android:orientation="vertical"
-        android:padding="@dimen/normal_padding" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_padding" >
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -50,6 +50,11 @@
                     android:text="Later" />
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_line" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -106,11 +111,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout1"
-        android:layout_toRightOf="@+id/question_exclamation"
         android:layout_marginTop="@dimen/big_margin"
+        android:layout_toRightOf="@+id/question_exclamation"
         android:text="@string/time_is_local_time" />
 
-   <LinearLayout
+    <LinearLayout
         android:id="@+id/ll_btns"
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_row_height"

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import kankan.wheel.widget.OnWheelChangedListener;
+import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,6 +24,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.DateAdapter;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
@@ -150,12 +152,21 @@ public class SetTimeActivity extends BaseActivity {
 
 	}
 
+	
+	
 	private void bindEvents() {
 		
 
 		final OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
 			@Override
 			public void onChanged(WheelView wheel, int oldValue, int newValue) {
+//				Logger.e("new " + newValue + ", old: " + oldValue);
+//				
+//				((TextView) wheel.getItemView(newValue).findViewById(R.id.date_text)).setTextColor(_context.getResources().getColor(R.color.actionbar_background));
+//				
+//				((TextView) wheel.getItemView(oldValue).findViewById(R.id.date_text)).setTextColor(_context.getResources().getColor(R.color.gray_line));
+//				
+				
 				if (newValue == 0) {
 					Date oldDate = timeNotTodayAdapter.getTime(times.getCurrentItem());
 					times.setViewAdapter(timeTodayAdapter);
@@ -215,7 +226,6 @@ public class SetTimeActivity extends BaseActivity {
 		});
 
 		dates.addChangingListener(wheelListener);
-		
 	}
 
 

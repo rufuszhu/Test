@@ -31,7 +31,6 @@ public class DriverNoteActivity extends BaseActivity {
 		setContentView(R.layout.activity_driver_note);
 		driverMessage = (EditText) findViewById(R.id.message);
 		textRemaining = (TextView) findViewById(R.id.text_remaining);
-		driverMessage.setHint("Buzzer #");
 		driverMessage.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable note) {

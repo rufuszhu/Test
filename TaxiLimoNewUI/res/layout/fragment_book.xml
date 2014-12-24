@@ -39,8 +39,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".8"
                 android:gravity="center_vertical"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textSize="@dimen/address_text_size"
+                android:singleLine="true" />
 
 
         </LinearLayout>

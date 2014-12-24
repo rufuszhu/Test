@@ -80,11 +80,11 @@ public class FavoritesFragment extends ListFragment {
 	private void setUp404(View view) {
 		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
 		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
-		TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
+		//TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
 		TextView tv_fav404_text = (TextView) view.findViewById(R.id.tv_fav404_text);
 		tv_fav404_text.setTypeface(rionaSansMedium);
-		attention_icon.setTypeface(icon_pack);
-		attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
+//		attention_icon.setTypeface(icon_pack);
+//		attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
 		RelativeLayout llfav404 = (RelativeLayout) view.findViewById(R.id.llfav404);
 		llfav404.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.GONE);
