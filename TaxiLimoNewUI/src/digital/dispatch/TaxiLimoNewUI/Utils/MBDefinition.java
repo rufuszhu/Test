@@ -146,8 +146,8 @@ public class MBDefinition {
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.attrbutes_icon_van);
-        aMap.put(2, R.drawable.attrbutes_icon_wheelchair);
+    	aMap.put(1, R.drawable.attrbutes_icon_wheelchair);
+        aMap.put(2, R.drawable.attrbutes_icon_van);  
         aMap.put(3, R.drawable.attrbutes_icon_pet);
         aMap.put(4, R.drawable.attrbutes_icon_airport);
         aMap.put(5, R.drawable.attrbutes_icon_ac);
@@ -167,9 +167,9 @@ public class MBDefinition {
     public static final SparseIntArray attrBtnOnMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();
-        
-        aMap.put(1, R.drawable.attrbutes_filter_van_on);
-        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_on);
+    	
+    	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_on);
+        aMap.put(2, R.drawable.attrbutes_filter_van_on);   
         aMap.put(3, R.drawable.attrbutes_filter_pet_on);
         aMap.put(4, R.drawable.attrbutes_filter_airport_on);
         aMap.put(5, R.drawable.attrbutes_filter_ac_on);
@@ -187,8 +187,8 @@ public class MBDefinition {
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.attrbutes_filter_van_off);
-        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_off);
+    	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_off);
+        aMap.put(2, R.drawable.attrbutes_filter_van_off);
         aMap.put(3, R.drawable.attrbutes_filter_pet_off);
         aMap.put(4, R.drawable.attrbutes_filter_airport_off);
         aMap.put(5, R.drawable.attrbutes_filter_ac_off);
