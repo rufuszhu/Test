@@ -146,10 +146,17 @@ public class MBDefinition {
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.attrbutes_icon_van);
-        aMap.put(2, R.drawable.attrbutes_icon_wheelchair);
+    	aMap.put(1, R.drawable.attrbutes_icon_wheelchair);
+        aMap.put(2, R.drawable.attrbutes_icon_van);  
         aMap.put(3, R.drawable.attrbutes_icon_pet);
         aMap.put(4, R.drawable.attrbutes_icon_airport);
+        aMap.put(5, R.drawable.attrbutes_icon_ac);
+        aMap.put(6, R.drawable.attrbutes_icon_creditcard);
+        aMap.put(7, R.drawable.attrbutes_icon_female);
+        aMap.put(8, R.drawable.attrbutes_icon_green);
+        aMap.put(9, R.drawable.attrbutes_icon_grocery);
+        aMap.put(10, R.drawable.attrbutes_icon_newspaper);
+        aMap.put(11, R.drawable.attrbutes_icon_wifi);
         
         attrIconMap = aMap;
     }
@@ -160,11 +167,18 @@ public class MBDefinition {
     public static final SparseIntArray attrBtnOnMap;
     static {
     	SparseIntArray  aMap = new SparseIntArray();
-        
-        aMap.put(1, R.drawable.attrbutes_filter_van_on);
-        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_on);
+    	
+    	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_on);
+        aMap.put(2, R.drawable.attrbutes_filter_van_on);   
         aMap.put(3, R.drawable.attrbutes_filter_pet_on);
         aMap.put(4, R.drawable.attrbutes_filter_airport_on);
+        aMap.put(5, R.drawable.attrbutes_filter_ac_on);
+        aMap.put(6, R.drawable.attrbutes_filter_creditcard_on);
+        aMap.put(7, R.drawable.attrbutes_filter_female_on);
+        aMap.put(8, R.drawable.attrbutes_filter_green_on);
+        aMap.put(9, R.drawable.attrbutes_filter_grocery_on);
+        aMap.put(10, R.drawable.attrbutes_filter_newspaper_on);
+        aMap.put(11, R.drawable.attrbutes_filter_wifi_on);
         
         attrBtnOnMap = aMap;
     }
@@ -173,10 +187,17 @@ public class MBDefinition {
     static {
     	SparseIntArray  aMap = new SparseIntArray();
         
-        aMap.put(1, R.drawable.attrbutes_filter_van_off);
-        aMap.put(2, R.drawable.attrbutes_filter_wheelchair_off);
+    	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_off);
+        aMap.put(2, R.drawable.attrbutes_filter_van_off);
         aMap.put(3, R.drawable.attrbutes_filter_pet_off);
         aMap.put(4, R.drawable.attrbutes_filter_airport_off);
+        aMap.put(5, R.drawable.attrbutes_filter_ac_off);
+        aMap.put(6, R.drawable.attrbutes_filter_creditcard_off);
+        aMap.put(7, R.drawable.attrbutes_filter_female_off);
+        aMap.put(8, R.drawable.attrbutes_filter_green_off);
+        aMap.put(9, R.drawable.attrbutes_filter_grocery_off);
+        aMap.put(10, R.drawable.attrbutes_filter_newspaper_off);
+        aMap.put(11, R.drawable.attrbutes_filter_wifi_off);
         
         attrBtnOffMap = aMap;
     }

@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -63,12 +61,15 @@ public class AttributeItemAdapter extends BaseAdapter {
 //		name.setText(attrList.get(position).getName());
 		
 		StateListDrawable states = new StateListDrawable();
-		states.addState(new int[] {android.R.attr.state_checked},
-				mContext.getResources().getDrawable(MBDefinition.attrBtnOnMap.get(Integer.parseInt(attrList.get(position).getIconId()))));
-		
-		states.addState(new int[] {},
-				mContext.getResources().getDrawable(MBDefinition.attrBtnOffMap.get(Integer.parseInt(attrList.get(position).getIconId()))));
-
+		int attrIconId = Integer.parseInt(attrList.get(position).getIconId());
+		if(MBDefinition.attrBtnOnMap.get(attrIconId) != 0){ //TL-276 to avoid resource NotFoundException
+			states.addState(new int[] {android.R.attr.state_checked},
+				mContext.getResources().getDrawable(MBDefinition.attrBtnOnMap.get(attrIconId)));
+		}
+		if(MBDefinition.attrBtnOffMap.get(attrIconId) != 0){ //TL-276 to avoid resource NotFoundException
+			states.addState(new int[] {},
+				mContext.getResources().getDrawable(MBDefinition.attrBtnOffMap.get(attrIconId)));
+		}
 		ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
 		
 		toggleButton.setBackgroundDrawable(states);
