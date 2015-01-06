@@ -150,6 +150,13 @@ public class MBDefinition {
         aMap.put(2, R.drawable.attrbutes_icon_wheelchair);
         aMap.put(3, R.drawable.attrbutes_icon_pet);
         aMap.put(4, R.drawable.attrbutes_icon_airport);
+        aMap.put(5, R.drawable.attrbutes_icon_ac);
+        aMap.put(6, R.drawable.attrbutes_icon_creditcard);
+        aMap.put(7, R.drawable.attrbutes_icon_female);
+        aMap.put(8, R.drawable.attrbutes_icon_green);
+        aMap.put(9, R.drawable.attrbutes_icon_grocery);
+        aMap.put(10, R.drawable.attrbutes_icon_newspaper);
+        aMap.put(11, R.drawable.attrbutes_icon_wifi);
         
         attrIconMap = aMap;
     }
