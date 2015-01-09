@@ -68,8 +68,10 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         public final static Property Company_attribute_list = new Property(42, String.class, "company_attribute_list", false, "COMPANY_ATTRIBUTE_LIST");
         public final static Property Company_dupChk_time = new Property(43, String.class, "company_dupChk_time", false, "COMPANY_DUP_CHK_TIME");
         public final static Property Company_car_file = new Property(44, String.class, "company_car_file", false, "COMPANY_CAR_FILE");
-        public final static Property AuthCode = new Property(45, String.class, "authCode", false, "AUTH_CODE");
-        public final static Property PaidAmount = new Property(46, String.class, "paidAmount", false, "PAID_AMOUNT");
+        public final static Property Company_baseRate = new Property(45, Integer.class, "company_baseRate", false, "COMPANY_BASE_RATE");
+        public final static Property Company_rate_PerDistance = new Property(46, Integer.class, "company_rate_PerDistance", false, "COMPANY_RATE__PER_DISTANCE");
+        public final static Property AuthCode = new Property(47, String.class, "authCode", false, "AUTH_CODE");
+        public final static Property PaidAmount = new Property(48, String.class, "paidAmount", false, "PAID_AMOUNT");
     };
 
 
@@ -130,8 +132,10 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
                 "'COMPANY_ATTRIBUTE_LIST' TEXT," + // 42: company_attribute_list
                 "'COMPANY_DUP_CHK_TIME' TEXT," + // 43: company_dupChk_time
                 "'COMPANY_CAR_FILE' TEXT," + // 44: company_car_file
-                "'AUTH_CODE' TEXT," + // 45: authCode
-                "'PAID_AMOUNT' TEXT);"); // 46: paidAmount
+                "'COMPANY_BASE_RATE' INTEGER," + // 45: company_baseRate
+                "'COMPANY_RATE__PER_DISTANCE' INTEGER," + // 46: company_rate_PerDistance
+                "'AUTH_CODE' TEXT," + // 47: authCode
+                "'PAID_AMOUNT' TEXT);"); // 48: paidAmount
     }
 
     /** Drops the underlying database table. */
@@ -370,14 +374,24 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             stmt.bindString(45, company_car_file);
         }
  
+        Integer company_baseRate = entity.getCompany_baseRate();
+        if (company_baseRate != null) {
+            stmt.bindLong(46, company_baseRate);
+        }
+ 
+        Integer company_rate_PerDistance = entity.getCompany_rate_PerDistance();
+        if (company_rate_PerDistance != null) {
+            stmt.bindLong(47, company_rate_PerDistance);
+        }
+ 
         String authCode = entity.getAuthCode();
         if (authCode != null) {
-            stmt.bindString(46, authCode);
+            stmt.bindString(48, authCode);
         }
  
         String paidAmount = entity.getPaidAmount();
         if (paidAmount != null) {
-            stmt.bindString(47, paidAmount);
+            stmt.bindString(49, paidAmount);
         }
     }
 
@@ -436,8 +450,10 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // company_attribute_list
             cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // company_dupChk_time
             cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // company_car_file
-            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45), // authCode
-            cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46) // paidAmount
+            cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45), // company_baseRate
+            cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46), // company_rate_PerDistance
+            cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47), // authCode
+            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48) // paidAmount
         );
         return entity;
     }
@@ -490,8 +506,10 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         entity.setCompany_attribute_list(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
         entity.setCompany_dupChk_time(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
         entity.setCompany_car_file(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
-        entity.setAuthCode(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
-        entity.setPaidAmount(cursor.isNull(offset + 46) ? null : cursor.getString(offset + 46));
+        entity.setCompany_baseRate(cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45));
+        entity.setCompany_rate_PerDistance(cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46));
+        entity.setAuthCode(cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47));
+        entity.setPaidAmount(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
      }
     
     /** @inheritdoc */

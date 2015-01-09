@@ -112,7 +112,7 @@ public class BookActivity extends BaseActivity {
 		bcReceiver = CommonUtilities.getGenericReceiver(_this, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.v(TAG, "on RESUME");
 		checkInternet();
 		setEstFareIfExist(null);
 		setPickupIfExist();
@@ -131,8 +131,8 @@ public class BookActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Logger.e("onActivityResult");
-		Logger.e("requestCode: " + requestCode);
+		Logger.v("onActivityResult");
+		Logger.v("requestCode: " + requestCode);
 		if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
 			if (resultCode == RESULT_OK) {
 				Utils.bookJob(Utils.mSelectedCompany, this);

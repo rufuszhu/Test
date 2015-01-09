@@ -249,6 +249,9 @@ public class Utils {
 		mbook.setSysId(String.valueOf(selectedCompany.systemID));
 		// TL-222
 		mbook.setCompany_car_file(selectedCompany.carFile);
+		//Tl-304
+		mbook.setCompany_baseRate(selectedCompany.baseRate);
+		mbook.setCompany_rate_PerDistance(selectedCompany.ratePerDistance);
 
 		mbook.setAttributeList(setupAttributeIdList(Utils.selected_attribute));
 

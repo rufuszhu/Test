@@ -369,6 +369,8 @@ public class TripDetailActivity extends BaseActivity {
 		company.phoneNr = dbBook.getCompany_phone_number();
 		company.destID = dbBook.getDestID();
 		company.systemID = Integer.parseInt(dbBook.getSysId());
+		company.baseRate = dbBook.getCompany_baseRate();
+		company.ratePerDistance = dbBook.getCompany_rate_PerDistance();
 		
 		Utils.mSelectedCompany = company;
 		String[] stringList = dbBook.getAttributeList().split(",");
