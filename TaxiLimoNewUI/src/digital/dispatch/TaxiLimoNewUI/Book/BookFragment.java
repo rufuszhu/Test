@@ -1,13 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -16,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -28,7 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,14 +33,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -55,7 +49,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -75,23 +68,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
-import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
+import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class BookFragment extends Fragment implements OnConnectionFailedListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks,
@@ -99,7 +86,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	/**
 	 * The fragment argument representing the section number for this fragment.
 	 */
-
+	private boolean logEnabled = false; //set to true if need to debug GecoderGoogle code
 	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String TAG = "BookFragment";
 	private static View view;
@@ -117,7 +104,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	
 	private ArrayList<LatLng> carPos;
 	private ArrayList<Marker> carMarkers;
-	private final static int INTERVAL = 1000 * 5; // 5 second
+	//private final static int INTERVAL = 1000 * 5; // 5 second
 	private Runnable mHandlerTask;
 	private Handler mHandler;
 	private int counter = 0;
@@ -487,6 +474,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 	}
 
+	/* ezhang this should be removed if not used
 	private Location getBestLocation() {
 		Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
 		Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
@@ -533,7 +521,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 
 		return location;
-	}
+	}*/
 
 	// @Override
 	// public void onDisconnected() {
@@ -552,9 +540,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Location location = new Location("");
 		location.setLatitude(cameraPosition.target.latitude);
 		location.setLongitude(cameraPosition.target.longitude);
-
-		getAddress(location);
+		//to avoid unnecessary address lookup
+		if(location.getLatitude() != 0.0 && location.getLongitude() != 0.0){
+			getAddress(location);
+		}
 		Utils.pickupHouseNumber = "";
+		
 	}
 
 	@Override
@@ -610,12 +601,15 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 		// In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !Geocoder.isPresent()) {
-			// No geocoder is present. Issue an error message
-			Toast.makeText(getActivity(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
-			return;
+			// No geocoder is present.
+			//TL-286 use Google Maps Web Service Geocoding API 
+			new GetAddressFromMapServerTask(getActivity()).execute(location); 
+			
 		}
-
-		new GetAddressTask(getActivity()).execute(location);
+		else{
+			new GetAddressTask(getActivity()).execute(location);
+			
+		}
 
 	}
 
@@ -653,6 +647,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 		// Store the context passed to the AsyncTask when the system instantiates it.
 		Context localContext;
+		
 
 		// Constructor called by the system to instantiate the task
 		public GetAddressTask(Context context) {
@@ -669,11 +664,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		 */
 		@Override
 		protected String doInBackground(Location... params) {
-			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
-			 * to address standards can also be used.
-			 */
-			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+			
 
 			// Get the current location from the input parameter list
 			Location location = params[0];
@@ -685,38 +676,22 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			try {
 
 				/*
+				 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+				 * to address standards can also be used.
+				 */
+				Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+				/*
 				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
 				 */
-				addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+				if(geocoder != null){
+					addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+				}
 
 				// Catch network or other I/O problems.
-			} catch (IOException exception1) {
-
-				// Log an error and return an error message
-				// Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-
-				// print the stack trace
-				exception1.printStackTrace();
-
-				// Return an error message
-				if(isAdded())
-					return (getString(R.string.IO_Exception_getFromLocation));
-				else
-					return "";
-
-				// Catch incorrect latitude or longitude values
-			} catch (IllegalArgumentException exception2) {
-
-				// Construct a message containing the invalid arguments
-				String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
-				// Log the error and print the stack trace
-				Log.e(LocationUtils.APPTAG, errorString);
-				exception2.printStackTrace();
-
-				if(isAdded())
-					return errorString;
-				else
-					return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				// Log an error 
+				Log.e(TAG, "geocoder failed , moving on to HTTP");
 			}
 			// If the reverse geocode returned an address
 			if (addresses != null && addresses.size() > 0) {
@@ -728,14 +703,175 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					return LocationUtils.addressToString(getActivity(), address);
 				else
 					return "";
-				// If there aren't any addresses, post a message
-			} else {
-				Utils.mPickupAddress = null;
+				
+			}else{	
+				//try HTTP lookup to the maps API					
+				GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
+				// Create a list to contain the result address
+				List<Address> addressList = null;	
+				
+				try{
+					addressList = mGecoderGoogle.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+					
+					if (addressList != null && addressList.size() > 0) {
+					
+							// Get the first address
+							Address address = addressList.get(0);
+							Utils.mPickupAddress = address;
+							if(isAdded())
+								return LocationUtils.addressToString(getActivity(), address);
+							else
+								return "";
+						
+					} else {
+						// If there aren't any addresses, post a message
+						Utils.mPickupAddress = null;
+						if(isAdded())
+							return getString(R.string.no_address_found);
+						else
+							return "";
+					}
+					
+					
+				}catch (IOException e) {
+			
+					// print the stack trace
+					e.printStackTrace();
+					// Return an error message
+					if(isAdded())
+						return (getString(R.string.IO_Exception_getFromLocation));
+					else
+						return "";
+					
+				} catch (IllegalArgumentException e) {
+					
+						// Construct a message containing the invalid arguments
+						String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
+						// Log the error and print the stack trace
+						Log.e(LocationUtils.APPTAG, errorString);
+						e.printStackTrace();
+
+						if(isAdded())
+							return errorString;
+						else
+							return "";
+					
+				} catch (NullPointerException e) {
+				
+						// print the stack trace
+						e.printStackTrace();
+						// Return an error message
+						if(isAdded())
+							return (getString(R.string.IO_Exception_getFromLocation));
+						else
+							return "";
+		
+				}
+				
+				
+			}
+			
+		}
+				
+
+		/**
+		 * A method that's called once doInBackground() completes. Set the text of the UI element that displays the address. This method runs on the UI thread.
+		 */
+		@Override
+		protected void onPostExecute(String address) {
+			address_bar_text.setText(address);
+			if(setPickupButtonClicked){
+				setPickupButtonClicked=false;
+				blue_pin.performClick();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Get address with Google Map Webservice Geocoding API asynchronously.
+	 * 
+	 * 
+	 */
+	protected class GetAddressFromMapServerTask extends AsyncTask<Location, Void, String> {
+		
+		// Store the context passed to the AsyncTask when the system instantiates it.
+		Context localContext;
+
+		// Constructor called by the system to instantiate the task
+		public GetAddressFromMapServerTask(Context context) {
+
+			// Required by the semantics of AsyncTask
+			super();
+
+			// Set a Context for the background task
+			localContext = context;
+		}
+		
+		
+		@Override
+		protected String doInBackground(Location... params) {
+			GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
+
+			// Get the current location from the input parameter list
+			Location location = params[0];
+			
+			// Create a list to contain the result address
+			List<Address> addressList = null;
+			
+			
+			try{
+				addressList = mGecoderGoogle.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+				
+				if (addressList != null && addressList.size() > 0) {
+				
+						// Get the first address
+						Address address = addressList.get(0);
+						Utils.mPickupAddress = address;
+						if(isAdded())
+							return LocationUtils.addressToString(getActivity(), address);
+						else
+							return "";
+					// If there aren't any addresses, post a message
+				} else {
+					Utils.mPickupAddress = null;
+					if(isAdded())
+						return getString(R.string.no_address_found);
+					else
+						return "";
+				}
+				
+				
+			}catch (IOException e) {
+		
+				// print the stack trace
+				e.printStackTrace();
+				// Return an error message
 				if(isAdded())
-					return getString(R.string.no_address_found);
+					return (getString(R.string.IO_Exception_getFromLocation));
 				else
 					return "";
+				
+			} catch (IllegalArgumentException e) {
+				
+					// Construct a message containing the invalid arguments
+					String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
+					// Log the error and print the stack trace
+					Log.e(LocationUtils.APPTAG, errorString);
+					e.printStackTrace();
+
+					if(isAdded())
+						return errorString;
+					else
+						return "";
+				
+			} catch (NullPointerException e) {
+			
+					Log.e(TAG, "NullPointer", e);
+					return "";
+	
 			}
+			
 		}
 
 		/**
@@ -749,6 +885,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				blue_pin.performClick();
 			}
 		}
+
+		
 	}
 
 	@Override
@@ -961,4 +1099,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		nicknameDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		nicknameDialog.show();
 	}
+	
+	
+	
 }

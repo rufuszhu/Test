@@ -6,5 +6,22 @@
 <!--         <item>Payment</item> -->
 <!--         <item>Preference</item> -->
         <item>About</item>
-    </string-array>       
+    </string-array>  
+    
+    <!-- Countries list that use street name before number -->
+    <string-array name="street_name_first_country_code">
+        <item>AU</item>        <!-- Austria -->
+        <item>CZ</item>        <!-- Czech -->
+        <item>DK</item>        <!-- Denmark -->
+        <item>FI</item>        <!-- Finland -->
+        <item>DE</item>        <!-- Germany -->
+        <item>IT</item>        <!-- Italy -->
+        <item>MX</item>        <!-- Mexico -->
+        <item>NL</item>        <!-- Netherlands -->
+        <item>NO</item>        <!-- Norway -->
+        <item>RO</item>        <!-- Romania -->
+        <item>RU</item>        <!-- Russia -->
+        <item>ES</item>        <!-- Spain -->
+        <item>SE</item>        <!-- Sweden -->
+    </string-array>
 </resources>
