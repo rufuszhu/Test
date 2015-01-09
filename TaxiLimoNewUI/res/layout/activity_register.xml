@@ -102,7 +102,7 @@
             android:ems="5"
             android:imeOptions="actionDone"
             android:inputType="textNoSuggestions"
-            android:textSize="@dimen/register_form_font_size"
+            android:textSize="15sp"
             android:background="@drawable/editbox_background"
             android:hint="@string/verify_hint"
             android:paddingLeft="@dimen/big_margin">

@@ -57,7 +57,7 @@
     <string name="warning">WARNING</string>
     <string name="pin_cannot_reset">PIN cannot be reset. Please choose your PIN carefully and keep it secure.</string>
     <string name="enter_verification">Enter the Verification Code, then click <b>Verify</b></string>
-    <string name="verify_hint">Verification Code form SMS Message</string>
+    <string name="verify_hint">Verification Code from SMS Message</string>
     <string name="verify_not_receive">Did not receive your Verification Code?</string>
     <string name="verify_check_phone">Check your phone number and  </string>
     <string name="verify_request_new"><u>request a new one.</u></string>
@@ -126,7 +126,7 @@
     <string name="support">Support</string>
     <string name="contactNum">1-800-111-2345</string>
     <string name="contactEmail">support@taxilimo.com</string>
-    <string name="aboutFooter">&#169; 2014 DDS Wireless International Inc.</string>
+    <string name="aboutFooter">&#169; 2014 Digital Dispatch Systems Inc.</string>
     <string name="action_edit">Edit</string>
 
     <!-- trip detail table -->

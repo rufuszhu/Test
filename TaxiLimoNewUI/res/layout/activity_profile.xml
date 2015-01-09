@@ -94,7 +94,8 @@
                 android:layout_marginTop="@dimen/normal_padding"
                 android:background="@drawable/editbox_background"
                 android:hint="@string/verify_hint"
-                android:paddingLeft="@dimen/big_margin" >
+                android:paddingLeft="@dimen/big_margin"
+                android:textSize="15sp" >
 
                 <requestFocus
                     android:layout_width="wrap_content"
