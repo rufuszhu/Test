@@ -125,6 +125,8 @@ public class LimoDaoGenerator {
         booking.addStringProperty("company_attribute_list");
         booking.addStringProperty("company_dupChk_time");
         booking.addStringProperty("company_car_file");
+        booking.addIntProperty("company_baseRate"); //TL-304
+        booking.addIntProperty("company_rate_PerDistance");
         
         booking.addStringProperty("authCode");
         booking.addStringProperty("paidAmount");

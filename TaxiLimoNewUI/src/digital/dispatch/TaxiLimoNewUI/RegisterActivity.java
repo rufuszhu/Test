@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -15,23 +14,18 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -56,7 +50,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	String regid;
 
 	private EditText name, email, phone_number;
-	private TextView next_btn, verify_btn, register_title, request_new_btn;
+	private TextView next_btn, verify_btn, request_new_btn;
 	private LinearLayout ll_sms_verify;
 	private Context _context;
 	private EditText et_code;
@@ -76,7 +70,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		findView();
 		styleView();
 		bindView();
-		//updateActionBar();
 		_context = this;
 
 	}
@@ -94,7 +87,6 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		if (checkPlayServices()) {
 			gcm = GoogleCloudMessaging.getInstance(_context);
 			regid = getRegistrationId(_context);
-			Logger.e("GCM id: " + regid);
 			if (regid.isEmpty())
 				registerInBackground(alreadyRegister);
 		} else {
@@ -145,7 +137,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		phone_number = (EditText) findViewById(R.id.phone_number);
 		ll_sms_verify = (LinearLayout) findViewById(R.id.ll_sms_verify);
 		question_ic = (TextView) findViewById(R.id.question_circle);
-		register_title = (TextView) findViewById(R.id.register_title);
+	
 
 		et_code = (EditText) findViewById(R.id.et_code);
 		request_new_btn = (TextView) findViewById(R.id.request_new_btn);
@@ -381,7 +373,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 				GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICES_RESOLUTION_REQUEST).show();
 			} else {
-				Log.i(TAG, "This device is not supported.");
+				//Log.i(TAG, "This device is not supported.");
 				finish();
 			}
 			return false;

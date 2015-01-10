@@ -2,7 +2,6 @@ package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.io.StringReader;
 import java.net.URI;
-import java.text.DecimalFormat;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -33,7 +32,7 @@ public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {
 	
 
 	
-	public GetEstimateFareTask(TextView fareView, int baseRate, int ratePerDistance/*, Address mPickupAddress, Address mDropoffAddress*/) {
+	public GetEstimateFareTask(TextView fareView, int baseRate, int ratePerDistance) {
 
 		this.fareView = fareView;
 		this.baseRate = baseRate;
@@ -92,10 +91,6 @@ public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {
 			double baseRateInCents = (double) baseRate;
 			double dynamicRateCentPerKM = (double) ratePerDistance;
 			double finalFare = (baseRateInCents + (dynamicRateCentPerKM * distance / 1000)) / 100;
-//			int finalFare = baseRate + (ratePerDistance * (int)distance/1000);
-			Logger.e("finalFare: " + finalFare);
-			Logger.e("distance: " + distance);
-			//fareView.setText("$" + new DecimalFormat("##.00").format(finalFare));
 			fareView.setText("$" + (int)Math.ceil(finalFare));
 		}
 		
