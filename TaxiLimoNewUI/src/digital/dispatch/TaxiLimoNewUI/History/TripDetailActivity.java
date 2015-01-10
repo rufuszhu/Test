@@ -351,6 +351,8 @@ public class TripDetailActivity extends BaseActivity {
 					}
 				}
 				else{
+					//TL-300 add DropOff address if exist
+					Utils.mDropoffAddress = addresses.get(0);
 					setUpCompanyAndGoToBook();
 				}
 			} else {
