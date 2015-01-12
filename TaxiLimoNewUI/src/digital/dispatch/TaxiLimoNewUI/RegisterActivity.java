@@ -457,7 +457,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			@Override
 			protected void onPostExecute(String msg) {
 				// mDisplay.append(msg + "\n");
-				Logger.e(TAG, msg);
+				Logger.i(TAG, msg);
 			}
 
 		}.execute(null, null, null);

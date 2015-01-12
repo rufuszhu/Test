@@ -143,7 +143,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Logger.e(TAG, "on CREATEVIEW");
+		Logger.d(TAG, "on CREATEVIEW");
 		
 		setPickupButtonClicked = false;
 		
@@ -416,7 +416,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		checkGPSEnable();
 		checkInternet();
 		
@@ -425,7 +425,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	@Override
 	public void onPause() {
 		super.onPause();
-		Logger.e(TAG, "on PAUSE");
+		Logger.d(TAG, "on PAUSE");
 		stopRepeatingTask();
 	}
 
@@ -891,7 +891,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		Logger.e(TAG, "onConnected");
+		Logger.d(TAG, "onConnected");
 		setUpMapIfNeeded();
 		Address address = Utils.mPickupAddress;
 		

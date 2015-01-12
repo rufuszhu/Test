@@ -58,7 +58,7 @@ public class PaymentActivity extends ActionBarActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		DaoManager daoManager = DaoManager.getInstance(this);
 		creditCardDao = daoManager.getDBCreditCardDao(DaoManager.TYPE_WRITE);
 		cardList = creditCardDao.queryBuilder().list();

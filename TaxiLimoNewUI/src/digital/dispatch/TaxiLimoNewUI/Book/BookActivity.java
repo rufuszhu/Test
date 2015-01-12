@@ -112,7 +112,7 @@ public class BookActivity extends BaseActivity {
 		bcReceiver = CommonUtilities.getGenericReceiver(_this, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
-		Logger.v(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		checkInternet();
 		setEstFareIfExist(null);
 		setPickupIfExist();
@@ -131,8 +131,8 @@ public class BookActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Logger.v("onActivityResult");
-		Logger.v("requestCode: " + requestCode);
+		Logger.d("onActivityResult");
+		Logger.d("requestCode: " + requestCode);
 		if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
 			if (resultCode == RESULT_OK) {
 				Utils.bookJob(Utils.mSelectedCompany, this);
@@ -167,7 +167,7 @@ public class BookActivity extends BaseActivity {
 					Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
 		}
 		else if(tempCompList!=null && tempCompList.length>0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mDropoffAddress != null){
-			Logger.e(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
+			Logger.d(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
 			Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
 			Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
 			Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");

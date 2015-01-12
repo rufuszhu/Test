@@ -62,7 +62,7 @@ public class HistoryFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 
 		List<DBBooking> values = qb.list();
 

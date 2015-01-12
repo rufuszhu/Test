@@ -105,7 +105,7 @@ public class AttributeActivity extends BaseActivity {
 //
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
-//		Logger.e(TAG, "onCreateOptionsMenu");
+//		Logger.d(TAG, "onCreateOptionsMenu");
 //		getMenuInflater().inflate(R.menu.attribute, menu);
 //		refresh_icon = menu.findItem(R.id.action_refresh);
 //		if (refreshing) {
