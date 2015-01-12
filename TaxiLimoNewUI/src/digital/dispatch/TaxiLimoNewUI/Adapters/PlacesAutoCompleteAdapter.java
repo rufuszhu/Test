@@ -188,7 +188,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 				ArrayList<String> queryResults;
 				if (constraint != null) {
 					// Retrieve the autocomplete results.
-					// Logger.e(LOG_TAG, "Street number: " + _streetNumber.getText().toString());
+					// Logger.d(LOG_TAG, "Street number: " + _streetNumber.getText().toString());
 					// resultList = autocomplete(_streetNumber.getText().toString() + " " + constraint.toString());
 					queryResults = autocomplete(constraint.toString());
 					// Assign the data to the FilterResults

@@ -114,7 +114,7 @@ public class TrackDetailActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Logger.e(TAG, "onCreate");
+		Logger.d(TAG, "onCreate");
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
@@ -166,7 +166,7 @@ public class TrackDetailActivity extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		daoManager = DaoManager.getInstance(_context);
 		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		boolean isTrackDetail = true;
@@ -177,8 +177,8 @@ public class TrackDetailActivity extends BaseActivity {
 	@Override
 	// this is user from user click pay but no registered credit card. And got directed to the cc register page and finished registraion
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Logger.e("onActivityResult");
-		Logger.e("requestCode: " + requestCode);
+		Logger.d("onActivityResult");
+		Logger.v("requestCode: " + requestCode);
 		if (requestCode == MBDefinition.REQUEST_REGISTER_CC) {
 			if (resultCode == RESULT_OK) {
 				if (data.getExtras().getParcelable(MBDefinition.EXTRA_BOOKING) != null) {
@@ -194,7 +194,7 @@ public class TrackDetailActivity extends BaseActivity {
 	public void onPause() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
-		Logger.e(TAG, "on PAUSE");
+		Logger.d(TAG, "on PAUSE");
 	}
 
 	@Override
@@ -504,7 +504,7 @@ public class TrackDetailActivity extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		Logger.e(TAG, "onCreateOptionsMenu");
+		Logger.d(TAG, "onCreateOptionsMenu");
 		getMenuInflater().inflate(R.menu.track_detail, menu);
 		refresh_icon = menu.findItem(R.id.action_refresh);
 		startRecallJobTask();

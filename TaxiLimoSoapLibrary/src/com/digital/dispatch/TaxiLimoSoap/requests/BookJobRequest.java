@@ -34,7 +34,7 @@ public class BookJobRequest extends Request {
 	
 	public void setSysID(String sysID) {
 		systemID = sysID;
-	}
+	} 
 	
 	public void setTaxiCompanyID(String compID) {
 		taxi_company_id = compID;

@@ -253,14 +253,14 @@ public class TripDetailActivity extends BaseActivity {
 		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 	}
 
 	@Override
 	public void onPause() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
-		Logger.e(TAG, "on PAUSE");
+		Logger.d(TAG, "on PAUSE");
 		
 	}
 	

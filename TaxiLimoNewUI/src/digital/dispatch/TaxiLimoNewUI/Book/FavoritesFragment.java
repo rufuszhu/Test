@@ -68,7 +68,7 @@ public class FavoritesFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Logger.e(TAG, "onCreate");
+		Logger.d(TAG, "onCreate");
 		initListeners();
 		daoManager = DaoManager.getInstance(getActivity());
 		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
@@ -92,7 +92,7 @@ public class FavoritesFragment extends ListFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Logger.e(TAG, "onCreateView");
+		Logger.d(TAG, "onCreateView");
 		view = inflater.inflate(R.layout.fragment_favorites, container, false);
 		mListView = (ListView) view.findViewById(android.R.id.list);
 //		RelativeLayout llfav404 = (RelativeLayout) view.findViewById(R.id.llfav404);
@@ -122,7 +122,7 @@ public class FavoritesFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 
 		Utils.isInternetAvailable(getActivity());
 	}

@@ -123,7 +123,7 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 	@Override
 	public void onPause() {
 		super.onPause();
-		Logger.e(TAG, "on PAUSE");
+		Logger.d(TAG, "on PAUSE");
 		if (mLocationClient != null) {
 			mLocationClient.disconnect();
 		}

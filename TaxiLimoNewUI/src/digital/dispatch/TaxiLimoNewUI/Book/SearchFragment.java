@@ -97,14 +97,14 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Logger.e(TAG, "onCreate");
+		Logger.d(TAG, "onCreate");
 		getData();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_search, container, false);
-		Logger.e(TAG, "onCreateView");
+		Logger.d(TAG, "onCreateView");
 		scrollView1 = (ScrollView) view.findViewById(R.id.scrollView1);
 		fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
 		rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
@@ -303,7 +303,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 
 	}
 

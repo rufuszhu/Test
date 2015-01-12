@@ -56,7 +56,7 @@ public class MapNotAvailableFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Logger.e(TAG, "onCreate");
+		Logger.d(TAG, "onCreate");
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class MapNotAvailableFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		
 	}
 	
