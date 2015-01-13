@@ -54,7 +54,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 	private Typeface RionaSansMedium;
 	private Typeface fontFamily;
 	private Typeface icon_pack;
-	private static final String API_KEY = "AIzaSyB-yx9i6UXvIObombR7xr1gQutmCBye2no";
+	private static final String API_KEY = "AIzaSyBZqkyqueJbnKhaUyudF6P6HwGTh1PtHVk";
 	private static final String TAG = "PlacesAutoCompleteAdapter";
 	
 	private boolean mSwiping = false;

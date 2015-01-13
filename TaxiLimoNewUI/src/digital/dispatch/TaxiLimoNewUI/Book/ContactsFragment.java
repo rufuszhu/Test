@@ -473,8 +473,10 @@ public class ContactsFragment extends ListFragment {
 				if (isSave) {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addressesObj.get(0);
-					else
-						Utils.mPickupAddress = addressesObj.get(0);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addressesObj.get(0);
+                    }
 					getActivity().finish();
 				} else
 					new AddFavoriteTask(getActivity()).execute(addresses.get(which));
@@ -568,10 +570,13 @@ public class ContactsFragment extends ListFragment {
 				boolean isSave = true;
 				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses, isSave);
 			} else if (addresses.size() == 1) {
-				if (((ModifyAddressActivity) getActivity()).getIsDesitination())
-					Utils.mDropoffAddress = addresses.get(0);
-				else
-					Utils.mPickupAddress = addresses.get(0);
+				if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
+                    Utils.mDropoffAddress = addresses.get(0);
+                }
+				else {
+                    Utils.pickupHouseNumber="";
+                    Utils.mPickupAddress = addresses.get(0);
+                }
 				getActivity().finish();
 
 			} else {

@@ -342,6 +342,7 @@ public class TripDetailActivity extends BaseActivity {
 			}
 			else if (addresses.size() != 0) {
 				if(isPickup){
+                    Utils.pickupHouseNumber = "";
 					Utils.mPickupAddress = addresses.get(0);
 					boolean isPickup = false;
 					if(dbBook.getDropoffAddress()!=null && dbBook.getDropoffAddress().length()>0)

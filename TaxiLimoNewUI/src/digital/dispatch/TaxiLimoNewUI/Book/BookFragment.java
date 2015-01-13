@@ -476,61 +476,6 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 	}
 
-	/* ezhang this should be removed if not used
-	private Location getBestLocation() {
-		Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
-		Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
-		Location tmpLocation;
-
-		if (gpsLocation == null) {
-			Logger.v(TAG, "No GPS Location available.");
-			return networkLocation;
-		}
-
-		if (networkLocation == null) {
-			Logger.v(TAG, "No Network Location available");
-			return gpsLocation;
-		}
-
-		Logger.v(TAG, "GPS location:");
-		Logger.v(TAG, "   accurate=" + gpsLocation.getAccuracy() + " time=" + gpsLocation.getTime());
-		Logger.v(TAG, "Netowrk location:");
-		Logger.v(TAG, "   accurate=" + networkLocation.getAccuracy() + " time=" + networkLocation.getTime());
-
-		if (gpsLocation.getAccuracy() < networkLocation.getAccuracy()) {
-			Logger.v(TAG, "use GPS location");
-			tmpLocation = gpsLocation;
-
-		} else {
-			Logger.v(TAG, "use networkLocation");
-			tmpLocation = networkLocation;
-		}
-		return tmpLocation;
-
-	}
-
-	private Location getLocationByProvider(String provider) {
-		Location location = null;
-
-		LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-		try {
-			if (locationManager.isProviderEnabled(provider)) {
-				location = locationManager.getLastKnownLocation(provider);
-			}
-		} catch (IllegalArgumentException e) {
-			Logger.d(TAG, "Cannot acces Provider " + provider);
-		}
-
-		return location;
-	}*/
-
-	// @Override
-	// public void onDisconnected() {
-	// // TODO Auto-generated method stub
-	//
-	// }
-
 	@Override
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
@@ -701,6 +646,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				// Get the first address
 				Address address = addresses.get(0);
 				Utils.mPickupAddress = address;
+                Utils.pickupHouseNumber="";
 				if(isAdded())
 					return LocationUtils.addressToString(getActivity(), address);
 				else
@@ -720,6 +666,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 							// Get the first address
 							Address address = addressList.get(0);
 							Utils.mPickupAddress = address;
+                            Utils.pickupHouseNumber="";
 							if(isAdded())
 								return LocationUtils.addressToString(getActivity(), address);
 							else
@@ -728,6 +675,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					} else {
 						// If there aren't any addresses, post a message
 						Utils.mPickupAddress = null;
+                        Utils.pickupHouseNumber="";
 						if(isAdded())
 							return getString(R.string.no_address_found);
 						else
@@ -830,6 +778,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 						// Get the first address
 						Address address = addressList.get(0);
 						Utils.mPickupAddress = address;
+                        Utils.pickupHouseNumber="";
 						if(isAdded())
 							return LocationUtils.addressToString(getActivity(), address);
 						else
@@ -837,6 +786,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					// If there aren't any addresses, post a message
 				} else {
 					Utils.mPickupAddress = null;
+                    Utils.pickupHouseNumber="";
 					if(isAdded())
 						return getString(R.string.no_address_found);
 					else
@@ -887,8 +837,6 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				blue_pin.performClick();
 			}
 		}
-
-		
 	}
 
 	@Override

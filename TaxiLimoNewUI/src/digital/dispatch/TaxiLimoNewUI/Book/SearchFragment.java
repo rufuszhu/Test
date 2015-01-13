@@ -638,6 +638,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
 					Utils.mDropoffAddress = addresses.get(0);
 				} else {
+                    Utils.pickupHouseNumber="";
 					Utils.mPickupAddress = addresses.get(0);
 				}
 				getActivity().finish();
@@ -666,8 +667,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				if (isAdded()) {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addressesObj.get(which);
-					else
-						Utils.mPickupAddress = addressesObj.get(which);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addressesObj.get(which);
+                    }
 					getActivity().finish();
 				} else {
 					dialog.dismiss();
