@@ -227,7 +227,7 @@ public class TrackFragment extends ListFragment {
 		if( activeJobs.size() > 0){	
 			BookingListAdapter adapter = new BookingListAdapter(getActivity(), activeJobs);
 			if(adapter.getCount()>0)
-			Logger.e(TAG,"trip status: " + adapter.getItem(0).getTripStatus());
+			Logger.i(TAG,"trip status: " + adapter.getItem(0).getTripStatus());
 			setListAdapter(adapter);
 		}
 	}

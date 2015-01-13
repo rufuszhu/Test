@@ -158,7 +158,6 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
 			@Override
 			public void onPageSelected(int selected) {
-				Log.e(TAG, "onPageSelected: " + selected);
 				if (selected == 0) {
 					selectTab0();
 				} else if (selected == 1) {

@@ -24,7 +24,6 @@ public class GetServiceListResponse extends ResponseWrapper {
 
 	public GetServiceListResponse() {
 		super();
-		Log.e(TAG,"in constructor");
 	}
 
 	public GetServiceListResponse(SoapObject soap) {

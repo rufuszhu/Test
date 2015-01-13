@@ -158,7 +158,6 @@ public class ModifyAddressActivity extends BaseActivity {
 
 			@Override
 			public void onPageSelected(int selected) {
-				Log.e(TAG, "onPageSelected: " + selected);
 
 				if (selected == 0) {
 					selectTab0();

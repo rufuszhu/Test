@@ -47,7 +47,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 	@Override
 	protected Boolean doInBackground(String... params) {
 		try {
-			Logger.e(TAG, _context.getString(R.string.reg_device_start));
+			Logger.d(TAG, _context.getString(R.string.reg_device_start));
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 			String phone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER);
 			rdReq.setPhoneNr(phone);
@@ -116,7 +116,7 @@ public class VerifyDeviceTask extends AsyncTask<String, Integer, Boolean> implem
 		else
 			((ProfileActivity)_context).showProfileVerifySuccessMessage();
 		
-		Logger.e(TAG, "VerifyDev: server-" + _context.getString(R.string.url) + ", response-" + str);
+		Logger.d(TAG, "VerifyDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 	}
 
 	public boolean checkConnection() {
