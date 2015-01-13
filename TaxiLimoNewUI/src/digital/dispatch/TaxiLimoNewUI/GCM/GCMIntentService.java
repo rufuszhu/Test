@@ -162,7 +162,7 @@ public class GCMIntentService extends GCMBaseIntentService
 				
 				break;
 			case MBDefinition.LATE_TRIP_EVENT:
-				Logger.e(TAG, "late trip:" + trID);
+				Logger.d(TAG, "late trip:" + trID);
 				SharedPreferences sharedPref = ctx.getSharedPreferences("mobile_booker", 0);
 				SharedPreferences.Editor prefEditor = sharedPref.edit();
 				String curLateTripTRID = trID + "";

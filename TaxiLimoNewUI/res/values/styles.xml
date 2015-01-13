@@ -2,7 +2,10 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
 
@@ -23,6 +26,12 @@
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <style name="TextDropShadowTop">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDy">-1</item>
         <item name="android:shadowRadius">1</item>
     </style>
 

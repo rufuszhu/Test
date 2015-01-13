@@ -805,7 +805,7 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 			int errCode = res.GetResponseCode();
 
 			if (!notInScreen) {
-				// Default generic error, unknown error – retry may succeed
+				// Default generic error, unknown error, retry may succeed
 				if (errCode == 0 || errCode == 7 || errCode == 25) {
 					notApproveAlert(R.string.credit_card_err_unknown);
 				}

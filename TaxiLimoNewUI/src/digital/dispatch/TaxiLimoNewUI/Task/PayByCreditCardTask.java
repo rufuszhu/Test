@@ -111,7 +111,7 @@ public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implemen
 		Utils.stopProcessingDialog(_context);
 		int errCode = res.GetResponseCode();
 
-		// Default generic error, unknown error – retry may succeed
+		// Default generic error, unknown error, retry may succeed
 		if (errCode == 0 || errCode == 7 || errCode == 25) {
 			notApproveAlert(R.string.payment_cc_err_generic_unknown);
 		}

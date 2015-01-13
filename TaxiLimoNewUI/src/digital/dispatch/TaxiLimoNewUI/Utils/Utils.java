@@ -33,6 +33,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
+import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -164,32 +166,75 @@ public class Utils {
 
 	}
 
-	public static void showOption(LinearLayout ll_attr, String[] attrs, Context context, int marginRight) {
+	public static void showOption(LinearLayout ll_attr, String[] attr_id_list, Context context, int marginRight) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		ll_attr.removeAllViews();
-		for (int i = 0; i < attrs.length; i++) {
-			if (!attrs[i].equalsIgnoreCase("")) {
+		for (int i = 0; i < attr_id_list.length; i++) {
+			if (!attr_id_list[i].equalsIgnoreCase("")) {
 				DaoManager daoManager = DaoManager.getInstance(context);
 				DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-				String iconId = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attrs[i])).list()
-						.get(0).getIconId();
+                DBAttribute dbAttr = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attr_id_list[i])).list().get(0);
+				String iconId = dbAttr.getIconId();
 				if (!iconId.equalsIgnoreCase("")) {
-					ImageView attr = new ImageView(context);
-					if(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)) != 0){ //TL-276 to avoid resource NotFoundException
-						attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
-					}
-					int dimens = (int) (30 * scale + 0.5f);
-					int margin_right = (int) (marginRight * scale + 0.5f);
-					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
-					layoutParams.setMargins(0, 0, margin_right, 0);
+                    int dimens = (int) (30 * scale + 0.5f);
+                    int margin_right = (int) (marginRight * scale + 0.5f);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimens, dimens);
+                    layoutParams.setMargins(0, 0, margin_right, 0);
 
-					// setting image position
-					attr.setLayoutParams(layoutParams);
-					ll_attr.addView(attr);
+
+					if(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)) != 0){ //TL-276 to avoid resource NotFoundException
+                        ImageView attr = new ImageView(context);
+                        attr.setImageResource(MBDefinition.attrIconMap.get(Integer.valueOf(iconId)));
+                        // setting image position
+                        attr.setLayoutParams(layoutParams);
+                        ll_attr.addView(attr);
+					}
+                    else{
+                        TextView attr_custom = new TextView(context);
+                        attr_custom.setBackground(context.getResources().getDrawable(R.drawable.attr_icon_background));
+                        attr_custom.setText(getShortName(attributeDao, dbAttr, i, attr_id_list));
+                        // setting image position
+
+                        attr_custom.setLayoutParams(layoutParams);
+                        attr_custom.setGravity(Gravity.CENTER);
+                        attr_custom.setTextColor(context.getResources().getColor(R.color.blue_grenn_color2));
+                        attr_custom.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf"));
+
+                        ll_attr.addView(attr_custom);
+                    }
 				}
 			}
 		}
 	}
+
+    private static String getShortName(DBAttributeDao attributeDao, DBAttribute dbAttr, int position, String[] attr_id_list) {
+        int repeatCount = 0;
+        int beforeCount = 0;
+        char firstChar = dbAttr.getName().charAt(0);
+        for (int i = 0; i < attr_id_list.length; i++) {
+            DBAttribute temp = getDBAttrById(attributeDao,attr_id_list[i]);
+            if (temp.getName().charAt(0) == firstChar) {
+                if(!checkIconAvailable(Integer.valueOf(temp.getIconId()))){
+                    repeatCount++;
+                    if (i < position)
+                        beforeCount++;
+                }
+            }
+        }
+        if (repeatCount > 1) {
+            return Character.toString(firstChar) + Integer.valueOf(beforeCount + 1).toString();
+        } else
+            return Character.toString(firstChar);
+    }
+
+    private static DBAttribute getDBAttrById(DBAttributeDao attributeDao, String id){
+        return attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(id)).list()
+                .get(0);
+    }
+
+    private static boolean checkIconAvailable(int attrIconId){
+        return MBDefinition.attrBtnOnMap.get(attrIconId) != 0 && MBDefinition.attrBtnOffMap.get(attrIconId) != 0;
+    }
 
 	private static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
 		String temp = "";
