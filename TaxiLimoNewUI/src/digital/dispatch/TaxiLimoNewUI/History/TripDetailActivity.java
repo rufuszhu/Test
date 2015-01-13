@@ -312,7 +312,7 @@ public class TripDetailActivity extends BaseActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 				// Log an error 
-				Log.e(TAG, "geocoder failed , moving on to HTTP");
+				Logger.e(TAG, "geocoder failed , moving on to HTTP");
 			}
 			//If the geocoder returned an address
 			if (addresses != null && addresses.size() > 0) {
@@ -329,7 +329,7 @@ public class TripDetailActivity extends BaseActivity {
 				catch (IOException exception1) {
 
 					// Log an error and return an error message
-					Log.e(TAG, getString(R.string.IO_Exception_getFromLocation));
+					Logger.e(TAG, getString(R.string.IO_Exception_getFromLocation));
 	
 					// print the stack trace
 					exception1.printStackTrace();
@@ -340,12 +340,12 @@ public class TripDetailActivity extends BaseActivity {
 					// Construct a message containing the invalid arguments
 					String errorString = getString(R.string.illegal_argument_exception, locationName);
 					// Log the error and print the stack trace
-					Log.e(TAG, errorString);
+					Logger.e(TAG, errorString);
 					exception2.printStackTrace();
 	
 				
 				}catch(Exception e){
-					Log.e(TAG, "other exception");
+					Logger.e(TAG, "other exception");
 					e.printStackTrace();
 				}
 				return addresses;
