@@ -13,7 +13,6 @@ import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -28,11 +27,14 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class AddFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 
+	private static final String TAG = "AddFavoriteTask";
 	// Store the context passed to the AsyncTask when the system
 	// instantiates it.
 	Context localContext;
@@ -50,11 +52,7 @@ public class AddFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 	 */
 	@Override
 	protected List<Address> doInBackground(String... params) {
-		/*
-		 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to
-		 * address standards can also be used.
-		 */
-		Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+		
 
 		// Get the current location from the input parameter list
 		String locationName = params[0];
@@ -67,34 +65,56 @@ public class AddFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 		try {
 
 			/*
+			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to
+			 * address standards can also be used.
+			 */
+			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+			/*
 			 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
 			 */
-			addresses = geocoder.getFromLocationName(locationName, 10);
+			if(geocoder != null)
+				addresses = geocoder.getFromLocationName(locationName, 10);
 
 			// Catch network or other I/O problems.
-		} catch (IOException exception1) {
-
-			// Log an error and return an error message
-			// print the stack trace
-			exception1.printStackTrace();
-
-			// Return an error message
-			// return (getString(R.string.IO_Exception_getFromLocation));
-
-			// Catch incorrect latitude or longitude values
-		} catch (IllegalArgumentException exception2) {
-
-			// Construct a message containing the invalid arguments
-			String errorString = localContext.getString(R.string.illegal_argument_exception, locationName);
-			// Log the error and print the stack trace
-			Log.e(LocationUtils.APPTAG, errorString);
-
-			exception2.printStackTrace();
-
-			//
-			// return errorString;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Log an error 
+			Logger.e(TAG, "geocoder failed , moving on to HTTP");
 		}
-		return addresses;
+		//If the geocoder returned an address
+		if (addresses != null && addresses.size() > 0) {
+			return addresses;
+		}			
+		else{
+			boolean logEnabled = false;
+			//try HTTP lookup to the maps API					
+			GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
+		
+			try{
+				addresses = mGecoderGoogle.getFromLocationName(locationName, 10);
+			}catch (IOException exception1) {
+
+				Logger.e(TAG, localContext.getString(R.string.IO_Exception_getFromLocation));
+				// Log an error and return an error message
+				// print the stack trace
+				exception1.printStackTrace();			
+	
+				// Catch incorrect latitude or longitude values
+			} catch (IllegalArgumentException exception2) {
+	
+				// Construct a message containing the invalid arguments
+				String errorString = localContext.getString(R.string.illegal_argument_exception, locationName);
+				// Log the error and print the stack trace
+				Logger.e(TAG, errorString);
+	
+				exception2.printStackTrace();
+	
+			}catch(Exception e){
+				Logger.e(TAG, "other exception");
+				e.printStackTrace();
+			}
+			return addresses;
+		}
 	}
 
 	/**
