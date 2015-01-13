@@ -58,20 +58,20 @@ public class CompanyItem implements Serializable{
 	}
 	
 	public static void printCompanyItem(CompanyItem item){
-		Log.e(TAG, "destId: " + item.destID);
-		Log.e(TAG, "name: " + item.name);
-		Log.e(TAG, "logo: " + item.logo);
-		Log.e(TAG, "logoVersion: " + item.logoVersion);
-		Log.e(TAG, "description: " + item.description);
-		Log.e(TAG, "attributes: " + item.attributes);
-		Log.e(TAG, "systemID: " + item.systemID);
-		Log.e(TAG, "baseRate: " + item.baseRate);
-		Log.e(TAG, "ratePerDistance: " + item.ratePerDistance);
-		Log.e(TAG, "multiPay: " +  item.multiPay);
-		Log.e(TAG, "carFile: " +  item.carFile);
-		Log.e(TAG, "dupChkTime: " +  item.dupChkTime);
-		Log.e(TAG, "ccPayEnable: " +  item.ccPayEnable);
-		Log.e(TAG, "phoneNr: " +  item.phoneNr);
-		Log.e(TAG, "--------------------------------");
+		Log.d(TAG, "destId: " + item.destID);
+		Log.d(TAG, "name: " + item.name);
+		Log.d(TAG, "logo: " + item.logo);
+		Log.d(TAG, "logoVersion: " + item.logoVersion);
+		Log.d(TAG, "description: " + item.description);
+		Log.d(TAG, "attributes: " + item.attributes);
+		Log.d(TAG, "systemID: " + item.systemID);
+		Log.d(TAG, "baseRate: " + item.baseRate);
+		Log.d(TAG, "ratePerDistance: " + item.ratePerDistance);
+		Log.d(TAG, "multiPay: " +  item.multiPay);
+		Log.d(TAG, "carFile: " +  item.carFile);
+		Log.d(TAG, "dupChkTime: " +  item.dupChkTime);
+		Log.d(TAG, "ccPayEnable: " +  item.ccPayEnable);
+		Log.d(TAG, "phoneNr: " +  item.phoneNr);
+		Log.d(TAG, "--------------------------------");
 	}
 }

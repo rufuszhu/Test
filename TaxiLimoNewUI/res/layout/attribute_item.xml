@@ -14,4 +14,29 @@
         android:textOff=""
         android:textOn="" />
 
+        <TextView
+            android:id="@+id/shortName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/big_margin"
+            android:textColor="@color/attr_color"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/longName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/shortName"
+            android:textSize="11sp"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:textColor="@color/attr_color"
+            android:paddingLeft="@dimen/small_padding"
+            android:paddingRight="@dimen/small_padding"/>
+
+
+
 </RelativeLayout>

@@ -52,7 +52,6 @@ public class AddPreferenceActivity extends BaseActivity {
 
 		findView();
 		initAndBindEvent();
-		Logger.e(TAG, "");
 	}
 
 	@Override

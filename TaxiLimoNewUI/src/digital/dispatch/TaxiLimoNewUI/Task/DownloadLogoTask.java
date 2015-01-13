@@ -27,8 +27,8 @@ public class DownloadLogoTask extends AsyncTask<Void, Integer, Bitmap> {
     @Override  
     protected Bitmap doInBackground(Void... params)  
     {  
-    	Logger.e(imgURL);
-    	Logger.e(destFile);
+    	Logger.d(imgURL);
+    	Logger.d(destFile);
     	Bitmap logoBitmap = null;
     	
         try {                

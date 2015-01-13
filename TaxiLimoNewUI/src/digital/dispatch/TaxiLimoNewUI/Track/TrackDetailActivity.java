@@ -257,7 +257,6 @@ public class TrackDetailActivity extends BaseActivity {
 
 			@Override
 			public void onPageSelected(int selected) {
-				Log.e(TAG, "onPageSelected: " + selected);
 				if (selected == 0) {
 					setTab0Text();
 					zoom_btn.setVisibility(View.GONE);
@@ -272,7 +271,6 @@ public class TrackDetailActivity extends BaseActivity {
 
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				Log.e(TAG, "position: " + position + " positionOffset: " + positionOffset + " positionOffsetPixels: " + positionOffsetPixels);
 				// do not animate tab color transition for clicking on tab
 				if (!isScolling) {
 					if (position == 0) {

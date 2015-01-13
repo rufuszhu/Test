@@ -59,7 +59,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 				e.printStackTrace();
 			}
 
-			Logger.e(TAG, _context.getString(R.string.reg_device_start));
+			Logger.d(TAG, _context.getString(R.string.reg_device_start));
 			rdReq.setToken(GCMRegisterID);
 			String userName = params[0];
 			String userEmail = params[1];
@@ -143,7 +143,7 @@ public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> impl
 		else
 			((ProfileActivity)_context).showResendSuccessMessage();
 		
-		Logger.e(TAG, "RegDev: server-" + _context.getString(R.string.url) + ", response-" + str);
+		Logger.d(TAG, "RegDev: server-" + _context.getString(R.string.url) + ", response-" + str);
 
 	}
 

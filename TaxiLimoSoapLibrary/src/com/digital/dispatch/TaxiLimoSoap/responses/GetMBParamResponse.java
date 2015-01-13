@@ -46,11 +46,6 @@ public class GetMBParamResponse extends ResponseWrapper {
 				if ((item instanceof SoapObject) && (objName.equalsIgnoreCase("listOfParameters"))) {
 					paramHM.put(checkExistAndGet((SoapObject)item, "parameterName"), 
 							checkExistAndGet((SoapObject)item, "parameterValue"));
-					
-					if (GlobalVar.logEnable) {
-						Log.e(TAG, "name: " + checkExistAndGet((SoapObject)item, "parameterName") + 
-								", value: " + checkExistAndGet((SoapObject)item, "parameterValue"));
-					}
 				}
 				
 				if ((item instanceof SoapObject) && (objName.equalsIgnoreCase("listOfAttributes"))) {
@@ -60,7 +55,7 @@ public class GetMBParamResponse extends ResponseWrapper {
 					
 					attributeList.add(attr);
 					if (GlobalVar.logEnable) {
-						Log.e(TAG, "id: "+ checkExistAndGet((SoapObject)item, "Id") + 
+						Log.i(TAG, "id: "+ checkExistAndGet((SoapObject)item, "Id") +
 									", name: " + checkExistAndGet((SoapObject)item, "name") + 
 									", value: " + checkExistAndGet((SoapObject)item, "appIconId"));
 					}

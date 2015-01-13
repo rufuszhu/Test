@@ -131,7 +131,7 @@ public class PayActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logger.e(TAG, "on RESUME");
+		Logger.d(TAG, "on RESUME");
 		//show keyboard
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputMethodManager.toggleSoftInputFromWindow(et_fare_amount.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
@@ -282,7 +282,7 @@ public class PayActivity extends Activity {
 			BigDecimal totalFare;
 
 			if (percent_radio.isChecked()) {
-				Logger.e(TAG, "enteredFare: " + enteredFare + "tipPercentage: " + tipPercentage);
+				Logger.d(TAG, "enteredFare: " + enteredFare + "tipPercentage: " + tipPercentage);
 				totalFare = enteredFare.add(enteredFare.multiply(tipPercentage));
 				final_tip_amount = enteredFare.multiply(tipPercentage).setScale(2, RoundingMode.CEILING).toString();
 			} else if (amount_radio.isChecked()) {
@@ -374,7 +374,6 @@ public class PayActivity extends Activity {
 		switch (view.getId()) {
 		case R.id.amount_radio:
 			if (checked) {
-				Logger.e(TAG, "amount_radio clicked");
 				percent_radio.setChecked(false);
 				et_tip_amount.setFocusableInTouchMode(true);
 				et_tip_amount.setFocusable(true);
@@ -387,7 +386,6 @@ public class PayActivity extends Activity {
 			break;
 		case R.id.percent_radio:
 			if (checked) {
-				Logger.e(TAG, "percent_radio clicked");
 				amount_radio.setChecked(false);
 				et_tip_amount.setFocusable(false);
 				et_tip_amount.setText("0.00");

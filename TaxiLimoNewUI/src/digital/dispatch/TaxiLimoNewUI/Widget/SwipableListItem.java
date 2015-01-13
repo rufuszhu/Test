@@ -125,7 +125,7 @@ public class SwipableListItem extends ViewGroup {
 		
 		@Override
 		public void onViewReleased(View releasedChild, float xvel, float yvel) {
-			Log.e(TAG,"onViewReleased xvel:" + xvel + " " + (float) Math.abs(mBarrier)/mSideView_width);
+			Log.d(TAG,"onViewReleased xvel:" + xvel + " " + (float) Math.abs(mBarrier)/mSideView_width);
 			if(xvel<0||(xvel==0&& (float) Math.abs(mHeaderView_width-mBarrier)/mSideView_width > 0.4f)){
 				smoothSlideTo(-mSideView_width);
 			}else{
