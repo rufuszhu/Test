@@ -23,6 +23,7 @@ public class BookJobRequest extends Request {
 	private String dropoff_unit, dropoff_landmark, dropoff_longitude, dropoff_latitude, accountCode, accountPassword;
 	private String authNum, remarks, priorityReason, cabNum, flatRate, rep_pickup_time;
 	private String repSuspendStart, repSuspendEnd, repStart, repEnd, forcedAddressFlag, ospVersion;
+	private String zipCode;
 	private List<String> attributeList;
 	private IBookJobResponseListener iResponseListener = null;
 	private static String TAG = "Soap-BookJob";
@@ -208,6 +209,14 @@ public class BookJobRequest extends Request {
 		ospVersion = ospV;
 	}
 	
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sendRequest(String ns, String url) {
@@ -306,7 +315,7 @@ public class BookJobRequest extends Request {
 		if (repEnd != null) { list.add(new DataParam("repEnd", repEnd)); }
 		if (forcedAddressFlag != null) { list.add(new DataParam("forcedAddressFlag", forcedAddressFlag)); }
 		if (ospVersion != null) { list.add(new DataParam("ospVersion", ospVersion)); }
-		
+		if (zipCode != null) { list.add(new DataParam("zipCode", zipCode)); }
 		if (attributeList != null) {
 			String str = "", newStr = "";
 			
@@ -323,4 +332,6 @@ public class BookJobRequest extends Request {
 		
 		return list;
 	}
+
+	
 }

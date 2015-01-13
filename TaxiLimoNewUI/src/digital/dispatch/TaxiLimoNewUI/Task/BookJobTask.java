@@ -3,12 +3,10 @@ package digital.dispatch.TaxiLimoNewUI.Task;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
-
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -22,10 +20,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-
 import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -87,6 +82,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 		bjReq.setPickUpDistrict(mbook.getPickup_district());
 		bjReq.setPickUpLatitude(Double.toString(mbook.getPickup_latitude()));
 		bjReq.setPickUpLongitude(Double.toString(mbook.getPickup_longitude()));
+		bjReq.setZipCode(mbook.getPickup_zipCode());//TL-301 this is 
 
 		if (mbook.getDropoff_unit() != null) {
 			bjReq.setDropOffUnit(mbook.getDropoff_unit());

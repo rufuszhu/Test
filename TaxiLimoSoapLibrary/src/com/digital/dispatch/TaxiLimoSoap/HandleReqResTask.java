@@ -61,7 +61,7 @@ public class HandleReqResTask extends AsyncTask {
 			// parse attribute list for bookjob request only
 			if (propertyList.get(i).name.equalsIgnoreCase("attributelist")) {
 				if (GlobalVar.logEnable) {
-					Log.v(TAG, propertyList.get(i).name + " :: " + propertyList.get(i).value);
+					Log.d(TAG, propertyList.get(i).name + " :: " + propertyList.get(i).value);
 				}
 				
 				String[] tokens = propertyList.get(i).value.split(",");
@@ -71,18 +71,23 @@ public class HandleReqResTask extends AsyncTask {
 					attrSoap.addProperty("attrShortName", tokens[j]);
 					req2.addSoapObject(attrSoap);
 				}
+			}else if(propertyList.get(i).name.equalsIgnoreCase("zipCode")){
+				if (GlobalVar.logEnable) {
+					Log.d(TAG, propertyList.get(i).name + " :: " + propertyList.get(i).value);
+				}
+				//TL-301
+				PropertyInfo pi = new PropertyInfo();
+				pi.setNamespace(ns);
+				pi.setType(PropertyInfo.STRING_CLASS);
+				pi.setName(propertyList.get(i).name);
+				pi.setValue(propertyList.get(i).value); 
+				req1.addProperty(pi);
 			}
 			else {
 				req2.addProperty(propertyList.get(i).name, propertyList.get(i).value);
 			}
 		}
 		
-		/*PropertyInfo pi = new PropertyInfo();
-		pi.setNamespace(ns);
-		pi.setType(PropertyInfo.STRING_CLASS);
-		pi.setName("destID");
-		pi.setValue("1"); 
-		req1.addProperty(pi);*/
 		req1.addSoapObject(req2);
 		envelope.setOutputSoapObject(req1);
 		envelope.implicitTypes = true;

@@ -1,22 +1,15 @@
 package digital.dispatch.TaxiLimoNewUI.DaoManager;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import android.location.Address;
 import android.text.TextUtils;
-
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
+import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
-
-import android.content.Context;
-import android.location.Address;
-import android.util.Log;
 
 public class AddressDaoManager {
 	private final static String TAG = "AddressDaoManager";
@@ -29,8 +22,9 @@ public class AddressDaoManager {
 		String country = address.getCountryName();
 		Double latitude = address.getLatitude();
 		Double longitude = address.getLongitude();
+		String zipCode = address.getPostalCode(); //TL-301
 		DBAddress dbaddress = new DBAddress(null, unit, streetName, houseNumber, district, province, country, nickName, latitude, longitude
-				,isFavoriate,"");
+				,isFavoriate,"", zipCode);
 		dbaddress.setFullAddress(dbAddressToString(dbaddress));
 		addressDao.insert(dbaddress);
 		
@@ -131,7 +125,10 @@ public class AddressDaoManager {
 			str += address.getProvince() + ", ";
 		
 		if(address.getCountry()!=null  && address.getCountry().length()>0)
-			str += address.getCountry();
+			str += address.getCountry() + ", ";;
+		
+		if(address.getZipCode() != null && address.getZipCode().length() >0) //TL-301
+			str += address.getZipCode();
 
 		return str;
 	}
