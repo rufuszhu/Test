@@ -146,22 +146,23 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		Logger.d(TAG, "on CREATEVIEW");
 		
 		setPickupButtonClicked = false;
-		
-		mHandler = new Handler();
-		mHandlerTask = new Runnable() {
-			@Override
-			public void run() {
-				if(carPos!=null && carMarkers!=null &&carPos.size()==12 && carMarkers.size()==12){
-					
-					moveCar(counter);
-					if(counter==11)
-						counter = 0;
-					else
-						counter++;
-				}
-				mHandler.postDelayed(mHandlerTask, (long) (4000*Math.random()));
-			}
-		};
+
+        //uncomment to enable (fake) car on map
+//		mHandler = new Handler();
+//		mHandlerTask = new Runnable() {
+//			@Override
+//			public void run() {
+//				if(carPos!=null && carMarkers!=null &&carPos.size()==12 && carMarkers.size()==12){
+//
+//					moveCar(counter);
+//					if(counter==11)
+//						counter = 0;
+//					else
+//						counter++;
+//				}
+//				mHandler.postDelayed(mHandlerTask, (long) (4000*Math.random()));
+//			}
+//		};
 
 		mLocationRequest = LocationRequest.create();
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -426,16 +427,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	public void onPause() {
 		super.onPause();
 		Logger.d(TAG, "on PAUSE");
-		stopRepeatingTask();
+        //uncomment to enable (fake) car on map
+		//stopRepeatingTask();
 	}
-
-	private void startRepeatingTask() {
-		mHandlerTask.run();
-	}
-
-	private void stopRepeatingTask() {
-		mHandler.removeCallbacks(mHandlerTask);
-	}
+    //uncomment to enable (fake) car on map
+//	private void startRepeatingTask() {
+//		mHandlerTask.run();
+//	}
+//
+//	private void stopRepeatingTask() {
+//		mHandler.removeCallbacks(mHandlerTask);
+//	}
 	private void checkGPSEnable() {
 		final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -899,19 +901,22 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
-				cleanUP();
-				generate12CarsWithin5MilesRandom(address.getLatitude(),address.getLongitude());
-				startRepeatingTask();
+                //uncomment to enable (fake) car on map
+//				cleanUP();
+//				generate12CarsWithin5MilesRandom(address.getLatitude(),address.getLongitude());
+//				startRepeatingTask();
 			}
 		} else {
 			if (checkReady() && servicesConnected()) {
 				// Get the current location
 				Location currentLocation = mLocationClient.getLastLocation();
 				if (currentLocation != null){
-					cleanUP();
-					generate12CarsWithin5MilesRandom(currentLocation.getLatitude(),currentLocation.getLongitude());
+                    //uncomment to enable (fake) car on map
+//					cleanUP();
+//					generate12CarsWithin5MilesRandom(currentLocation.getLatitude(),currentLocation.getLongitude());
+//                  startRepeatingTask();
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
-					startRepeatingTask();
+
 				}
 				else
 					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();
@@ -921,134 +926,134 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		}
 	}
-	
-	private void moveCar(int carNum){
-		double MOVE_AMOUNT = 0.005;
-		LatLng pos = carPos.get(carNum);
-		Marker marker = carMarkers.get(carNum);
-		double sign = randomePosNegative();
-		LatLng newPos;
-		
-		
-		if(randomePosNegative()>0.5){
-			newPos = new LatLng( pos.latitude + MOVE_AMOUNT * sign, pos.longitude);
-			if(sign>0)
-				animateRotateAndMoveMarker(marker,0f,newPos);
-			else
-				animateRotateAndMoveMarker(marker,180f,newPos);
-			carPos.set(carNum, newPos);
-		}
-		else
-		{
-			newPos = new LatLng( pos.latitude , pos.longitude + MOVE_AMOUNT * sign);
-			if(sign>0){
-				animateRotateAndMoveMarker(marker,90f,newPos);
-				}
-			else
-				animateRotateAndMoveMarker(marker,270f,newPos);
-			carPos.set(carNum, newPos);
-			
-		}
-		
-	}
-
-	private void cleanUP(){
-		if(carPos!=null && carPos.size()>0 && carMarkers!=null && carMarkers.size()>0){
-			for(int i=0;i<carMarkers.size();i++){
-				carMarkers.get(i).remove();
-			}
-			carPos.clear();
-			carMarkers.clear();
-		}
-	}
-	
-	private void generate12CarsWithin5MilesRandom(double mLat, double mLong){
-		double FIVE_MILES_IN_LAT = (double) 0.022346;
-		double FIVE_MILES_IN_LONG = (double) 0.033341;
-		
-		carPos = new ArrayList<LatLng>();
-		carMarkers = new ArrayList<Marker>();
-		
-		for(int i=0;i<12;i++){
-			double xLat = (double)Math.random() * FIVE_MILES_IN_LAT * randomePosNegative();
-			double xLong = (double)Math.random() * FIVE_MILES_IN_LONG * randomePosNegative();
-			double lat = xLat + mLat;
-			double longi = xLong + mLong;
-			LatLng a = new LatLng(lat,longi);
-			carPos.add(a);
-			Marker carMarker = mMap.addMarker(new MarkerOptions().position(a).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_on_map)).rotation(90*(i%4)));
-			carMarkers.add(carMarker);
-		}
-	}
-	
-	private long randomePosNegative(){
-		if(Math.random()>0.5)
-			return (long) 1.0;
-		else
-			return (long) -1.0;
-	}
-	
-	
-	private void animateMarker(final Marker marker, final LatLng toPosition) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = mMap.getProjection();
-        Point startPoint = proj.toScreenLocation(marker.getPosition());
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 5000;
-
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startLatLng.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
-
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                	marker.setVisible(true);
-                }
-            }
-        });
-    }
-	//animate rotation after, and move the marker after rotation
-	private void animateRotateAndMoveMarker(final Marker marker, final float endDegree,final LatLng newPos) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        final float startDegree = marker.getRotation();
-        
-        final long duration = 1000;
-
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                float degree = t * endDegree + (1 - t) * startDegree;
-                marker.setRotation(degree);
-
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                	marker.setVisible(true);
-                	animateMarker(marker, newPos);
-                }
-            }
-        });
-    }
+    //uncomment to enable (fake) car on map
+//	private void moveCar(int carNum){
+//		double MOVE_AMOUNT = 0.005;
+//		LatLng pos = carPos.get(carNum);
+//		Marker marker = carMarkers.get(carNum);
+//		double sign = randomePosNegative();
+//		LatLng newPos;
+//
+//
+//		if(randomePosNegative()>0.5){
+//			newPos = new LatLng( pos.latitude + MOVE_AMOUNT * sign, pos.longitude);
+//			if(sign>0)
+//				animateRotateAndMoveMarker(marker,0f,newPos);
+//			else
+//				animateRotateAndMoveMarker(marker,180f,newPos);
+//			carPos.set(carNum, newPos);
+//		}
+//		else
+//		{
+//			newPos = new LatLng( pos.latitude , pos.longitude + MOVE_AMOUNT * sign);
+//			if(sign>0){
+//				animateRotateAndMoveMarker(marker,90f,newPos);
+//				}
+//			else
+//				animateRotateAndMoveMarker(marker,270f,newPos);
+//			carPos.set(carNum, newPos);
+//
+//		}
+//
+//	}
+//
+//	private void cleanUP(){
+//		if(carPos!=null && carPos.size()>0 && carMarkers!=null && carMarkers.size()>0){
+//			for(int i=0;i<carMarkers.size();i++){
+//				carMarkers.get(i).remove();
+//			}
+//			carPos.clear();
+//			carMarkers.clear();
+//		}
+//	}
+//
+//	private void generate12CarsWithin5MilesRandom(double mLat, double mLong){
+//		double FIVE_MILES_IN_LAT = (double) 0.022346;
+//		double FIVE_MILES_IN_LONG = (double) 0.033341;
+//
+//		carPos = new ArrayList<LatLng>();
+//		carMarkers = new ArrayList<Marker>();
+//
+//		for(int i=0;i<12;i++){
+//			double xLat = (double)Math.random() * FIVE_MILES_IN_LAT * randomePosNegative();
+//			double xLong = (double)Math.random() * FIVE_MILES_IN_LONG * randomePosNegative();
+//			double lat = xLat + mLat;
+//			double longi = xLong + mLong;
+//			LatLng a = new LatLng(lat,longi);
+//			carPos.add(a);
+//			Marker carMarker = mMap.addMarker(new MarkerOptions().position(a).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.taxi_on_map)).rotation(90*(i%4)));
+//			carMarkers.add(carMarker);
+//		}
+//	}
+//
+//	private long randomePosNegative(){
+//		if(Math.random()>0.5)
+//			return (long) 1.0;
+//		else
+//			return (long) -1.0;
+//	}
+//
+//
+//	private void animateMarker(final Marker marker, final LatLng toPosition) {
+//        final Handler handler = new Handler();
+//        final long start = SystemClock.uptimeMillis();
+//        Projection proj = mMap.getProjection();
+//        Point startPoint = proj.toScreenLocation(marker.getPosition());
+//        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+//        final long duration = 5000;
+//
+//        final Interpolator interpolator = new LinearInterpolator();
+//
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                long elapsed = SystemClock.uptimeMillis() - start;
+//                float t = interpolator.getInterpolation((float) elapsed
+//                        / duration);
+//                double lng = t * toPosition.longitude + (1 - t)
+//                        * startLatLng.longitude;
+//                double lat = t * toPosition.latitude + (1 - t)
+//                        * startLatLng.latitude;
+//                marker.setPosition(new LatLng(lat, lng));
+//
+//                if (t < 1.0) {
+//                    // Post again 16ms later.
+//                    handler.postDelayed(this, 16);
+//                } else {
+//                	marker.setVisible(true);
+//                }
+//            }
+//        });
+//    }
+//	//animate rotation after, and move the marker after rotation
+//	private void animateRotateAndMoveMarker(final Marker marker, final float endDegree,final LatLng newPos) {
+//        final Handler handler = new Handler();
+//        final long start = SystemClock.uptimeMillis();
+//        final float startDegree = marker.getRotation();
+//
+//        final long duration = 1000;
+//
+//        final Interpolator interpolator = new LinearInterpolator();
+//
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                long elapsed = SystemClock.uptimeMillis() - start;
+//                float t = interpolator.getInterpolation((float) elapsed
+//                        / duration);
+//                float degree = t * endDegree + (1 - t) * startDegree;
+//                marker.setRotation(degree);
+//
+//                if (t < 1.0) {
+//                    // Post again 16ms later.
+//                    handler.postDelayed(this, 16);
+//                } else {
+//                	marker.setVisible(true);
+//                	animateMarker(marker, newPos);
+//                }
+//            }
+//        });
+//    }
 
 	@Override
 	public void onDisconnected() {
