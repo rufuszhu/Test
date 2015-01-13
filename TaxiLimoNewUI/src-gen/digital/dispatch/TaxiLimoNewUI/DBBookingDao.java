@@ -41,37 +41,38 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         public final static Property Pickup_landmark = new Property(15, String.class, "pickup_landmark", false, "PICKUP_LANDMARK");
         public final static Property Pickup_longitude = new Property(16, Double.class, "pickup_longitude", false, "PICKUP_LONGITUDE");
         public final static Property Pickup_latitude = new Property(17, Double.class, "pickup_latitude", false, "PICKUP_LATITUDE");
-        public final static Property Dropoff_house_number = new Property(18, String.class, "dropoff_house_number", false, "DROPOFF_HOUSE_NUMBER");
-        public final static Property Dropoff_street_name = new Property(19, String.class, "dropoff_street_name", false, "DROPOFF_STREET_NAME");
-        public final static Property Dropoff_district = new Property(20, String.class, "dropoff_district", false, "DROPOFF_DISTRICT");
-        public final static Property Dropoff_unit = new Property(21, String.class, "dropoff_unit", false, "DROPOFF_UNIT");
-        public final static Property Dropoff_landmark = new Property(22, String.class, "dropoff_landmark", false, "DROPOFF_LANDMARK");
-        public final static Property Dropoff_longitude = new Property(23, Double.class, "dropoff_longitude", false, "DROPOFF_LONGITUDE");
-        public final static Property Dropoff_latitude = new Property(24, Double.class, "dropoff_latitude", false, "DROPOFF_LATITUDE");
-        public final static Property AttributeList = new Property(25, String.class, "attributeList", false, "ATTRIBUTE_LIST");
-        public final static Property Phonenum = new Property(26, String.class, "phonenum", false, "PHONENUM");
-        public final static Property Pickup_time = new Property(27, String.class, "pickup_time", false, "PICKUP_TIME");
-        public final static Property Remarks = new Property(28, String.class, "remarks", false, "REMARKS");
-        public final static Property TripCancelledTime = new Property(29, String.class, "tripCancelledTime", false, "TRIP_CANCELLED_TIME");
-        public final static Property TripCreationTime = new Property(30, String.class, "tripCreationTime", false, "TRIP_CREATION_TIME");
-        public final static Property TripModificationTime = new Property(31, String.class, "tripModificationTime", false, "TRIP_MODIFICATION_TIME");
-        public final static Property TripCompletionTime = new Property(32, String.class, "tripCompletionTime", false, "TRIP_COMPLETION_TIME");
-        public final static Property TripStatus = new Property(33, Integer.class, "tripStatus", false, "TRIP_STATUS");
-        public final static Property PickupAddress = new Property(34, String.class, "pickupAddress", false, "PICKUP_ADDRESS");
-        public final static Property DropoffAddress = new Property(35, String.class, "dropoffAddress", false, "DROPOFF_ADDRESS");
-        public final static Property Already_paid = new Property(36, Boolean.class, "already_paid", false, "ALREADY_PAID");
-        public final static Property Multi_pay_allow = new Property(37, Boolean.class, "multi_pay_allow", false, "MULTI_PAY_ALLOW");
-        public final static Property Company_name = new Property(38, String.class, "company_name", false, "COMPANY_NAME");
-        public final static Property Company_description = new Property(39, String.class, "company_description", false, "COMPANY_DESCRIPTION");
-        public final static Property Company_phone_number = new Property(40, String.class, "company_phone_number", false, "COMPANY_PHONE_NUMBER");
-        public final static Property Company_icon = new Property(41, String.class, "company_icon", false, "COMPANY_ICON");
-        public final static Property Company_attribute_list = new Property(42, String.class, "company_attribute_list", false, "COMPANY_ATTRIBUTE_LIST");
-        public final static Property Company_dupChk_time = new Property(43, String.class, "company_dupChk_time", false, "COMPANY_DUP_CHK_TIME");
-        public final static Property Company_car_file = new Property(44, String.class, "company_car_file", false, "COMPANY_CAR_FILE");
-        public final static Property Company_baseRate = new Property(45, Integer.class, "company_baseRate", false, "COMPANY_BASE_RATE");
-        public final static Property Company_rate_PerDistance = new Property(46, Integer.class, "company_rate_PerDistance", false, "COMPANY_RATE__PER_DISTANCE");
-        public final static Property AuthCode = new Property(47, String.class, "authCode", false, "AUTH_CODE");
-        public final static Property PaidAmount = new Property(48, String.class, "paidAmount", false, "PAID_AMOUNT");
+        public final static Property Pickup_zipCode = new Property(18, String.class, "pickup_zipCode", false, "PICKUP_ZIP_CODE");
+        public final static Property Dropoff_house_number = new Property(19, String.class, "dropoff_house_number", false, "DROPOFF_HOUSE_NUMBER");
+        public final static Property Dropoff_street_name = new Property(20, String.class, "dropoff_street_name", false, "DROPOFF_STREET_NAME");
+        public final static Property Dropoff_district = new Property(21, String.class, "dropoff_district", false, "DROPOFF_DISTRICT");
+        public final static Property Dropoff_unit = new Property(22, String.class, "dropoff_unit", false, "DROPOFF_UNIT");
+        public final static Property Dropoff_landmark = new Property(23, String.class, "dropoff_landmark", false, "DROPOFF_LANDMARK");
+        public final static Property Dropoff_longitude = new Property(24, Double.class, "dropoff_longitude", false, "DROPOFF_LONGITUDE");
+        public final static Property Dropoff_latitude = new Property(25, Double.class, "dropoff_latitude", false, "DROPOFF_LATITUDE");
+        public final static Property AttributeList = new Property(26, String.class, "attributeList", false, "ATTRIBUTE_LIST");
+        public final static Property Phonenum = new Property(27, String.class, "phonenum", false, "PHONENUM");
+        public final static Property Pickup_time = new Property(28, String.class, "pickup_time", false, "PICKUP_TIME");
+        public final static Property Remarks = new Property(29, String.class, "remarks", false, "REMARKS");
+        public final static Property TripCancelledTime = new Property(30, String.class, "tripCancelledTime", false, "TRIP_CANCELLED_TIME");
+        public final static Property TripCreationTime = new Property(31, String.class, "tripCreationTime", false, "TRIP_CREATION_TIME");
+        public final static Property TripModificationTime = new Property(32, String.class, "tripModificationTime", false, "TRIP_MODIFICATION_TIME");
+        public final static Property TripCompletionTime = new Property(33, String.class, "tripCompletionTime", false, "TRIP_COMPLETION_TIME");
+        public final static Property TripStatus = new Property(34, Integer.class, "tripStatus", false, "TRIP_STATUS");
+        public final static Property PickupAddress = new Property(35, String.class, "pickupAddress", false, "PICKUP_ADDRESS");
+        public final static Property DropoffAddress = new Property(36, String.class, "dropoffAddress", false, "DROPOFF_ADDRESS");
+        public final static Property Already_paid = new Property(37, Boolean.class, "already_paid", false, "ALREADY_PAID");
+        public final static Property Multi_pay_allow = new Property(38, Boolean.class, "multi_pay_allow", false, "MULTI_PAY_ALLOW");
+        public final static Property Company_name = new Property(39, String.class, "company_name", false, "COMPANY_NAME");
+        public final static Property Company_description = new Property(40, String.class, "company_description", false, "COMPANY_DESCRIPTION");
+        public final static Property Company_phone_number = new Property(41, String.class, "company_phone_number", false, "COMPANY_PHONE_NUMBER");
+        public final static Property Company_icon = new Property(42, String.class, "company_icon", false, "COMPANY_ICON");
+        public final static Property Company_attribute_list = new Property(43, String.class, "company_attribute_list", false, "COMPANY_ATTRIBUTE_LIST");
+        public final static Property Company_dupChk_time = new Property(44, String.class, "company_dupChk_time", false, "COMPANY_DUP_CHK_TIME");
+        public final static Property Company_car_file = new Property(45, String.class, "company_car_file", false, "COMPANY_CAR_FILE");
+        public final static Property Company_baseRate = new Property(46, Integer.class, "company_baseRate", false, "COMPANY_BASE_RATE");
+        public final static Property Company_rate_PerDistance = new Property(47, Integer.class, "company_rate_PerDistance", false, "COMPANY_RATE__PER_DISTANCE");
+        public final static Property AuthCode = new Property(48, String.class, "authCode", false, "AUTH_CODE");
+        public final static Property PaidAmount = new Property(49, String.class, "paidAmount", false, "PAID_AMOUNT");
     };
 
 
@@ -105,37 +106,38 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
                 "'PICKUP_LANDMARK' TEXT," + // 15: pickup_landmark
                 "'PICKUP_LONGITUDE' REAL," + // 16: pickup_longitude
                 "'PICKUP_LATITUDE' REAL," + // 17: pickup_latitude
-                "'DROPOFF_HOUSE_NUMBER' TEXT," + // 18: dropoff_house_number
-                "'DROPOFF_STREET_NAME' TEXT," + // 19: dropoff_street_name
-                "'DROPOFF_DISTRICT' TEXT," + // 20: dropoff_district
-                "'DROPOFF_UNIT' TEXT," + // 21: dropoff_unit
-                "'DROPOFF_LANDMARK' TEXT," + // 22: dropoff_landmark
-                "'DROPOFF_LONGITUDE' REAL," + // 23: dropoff_longitude
-                "'DROPOFF_LATITUDE' REAL," + // 24: dropoff_latitude
-                "'ATTRIBUTE_LIST' TEXT," + // 25: attributeList
-                "'PHONENUM' TEXT," + // 26: phonenum
-                "'PICKUP_TIME' TEXT," + // 27: pickup_time
-                "'REMARKS' TEXT," + // 28: remarks
-                "'TRIP_CANCELLED_TIME' TEXT," + // 29: tripCancelledTime
-                "'TRIP_CREATION_TIME' TEXT," + // 30: tripCreationTime
-                "'TRIP_MODIFICATION_TIME' TEXT," + // 31: tripModificationTime
-                "'TRIP_COMPLETION_TIME' TEXT," + // 32: tripCompletionTime
-                "'TRIP_STATUS' INTEGER," + // 33: tripStatus
-                "'PICKUP_ADDRESS' TEXT," + // 34: pickupAddress
-                "'DROPOFF_ADDRESS' TEXT," + // 35: dropoffAddress
-                "'ALREADY_PAID' INTEGER," + // 36: already_paid
-                "'MULTI_PAY_ALLOW' INTEGER," + // 37: multi_pay_allow
-                "'COMPANY_NAME' TEXT," + // 38: company_name
-                "'COMPANY_DESCRIPTION' TEXT," + // 39: company_description
-                "'COMPANY_PHONE_NUMBER' TEXT," + // 40: company_phone_number
-                "'COMPANY_ICON' TEXT," + // 41: company_icon
-                "'COMPANY_ATTRIBUTE_LIST' TEXT," + // 42: company_attribute_list
-                "'COMPANY_DUP_CHK_TIME' TEXT," + // 43: company_dupChk_time
-                "'COMPANY_CAR_FILE' TEXT," + // 44: company_car_file
-                "'COMPANY_BASE_RATE' INTEGER," + // 45: company_baseRate
-                "'COMPANY_RATE__PER_DISTANCE' INTEGER," + // 46: company_rate_PerDistance
-                "'AUTH_CODE' TEXT," + // 47: authCode
-                "'PAID_AMOUNT' TEXT);"); // 48: paidAmount
+                "'PICKUP_ZIP_CODE' TEXT," + // 18: pickup_zipCode
+                "'DROPOFF_HOUSE_NUMBER' TEXT," + // 19: dropoff_house_number
+                "'DROPOFF_STREET_NAME' TEXT," + // 20: dropoff_street_name
+                "'DROPOFF_DISTRICT' TEXT," + // 21: dropoff_district
+                "'DROPOFF_UNIT' TEXT," + // 22: dropoff_unit
+                "'DROPOFF_LANDMARK' TEXT," + // 23: dropoff_landmark
+                "'DROPOFF_LONGITUDE' REAL," + // 24: dropoff_longitude
+                "'DROPOFF_LATITUDE' REAL," + // 25: dropoff_latitude
+                "'ATTRIBUTE_LIST' TEXT," + // 26: attributeList
+                "'PHONENUM' TEXT," + // 27: phonenum
+                "'PICKUP_TIME' TEXT," + // 28: pickup_time
+                "'REMARKS' TEXT," + // 29: remarks
+                "'TRIP_CANCELLED_TIME' TEXT," + // 30: tripCancelledTime
+                "'TRIP_CREATION_TIME' TEXT," + // 31: tripCreationTime
+                "'TRIP_MODIFICATION_TIME' TEXT," + // 32: tripModificationTime
+                "'TRIP_COMPLETION_TIME' TEXT," + // 33: tripCompletionTime
+                "'TRIP_STATUS' INTEGER," + // 34: tripStatus
+                "'PICKUP_ADDRESS' TEXT," + // 35: pickupAddress
+                "'DROPOFF_ADDRESS' TEXT," + // 36: dropoffAddress
+                "'ALREADY_PAID' INTEGER," + // 37: already_paid
+                "'MULTI_PAY_ALLOW' INTEGER," + // 38: multi_pay_allow
+                "'COMPANY_NAME' TEXT," + // 39: company_name
+                "'COMPANY_DESCRIPTION' TEXT," + // 40: company_description
+                "'COMPANY_PHONE_NUMBER' TEXT," + // 41: company_phone_number
+                "'COMPANY_ICON' TEXT," + // 42: company_icon
+                "'COMPANY_ATTRIBUTE_LIST' TEXT," + // 43: company_attribute_list
+                "'COMPANY_DUP_CHK_TIME' TEXT," + // 44: company_dupChk_time
+                "'COMPANY_CAR_FILE' TEXT," + // 45: company_car_file
+                "'COMPANY_BASE_RATE' INTEGER," + // 46: company_baseRate
+                "'COMPANY_RATE__PER_DISTANCE' INTEGER," + // 47: company_rate_PerDistance
+                "'AUTH_CODE' TEXT," + // 48: authCode
+                "'PAID_AMOUNT' TEXT);"); // 49: paidAmount
     }
 
     /** Drops the underlying database table. */
@@ -239,159 +241,164 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             stmt.bindDouble(18, pickup_latitude);
         }
  
+        String pickup_zipCode = entity.getPickup_zipCode();
+        if (pickup_zipCode != null) {
+            stmt.bindString(19, pickup_zipCode);
+        }
+ 
         String dropoff_house_number = entity.getDropoff_house_number();
         if (dropoff_house_number != null) {
-            stmt.bindString(19, dropoff_house_number);
+            stmt.bindString(20, dropoff_house_number);
         }
  
         String dropoff_street_name = entity.getDropoff_street_name();
         if (dropoff_street_name != null) {
-            stmt.bindString(20, dropoff_street_name);
+            stmt.bindString(21, dropoff_street_name);
         }
  
         String dropoff_district = entity.getDropoff_district();
         if (dropoff_district != null) {
-            stmt.bindString(21, dropoff_district);
+            stmt.bindString(22, dropoff_district);
         }
  
         String dropoff_unit = entity.getDropoff_unit();
         if (dropoff_unit != null) {
-            stmt.bindString(22, dropoff_unit);
+            stmt.bindString(23, dropoff_unit);
         }
  
         String dropoff_landmark = entity.getDropoff_landmark();
         if (dropoff_landmark != null) {
-            stmt.bindString(23, dropoff_landmark);
+            stmt.bindString(24, dropoff_landmark);
         }
  
         Double dropoff_longitude = entity.getDropoff_longitude();
         if (dropoff_longitude != null) {
-            stmt.bindDouble(24, dropoff_longitude);
+            stmt.bindDouble(25, dropoff_longitude);
         }
  
         Double dropoff_latitude = entity.getDropoff_latitude();
         if (dropoff_latitude != null) {
-            stmt.bindDouble(25, dropoff_latitude);
+            stmt.bindDouble(26, dropoff_latitude);
         }
  
         String attributeList = entity.getAttributeList();
         if (attributeList != null) {
-            stmt.bindString(26, attributeList);
+            stmt.bindString(27, attributeList);
         }
  
         String phonenum = entity.getPhonenum();
         if (phonenum != null) {
-            stmt.bindString(27, phonenum);
+            stmt.bindString(28, phonenum);
         }
  
         String pickup_time = entity.getPickup_time();
         if (pickup_time != null) {
-            stmt.bindString(28, pickup_time);
+            stmt.bindString(29, pickup_time);
         }
  
         String remarks = entity.getRemarks();
         if (remarks != null) {
-            stmt.bindString(29, remarks);
+            stmt.bindString(30, remarks);
         }
  
         String tripCancelledTime = entity.getTripCancelledTime();
         if (tripCancelledTime != null) {
-            stmt.bindString(30, tripCancelledTime);
+            stmt.bindString(31, tripCancelledTime);
         }
  
         String tripCreationTime = entity.getTripCreationTime();
         if (tripCreationTime != null) {
-            stmt.bindString(31, tripCreationTime);
+            stmt.bindString(32, tripCreationTime);
         }
  
         String tripModificationTime = entity.getTripModificationTime();
         if (tripModificationTime != null) {
-            stmt.bindString(32, tripModificationTime);
+            stmt.bindString(33, tripModificationTime);
         }
  
         String tripCompletionTime = entity.getTripCompletionTime();
         if (tripCompletionTime != null) {
-            stmt.bindString(33, tripCompletionTime);
+            stmt.bindString(34, tripCompletionTime);
         }
  
         Integer tripStatus = entity.getTripStatus();
         if (tripStatus != null) {
-            stmt.bindLong(34, tripStatus);
+            stmt.bindLong(35, tripStatus);
         }
  
         String pickupAddress = entity.getPickupAddress();
         if (pickupAddress != null) {
-            stmt.bindString(35, pickupAddress);
+            stmt.bindString(36, pickupAddress);
         }
  
         String dropoffAddress = entity.getDropoffAddress();
         if (dropoffAddress != null) {
-            stmt.bindString(36, dropoffAddress);
+            stmt.bindString(37, dropoffAddress);
         }
  
         Boolean already_paid = entity.getAlready_paid();
         if (already_paid != null) {
-            stmt.bindLong(37, already_paid ? 1l: 0l);
+            stmt.bindLong(38, already_paid ? 1l: 0l);
         }
  
         Boolean multi_pay_allow = entity.getMulti_pay_allow();
         if (multi_pay_allow != null) {
-            stmt.bindLong(38, multi_pay_allow ? 1l: 0l);
+            stmt.bindLong(39, multi_pay_allow ? 1l: 0l);
         }
  
         String company_name = entity.getCompany_name();
         if (company_name != null) {
-            stmt.bindString(39, company_name);
+            stmt.bindString(40, company_name);
         }
  
         String company_description = entity.getCompany_description();
         if (company_description != null) {
-            stmt.bindString(40, company_description);
+            stmt.bindString(41, company_description);
         }
  
         String company_phone_number = entity.getCompany_phone_number();
         if (company_phone_number != null) {
-            stmt.bindString(41, company_phone_number);
+            stmt.bindString(42, company_phone_number);
         }
  
         String company_icon = entity.getCompany_icon();
         if (company_icon != null) {
-            stmt.bindString(42, company_icon);
+            stmt.bindString(43, company_icon);
         }
  
         String company_attribute_list = entity.getCompany_attribute_list();
         if (company_attribute_list != null) {
-            stmt.bindString(43, company_attribute_list);
+            stmt.bindString(44, company_attribute_list);
         }
  
         String company_dupChk_time = entity.getCompany_dupChk_time();
         if (company_dupChk_time != null) {
-            stmt.bindString(44, company_dupChk_time);
+            stmt.bindString(45, company_dupChk_time);
         }
  
         String company_car_file = entity.getCompany_car_file();
         if (company_car_file != null) {
-            stmt.bindString(45, company_car_file);
+            stmt.bindString(46, company_car_file);
         }
  
         Integer company_baseRate = entity.getCompany_baseRate();
         if (company_baseRate != null) {
-            stmt.bindLong(46, company_baseRate);
+            stmt.bindLong(47, company_baseRate);
         }
  
         Integer company_rate_PerDistance = entity.getCompany_rate_PerDistance();
         if (company_rate_PerDistance != null) {
-            stmt.bindLong(47, company_rate_PerDistance);
+            stmt.bindLong(48, company_rate_PerDistance);
         }
  
         String authCode = entity.getAuthCode();
         if (authCode != null) {
-            stmt.bindString(48, authCode);
+            stmt.bindString(49, authCode);
         }
  
         String paidAmount = entity.getPaidAmount();
         if (paidAmount != null) {
-            stmt.bindString(49, paidAmount);
+            stmt.bindString(50, paidAmount);
         }
     }
 
@@ -423,37 +430,38 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // pickup_landmark
             cursor.isNull(offset + 16) ? null : cursor.getDouble(offset + 16), // pickup_longitude
             cursor.isNull(offset + 17) ? null : cursor.getDouble(offset + 17), // pickup_latitude
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // dropoff_house_number
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // dropoff_street_name
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // dropoff_district
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // dropoff_unit
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // dropoff_landmark
-            cursor.isNull(offset + 23) ? null : cursor.getDouble(offset + 23), // dropoff_longitude
-            cursor.isNull(offset + 24) ? null : cursor.getDouble(offset + 24), // dropoff_latitude
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // attributeList
-            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // phonenum
-            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // pickup_time
-            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // remarks
-            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // tripCancelledTime
-            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // tripCreationTime
-            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // tripModificationTime
-            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // tripCompletionTime
-            cursor.isNull(offset + 33) ? null : cursor.getInt(offset + 33), // tripStatus
-            cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34), // pickupAddress
-            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // dropoffAddress
-            cursor.isNull(offset + 36) ? null : cursor.getShort(offset + 36) != 0, // already_paid
-            cursor.isNull(offset + 37) ? null : cursor.getShort(offset + 37) != 0, // multi_pay_allow
-            cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38), // company_name
-            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // company_description
-            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // company_phone_number
-            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // company_icon
-            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // company_attribute_list
-            cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // company_dupChk_time
-            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // company_car_file
-            cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45), // company_baseRate
-            cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46), // company_rate_PerDistance
-            cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47), // authCode
-            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48) // paidAmount
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // pickup_zipCode
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // dropoff_house_number
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // dropoff_street_name
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // dropoff_district
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // dropoff_unit
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // dropoff_landmark
+            cursor.isNull(offset + 24) ? null : cursor.getDouble(offset + 24), // dropoff_longitude
+            cursor.isNull(offset + 25) ? null : cursor.getDouble(offset + 25), // dropoff_latitude
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // attributeList
+            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // phonenum
+            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // pickup_time
+            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // remarks
+            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // tripCancelledTime
+            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31), // tripCreationTime
+            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // tripModificationTime
+            cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33), // tripCompletionTime
+            cursor.isNull(offset + 34) ? null : cursor.getInt(offset + 34), // tripStatus
+            cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35), // pickupAddress
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36), // dropoffAddress
+            cursor.isNull(offset + 37) ? null : cursor.getShort(offset + 37) != 0, // already_paid
+            cursor.isNull(offset + 38) ? null : cursor.getShort(offset + 38) != 0, // multi_pay_allow
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39), // company_name
+            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40), // company_description
+            cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41), // company_phone_number
+            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42), // company_icon
+            cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43), // company_attribute_list
+            cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // company_dupChk_time
+            cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45), // company_car_file
+            cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46), // company_baseRate
+            cursor.isNull(offset + 47) ? null : cursor.getInt(offset + 47), // company_rate_PerDistance
+            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48), // authCode
+            cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49) // paidAmount
         );
         return entity;
     }
@@ -479,37 +487,38 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         entity.setPickup_landmark(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
         entity.setPickup_longitude(cursor.isNull(offset + 16) ? null : cursor.getDouble(offset + 16));
         entity.setPickup_latitude(cursor.isNull(offset + 17) ? null : cursor.getDouble(offset + 17));
-        entity.setDropoff_house_number(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setDropoff_street_name(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setDropoff_district(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setDropoff_unit(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
-        entity.setDropoff_landmark(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setDropoff_longitude(cursor.isNull(offset + 23) ? null : cursor.getDouble(offset + 23));
-        entity.setDropoff_latitude(cursor.isNull(offset + 24) ? null : cursor.getDouble(offset + 24));
-        entity.setAttributeList(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
-        entity.setPhonenum(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
-        entity.setPickup_time(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
-        entity.setRemarks(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
-        entity.setTripCancelledTime(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
-        entity.setTripCreationTime(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
-        entity.setTripModificationTime(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
-        entity.setTripCompletionTime(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
-        entity.setTripStatus(cursor.isNull(offset + 33) ? null : cursor.getInt(offset + 33));
-        entity.setPickupAddress(cursor.isNull(offset + 34) ? null : cursor.getString(offset + 34));
-        entity.setDropoffAddress(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
-        entity.setAlready_paid(cursor.isNull(offset + 36) ? null : cursor.getShort(offset + 36) != 0);
-        entity.setMulti_pay_allow(cursor.isNull(offset + 37) ? null : cursor.getShort(offset + 37) != 0);
-        entity.setCompany_name(cursor.isNull(offset + 38) ? null : cursor.getString(offset + 38));
-        entity.setCompany_description(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
-        entity.setCompany_phone_number(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
-        entity.setCompany_icon(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
-        entity.setCompany_attribute_list(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
-        entity.setCompany_dupChk_time(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
-        entity.setCompany_car_file(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
-        entity.setCompany_baseRate(cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45));
-        entity.setCompany_rate_PerDistance(cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46));
-        entity.setAuthCode(cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47));
-        entity.setPaidAmount(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
+        entity.setPickup_zipCode(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setDropoff_house_number(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setDropoff_street_name(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setDropoff_district(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setDropoff_unit(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setDropoff_landmark(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setDropoff_longitude(cursor.isNull(offset + 24) ? null : cursor.getDouble(offset + 24));
+        entity.setDropoff_latitude(cursor.isNull(offset + 25) ? null : cursor.getDouble(offset + 25));
+        entity.setAttributeList(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
+        entity.setPhonenum(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
+        entity.setPickup_time(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
+        entity.setRemarks(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setTripCancelledTime(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
+        entity.setTripCreationTime(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
+        entity.setTripModificationTime(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
+        entity.setTripCompletionTime(cursor.isNull(offset + 33) ? null : cursor.getString(offset + 33));
+        entity.setTripStatus(cursor.isNull(offset + 34) ? null : cursor.getInt(offset + 34));
+        entity.setPickupAddress(cursor.isNull(offset + 35) ? null : cursor.getString(offset + 35));
+        entity.setDropoffAddress(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
+        entity.setAlready_paid(cursor.isNull(offset + 37) ? null : cursor.getShort(offset + 37) != 0);
+        entity.setMulti_pay_allow(cursor.isNull(offset + 38) ? null : cursor.getShort(offset + 38) != 0);
+        entity.setCompany_name(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
+        entity.setCompany_description(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
+        entity.setCompany_phone_number(cursor.isNull(offset + 41) ? null : cursor.getString(offset + 41));
+        entity.setCompany_icon(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
+        entity.setCompany_attribute_list(cursor.isNull(offset + 43) ? null : cursor.getString(offset + 43));
+        entity.setCompany_dupChk_time(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
+        entity.setCompany_car_file(cursor.isNull(offset + 45) ? null : cursor.getString(offset + 45));
+        entity.setCompany_baseRate(cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46));
+        entity.setCompany_rate_PerDistance(cursor.isNull(offset + 47) ? null : cursor.getInt(offset + 47));
+        entity.setAuthCode(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
+        entity.setPaidAmount(cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49));
      }
     
     /** @inheritdoc */

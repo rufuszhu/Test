@@ -167,7 +167,7 @@ public class BookActivity extends BaseActivity {
 					Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
 		}
 		else if(tempCompList!=null && tempCompList.length>0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mDropoffAddress != null){
-			Logger.e(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
+			//Logger.e(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
 			Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
 			Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
 			Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");

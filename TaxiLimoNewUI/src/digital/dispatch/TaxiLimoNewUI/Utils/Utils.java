@@ -30,13 +30,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -51,9 +47,7 @@ import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
 import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
-import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 
 public class Utils {
 
@@ -220,6 +214,7 @@ public class Utils {
 		mbook.setPickup_latitude(Utils.mPickupAddress.getLatitude());
 		mbook.setPickup_longitude(Utils.mPickupAddress.getLongitude());
 		mbook.setPickup_street_name(AddressDaoManager.getStreetNameFromAddress(Utils.mPickupAddress));
+		mbook.setPickup_zipCode(Utils.mPickupAddress.getPostalCode()); //TL-301
 	}
 
 	private static void setUpDropoffAddress(DBBooking mbook, Context context) {
