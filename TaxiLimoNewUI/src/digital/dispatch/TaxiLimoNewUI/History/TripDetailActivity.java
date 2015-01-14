@@ -48,6 +48,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
+import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -56,6 +57,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 public class TripDetailActivity extends BaseActivity {
 
 	private static final String TAG = "TripDetailActivity";
+	private boolean logEnabled = false;
 	private DBBooking dbBook;
 	private Context _context;
 	private BroadcastReceiver bcReceiver;
@@ -286,10 +288,7 @@ public class TripDetailActivity extends BaseActivity {
 		 */
 		@Override
 		protected List<Address> doInBackground(String... params) {
-			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
-			 */
-			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+			
 
 			// Get the current location from the input parameter list
 			String locationName = params[0];
@@ -299,37 +298,58 @@ public class TripDetailActivity extends BaseActivity {
 
 			// Try to get an address for the current location. Catch IO or network problems.
 			try {
-
+				/*
+				 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform to address standards can also be used.
+				 */
+				Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
 				/*
 				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
 				 */
-				addresses = geocoder.getFromLocationName(locationName, 10);
+				if(geocoder != null)
+					addresses = geocoder.getFromLocationName(locationName, 10);
 
 				// Catch network or other I/O problems.
-			} catch (IOException exception1) {
+			} catch (Exception e) {
+				e.printStackTrace();
+				// Log an error 
+				Logger.e(TAG, "geocoder failed , moving on to HTTP");
+			}
+			//If the geocoder returned an address
+			if (addresses != null && addresses.size() > 0) {
+				return addresses;
+			}			
+			else{
+				
+				//try HTTP lookup to the maps API					
+				GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
+			
+				try{
+					addresses = mGecoderGoogle.getFromLocationName(locationName, 10);
+				}	
+				catch (IOException exception1) {
 
-				// Log an error and return an error message
-				Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-
-				// print the stack trace
-				exception1.printStackTrace();
-
-				// Return an error message
-				// return (getString(R.string.IO_Exception_getFromLocation));
+					// Log an error and return an error message
+					Logger.e(TAG, getString(R.string.IO_Exception_getFromLocation));
+	
+					// print the stack trace
+					exception1.printStackTrace();
 
 				// Catch incorrect latitude or longitude values
-			} catch (IllegalArgumentException exception2) {
-
-				// Construct a message containing the invalid arguments
-				String errorString = getString(R.string.illegal_argument_exception, locationName);
-				// Log the error and print the stack trace
-				Log.e(LocationUtils.APPTAG, errorString);
-				exception2.printStackTrace();
-
-				//
-				// return errorString;
+				} catch (IllegalArgumentException exception2) {
+	
+					// Construct a message containing the invalid arguments
+					String errorString = getString(R.string.illegal_argument_exception, locationName);
+					// Log the error and print the stack trace
+					Logger.e(TAG, errorString);
+					exception2.printStackTrace();
+	
+				
+				}catch(Exception e){
+					Logger.e(TAG, "other exception");
+					e.printStackTrace();
+				}
+				return addresses;
 			}
-			return addresses;
 		}
 
 		/**
@@ -337,6 +357,7 @@ public class TripDetailActivity extends BaseActivity {
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
+				
 			if(addresses==null){
 				Utils.showMessageDialog(_context.getString(R.string.cannot_get_address_from_google), _context);
 			}
@@ -359,6 +380,7 @@ public class TripDetailActivity extends BaseActivity {
 				Utils.showMessageDialog(_context.getString(R.string.cannot_get_address_from_google), _context);
 				// Toast.makeText(_context, "invalid address", Toast.LENGTH_SHORT).show();
 			}
+		
 		}
 	}
 	

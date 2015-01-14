@@ -144,7 +144,7 @@ public class GoogleMapXMLParser {
 								addressList.add(addr);
 							} else {
 								if (logEnabled)
-									Log.e(TAG,
+									Logger.e(TAG,
 										"abandon address for reaching the limit of "
 												+ mMaxResult);
 							}
