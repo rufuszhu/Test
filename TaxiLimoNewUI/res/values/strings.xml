@@ -396,6 +396,8 @@
 
     <!-- successful messages -->
     <string name="message_cancel_successful">The trip was successfully canceled</string>
+    <string name="message_cancel_failed_rejected_by_pf">The job cannot be canceled at the moment, please try again later.</string>
+
     <string name="message_book_successful">Thank you. We\'re looking for a Taxi. Please stand by.</string>
     <string name="message_track_send_msg_success">Successfully sent message to driver</string>
     <string name="reg_device_success">Login Successful</string>
