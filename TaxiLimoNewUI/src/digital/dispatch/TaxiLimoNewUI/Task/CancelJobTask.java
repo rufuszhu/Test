@@ -39,13 +39,6 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 	// The code to be executed in a background thread.
 	@Override
 	protected Void doInBackground(Void... params) {
-		// set job's status in database to canceled
-		dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-		dbBook.setTripCancelledTime(System.currentTimeMillis() + "");
-		DaoManager daoManager = DaoManager.getInstance(_context);
-		DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-		bookingDao.update(dbBook);
-
 		try {
 			cjReq = new CancelJobRequest(this, this);
 			cjReq.setSysID(dbBook.getSysId() + "");
@@ -77,6 +70,13 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 		    }
 		}
 
+        // set job's status in database to canceled
+        dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+        dbBook.setTripCancelledTime(System.currentTimeMillis() + "");
+        DaoManager daoManager = DaoManager.getInstance(_context);
+        DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+        bookingDao.update(dbBook);
+
 		Utils.stopProcessingDialog(_context);
 		if (_context instanceof TrackDetailActivity) {
 				((TrackDetailActivity) _context).showCancelDialog();
@@ -97,13 +97,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 		}
 		
 		Utils.stopProcessingDialog(_context);
-		
-		// we force cancel the job even if the request fail
-		if (_context instanceof TrackDetailActivity)
-			((TrackDetailActivity) _context).showCancelDialog();
-		else{
-			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
-		}
+        Utils.showMessageDialog(_context.getString(R.string.message_cancel_failed_rejected_by_pf), _context);
 
 		Logger.e(TAG, "cancelJob: ResponseError - " + errorString);
 	}
@@ -119,10 +113,7 @@ public class CancelJobTask extends AsyncTask<Void, Integer, Void> implements ICa
 		}
 		
 		Utils.stopProcessingDialog(_context);
-		if (_context instanceof TrackDetailActivity)
-			((TrackDetailActivity) _context).showCancelDialog();
-		else
-			Utils.showMessageDialog(_context.getString(R.string.message_cancel_successful), _context);
+        Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 
 		Logger.v(TAG, "cancelJob: Error");
 	}
