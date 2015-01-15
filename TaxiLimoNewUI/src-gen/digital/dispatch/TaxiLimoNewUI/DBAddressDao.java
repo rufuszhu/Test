@@ -35,6 +35,7 @@ public class DBAddressDao extends AbstractDao<DBAddress, Long> {
         public final static Property Longitude = new Property(9, Double.class, "longitude", false, "LONGITUDE");
         public final static Property IsFavoriate = new Property(10, Boolean.class, "isFavoriate", false, "IS_FAVORIATE");
         public final static Property FullAddress = new Property(11, String.class, "fullAddress", false, "FULL_ADDRESS");
+        public final static Property ZipCode = new Property(12, String.class, "zipCode", false, "ZIP_CODE");
     };
 
 
@@ -61,7 +62,8 @@ public class DBAddressDao extends AbstractDao<DBAddress, Long> {
                 "'LATITUDE' REAL," + // 8: latitude
                 "'LONGITUDE' REAL," + // 9: longitude
                 "'IS_FAVORIATE' INTEGER," + // 10: isFavoriate
-                "'FULL_ADDRESS' TEXT);"); // 11: fullAddress
+                "'FULL_ADDRESS' TEXT," + // 11: fullAddress
+                "'ZIP_CODE' TEXT);"); // 12: zipCode
     }
 
     /** Drops the underlying database table. */
@@ -134,6 +136,11 @@ public class DBAddressDao extends AbstractDao<DBAddress, Long> {
         if (fullAddress != null) {
             stmt.bindString(12, fullAddress);
         }
+ 
+        String zipCode = entity.getZipCode();
+        if (zipCode != null) {
+            stmt.bindString(13, zipCode);
+        }
     }
 
     /** @inheritdoc */
@@ -157,7 +164,8 @@ public class DBAddressDao extends AbstractDao<DBAddress, Long> {
             cursor.isNull(offset + 8) ? null : cursor.getDouble(offset + 8), // latitude
             cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9), // longitude
             cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isFavoriate
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // fullAddress
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // fullAddress
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // zipCode
         );
         return entity;
     }
@@ -177,6 +185,7 @@ public class DBAddressDao extends AbstractDao<DBAddress, Long> {
         entity.setLongitude(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
         entity.setIsFavoriate(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
         entity.setFullAddress(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setZipCode(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     /** @inheritdoc */

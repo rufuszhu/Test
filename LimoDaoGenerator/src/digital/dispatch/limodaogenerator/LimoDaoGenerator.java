@@ -52,6 +52,7 @@ public class LimoDaoGenerator {
         address.addDoubleProperty("longitude");
         address.addBooleanProperty("isFavoriate");
         address.addStringProperty("fullAddress");
+        address.addStringProperty("zipCode"); //TL-301
     }
     
     private static void addCreditCard(Schema schema) {
@@ -92,6 +93,7 @@ public class LimoDaoGenerator {
         booking.addStringProperty("pickup_landmark");
         booking.addDoubleProperty("pickup_longitude");
         booking.addDoubleProperty("pickup_latitude");
+        booking.addStringProperty("pickup_zipCode"); //TL-301
         
         booking.addStringProperty("dropoff_house_number");
         booking.addStringProperty("dropoff_street_name");
@@ -128,10 +130,11 @@ public class LimoDaoGenerator {
         booking.addIntProperty("company_baseRate"); //TL-304
         booking.addIntProperty("company_rate_PerDistance");
         
-        booking.addBooleanProperty("shouldForceDisableCancel");
+        booking.addBooleanProperty("shouldForceDisableCancel");//TL-343
         
         booking.addStringProperty("authCode");
         booking.addStringProperty("paidAmount");
+        
     }
     
     private static void addAttribute(Schema schema) {

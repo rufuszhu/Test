@@ -18,6 +18,7 @@ public class DBAddress {
     private Double longitude;
     private Boolean isFavoriate;
     private String fullAddress;
+    private String zipCode;
 
     public DBAddress() {
     }
@@ -26,7 +27,7 @@ public class DBAddress {
         this.id = id;
     }
 
-    public DBAddress(Long id, String unit, String streetName, String houseNumber, String district, String province, String country, String nickName, Double latitude, Double longitude, Boolean isFavoriate, String fullAddress) {
+    public DBAddress(Long id, String unit, String streetName, String houseNumber, String district, String province, String country, String nickName, Double latitude, Double longitude, Boolean isFavoriate, String fullAddress, String zipCode) {
         this.id = id;
         this.unit = unit;
         this.streetName = streetName;
@@ -39,6 +40,7 @@ public class DBAddress {
         this.longitude = longitude;
         this.isFavoriate = isFavoriate;
         this.fullAddress = fullAddress;
+        this.zipCode = zipCode;
     }
 
     public Long getId() {
@@ -135,6 +137,14 @@ public class DBAddress {
 
     public void setFullAddress(String fullAddress) {
         this.fullAddress = fullAddress;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
 }

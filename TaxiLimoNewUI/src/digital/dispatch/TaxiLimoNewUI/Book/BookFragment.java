@@ -638,7 +638,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			} catch (Exception e) {
 				e.printStackTrace();
 				// Log an error 
-				Log.e(TAG, "geocoder failed , moving on to HTTP");
+				Logger.e(TAG, "geocoder failed , moving on to HTTP");
 			}
 			// If the reverse geocode returned an address
 			if (addresses != null && addresses.size() > 0) {
@@ -698,7 +698,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 						// Construct a message containing the invalid arguments
 						String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
 						// Log the error and print the stack trace
-						Log.e(LocationUtils.APPTAG, errorString);
+						Logger.e(TAG, errorString);
 						e.printStackTrace();
 
 						if(isAdded())
@@ -809,7 +809,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					// Construct a message containing the invalid arguments
 					String errorString = getString(R.string.illegal_argument_exception, location.getLatitude(), location.getLongitude());
 					// Log the error and print the stack trace
-					Log.e(LocationUtils.APPTAG, errorString);
+					Logger.e(TAG, errorString);
 					e.printStackTrace();
 
 					if(isAdded())
@@ -819,7 +819,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 				
 			} catch (NullPointerException e) {
 			
-					Log.e(TAG, "NullPointer", e);
+					Logger.e(TAG, "NullPointer");
 					return "";
 	
 			}

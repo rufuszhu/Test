@@ -50,6 +50,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -59,6 +60,7 @@ import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 public class SearchFragment extends Fragment implements OnItemClickListener {
 
 	private static final String TAG = "SearchFragment";
+	private boolean logEnabled = false;
 	private View view;
 	private AutoCompleteTextView autoCompView;
 	private DaoManager daoManager;
@@ -574,11 +576,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		 */
 		@Override
 		protected List<Address> doInBackground(String... params) {
-			/*
-			 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
-			 * to address standards can also be used.
-			 */
-			Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+			
 
 			// Get the current location from the input parameter list
 			String locationName = params[0];
@@ -590,38 +588,61 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			try {
 
 				/*
+				 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
+				 * to address standards can also be used.
+				 */
+				Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
+				
+				/*
 				 * Call the synchronous getFromLocation() method with the latitude and longitude of the current location. Return at most 1 address.
 				 */
-				addresses = geocoder.getFromLocationName(locationName, 10);
+				if(geocoder != null)
+					addresses = geocoder.getFromLocationName(locationName, 10);
 
 				// Catch network or other I/O problems.
-			} catch (IOException exception1) {
-
-				// Log an error and return an error message
-				if (isAdded())
-					Log.e(LocationUtils.APPTAG, getString(R.string.IO_Exception_getFromLocation));
-
-				// print the stack trace
-				exception1.printStackTrace();
-
-				// Return an error message
-				// return (getString(R.string.IO_Exception_getFromLocation));
-
-				// Catch incorrect latitude or longitude values
-			} catch (IllegalArgumentException exception2) {
-
-				// Construct a message containing the invalid arguments
-				if (isAdded()) {
+			} catch (Exception e) {
+				e.printStackTrace();
+				// Log an error 
+				Logger.e(TAG, "geocoder failed , moving on to HTTP");
+			}
+			//If the geocoder returned an address
+			if (addresses != null && addresses.size() > 0) {
+				return addresses;
+			}			
+			else{
+				
+				//try HTTP lookup to the maps API					
+				GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
+			
+				try{
+					addresses = mGecoderGoogle.getFromLocationName(locationName, 10);
+				}
+				catch (IOException exception1) {
+	
+					// Log an error 
+					Logger.e(TAG, getString(R.string.IO_Exception_getFromLocation));
+	
+					// print the stack trace
+					exception1.printStackTrace();
+	
+	
+					// Catch incorrect latitude or longitude values
+				} catch (IllegalArgumentException exception2) {
+	
+					// Construct a message containing the invalid arguments					
 					String errorString = getString(R.string.illegal_argument_exception, locationName);
 					// Log the error and print the stack trace
-					Log.e(LocationUtils.APPTAG, errorString);
+					Logger.e(TAG, errorString);
+					
+					exception2.printStackTrace();
+	
+					
+				}catch(Exception e){
+					Logger.e(TAG, "other exception");
+					e.printStackTrace();
 				}
-				exception2.printStackTrace();
-
-				//
-				// return errorString;
+				return addresses;
 			}
-			return addresses;
 		}
 
 		/**
@@ -629,23 +650,35 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
-			if (addresses == null) {
-				Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
-			} else if (addresses.size() > 1) {
-				// pop up list
-				setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses);
-			} else if (addresses.size() == 1) {
-				if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
-					Utils.mDropoffAddress = addresses.get(0);
+			if(isAdded()) { //added to avoid NullPointerException	
+				if (addresses == null) {
+				
+					Utils.showMessageDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+					
+				} else if (addresses.size() > 1) {
+					// pop up list		
+					setUpListDialog(getActivity(), LocationUtils.addressListToStringList(getActivity(), addresses), addresses);
+	
+				} else if (addresses.size() == 1) {
+		
+			
+					if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
+						Utils.mDropoffAddress = addresses.get(0);
+					} else {
+						Utils.mPickupAddress = addresses.get(0);
+					}
+					getActivity().finish();
+					
 				} else {
                     Utils.pickupHouseNumber="";
 					Utils.mPickupAddress = addresses.get(0);
+				
+					Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+
 				}
-				getActivity().finish();
-			} else {
-				Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
 			}
 		}
+		
 	}
 
 	private void setUpListDialog(final Context context, final ArrayList<String> addresses, final List<Address> addressesObj) {

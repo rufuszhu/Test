@@ -27,6 +27,7 @@ public class DBBooking implements Serializable{
     private String pickup_landmark;
     private Double pickup_longitude;
     private Double pickup_latitude;
+    private String pickup_zipCode;
     private String dropoff_house_number;
     private String dropoff_street_name;
     private String dropoff_district;
@@ -67,7 +68,7 @@ public class DBBooking implements Serializable{
         this.id = id;
     }
 
-    public DBBooking(Long id, String destID, Integer taxi_ride_id, String ride_id, String sysId, Boolean asap, Double carLatitude, Double carLongitude, String dispatchedCar, String dispatchedTime, String dispatchedDriver, String pickup_house_number, String pickup_street_name, String pickup_district, String pickup_unit, String pickup_landmark, Double pickup_longitude, Double pickup_latitude, String dropoff_house_number, String dropoff_street_name, String dropoff_district, String dropoff_unit, String dropoff_landmark, Double dropoff_longitude, Double dropoff_latitude, String attributeList, String phonenum, String pickup_time, String remarks, String tripCancelledTime, String tripCreationTime, String tripModificationTime, String tripCompletionTime, Integer tripStatus, String pickupAddress, String dropoffAddress, Boolean already_paid, Boolean multi_pay_allow, String company_name, String company_description, String company_phone_number, String company_icon, String company_attribute_list, String company_dupChk_time, String company_car_file, Integer company_baseRate, Integer company_rate_PerDistance, Boolean shouldForceDisableCancel, String authCode, String paidAmount) {
+    public DBBooking(Long id, String destID, Integer taxi_ride_id, String ride_id, String sysId, Boolean asap, Double carLatitude, Double carLongitude, String dispatchedCar, String dispatchedTime, String dispatchedDriver, String pickup_house_number, String pickup_street_name, String pickup_district, String pickup_unit, String pickup_landmark, Double pickup_longitude, Double pickup_latitude, String pickup_zipCode, String dropoff_house_number, String dropoff_street_name, String dropoff_district, String dropoff_unit, String dropoff_landmark, Double dropoff_longitude, Double dropoff_latitude, String attributeList, String phonenum, String pickup_time, String remarks, String tripCancelledTime, String tripCreationTime, String tripModificationTime, String tripCompletionTime, Integer tripStatus, String pickupAddress, String dropoffAddress, Boolean already_paid, Boolean multi_pay_allow, String company_name, String company_description, String company_phone_number, String company_icon, String company_attribute_list, String company_dupChk_time, String company_car_file, Integer company_baseRate, Integer company_rate_PerDistance, Boolean shouldForceDisableCancel, String authCode, String paidAmount) {
         this.id = id;
         this.destID = destID;
         this.taxi_ride_id = taxi_ride_id;
@@ -86,6 +87,7 @@ public class DBBooking implements Serializable{
         this.pickup_landmark = pickup_landmark;
         this.pickup_longitude = pickup_longitude;
         this.pickup_latitude = pickup_latitude;
+        this.pickup_zipCode = pickup_zipCode;
         this.dropoff_house_number = dropoff_house_number;
         this.dropoff_street_name = dropoff_street_name;
         this.dropoff_district = dropoff_district;
@@ -262,6 +264,14 @@ public class DBBooking implements Serializable{
 
     public void setPickup_latitude(Double pickup_latitude) {
         this.pickup_latitude = pickup_latitude;
+    }
+
+    public String getPickup_zipCode() {
+        return pickup_zipCode;
+    }
+
+    public void setPickup_zipCode(String pickup_zipCode) {
+        this.pickup_zipCode = pickup_zipCode;
     }
 
     public String getDropoff_house_number() {
