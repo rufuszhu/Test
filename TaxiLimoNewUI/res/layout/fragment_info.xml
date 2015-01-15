@@ -17,7 +17,100 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".4" >
+        android:layout_weight=".4">
+
+        <TextView
+            android:id="@+id/itinerary_title"
+            style="@style/InfoLabelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/normal_padding"
+            android:layout_marginTop="@dimen/small_padding"
+            android:text="@string/itinerary" />
+
+        <TextView
+            android:id="@+id/icon_pickup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/itinerary_title"
+            android:layout_below="@+id/itinerary_title"
+            android:layout_marginLeft="@dimen/big_margin"
+            android:layout_marginTop="@dimen/small_padding"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_icon_size" />
+
+        <TextView
+            android:id="@+id/tv_pickup_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itinerary_title"
+            android:layout_marginLeft="@dimen/big_margin"
+            android:layout_marginTop="@dimen/small_padding"
+            android:layout_toRightOf="@+id/icon_pickup"
+            android:singleLine="true"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_font_size" />
+
+        <TextView
+            android:id="@+id/icon_dropoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/itinerary_title"
+            android:layout_below="@+id/icon_pickup"
+            android:layout_marginTop="@dimen/big_margin"
+            android:layout_marginLeft="12dp"
+            android:singleLine="true"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_icon_size" />
+
+        <TextView
+            android:id="@+id/tv_dropoff_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_pickup_address"
+            android:layout_below="@+id/tv_pickup_address"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/icon_dropoff"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_font_size" />
+
+        <TextView
+            android:id="@+id/icon_calander"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/itinerary_title"
+            android:layout_below="@+id/icon_dropoff"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="@dimen/big_margin"
+            android:singleLine="true"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_icon_size" />
+
+        <TextView
+            android:id="@+id/tv_pickup_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_dropoff_address"
+            android:layout_below="@+id/tv_dropoff_address"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/icon_calander"
+            android:textColor="@color/drawer_selected"
+            android:textSize="@dimen/history_pickup_font_size" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".3" >
 
         <TextView
             android:id="@+id/company_title"
@@ -97,13 +190,15 @@
         android:layout_height="1dp"
         android:background="@color/gray_line" />
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".2" >
+        android:layout_weight=".3">
 
         <TextView
-            android:id="@+id/driver_title"
+            android:id="@+id/option_title"
             style="@style/InfoLabelTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,22 +206,83 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/normal_padding"
             android:layout_marginTop="@dimen/small_padding"
-            android:text="@string/driver" />
+            android:text="@string/driver_and_vehicle" />
 
-        <View
-            android:layout_width="5dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/tv_driver"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/driver_title"
-            android:layout_alignBottom="@+id/text_driver_btn"
+            android:layout_alignLeft="@+id/option_title"
+            android:layout_marginTop="@dimen/normal_padding"
             android:layout_marginLeft="@dimen/big_margin"
-            android:textColor="@color/black_text"
-            android:textSize="@dimen/company_font_size"
-            android:text="Large Text" />
+            android:layout_below="@+id/option_title"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/linearLayout">
+
+            <TextView
+                android:id="@+id/tv_waiting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/company_font_size"
+                android:text="@string/awaiting_dispatch"
+                android:visibility="gone"/>
+
+
+            <ImageView
+                android:id="@+id/icon_taxi"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/icon_taxi"
+                android:layout_marginRight="@dimen/small_padding"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_car_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/company_font_size"
+                android:visibility="gone"/>
+
+            <View
+                android:id="@+id/space_diver_car"
+                android:layout_width="@dimen/normal_margin"
+                android:layout_height="match_parent"
+                android:visibility="gone"></View>
+
+            <TextView
+                android:id="@+id/icon_male_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text"
+                android:textSize="20sp"
+                android:layout_marginBottom="2dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_driver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/company_font_size"
+                android:visibility="gone"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_attr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignLeft="@+id/linearLayout"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/text_driver_btn"
@@ -137,7 +293,8 @@
             android:layout_marginRight="@dimen/big_margin"
             android:background="@drawable/searchbar_selector"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/icon_text"
@@ -157,53 +314,6 @@
                 android:text="TEXT"
                 android:textColor="@color/blue_grenn_color2"
                 android:textSize="@dimen/call_btn_font_size" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_line" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".4" >
-
-        <TextView
-            android:id="@+id/option_title"
-            style="@style/InfoLabelTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/normal_padding"
-            android:layout_marginTop="@dimen/small_padding"
-            android:text="@string/option" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/option_title"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/big_margin"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/tv_car_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black_text"
-                android:textSize="@dimen/company_font_size"
-                android:text="Small Text" />
-
-            <LinearLayout
-                android:id="@+id/ll_attr"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/charaters_left"
+                android:text="@string/characters_left"
                 android:textColor="@color/gray_light" />
         </LinearLayout>
 

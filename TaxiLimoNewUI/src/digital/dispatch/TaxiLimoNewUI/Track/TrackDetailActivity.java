@@ -140,7 +140,7 @@ public class TrackDetailActivity extends BaseActivity {
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 			Date date = format.parse(dbBook.getTripCreationTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm MMM dd, yyyy", Locale.US);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a MMM dd, yyyy", Locale.US);
 			String dateString = dateFormat.format(date);
 			tv_book_time.setText("Received at " + dateString);
 
@@ -619,8 +619,13 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void enableCancelBtn() {
-		ll_cancel_btn.setVisibility(View.VISIBLE);
-		cancel_cover.setVisibility(View.GONE);
+        //TL-344 Grey out Cancel Trip button for jobs that are in Unknown state.
+        if(dbBook.getShouldForceDisableCancel())
+            disableCancelBtn();
+        else {
+            ll_cancel_btn.setVisibility(View.VISIBLE);
+            cancel_cover.setVisibility(View.GONE);
+        }
 	}
 	
 	private boolean shouldShowCar(){

@@ -475,8 +475,10 @@ public class ContactsFragment extends ListFragment {
 				if (isSave) {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addressesObj.get(0);
-					else
-						Utils.mPickupAddress = addressesObj.get(0);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addressesObj.get(0);
+                    }
 					getActivity().finish();
 				} else
 					new AddFavoriteTask(getActivity()).execute(addresses.get(which));
@@ -585,6 +587,7 @@ public class ContactsFragment extends ListFragment {
 		 */
 		@Override
 		protected void onPostExecute(List<Address> addresses) {
+
 			if(isAdded()){
 			 
 				if (addresses == null) {
@@ -596,13 +599,14 @@ public class ContactsFragment extends ListFragment {
 				} else if (addresses.size() == 1) {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addresses.get(0);
-					else
-						Utils.mPickupAddress = addresses.get(0);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addresses.get(0);
+                    }
 					getActivity().finish();
 	
 				} else {
 					Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
-	
 				}
 			}
 		}

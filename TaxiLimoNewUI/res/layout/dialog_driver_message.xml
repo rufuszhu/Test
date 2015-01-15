@@ -42,7 +42,7 @@
             android:id="@+id/text_remaining"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/charaters_left"
+            android:text="@string/characters_left"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         

@@ -182,8 +182,8 @@ public final class LocationUtils {
 			// If there's a street address, add it
 					address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
 
-					// Locality is usually a city
-					address.getLocality());
+					// Locality is usually a city TL-274
+                    address.getLocality() != null ? address.getLocality() : "");
 			// Return the text
 			return addressText;
 		} else

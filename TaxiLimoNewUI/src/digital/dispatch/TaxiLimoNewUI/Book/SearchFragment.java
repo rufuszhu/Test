@@ -670,8 +670,11 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 					getActivity().finish();
 					
 				} else {
+                    Utils.pickupHouseNumber="";
+					Utils.mPickupAddress = addresses.get(0);
 				
 					Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
+
 				}
 			}
 		}
@@ -697,8 +700,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 				if (isAdded()) {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addressesObj.get(which);
-					else
-						Utils.mPickupAddress = addressesObj.get(which);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addressesObj.get(which);
+                    }
 					getActivity().finish();
 				} else {
 					dialog.dismiss();

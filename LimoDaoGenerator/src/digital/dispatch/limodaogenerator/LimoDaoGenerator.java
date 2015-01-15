@@ -130,6 +130,8 @@ public class LimoDaoGenerator {
         booking.addIntProperty("company_baseRate"); //TL-304
         booking.addIntProperty("company_rate_PerDistance");
         
+        booking.addBooleanProperty("shouldForceDisableCancel");//TL-343
+        
         booking.addStringProperty("authCode");
         booking.addStringProperty("paidAmount");
         

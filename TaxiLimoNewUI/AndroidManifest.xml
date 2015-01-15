@@ -58,7 +58,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCuJai86UcCVuPMA9MbmFjonXoKFzrVeQk" />
+            android:value="AIzaSyCprM9D9XGci60yXz-2ruCly0NDq9BNHNg" />
 
         <activity
             android:name=".MainActivity"
@@ -126,15 +126,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
-        <activity
-            android:name=".Track.TrackingMapActivity"
-            android:label="@string/title_activity_tracking_map"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
-        </activity>
+
 
         <!--
           BroadcastReceiver that will receive intents from GCM

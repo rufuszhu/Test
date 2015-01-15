@@ -145,7 +145,7 @@ public class TripDetailActivity extends BaseActivity {
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 			Date date = format.parse(dbBook.getTripCreationTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm MMM dd, yyyy", Locale.US);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a MMM dd, yyyy", Locale.US);
 			String dateString = dateFormat.format(date);
 			tv_receive.setText("Received at " + dateString);
 
@@ -363,6 +363,7 @@ public class TripDetailActivity extends BaseActivity {
 			}
 			else if (addresses.size() != 0) {
 				if(isPickup){
+                    Utils.pickupHouseNumber = "";
 					Utils.mPickupAddress = addresses.get(0);
 					boolean isPickup = false;
 					if(dbBook.getDropoffAddress()!=null && dbBook.getDropoffAddress().length()>0)

@@ -484,8 +484,10 @@ public class FavoritesFragment extends ListFragment {
 	
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 						Utils.mDropoffAddress = addresses.get(0);
-					else
-						Utils.mPickupAddress = addresses.get(0);
+					else {
+                        Utils.pickupHouseNumber="";
+                        Utils.mPickupAddress = addresses.get(0);
+                    }
 					getActivity().finish();
 	
 				} else {
@@ -516,8 +518,10 @@ public class FavoritesFragment extends ListFragment {
 
 				if (((ModifyAddressActivity) getActivity()).getIsDesitination())
 					Utils.mDropoffAddress = addressesObj.get(which);
-				else
-					Utils.mPickupAddress = addressesObj.get(which);
+				else {
+                    Utils.pickupHouseNumber="";
+                    Utils.mPickupAddress = addressesObj.get(which);
+                }
 				getActivity().finish();
 			}
 		});
