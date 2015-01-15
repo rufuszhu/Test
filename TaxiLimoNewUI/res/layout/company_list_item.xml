@@ -43,7 +43,7 @@
             android:paddingTop="@dimen/small_padding" >
         </LinearLayout>
     </LinearLayout>
-
+	<!--  
     <TextView
         android:id="@+id/tv_round_btn"
         style="@style/TextDropShadowWhite"
@@ -56,5 +56,6 @@
         android:textColor="@color/blue_grenn_color2"
         android:textSize="@dimen/selection_btn_font_size"
         android:textStyle="bold" />
+     -->
 
 </RelativeLayout>

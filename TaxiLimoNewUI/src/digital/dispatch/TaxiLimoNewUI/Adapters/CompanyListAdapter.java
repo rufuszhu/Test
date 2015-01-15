@@ -29,7 +29,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 	boolean bookRightAfter;
 	private Typeface rionaSansMedium;
 	private Typeface rionaSansRegular;
-	private Typeface rionaSansBold;
+	//private Typeface rionaSansBold;
 	private Typeface exoBold;
 	
 
@@ -49,7 +49,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		public TextView name;
 		public TextView description;
 		public LinearLayout ll_attr;
-		public TextView tv_round_btn;
+		//public TextView tv_round_btn;
 		//public TextView estFare;
 	}
 
@@ -67,7 +67,8 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			viewHolder.name = (TextView) rowView.findViewById(R.id.tv_name);
 			viewHolder.description = (TextView) rowView.findViewById(R.id.tv_description);
 			viewHolder.ll_attr = (LinearLayout) rowView.findViewById(R.id.ll_attr);
-			viewHolder.tv_round_btn = (TextView) rowView.findViewById(R.id.tv_round_btn);
+			//TL-333
+			//viewHolder.tv_round_btn = (TextView) rowView.findViewById(R.id.tv_round_btn);
 			//viewHolder.estFare = (TextView) rowView.findViewById(R.id.tv_est_fare);
 
 			rowView.setTag(viewHolder);
@@ -77,14 +78,16 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		}
 		
 		viewHolder.name.setTypeface(rionaSansMedium);
-		viewHolder.tv_round_btn.setTypeface(exoBold);
+		//viewHolder.tv_round_btn.setTypeface(exoBold);
 		viewHolder.description.setTypeface(rionaSansRegular);
 		
-
+		/*
 		if (bookRightAfter)
-			viewHolder.tv_round_btn.setText(context.getString(R.string.book));
+			//viewHolder.tv_round_btn.setText(context.getString(R.string.book));
 		else
-			viewHolder.tv_round_btn.setText(context.getString(R.string.select));
+			//viewHolder.tv_round_btn.setText(context.getString(R.string.select));
+			
+			 */
 
 		CompanyItem item = items[position];
 
