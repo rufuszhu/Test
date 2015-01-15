@@ -57,10 +57,10 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 
 	private Runnable mHandlerTask;
 	private Handler mHandler;
-	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000) // 5 seconds
+	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(10000) // 10 seconds
 			.setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-	private final static int INTERVAL = 1000 * 30; // 30 second
+	private final static int INTERVAL = 1000 * 10; // 10 second
 
 	public static TrackingMapFragment newInstance() {
 		TrackingMapFragment fragment = new TrackingMapFragment();
@@ -116,6 +116,13 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 		}
 		setUpLocationClientIfNeeded();
 		mLocationClient.connect();
+
+        dbBook = ((TrackDetailActivity) getActivity()).getDBBook();
+        carLatLng = new LatLng(dbBook.getCarLatitude(), dbBook.getCarLongitude());
+
+        if (map != null && map.getCameraPosition().zoom != MBDefinition.DEFAULT_ZOOM && carLatLng!=null) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
+        }
 
 		startRepeatingTask();
 	}
@@ -201,7 +208,7 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 	@Override
 	public void onConnected(Bundle arg0) {
 		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
+		//map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 		pickupMarker = map.addMarker(new MarkerOptions().position(pickupLatLng).draggable(false));
 	}
 
@@ -292,6 +299,7 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 				}
 
 				carMarker = map.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(carLatLng, MBDefinition.DEFAULT_ZOOM));
 			}
 		}
 	}

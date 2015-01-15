@@ -90,7 +90,7 @@
     <!-- track detail -->
     <dimen name="track_circle_size">20dp</dimen>
     <dimen name="track_circle_holo_size">20dp</dimen>
-    <dimen name="track_detail_tab_font_size">10sp</dimen>
+    <dimen name="track_detail_tab_font_size">15sp</dimen>
  	<dimen name="track_detail_tab_icon_size">25sp</dimen>
  	<dimen name="company_font_size">17sp</dimen>
  	<dimen name="company_description_font_size">17sp</dimen>

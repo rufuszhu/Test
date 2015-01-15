@@ -93,6 +93,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:background="@drawable/fare_estimate_selector"
+            android:clickable="true"
             android:visibility="gone">
 
             <TextView

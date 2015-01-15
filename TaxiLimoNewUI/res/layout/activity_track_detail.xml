@@ -177,16 +177,23 @@
                 android:id="@+id/icon_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:textColor="@color/white"
+                android:layout_toLeftOf="@+id/space1"
                 android:textSize="@dimen/track_detail_tab_icon_size" />
+
+            <View
+                android:id="@+id/space1"
+                android:layout_width="@dimen/normal_padding"
+                android:layout_centerInParent="true"
+                android:layout_height="match_parent"></View>
 
             <TextView
                 android:id="@+id/tv_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/icon_info"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@+id/space1"
+                android:layout_centerVertical="true"
                 android:text="@string/info"
                 android:textColor="@color/white"
                 android:textSize="@dimen/track_detail_tab_font_size" />
@@ -200,20 +207,26 @@
             android:background="@color/background_tab"
             android:gravity="center" >
 
-            <TextView
+            <ImageView
                 android:id="@+id/icon_track"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/track_detail_tab_icon_size" />
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/space2"
+                android:src="@drawable/icon_trackcar"/>
+
+            <View
+                android:id="@+id/space2"
+                android:layout_width="@dimen/normal_padding"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"></View>
 
             <TextView
                 android:id="@+id/tv_track"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/icon_track"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@+id/space2"
+                android:layout_centerVertical="true"
                 android:text="@string/TRACK"
                 android:textColor="@color/white"
                 android:textSize="@dimen/track_detail_tab_font_size" />
@@ -381,10 +394,6 @@
 <!--                 android:layout_height="wrap_content" -->
 <!--                 android:text="@string/pay" /> -->
 <!--      </LinearLayout> -->
-     
-	
-
-    
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"

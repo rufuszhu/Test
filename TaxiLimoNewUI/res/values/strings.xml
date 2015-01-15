@@ -131,8 +131,8 @@
     <string name="action_edit">Edit</string>
 
     <!-- trip detail table -->
-    <string name="TRACK">TRACK</string>
-    <string name="info">INFO</string>
+    <string name="TRACK">TRACK CAR</string>
+    <string name="info">TRIP INFO</string>
     <string name="company">COMPANY</string>
     <string name="trip_id">TRIP ID</string>
     <string name="received">RECEIVED</string>
@@ -181,6 +181,7 @@
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <string name="url">http://192.168.50.160:76/Service.asmx</string>
+    <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
 <!--     <string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string> -->
     
 <!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
@@ -232,7 +233,7 @@
 
     <!-- Book Activity -->
     <string name="date_title">Pickup Date &amp; Time</string>
-    <string name="note_title">Driver Note</string>
+    <string name="note_title">Message to Driver</string>
     <string name="company_title">Company</string>
     <string name="choose">Choose</string>
     <string name="enter_for_est_fare">Enter your destination for fare estimate</string>
@@ -471,6 +472,8 @@
     <string name="title_activity_register_confirm">REGISTER</string>
     <string name="awaiting_dispatch">Awaiting dispatch</string>
     <string name="driver_and_vehicle"><![CDATA[DRIVER & VEHICLE]]></string>
+    <string name="pickup_location">PICKUP LOCATION</string>
+    <string name="disclaimer">Disclaimer: This is an estimate only and the actual amount charged by the taxi could vary</string>
 
 
 </resources>
