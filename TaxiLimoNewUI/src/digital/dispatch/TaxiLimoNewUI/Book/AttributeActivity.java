@@ -47,6 +47,8 @@ public class AttributeActivity extends BaseActivity {
 	private MenuItem refresh_icon;
 	private boolean refreshing;
 	private boolean shouldBookRightAfter;
+    private TextView tv_company404_text;
+    private View line;
 	private Context _context;
 
 	@Override
@@ -61,6 +63,8 @@ public class AttributeActivity extends BaseActivity {
 
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+
+
 
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
@@ -79,10 +83,15 @@ public class AttributeActivity extends BaseActivity {
 			}
 		});
 		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+        Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
 		TextView textView2 = (TextView) findViewById(R.id.textView2);
+        tv_company404_text = (TextView) findViewById(R.id.tv_company404_text);
+        line = findViewById(R.id.line);
+
 		textView1.setTypeface(rionaSansBold);
 		textView2.setTypeface(rionaSansBold);
+        tv_company404_text.setTypeface(rionaSansMedium);
 	}
 
 	@Override
@@ -97,6 +106,7 @@ public class AttributeActivity extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
+            clearSelectedCompanyIfNotAvailable();
 			finish();
 			return true;
 		}
@@ -144,11 +154,28 @@ public class AttributeActivity extends BaseActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //TL-359
+            clearSelectedCompanyIfNotAvailable();
+
 			finish();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+    private void clearSelectedCompanyIfNotAvailable(){
+        boolean companyAvailable = false;
+        if(Utils.mSelectedCompany==null)
+            return;
+
+        for(int i = 0; i< cp_adapter.getCount(); i++){
+            if(cp_adapter.getCompanyItem(i).destID.equals(Utils.mSelectedCompany.destID))
+                companyAvailable = true;
+        }
+
+        if(!companyAvailable)
+            Utils.mSelectedCompany=null;
+    }
 
 	// call from AttributeItemAdapter
 	public void filterCompany(ArrayList<Integer> positive_attribute_IDs) {
@@ -157,6 +184,23 @@ public class AttributeActivity extends BaseActivity {
 		if (positive_attribute_IDs.size() == 0 && companyArr!=null) {
 			cp_adapter = new CompanyListAdapter(this, companyArr, shouldBookRightAfter);
 			lv_company.setAdapter(cp_adapter);
+            if(cp_adapter.getCount()==0){
+                lv_company.setVisibility(View.GONE);
+                tv_company404_text.setVisibility(View.VISIBLE);
+                line.setVisibility(View.GONE);
+                if(Utils.mPickupAddress!=null) {
+                    String string = "No Fleets available ";
+                    string += Utils.mPickupAddress.getLocality() != null ? ("in " + Utils.mPickupAddress.getLocality()) : "";
+                    tv_company404_text.setText(string );
+                }
+                else
+                    tv_company404_text.setText("Please select a pickup address first");
+            }
+            else{
+                lv_company.setVisibility(View.VISIBLE);
+                tv_company404_text.setVisibility(View.GONE);
+                line.setVisibility(View.VISIBLE);
+            }
 		} else {
 			if (companyArr!=null && companyArr.length > 0) {
 				ArrayList<CompanyItem> temp = new ArrayList<CompanyItem>();
@@ -181,6 +225,16 @@ public class AttributeActivity extends BaseActivity {
 
 				cp_adapter = new CompanyListAdapter(this, compArr, shouldBookRightAfter);
 				lv_company.setAdapter(cp_adapter);
+                if(cp_adapter.getCount()==0){
+                    lv_company.setVisibility(View.GONE);
+                    tv_company404_text.setVisibility(View.VISIBLE);
+                    line.setVisibility(View.GONE);
+                }
+                else{
+                    lv_company.setVisibility(View.VISIBLE);
+                    tv_company404_text.setVisibility(View.GONE);
+                    line.setVisibility(View.VISIBLE);
+                }
 			}
 		}
 	}
@@ -194,7 +248,14 @@ public class AttributeActivity extends BaseActivity {
 			CompanyItem.printCompanyItem(tempCompList[i]);
 		}
 
-		filterCompany(new ArrayList<Integer>());
+        if(Utils.selected_attribute!=null) {
+            filterCompany(Utils.selected_attribute);
+        }
+        else {
+            filterCompany(new ArrayList<Integer>());
+        }
 	}
+
+
 
 }

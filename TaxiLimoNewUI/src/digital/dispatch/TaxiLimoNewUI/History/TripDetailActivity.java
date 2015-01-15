@@ -82,6 +82,7 @@ public class TripDetailActivity extends BaseActivity {
 		TextView tv_receive = (TextView) findViewById(R.id.tv_history_receive);
 		TextView tv_from = (TextView) findViewById(R.id.tv_pickup_address);
 		TextView tv_to = (TextView) findViewById(R.id.tv_dropoff_address);
+        TextView tv_pickup_time = (TextView) findViewById(R.id.tv_pickup_time);
 		NetworkImageView iv_company_icon = (NetworkImageView) findViewById(R.id.iv_tracking_company_icon);
 		LinearLayout ll_attr = (LinearLayout) findViewById(R.id.ll_attr);
 		TextView tv_company_name =(TextView) findViewById(R.id.tv_company_name);
@@ -93,8 +94,9 @@ public class TripDetailActivity extends BaseActivity {
 		TextView status_icon = (TextView) findViewById(R.id.status_icon);
 		TextView icon_pickup = (TextView) findViewById(R.id.icon_pickup);
 		TextView icon_dropoff = (TextView) findViewById(R.id.icon_dropoff);
+        TextView icon_calander = (TextView) findViewById(R.id.icon_calander);
 		
-		TextView route_title = (TextView) findViewById(R.id.route_title);
+		TextView itineary_title = (TextView) findViewById(R.id.itinerary_title);
 		TextView company_title = (TextView) findViewById(R.id.company_title);
 		
 		
@@ -102,7 +104,8 @@ public class TripDetailActivity extends BaseActivity {
 		TextView bookAgain_icon = (TextView) findViewById(R.id.bookAgain_icon);
 		TextView tv_delete = (TextView) findViewById(R.id.tv_delete);
 		TextView tv_bookAgain = (TextView) findViewById(R.id.tv_bookAgain);
-		
+
+
 		
 		delete_icon.setTypeface(icon_pack);
 		bookAgain_icon.setTypeface(icon_pack);
@@ -111,7 +114,7 @@ public class TripDetailActivity extends BaseActivity {
 		tv_delete.setTypeface(exo2Bold);
 		tv_bookAgain.setTypeface(exo2Bold);
 		
-		route_title.setTypeface(rionaSansBold);
+		itineary_title.setTypeface(rionaSansBold);
 		company_title.setTypeface(rionaSansBold);
 		
 		tv_trip_status.setTypeface(exo2SemiBold);
@@ -119,6 +122,7 @@ public class TripDetailActivity extends BaseActivity {
 		tv_receive.setTypeface(rionaSansRegular);
 		tv_from.setTypeface(rionaSansMedium);
 		tv_to.setTypeface(rionaSansMedium);
+        tv_pickup_time.setTypeface(rionaSansMedium);
 		
 		tv_company_name.setTypeface(exo2SemiBold,Typeface.BOLD);
 		tv_company_description.setTypeface(exo2Light, Typeface.ITALIC);
@@ -127,13 +131,16 @@ public class TripDetailActivity extends BaseActivity {
 		tv_call.setTypeface(exo2SemiBold,Typeface.BOLD);
 		
 		icon_call.setTypeface(icon_pack);
+        icon_calander.setTypeface(icon_pack);
 		icon_call.setText(MBDefinition.icon_phone);
 		status_icon.setTypeface(icon_pack);
 		icon_dropoff.setTypeface(icon_pack);
 		icon_pickup.setTypeface(fontawesome);
-		
+        icon_calander.setTypeface(icon_pack);
+
 		icon_pickup.setText(MBDefinition.ICON_PERSON);
 		icon_dropoff.setText(MBDefinition.icon_location);
+        icon_calander.setText(MBDefinition.icon_tab_calendar);
 		
 		setUpListener();
 
@@ -178,6 +185,19 @@ public class TripDetailActivity extends BaseActivity {
 		}
 		else
 			tv_to.setText("Destination Not Given");
+
+        try {
+            if (dbBook.getPickup_time() != null) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                Date date = format.parse(dbBook.getPickup_time());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a MMM dd, yyyy", Locale.US);
+                String dateString = dateFormat.format(date);
+                tv_pickup_time.setText(dateString);
+            } else
+                tv_pickup_time.setText("As soon as possible");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 		
 
 		String prefixURL = getResources().getString(R.string.url);

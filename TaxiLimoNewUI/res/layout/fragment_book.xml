@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/small_padding" >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/addressBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/map_addressBar_height"
@@ -30,20 +30,45 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_alignParentLeft="true"
                 android:textSize="25sp"
                 android:textColor="@color/fav_color"/>
 
+
             <TextView
                 android:id="@+id/text_address"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".8"
-                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/add_fav_btn"
+                android:layout_below="@+id/tv_pickup_location_lable"
                 android:textSize="@dimen/address_text_size"
                 android:singleLine="true" />
 
+            <TextView
+                android:id="@+id/tv_pickup_location_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignLeft="@+id/text_address"
+                android:layout_marginTop="@dimen/small_padding"
+                android:textColor="@color/green"
+                android:textSize="10sp"
+                android:layout_alignParentTop="true"
+                android:text="@string/pickup_location"
+                android:singleLine="true" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tv_angle_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="30sp"
+                android:textColor="@color/gray_light"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/normal_padding"
+                android:layout_toRightOf="@+id/tv_pickup_address"/>
+
+        </RelativeLayout>
 
         
 

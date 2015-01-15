@@ -45,6 +45,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -194,6 +195,14 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
 		Typeface rionaFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
 		address_bar_text.setTypeface(rionaFamily);
+        TextView tv_angle_right = (TextView) view.findViewById(R.id.tv_angle_right);
+
+        tv_angle_right.setTypeface(fontFamily);
+        tv_angle_right.setText(MBDefinition.ICON_ANGLE_RIGHT);
+
+        TextView tv_pickup_location_lable = (TextView) view.findViewById(R.id.tv_pickup_location_lable);
+        tv_pickup_location_lable.setTypeface(rionaFamily);
+
 
 		TextView my_location_icon = (TextView) view.findViewById(R.id.my_location_icon);
 		my_location_icon.setTypeface(fontFamily);
@@ -206,7 +215,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		});
 
-		LinearLayout addressBar = (LinearLayout) view.findViewById(R.id.addressBar);
+        RelativeLayout addressBar = (RelativeLayout) view.findViewById(R.id.addressBar);
 		addressBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ModifyAddressActivity.class);

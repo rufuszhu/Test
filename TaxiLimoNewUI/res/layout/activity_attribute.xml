@@ -45,9 +45,25 @@
         android:textStyle="bold" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray_extra_light" />
+
+
+    <TextView
+        android:id="@+id/tv_company404_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:lineSpacingExtra="@dimen/normal_padding"
+        android:layout_marginTop="@dimen/big_margin"
+        android:text="No matching taxi company.\nTry selecting fewer booking options."
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/list_gray_text"
+        android:textSize="@dimen/modify_address_404_font_size"
+        style="@style/TextDropShadowWhite"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/lv_company"

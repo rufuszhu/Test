@@ -124,7 +124,7 @@ public class GCMIntentService extends GCMBaseIntentService
 
 
 
-	   
+	//if return true release the wake lock and display message
 	private boolean checkDisplayMsg(Context ctx, String msg, Intent intent) {
 		boolean isJobCancelled = false;
 		boolean isCancelJobBySupervisor = false;

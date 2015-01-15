@@ -124,10 +124,10 @@ public class TrackDetailActivity extends BaseActivity {
 		exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
 		exo2Bold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
 		fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+        findView();
+        initListener();
 		setUpTab();
-		findView();
 		setTab0Text();
-		initListener();
 		isRefreshing = false;
 	}
 
@@ -235,17 +235,17 @@ public class TrackDetailActivity extends BaseActivity {
 		setTabListener();
 		TextView icon_info = (TextView) findViewById(R.id.icon_info);
 		TextView tv_info = (TextView) findViewById(R.id.tv_info);
-		TextView icon_track = (TextView) findViewById(R.id.icon_track);
+		//TextView icon_track = (TextView) findViewById(R.id.icon_track);
 		TextView tv_track = (TextView) findViewById(R.id.tv_track);
 
 		icon_info.setTypeface(icon_pack);
-		icon_track.setTypeface(icon_pack);
+		//icon_track.setTypeface(icon_pack);
 
 		icon_info.setText(MBDefinition.ICON_INFO);
-		icon_track.setText(MBDefinition.icon_tab_track);
+		//icon_track.setText(MBDefinition.icon_tab_track);
 
-		tv_info.setTypeface(rionaSansBold);
-		tv_track.setTypeface(rionaSansBold);
+		tv_info.setTypeface(rionaSansMedium, Typeface.NORMAL);
+		tv_track.setTypeface(rionaSansMedium, Typeface.NORMAL);
 
 		trackingMapFragment = TrackingMapFragment.newInstance();
 		infoFragment = new InfoFragment();
@@ -306,10 +306,16 @@ public class TrackDetailActivity extends BaseActivity {
 
 		mPager.setAdapter(mAdapter);
 
+
+
 		// This is required to avoid a black flash when the map is loaded. The flash is due
 		// to the use of a SurfaceView as the underlying view of the map.
 		mPager.requestTransparentRegion(mPager);
 		mPager.setOnPageChangeListener(pageChangeListener);
+
+        //TL-347 When "map" is available, set "TRACK CAR" as the default tab, instead of INFO
+        if(dbBook.getTripStatus() == MBDefinition.MB_STATUS_ACCEPTED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_ARRIVED || dbBook.getTripStatus() == MBDefinition.MB_STATUS_IN_SERVICE)
+            tab1.performClick();
 	}
 
 	private void animateUnSelect(RelativeLayout tab, float positionOffset) {

@@ -80,10 +80,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp" >
+            android:layout_height="130dp" >
 
             <TextView
-                android:id="@+id/route_title"
+                android:id="@+id/itinerary_title"
                 style="@style/InfoLabelTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,40 +91,41 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="@dimen/normal_padding"
                 android:layout_marginTop="@dimen/small_padding"
-                android:text="@string/route" />
+                android:text="@string/itinerary" />
 
             <TextView
                 android:id="@+id/icon_pickup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/route_title"
-                android:layout_below="@+id/route_title"
+                android:layout_alignLeft="@+id/itinerary_title"
+                android:layout_below="@+id/itinerary_title"
                 android:layout_marginLeft="@dimen/big_margin"
                 android:layout_marginTop="@dimen/small_padding"
-                android:textColor="@color/green"
+                android:textColor="@color/drawer_selected"
                 android:textSize="@dimen/history_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_pickup_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/route_title"
+                android:layout_below="@+id/itinerary_title"
                 android:layout_marginLeft="@dimen/big_margin"
                 android:layout_marginTop="@dimen/small_padding"
                 android:layout_toRightOf="@+id/icon_pickup"
                 android:singleLine="true"
+                android:textColor="@color/drawer_selected"
                 android:textSize="@dimen/history_pickup_font_size" />
 
             <TextView
                 android:id="@+id/icon_dropoff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/route_title"
+                android:layout_alignLeft="@+id/itinerary_title"
                 android:layout_below="@+id/icon_pickup"
-                android:layout_marginLeft="12dp"
                 android:layout_marginTop="@dimen/big_margin"
+                android:layout_marginLeft="12dp"
                 android:singleLine="true"
-                android:textColor="@color/red_color"
+                android:textColor="@color/drawer_selected"
                 android:textSize="@dimen/history_pickup_icon_size" />
 
             <TextView
@@ -133,8 +134,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/tv_pickup_address"
                 android:layout_below="@+id/tv_pickup_address"
-                android:layout_marginTop="@dimen/normal_padding"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/icon_dropoff"
+                android:textColor="@color/drawer_selected"
+                android:textSize="@dimen/history_pickup_font_size" />
+
+            <TextView
+                android:id="@+id/icon_calander"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/itinerary_title"
+                android:layout_below="@+id/icon_dropoff"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="@dimen/big_margin"
+                android:singleLine="true"
+                android:textColor="@color/drawer_selected"
+                android:textSize="@dimen/history_pickup_icon_size" />
+
+            <TextView
+                android:id="@+id/tv_pickup_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_dropoff_address"
+                android:layout_below="@+id/tv_dropoff_address"
+                android:layout_marginTop="11dp"
+                android:layout_toRightOf="@+id/icon_calander"
+                android:textColor="@color/drawer_selected"
                 android:textSize="@dimen/history_pickup_font_size" />
         </RelativeLayout>
 

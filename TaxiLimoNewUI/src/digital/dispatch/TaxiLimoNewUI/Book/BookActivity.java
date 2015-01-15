@@ -146,6 +146,12 @@ public class BookActivity extends BaseActivity {
     private void setEstFareIfExist(CompanyItem[] tempCompList) {
         // TL-88 add fare estimate if drop off address is set and baseRate set up
         RelativeLayout rl_fare = (RelativeLayout) findViewById(R.id.rl_fare);
+        rl_fare.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.showMessageDialog(getString(R.string.disclaimer), _this);
+            }
+        });
         //if there is a selected company
         if (Utils.mDropoffAddress != null && Utils.mSelectedCompany != null && Utils.mSelectedCompany.baseRate != 0
                 && Utils.mSelectedCompany.ratePerDistance != 0) {
