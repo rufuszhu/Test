@@ -34,7 +34,7 @@ public class DriverNoteActivity extends BaseActivity {
 		driverMessage.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable note) {
-				textRemaining.setText(MBDefinition.DRIVER_NOTE_MAX_LENGTH - note.length() + " Charaters Left");
+				textRemaining.setText(MBDefinition.DRIVER_NOTE_MAX_LENGTH - note.length() + " Characters Left");
 			}
 
 			@Override

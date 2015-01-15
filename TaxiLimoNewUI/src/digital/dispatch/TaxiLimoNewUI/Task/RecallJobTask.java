@@ -133,23 +133,29 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 				switch (Integer.parseInt(job.tripStatusUniformCode)) {
 				case MBDefinition.TRIP_STATUS_BOOKED:
 				case MBDefinition.TRIP_STATUS_DISPATCHING:
+                    dbBook.setShouldForceDisableCancel(false);
 					break;
 				case MBDefinition.TRIP_STATUS_ACCEPTED:
 					dbBook.setTripStatus(MBDefinition.MB_STATUS_ACCEPTED);
+                    dbBook.setShouldForceDisableCancel(false);
 					break;
 				case MBDefinition.TRIP_STATUS_ARRIVED:
 					dbBook.setTripStatus(MBDefinition.MB_STATUS_ARRIVED);
+                    dbBook.setShouldForceDisableCancel(false);
 					break;
 				case MBDefinition.TRIP_STATUS_COMPLETE:
 					switch (Integer.parseInt(job.detailTripStatusUniformCode)) {
 					case MBDefinition.DETAIL_STATUS_IN_SERVICE:
 						dbBook.setTripStatus(MBDefinition.MB_STATUS_IN_SERVICE);
+                        dbBook.setShouldForceDisableCancel(false);
 						break;
 					case MBDefinition.DETAIL_STATUS_COMPLETE:
 						dbBook.setTripStatus(MBDefinition.MB_STATUS_COMPLETED);
+                        dbBook.setShouldForceDisableCancel(false);
 						break;
 					case MBDefinition.DETAIL_STATUS_CANCEL:
 						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
+                        dbBook.setShouldForceDisableCancel(false);
 						break;
 					// special complete: no show, force complete etc. set as "Cancelled" to user
 					case MBDefinition.DETAIL_STATUS_NO_SHOW:
@@ -160,11 +166,13 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 							dbBook.setTripCompletionTime(pickupTimeFormat.format(cal.getTime()));
 						}
 						dbBook.setTripStatus(MBDefinition.MB_STATUS_CANCELLED);
-
+                        dbBook.setShouldForceDisableCancel(false);
 						break;
 					// other unimportant intermediate status, just ignore
 					case MBDefinition.DETAIL_OTHER_IGNORE:
 					default:
+                        //TL-344 Grey out Cancel Trip button for jobs that are in Unknown state.
+                        dbBook.setShouldForceDisableCancel(true);
 						break;
 					}
 					break;
@@ -183,7 +191,7 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
 			//remove this job from reqJobs if it's response is updated
 			reqJobs.remove(jobArr[i].taxi_ride_id);
 		}
-		//TL-246
+		//TL-264
 		if(!reqJobs.isEmpty()){
 			//set the rest of job status to UNKNOWN
 			for (int i = 0; i < reqJobs.size(); i++){

@@ -70,8 +70,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         public final static Property Company_car_file = new Property(44, String.class, "company_car_file", false, "COMPANY_CAR_FILE");
         public final static Property Company_baseRate = new Property(45, Integer.class, "company_baseRate", false, "COMPANY_BASE_RATE");
         public final static Property Company_rate_PerDistance = new Property(46, Integer.class, "company_rate_PerDistance", false, "COMPANY_RATE__PER_DISTANCE");
-        public final static Property AuthCode = new Property(47, String.class, "authCode", false, "AUTH_CODE");
-        public final static Property PaidAmount = new Property(48, String.class, "paidAmount", false, "PAID_AMOUNT");
+        public final static Property ShouldForceDisableCancel = new Property(47, Boolean.class, "shouldForceDisableCancel", false, "SHOULD_FORCE_DISABLE_CANCEL");
+        public final static Property AuthCode = new Property(48, String.class, "authCode", false, "AUTH_CODE");
+        public final static Property PaidAmount = new Property(49, String.class, "paidAmount", false, "PAID_AMOUNT");
     };
 
 
@@ -134,8 +135,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
                 "'COMPANY_CAR_FILE' TEXT," + // 44: company_car_file
                 "'COMPANY_BASE_RATE' INTEGER," + // 45: company_baseRate
                 "'COMPANY_RATE__PER_DISTANCE' INTEGER," + // 46: company_rate_PerDistance
-                "'AUTH_CODE' TEXT," + // 47: authCode
-                "'PAID_AMOUNT' TEXT);"); // 48: paidAmount
+                "'SHOULD_FORCE_DISABLE_CANCEL' INTEGER," + // 47: shouldForceDisableCancel
+                "'AUTH_CODE' TEXT," + // 48: authCode
+                "'PAID_AMOUNT' TEXT);"); // 49: paidAmount
     }
 
     /** Drops the underlying database table. */
@@ -384,14 +386,19 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             stmt.bindLong(47, company_rate_PerDistance);
         }
  
+        Boolean shouldForceDisableCancel = entity.getShouldForceDisableCancel();
+        if (shouldForceDisableCancel != null) {
+            stmt.bindLong(48, shouldForceDisableCancel ? 1l: 0l);
+        }
+ 
         String authCode = entity.getAuthCode();
         if (authCode != null) {
-            stmt.bindString(48, authCode);
+            stmt.bindString(49, authCode);
         }
  
         String paidAmount = entity.getPaidAmount();
         if (paidAmount != null) {
-            stmt.bindString(49, paidAmount);
+            stmt.bindString(50, paidAmount);
         }
     }
 
@@ -452,8 +459,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
             cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44), // company_car_file
             cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45), // company_baseRate
             cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46), // company_rate_PerDistance
-            cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47), // authCode
-            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48) // paidAmount
+            cursor.isNull(offset + 47) ? null : cursor.getShort(offset + 47) != 0, // shouldForceDisableCancel
+            cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48), // authCode
+            cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49) // paidAmount
         );
         return entity;
     }
@@ -508,8 +516,9 @@ public class DBBookingDao extends AbstractDao<DBBooking, Long> {
         entity.setCompany_car_file(cursor.isNull(offset + 44) ? null : cursor.getString(offset + 44));
         entity.setCompany_baseRate(cursor.isNull(offset + 45) ? null : cursor.getInt(offset + 45));
         entity.setCompany_rate_PerDistance(cursor.isNull(offset + 46) ? null : cursor.getInt(offset + 46));
-        entity.setAuthCode(cursor.isNull(offset + 47) ? null : cursor.getString(offset + 47));
-        entity.setPaidAmount(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
+        entity.setShouldForceDisableCancel(cursor.isNull(offset + 47) ? null : cursor.getShort(offset + 47) != 0);
+        entity.setAuthCode(cursor.isNull(offset + 48) ? null : cursor.getString(offset + 48));
+        entity.setPaidAmount(cursor.isNull(offset + 49) ? null : cursor.getString(offset + 49));
      }
     
     /** @inheritdoc */

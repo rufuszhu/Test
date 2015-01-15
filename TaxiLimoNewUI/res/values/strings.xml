@@ -103,7 +103,8 @@
 
         5. Disclaimer of Warranties and Technical Support\n
            The Software is provided to you on an "AS IS" basis, without any technical support or warranty of any kind including, 
-            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.\n</string>
+            without limitation, any warranty or condition of merchantability, fitness for a particular purpose and non-infringement.\n
+</string>
     <string name="chk_agreement">I agree to the terms and conditions.</string>
     <string name="register_warning">You must agree in order to register.</string>
 
@@ -160,6 +161,7 @@
     <string name="map_not_available_cancel">Tracking map is not available\n after trip is canceled</string>
     <string name="tracking_map_not_available">Tracking map will be available\nas soon as your taxi is dispatched.</string>
     <string name="vehicle_info_not_available">Vehicle information will be available after dispatch</string>
+    <string name="itinerary">ITINERARY</string>
 
     <!-- modify address -->
     <string name="contacts">Contacts</string>
@@ -264,19 +266,23 @@
     <string name="register_unsuccess">Registration Failed</string>
     <string name="err_msg_duplicated_card">The card number has already been registered.</string>
     <string name="credit_card_err_unknown">Unknown error. Please try registering the card again.</string>
-    <string name="credit_card_err_duplicate">        Duplicate card registration detected. Please wait a moment and try again, or try registering a different card.</string>
+    <string name="credit_card_err_duplicate">        Duplicate card registration detected. Please wait a moment and try again, or try registering a different card.
+</string>
     <string name="credit_card_err_no_such_card">Invalid card. No such card on file.</string>
     <string name="credit_card_err_no_connect_processor">Problem connecting to the payment processor.</string>
     <string name="credit_card_err_fraud_alert">Card declined due to fraud alert.</string>
     <string name="credit_card_err_merchant_account">Problem with the merchant account or merchant configuration.</string>
     <string name="credit_card_err_invalid_card">        Invalid credit card.\n
-        Possible reasons: invalid card number, card expired, or card not on file.</string>
+        Possible reasons: invalid card number, card expired, or card not on file.
+</string>
     <string name="credit_card_err_not_authorized">        Card is not authorized.\n 
-        Possible reasons: account closed, card not activated, card not honored, or card not authorized for registration.</string>
+        Possible reasons: account closed, card not activated, card not honored, or card not authorized for registration.
+</string>
     <string name="credit_card_err_incorrect_avs">ZIP code does not match the address information on file with your credit card company.</string>
     <string name="credit_card_instruction">To add a credit card to enable credit card payment, click "Add Card".</string>
     <string name="credit_card_list_info_button">        When you register your credit card number, it is stored securely by the payment processor.\n
-        Your credit card number is never stored on your mobile device, and is never revealed to the taxi company.</string>
+        Your credit card number is never stored on your mobile device, and is never revealed to the taxi company.
+</string>
     <string name="credit_card_delete_confirmation">Are you sure you want to remove this credit card?</string>
     <string name="delete_confirmation">Are you sure you want to delete?</string>
     <string name="credit_card_ccnum_too_short">Credit card number is too short</string>
@@ -297,9 +303,11 @@
     <string name="credit_card_registration_approved">Your card was approved.</string>
     <string name="pin_instruction">You can add a PIN to protect your credit cards from unauthorized use.\n
         If you add a PIN, you will be asked to enter it whenever you pay by credit card.\n
-        PIN is used for credit card payments only.</string>
+        PIN is used for credit card payments only.
+</string>
     <string name="pin_reset_instruction">If you forget your PIN and want to reset it, you must delete and re-register all your credit cards.\n</string>
-    <string name="pin_remove_instruction">        To remove a PIN: Enter the correct “Old PIN”, leave the “New PIN” and “Confirm” blank, and then tap Save.</string>
+    <string name="pin_remove_instruction">        To remove a PIN: Enter the correct “Old PIN”, leave the “New PIN” and “Confirm” blank, and then tap Save.
+</string>
     <string name="pin_not_the_same">The two PINs do not match.</string>
     <string name="pin_not_support_empty">PIN cannot be blank.</string>
     <string name="pin_not_save">PIN did not get saved, please try again.</string>
@@ -310,15 +318,19 @@
     <string name="payment_confirm_pay">Do you want to pay this amount?</string>
     <string name="payment_cannot_pay_zero">You cannot pay a 0 dollar fare amount.</string>
     <string name="payment_cc_err_generic_unknown">Unknown error. Please try sending the payment again.</string>
-    <string name="payment_cc_err_duplicate">        Duplicate transaction detected. Please wait a moment and try again, or try sending the payment with a different amount.</string>
+    <string name="payment_cc_err_duplicate">        Duplicate transaction detected. Please wait a moment and try again, or try sending the payment with a different amount.
+</string>
     <string name="payment_cc_err_no_such_card">Invalid card. No such card on file.</string>
     <string name="payment_cc_err_connection_tout">Problem connecting to the payment processor.</string>
     <string name="payment_cc_err_fraud_alert">Card declined due to fraud alert.</string>
     <string name="payment_cc_err_server_config">Problem with the merchant account or merchant configuration.</string>
-    <string name="payment_cc_err_card_invalid">        Invalid credit card. Possible reasons: invalid card number, invalid expiry date, card expired, or card not on file.</string>
+    <string name="payment_cc_err_card_invalid">        Invalid credit card. Possible reasons: invalid card number, invalid expiry date, card expired, or card not on file.
+</string>
     <string name="payment_cc_err_unauthorized">        Card is not authorized. Possible reasons: account closed, card not activated, 
-        card not honored, or card not authorized for this transaction.</string>
-    <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.</string>
+        card not honored, or card not authorized for this transaction.
+</string>
+    <string name="payment_cc_err_limit">        There is a problem with your card limit. Possible reasons: insufficient funds, activity exceeded, or withdrawal exceeded.
+</string>
     <string name="welcome_message">Thank you for registering with us!</string>
     <string name="duplicate_check_buffer_time">30</string>
     <!-- in minutes -->
@@ -344,7 +356,8 @@
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="gcm_late_trip_format">We are currently experiencing unusually high volume of bookings and we apologize for the delay</string>
-    <string name="late_trip_msg">        Taxi delayed due to high demand. Would you like to wait or cancel? You won\'t be charged a cancellation fee.</string>
+    <string name="late_trip_msg">        Taxi delayed due to high demand. Would you like to wait or cancel? You won\'t be charged a cancellation fee.
+</string>
     <!-- Late Trip Notification -->
     <string name="late_trip">LATE TRIP NOTIFICATION</string>
     <string name="late_trip_wait">Wait</string>
@@ -362,7 +375,8 @@
     <string name="err_empty_street_name">Street name can\'t be Empty</string>
     <string name="err_no_multiple_booking">You already have one active booking</string>
     <string name="err_dropoff_mandatory">Please enter your destination</string>
-    <string name="err_msg_book_req_area_not_bookable">Address is not within the taxi company\'s service area. Please choose a different address.        </string>
+    <string name="err_msg_book_req_area_not_bookable">Address is not within the taxi company\'s service area. Please choose a different address.        
+</string>
     <string name="err_msg_book_req_invalid_account">Invalid company account #. Do you want to delete the company account?</string>
     <string name="err_msg_book_req_account_err">        Problem with company account. Please call [company phone] to book your taxi.</string>
     <string name="booking_failed_generic_msg">Book taxi failed. Please call [company phone] to book your taxi.</string>
@@ -393,7 +407,7 @@
     <string name="enter_street_number_range">Select a street number between</string>
     <string name="address_output_string">%1$s %2$s</string>
     <string name="time_is_local_time">Your selected pickup time is the local time at the pickup location.</string>
-    <string name="charaters_left">256 characters left</string>
+    <string name="characters_left">256 characters left</string>
 
     <string name="lock_screen_text">Your phone number has been blocked from the Zoro service at the request of one of our transportation providers.\n\nIf you need assistance in resolving this issue, please contact us.</string>
 
@@ -411,15 +425,18 @@
     <string name="disconnected">Client disconnected</string>
     <string name="get_address">Get Address</string>
     <string name="get_location">Get Location</string>
-    <string name="illegal_argument_exception">        Illegal arguments: Latitude %1$.8f Longitude %2$.8f</string>
+    <string name="illegal_argument_exception">        Illegal arguments: Latitude %1$.8f Longitude %2$.8f
+</string>
     <string name="invalid_action">Invalid intent action %1$s</string>
     <string name="invalid_integer_id">Invalid integer request ID: %1$s</string>
     <string name="IO_Exception_getFromLocation">Cannot get current Location</string>
     <string name="location_requested">Periodic updates requested</string>
     <string name="location_updated">Location updated</string>
     <string name="location_update_error">Location update failed</string>
-    <string name="location_update_error_detail">        Location update error. code %1$d message %2$sur</string>
-    <string name="location_update_missing_update">        Location update error. No incoming location.</string>
+    <string name="location_update_error_detail">        Location update error. code %1$d message %2$sur
+</string>
+    <string name="location_update_missing_update">        Location update error. No incoming location.
+</string>
     <string name="location_updates_stopped">Periodic updates stopped</string>
     <string name="log_new_location">New location: %1$s</string>
     <string name="no_address_found">No address found for location</string>
@@ -430,11 +447,13 @@
     <string name="no_resolution">Google Play services: unable to resolve connection error.</string>
     <string name="periodic_update_stop">Stopping periodic updates</string>
     <string name="play_services_available">Google Play services is available</string>
-    <string name="request_location_updates_in_progress">        Can\'t request location updates, previous request hasn\'t finished</string>
+    <string name="request_location_updates_in_progress">        Can\'t request location updates, previous request hasn\'t finished
+</string>
     <string name="start_updates">Start Updates</string>
     <string name="stop_updates">Stop Updates</string>
     <string name="unknown">--Unknown--</string>
-    <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.</string>
+    <string name="unknown_activity_request_code">        Received an unknown activity request code %1$d in onActivityResult.
+</string>
     <string name="title_activity_attribute">BOOKING OPTIONS</string>
     <string name="title_activity_trip_detail">TRIP DETAILS</string>
     <string name="title_activity_tracking_map">Track Your Taxi</string>
@@ -448,5 +467,8 @@
     <string name="title_activity_set_time">PICKUP DATE &amp; TIME</string>
     <string name="title_activity_driver_note">DRIVER NOTE</string>
     <string name="title_activity_register_confirm">REGISTER</string>
+    <string name="awaiting_dispatch">Awaiting dispatch</string>
+    <string name="driver_and_vehicle"><![CDATA[DRIVER & VEHICLE]]></string>
+
 
 </resources>

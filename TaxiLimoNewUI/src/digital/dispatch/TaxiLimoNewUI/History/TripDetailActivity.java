@@ -143,7 +143,7 @@ public class TripDetailActivity extends BaseActivity {
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 			Date date = format.parse(dbBook.getTripCreationTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm MMM dd, yyyy", Locale.US);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a MMM dd, yyyy", Locale.US);
 			String dateString = dateFormat.format(date);
 			tv_receive.setText("Received at " + dateString);
 

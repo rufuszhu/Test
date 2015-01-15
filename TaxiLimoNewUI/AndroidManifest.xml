@@ -126,15 +126,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
-        <activity
-            android:name=".Track.TrackingMapActivity"
-            android:label="@string/title_activity_tracking_map"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
-        </activity>
+
 
         <!--
           BroadcastReceiver that will receive intents from GCM
