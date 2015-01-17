@@ -7,6 +7,11 @@ import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -15,19 +20,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutActivity extends BaseActivity {
 
 	private static final String TAG = "AboutActivity";
+    private Context _this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
+        _this = this;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_this); //TL-379
 
 		String versionName = "";
+        String supportEmail = "";
+        String supportPhone = "";
 		try {
 			versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 		} catch (Exception e) {
@@ -43,6 +54,8 @@ public class AboutActivity extends BaseActivity {
 		final TextView tvContactNum = (TextView) findViewById(R.id.tvContactNum);
 		final TextView tvContactEmail = (TextView) findViewById(R.id.tvContactEmail);
 		TextView tvAboutFooter = (TextView) findViewById(R.id.tvAboutFooter);
+        LinearLayout llContact = (LinearLayout)findViewById(id.ll_support_phone);
+        LinearLayout llEmail = (LinearLayout)findViewById(id.ll_support_email);
 
 		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
@@ -63,7 +76,28 @@ public class AboutActivity extends BaseActivity {
 		tvAboutFooter.setTypeface(rionaSansMedium);
 
 		tvVersion.setText("Version " + versionName);
-		
+        //Tl-379
+        supportEmail = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_SUPPORT_EMAIL );
+        supportPhone = SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_SUPPORT_PHONE );
+
+
+
+        if(!supportEmail.isEmpty()  && !supportPhone.isEmpty()){
+            //set up phone and email from mb parameters
+            tvContactNum.setText(supportPhone);
+            tvContactEmail.setText(supportEmail);
+        }else if(supportEmail.isEmpty() && !supportPhone.isEmpty()){
+            tvContactNum.setText(supportPhone);
+            llEmail.setVisibility(View.GONE);
+        }else if(supportPhone.isEmpty() && !supportEmail.isEmpty()){
+            tvContactEmail.setText(supportEmail);
+            llContact.setVisibility(View.GONE);
+        }else{
+            llContact.setVisibility(View.GONE);
+            llEmail.setVisibility(View.GONE);
+            tvSupport.setVisibility(View.GONE);
+
+        }
 		tvContactNum.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -37,6 +37,7 @@
             android:textSize="@dimen/about_font_size" />
 
         <LinearLayout
+            android:id="@+id/ll_support_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -54,7 +55,6 @@
                 android:id="@+id/tvContactNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/contactNum"
                 android:textColor="@drawable/request_new_selector"
                 android:clickable="true"
                 android:layout_marginLeft="@dimen/small_padding"
@@ -62,6 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_support_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -79,7 +80,6 @@
                 android:id="@+id/tvContactEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/contactEmail"
                 android:textSize="@dimen/about_font_size" 
                 
                 android:clickable="true"

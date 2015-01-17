@@ -27,6 +27,8 @@ public class GetMBParamResponse extends ResponseWrapper {
 	public static String CC_PAYMENT = "C_MB_CC_PAMNT_ENABLE"; 
 	public static String TIP_BUTTON1 = "C_MB_TIP_BUTTON1";
 	public static String PAYMENT_TMOUT = "C_MB_PAYMNT_TMOUT";
+    public static String SUPPORT_PHONE = "C_MB_SUPPORT_PHONE"; //TL-379
+    public static String SUPPORT_EMAIL = "C_MB_SUPPORT_EMAIL";
 
 	
 	public GetMBParamResponse() {
@@ -61,10 +63,9 @@ public class GetMBParamResponse extends ResponseWrapper {
 					}
 				}
 			}
-			
 			params = new MGParam(null, null, paramHM.get(SND_MSG_DRV), 
 					paramHM.get(DROP_OFF_MANDATORY), paramHM.get(MULTI_BOOK_ALLOWED), paramHM.get(SAME_LOG_BOOK_ALLOWED),
-					null, null, paramHM.get(TIP_BUTTON1), paramHM.get(PAYMENT_TMOUT));	
+					null, null, paramHM.get(TIP_BUTTON1), paramHM.get(PAYMENT_TMOUT), paramHM.get(SUPPORT_EMAIL), paramHM.get(SUPPORT_PHONE)); //TL-379
 		}
 		catch (Exception e) {
 			if (GlobalVar.logEnable) {
