@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -66,7 +67,7 @@ public class Utils {
 	public static int currentTab = 0;
 	// public static boolean mainActivityIsActivated = true;
 	private static Dialog progressDialog;
-
+    private static ProgressDialog progressDialogWithMessage;
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
 	// public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
 	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_about };
@@ -383,7 +384,7 @@ public class Utils {
 		progressDialog.getWindow().setBackgroundDrawable(d);
 		progressDialog.setContentView(R.layout.custom_dialog);
 		// uncomment the next line if you want this dialog can't be cancelled by pressing the back key
-		// progressDialog.setCancelable(false);
+		progressDialog.setCancelable(false);
 
 		DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
 			@Override
@@ -391,15 +392,30 @@ public class Utils {
 
 			}
 		};
+        progressDialog.setOnCancelListener(cancelListener);
+        progressDialog.setCanceledOnTouchOutside(false);
 
-		progressDialog.setOnCancelListener(cancelListener);
-		progressDialog.setCanceledOnTouchOutside(false);
 		progressDialog.show();
 	}
 
 	public static void stopProcessingDialog(Context _context) {
 		progressDialog.dismiss();
 	}
+
+    public static void showProcessingDialogWithMessage(Context _context, String message) {
+
+        progressDialogWithMessage = new ProgressDialog(_context);
+        progressDialogWithMessage.setIndeterminate(false);
+        progressDialogWithMessage.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialogWithMessage.setCanceledOnTouchOutside(false);
+        progressDialogWithMessage.setCancelable(false);
+        progressDialogWithMessage.setMessage(message);
+        progressDialogWithMessage.show();
+    }
+
+    public static void stopProcessingDialogWithMessage(Context _context) {
+        progressDialogWithMessage.dismiss();
+    }
 
 	public static void showMessageDialog(String message, Context _context) {
 

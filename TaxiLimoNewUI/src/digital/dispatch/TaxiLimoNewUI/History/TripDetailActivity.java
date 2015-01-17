@@ -389,6 +389,7 @@ public class TripDetailActivity extends BaseActivity {
 					if(dbBook.getDropoffAddress()!=null && dbBook.getDropoffAddress().length()>0)
 						new GetAddressTask(_context, isPickup).execute(dbBook.getDropoffAddress());
 					else{
+                        Utils.mDropoffAddress = null;
 						setUpCompanyAndGoToBook();
 					}
 				}

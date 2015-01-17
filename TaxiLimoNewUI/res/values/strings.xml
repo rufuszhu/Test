@@ -184,7 +184,7 @@
     <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
 <!--     <string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string> -->
     
-<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string> -->
+     <!--<string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>-->
 
 
     <!-- <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
@@ -474,6 +474,8 @@
     <string name="driver_and_vehicle"><![CDATA[DRIVER & VEHICLE]]></string>
     <string name="pickup_location">PICKUP LOCATION</string>
     <string name="disclaimer">Disclaimer: This is an estimate only and the actual amount charged by the taxi could vary</string>
+    <string name="invalid_address">Invalid Address</string>
+    <string name="invade_address">Invalid Address</string>
 
 
 </resources>

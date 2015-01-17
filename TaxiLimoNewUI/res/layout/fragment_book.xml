@@ -40,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/add_fav_btn"
+                android:layout_toLeftOf="@+id/tv_angle_right"
                 android:layout_below="@+id/tv_pickup_location_lable"
                 android:textSize="@dimen/address_text_size"
                 android:singleLine="true" />

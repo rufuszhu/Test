@@ -43,12 +43,65 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/values/strings.xml">
+      <file leaf-file-name="fragment_info.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_info.xml">
+          <provider editor-type-id="android-designer">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.5849056" vertical-offset="3491" max-vertical-offset="9680">
-              <caret line="192" column="40" selection-start-line="192" selection-start-column="40" selection-end-line="192" selection-end-column="40" />
-              <folding />
+            <state vertical-scroll-proportion="-3.7818182" vertical-offset="5572" max-vertical-offset="6660">
+              <caret line="289" column="48" selection-start-line="289" selection-start-column="33" selection-end-line="289" selection-end-column="48" />
+              <folding>
+                <element signature="e#417#450#0" expanded="true" />
+                <element signature="e#479#514#0" expanded="true" />
+                <element signature="e#544#579#0" expanded="true" />
+                <element signature="e#607#640#0" expanded="true" />
+                <element signature="e#1294#1317#0" expanded="true" />
+                <element signature="e#1359#1381#0" expanded="true" />
+                <element signature="e#1411#1430#0" expanded="true" />
+                <element signature="e#1774#1793#0" expanded="true" />
+                <element signature="e#1835#1857#0" expanded="true" />
+                <element signature="e#1950#1988#0" expanded="true" />
+                <element signature="e#2274#2293#0" expanded="true" />
+                <element signature="e#2335#2357#0" expanded="true" />
+                <element signature="e#2552#2590#0" expanded="true" />
+                <element signature="e#2979#2998#0" expanded="true" />
+                <element signature="e#3133#3171#0" expanded="true" />
+                <element signature="e#3685#3723#0" expanded="true" />
+                <element signature="e#4114#4133#0" expanded="true" />
+                <element signature="e#4268#4306#0" expanded="true" />
+                <element signature="e#4709#4732#0" expanded="true" />
+                <element signature="e#4888#4926#0" expanded="true" />
+                <element signature="e#5270#5293#0" expanded="true" />
+                <element signature="e#5666#5689#0" expanded="true" />
+                <element signature="e#5731#5753#0" expanded="true" />
+                <element signature="e#5783#5800#0" expanded="true" />
+                <element signature="e#6209#6232#0" expanded="true" />
+                <element signature="e#6404#6430#0" expanded="true" />
+                <element signature="e#6948#6986#0" expanded="true" />
+                <element signature="e#7388#7411#0" expanded="true" />
+                <element signature="e#7454#7473#0" expanded="true" />
+                <element signature="e#7517#7536#0" expanded="true" />
+                <element signature="e#7865#7884#0" expanded="true" />
+                <element signature="e#8332#8359#0" expanded="true" />
+                <element signature="e#8691#8718#0" expanded="true" />
+                <element signature="e#9089#9112#0" expanded="true" />
+                <element signature="e#9484#9507#0" expanded="true" />
+                <element signature="e#9549#9571#0" expanded="true" />
+                <element signature="e#9601#9629#0" expanded="true" />
+                <element signature="e#9972#9991#0" expanded="true" />
+                <element signature="e#10033#10056#0" expanded="true" />
+                <element signature="e#10379#10406#0" expanded="true" />
+                <element signature="e#10502#10528#0" expanded="true" />
+                <element signature="e#10799#10821#0" expanded="true" />
+                <element signature="e#11209#11235#0" expanded="true" />
+                <element signature="e#11403#11425#0" expanded="true" />
+                <element signature="e#12218#12244#0" expanded="true" />
+                <element signature="e#12657#12680#0" expanded="true" />
+                <element signature="e#13114#13133#0" expanded="true" />
+                <element signature="e#13623#13650#0" expanded="true" />
+                <element signature="e#14112#14139#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,70 +109,11 @@
       <file leaf-file-name="AttributeActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/AttributeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.035715" vertical-offset="2811" max-vertical-offset="4580">
-              <caret line="201" column="49" selection-start-line="201" selection-start-column="49" selection-end-line="201" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fav404.png" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/drawable-mdpi/fav404.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_attribute.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_attribute.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.703704" vertical-offset="570" max-vertical-offset="1600">
-              <caret line="47" column="29" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="29" />
+            <state vertical-scroll-proportion="-5.821429" vertical-offset="3857" max-vertical-offset="4880">
+              <caret line="239" column="65" selection-start-line="239" selection-start-column="65" selection-end-line="239" selection-end-column="65" />
               <folding>
-                <element signature="e#575#597#0" expanded="true" />
-                <element signature="e#632#654#0" expanded="true" />
-                <element signature="e#676#701#0" expanded="true" />
-                <element signature="e#777#810#0" expanded="true" />
-                <element signature="e#1085#1107#0" expanded="true" />
-                <element signature="e#1163#1186#0" expanded="true" />
-                <element signature="e#1261#1283#0" expanded="true" />
-                <element signature="e#1518#1540#0" expanded="true" />
-                <element signature="e#1577#1599#0" expanded="true" />
-                <element signature="e#1634#1656#0" expanded="true" />
-                <element signature="e#1678#1713#0" expanded="true" />
-                <element signature="e#1789#1822#0" expanded="true" />
-                <element signature="e#2265#2288#0" expanded="true" />
-                <element signature="e#2322#2341#0" expanded="true" />
-                <element signature="e#2555#2592#0" expanded="true" />
+                <element signature="e#9425#9438#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ContactsFragment.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/ContactsFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.0" vertical-offset="1984" max-vertical-offset="12000">
-              <caret line="109" column="116" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="116" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fragment_contacts.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_contacts.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.6666665" vertical-offset="0" max-vertical-offset="720">
-              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="18" selection-end-column="44" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -127,32 +121,45 @@
       <file leaf-file-name="CompanyListAdapter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Adapters/CompanyListAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1885" max-vertical-offset="2500">
-              <caret line="134" column="13" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="13" />
+            <state vertical-scroll-proportion="-7.392857" vertical-offset="1513" max-vertical-offset="2460">
+              <caret line="106" column="21" selection-start-line="106" selection-start-column="21" selection-end-line="106" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GetCompanyListTask.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetCompanyListTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33898306" vertical-offset="880" max-vertical-offset="2280">
+              <caret line="76" column="9" selection-start-line="76" selection-start-column="9" selection-end-line="76" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BookFragment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.821429" vertical-offset="4217" max-vertical-offset="18960">
+              <caret line="315" column="0" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
               <folding>
-                <element signature="e#5186#5187#0" expanded="true" />
-                <element signature="e#5208#5209#0" expanded="true" />
+                <element signature="e#9255#9303#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CompanyItem.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoSoapLibrary/src/com/digital/dispatch/TaxiLimoSoap/responses/CompanyItem.java">
+      <file leaf-file-name="Utils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1620">
-              <caret line="10" column="24" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TrackDetailActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackDetailActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.571428" vertical-offset="4768" max-vertical-offset="14420">
-              <caret line="318" column="5" selection-start-line="318" selection-start-column="5" selection-end-line="318" selection-end-column="5" />
-              <folding />
+            <state vertical-scroll-proportion="-5.821429" vertical-offset="6797" max-vertical-offset="10120">
+              <caret line="404" column="54" selection-start-line="404" selection-start-column="23" selection-end-line="404" selection-end-column="54" />
+              <folding>
+                <element signature="e#5704#5728#0" expanded="true" />
+                <element signature="e#14309#14357#0" expanded="true" />
+                <element signature="e#17032#17043#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2425,8 +2432,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/color.xml" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Adapters/AttributeItemAdapter.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/attribute_item.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Drawers/AddPreferenceActivity.java" />
@@ -2444,7 +2449,6 @@
         <option value="$PROJECT_DIR$/TaxiLimoSoapLibrary/src/com/digital/dispatch/TaxiLimoSoap/responses/GetServiceListResponse.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Adapters/PlacesAutoCompleteAdapter.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/GCM/CommonUtilities.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/Utils.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/LocationUtils.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/anim/rotate_refresh.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/RecallJobTask.java" />
@@ -2454,7 +2458,6 @@
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/dialog_driver_message.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/DriverNoteActivity.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/InfoFragment.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/SearchFragment.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/FavoritesFragment.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/ContactsFragment.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src-gen/digital/dispatch/TaxiLimoNewUI/DBBookingDao.java" />
@@ -2462,20 +2465,24 @@
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src-gen/digital/dispatch/TaxiLimoNewUI/DBCreditCard.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/CancelJobTask.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/GCM/GCMIntentService.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookFragment.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_book.xml" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_book.xml" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookActivity.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_track_detail.xml" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/dimens.xml" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/History/TripDetailActivity.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_info.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_trip_detail.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackingMapFragment.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackDetailActivity.java" />
-        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_attribute.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/SearchFragment.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_book.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/History/TripDetailActivity.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/values/dimens.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_info.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetEstimateFareTask.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_book.xml" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookActivity.java" />
         <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/AttributeActivity.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/Utils.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookFragment.java" />
+        <option value="$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetCompanyListTask.java" />
       </list>
     </option>
   </component>
@@ -2600,6 +2607,7 @@
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/TaxiLimoNewUI/res/drawable-xxhdpi" />
     <property name="LayoutCode.rearrangeEntriesXML" value="true" />
+    <property name="AndroidTargetDevices" value="5b6bd2f3" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -2786,18 +2794,18 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37100214" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35" sideWeight="0.23454158" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37888888" sideWeight="0.23454158" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938388" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5351812" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35" sideWeight="0.7654584" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37888888" sideWeight="0.7654584" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2834,14 +2842,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/LocationUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6" vertical-offset="2855" max-vertical-offset="3940">
-          <caret line="184" column="56" selection-start-line="184" selection-start-column="56" selection-end-line="184" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/MapNotAvailableFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="889" max-vertical-offset="1580">
@@ -2924,14 +2924,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6200" max-vertical-offset="11080">
-          <caret line="310" column="16" selection-start-line="310" selection-start-column="16" selection-end-line="310" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_driver_note.xml">
       <provider editor-type-id="android-designer">
         <state />
@@ -2960,22 +2952,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.142858" vertical-offset="28" max-vertical-offset="1180">
           <caret line="36" column="100" selection-start-line="36" selection-start-column="100" selection-end-line="36" selection-end-column="100" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/SearchFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="11603" max-vertical-offset="13920">
-          <caret line="670" column="20" selection-start-line="670" selection-start-column="20" selection-end-line="670" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/FavoritesFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="8423" max-vertical-offset="10000">
-          <caret line="504" column="58" selection-start-line="504" selection-start-column="58" selection-end-line="504" selection-end-column="58" />
           <folding />
         </state>
       </provider>
@@ -3058,31 +3034,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_book.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41188118" vertical-offset="1012" max-vertical-offset="2860">
-          <caret line="61" column="51" selection-start-line="61" selection-start-column="51" selection-end-line="61" selection-end-column="51" />
-          <folding>
-            <element signature="e#634#656#0" expanded="true" />
-            <element signature="e#807#837#0" expanded="true" />
-            <element signature="e#1791#1817#0" expanded="true" />
-            <element signature="e#2205#2227#0" expanded="true" />
-            <element signature="e#2399#2424#0" expanded="true" />
-            <element signature="e#2892#2915#0" expanded="true" />
-            <element signature="e#3189#3220#0" expanded="true" />
-            <element signature="e#3718#3737#0" expanded="true" />
-            <element signature="e#4588#4617#0" expanded="true" />
-            <element signature="e#4653#4682#0" expanded="true" />
-            <element signature="e#4827#4846#0" expanded="true" />
-            <element signature="e#4886#4905#0" expanded="true" />
-            <element signature="e#5263#5298#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/drawable/shape_fare_estimate_selected.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45112783" vertical-offset="0" max-vertical-offset="532">
@@ -3096,63 +3047,6 @@
         <state vertical-scroll-proportion="0.26974952" vertical-offset="0" max-vertical-offset="519">
           <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetCompanyListTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1560" max-vertical-offset="2280">
-          <caret line="111" column="23" selection-start-line="111" selection-start-column="23" selection-end-line="111" selection-end-column="23" />
-          <folding>
-            <element signature="e#3702#3750#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_book.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.64950496" vertical-offset="3992" max-vertical-offset="6360">
-          <caret line="216" column="38" selection-start-line="216" selection-start-column="38" selection-end-line="216" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1663" max-vertical-offset="2920">
-          <caret line="92" column="47" selection-start-line="92" selection-start-column="47" selection-end-line="92" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/History/TripDetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="733" max-vertical-offset="7580">
-          <caret line="98" column="31" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/InfoFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2825" max-vertical-offset="5980">
-          <caret line="205" column="9" selection-start-line="205" selection-start-column="9" selection-end-line="205" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.857142" vertical-offset="292" max-vertical-offset="11100">
-          <caret line="82" column="46" selection-start-line="82" selection-start-column="46" selection-end-line="82" selection-end-column="46" />
-          <folding>
-            <element signature="e#6093#6284#0" expanded="true" />
-            <element signature="e#6221#6251#0" expanded="true" />
-            <element signature="e#6273#6274#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3217,14 +3111,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.785714" vertical-offset="18346" max-vertical-offset="18880">
-          <caret line="1066" column="1" selection-start-line="1066" selection-start-column="1" selection-end-line="1066" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackingMapFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-9.357142" vertical-offset="1058" max-vertical-offset="6420">
@@ -3235,97 +3121,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_info.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.851852" vertical-offset="6095" max-vertical-offset="6600">
-          <caret line="314" column="60" selection-start-line="314" selection-start-column="60" selection-end-line="314" selection-end-column="60" />
-          <folding>
-            <element signature="e#8804#8827#0" expanded="true" />
-            <element signature="e#9713#9735#0" expanded="true" />
-            <element signature="e#11369#11392#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_track_detail.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.259259" vertical-offset="3164" max-vertical-offset="8600">
-          <caret line="168" column="33" selection-start-line="168" selection-start-column="29" selection-end-line="168" selection-end-column="33" />
-          <folding>
-            <element signature="e#276#299#0" expanded="true" />
-            <element signature="e#324#347#0" expanded="true" />
-            <element signature="e#373#396#0" expanded="true" />
-            <element signature="e#682#704#0" expanded="true" />
-            <element signature="e#734#756#0" expanded="true" />
-            <element signature="e#1871#1891#0" expanded="true" />
-            <element signature="e#1978#2016#0" expanded="true" />
-            <element signature="e#3432#3449#0" expanded="true" />
-            <element signature="e#3536#3574#0" expanded="true" />
-            <element signature="e#5000#5020#0" expanded="true" />
-            <element signature="e#5107#5145#0" expanded="true" />
-            <element signature="e#6282#6301#0" expanded="true" />
-            <element signature="e#6388#6426#0" expanded="true" />
-            <element signature="e#6687#6710#0" expanded="true" />
-            <element signature="e#7478#7513#0" expanded="true" />
-            <element signature="e#7614#7637#0" expanded="true" />
-            <element signature="e#8059#8073#0" expanded="true" />
-            <element signature="e#8156#8191#0" expanded="true" />
-            <element signature="e#8920#8943#0" expanded="true" />
-            <element signature="e#9366#9381#0" expanded="true" />
-            <element signature="e#9464#9499#0" expanded="true" />
-            <element signature="e#9874#9897#0" expanded="true" />
-            <element signature="e#10263#10290#0" expanded="true" />
-            <element signature="e#10953#10980#0" expanded="true" />
-            <element signature="e#11136#11162#0" expanded="true" />
-            <element signature="e#11270#11296#0" expanded="true" />
-            <element signature="e#11608#11634#0" expanded="true" />
-            <element signature="e#12042#12064#0" expanded="true" />
-            <element signature="e#12125#12147#0" expanded="true" />
-            <element signature="e#12447#12468#0" expanded="true" />
-            <element signature="e#16538#16561#0" expanded="true" />
-            <element signature="e#17092#17114#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackDetailActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.571428" vertical-offset="4768" max-vertical-offset="14420">
-          <caret line="318" column="5" selection-start-line="318" selection-start-column="5" selection-end-line="318" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/GCM/CommonUtilities.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.68" vertical-offset="209" max-vertical-offset="3700">
           <caret line="59" column="57" selection-start-line="59" selection-start-column="57" selection-end-line="59" selection-end-column="57" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.5849056" vertical-offset="3491" max-vertical-offset="9680">
-          <caret line="192" column="40" selection-start-line="192" selection-start-column="40" selection-end-line="192" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Adapters/CompanyListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1885" max-vertical-offset="2500">
-          <caret line="134" column="13" selection-start-line="134" selection-start-column="13" selection-end-line="134" selection-end-column="13" />
-          <folding>
-            <element signature="e#5186#5187#0" expanded="true" />
-            <element signature="e#5208#5209#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3345,16 +3145,6 @@
         <state vertical-scroll-proportion="-6.6666665" vertical-offset="0" max-vertical-offset="720">
           <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="18" selection-end-column="44" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/ContactsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.0" vertical-offset="1984" max-vertical-offset="12000">
-          <caret line="109" column="116" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="116" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3385,10 +3175,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/AttributeActivity.java">
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_book.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.035715" vertical-offset="2811" max-vertical-offset="4580">
-          <caret line="201" column="49" selection-start-line="201" selection-start-column="49" selection-end-line="201" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.40754718" vertical-offset="644" max-vertical-offset="2880">
+          <caret line="43" column="68" selection-start-line="43" selection-start-column="68" selection-end-line="43" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/TrackDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25581396" vertical-offset="4768" max-vertical-offset="14420">
+          <caret line="307" column="0" selection-start-line="307" selection-start-column="0" selection-end-line="307" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -3396,6 +3197,300 @@
     <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/drawable-mdpi/fav404.png">
       <provider selected="true" editor-type-id="images">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/History/TripDetailActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6373" max-vertical-offset="7600">
+          <caret line="407" column="4" selection-start-line="407" selection-start-column="4" selection-end-line="407" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/FavoritesFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8909" max-vertical-offset="10000">
+          <caret line="522" column="51" selection-start-line="522" selection-start-column="51" selection-end-line="522" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/ContactsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34290844" vertical-offset="9009" max-vertical-offset="12000">
+          <caret line="479" column="24" selection-start-line="479" selection-start-column="24" selection-end-line="479" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/SearchFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34290844" vertical-offset="12189" max-vertical-offset="13860">
+          <caret line="701" column="24" selection-start-line="701" selection-start-column="24" selection-end-line="701" selection-end-column="24" />
+          <folding>
+            <element signature="e#22099#22159#0" expanded="false" />
+            <element signature="e#23404#23468#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/values/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1675" max-vertical-offset="2940">
+          <caret line="100" column="50" selection-start-line="100" selection-start-column="50" selection-end-line="100" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/bin/classes/digital/dispatch/TaxiLimoNewUI/Track/InfoFragment.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1240">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Track/InfoFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.607142" vertical-offset="3783" max-vertical-offset="5980">
+          <caret line="249" column="50" selection-start-line="249" selection-start-column="50" selection-end-line="249" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.3396225" vertical-offset="9191" max-vertical-offset="9700">
+          <caret line="479" column="12" selection-start-line="479" selection-start-column="12" selection-end-line="479" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetEstimateFareTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.428572" vertical-offset="1380" max-vertical-offset="2000">
+          <caret line="109" column="38" selection-start-line="109" selection-start-column="38" selection-end-line="109" selection-end-column="38" />
+          <folding>
+            <element signature="e#3487#3738#0" expanded="true" />
+            <element signature="e#3644#3687#0" expanded="true" />
+            <element signature="e#3719#3720#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_track_detail.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.5185184" vertical-offset="6138" max-vertical-offset="8600">
+          <caret line="313" column="8" selection-start-line="313" selection-start-column="8" selection-end-line="321" selection-end-column="18" />
+          <folding>
+            <element signature="e#8156#8191#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/activity_book.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9206349" vertical-offset="6116" max-vertical-offset="6780">
+          <caret line="329" column="36" selection-start-line="329" selection-start-column="36" selection-end-line="329" selection-end-column="36" />
+          <folding>
+            <element signature="e#227#250#0" expanded="true" />
+            <element signature="e#454#494#0" expanded="true" />
+            <element signature="e#688#721#0" expanded="true" />
+            <element signature="e#1205#1228#0" expanded="true" />
+            <element signature="e#1311#1343#0" expanded="true" />
+            <element signature="e#1614#1637#0" expanded="true" />
+            <element signature="e#1773#1805#0" expanded="true" />
+            <element signature="e#1984#2017#0" expanded="true" />
+            <element signature="e#2504#2527#0" expanded="true" />
+            <element signature="e#2614#2646#0" expanded="true" />
+            <element signature="e#2920#2943#0" expanded="true" />
+            <element signature="e#3137#3165#0" expanded="true" />
+            <element signature="e#3257#3289#0" expanded="true" />
+            <element signature="e#3620#3643#0" expanded="true" />
+            <element signature="e#3910#3933#0" expanded="true" />
+            <element signature="e#5049#5067#0" expanded="true" />
+            <element signature="e#5740#5773#0" expanded="true" />
+            <element signature="e#5855#5878#0" expanded="true" />
+            <element signature="e#6231#6254#0" expanded="true" />
+            <element signature="e#6329#6361#0" expanded="true" />
+            <element signature="e#6612#6635#0" expanded="true" />
+            <element signature="e#6753#6773#0" expanded="true" />
+            <element signature="e#6848#6880#0" expanded="true" />
+            <element signature="e#7182#7205#0" expanded="true" />
+            <element signature="e#7280#7305#0" expanded="true" />
+            <element signature="e#7551#7574#0" expanded="true" />
+            <element signature="e#7788#7801#0" expanded="true" />
+            <element signature="e#7885#7917#0" expanded="true" />
+            <element signature="e#8079#8112#0" expanded="true" />
+            <element signature="e#8190#8213#0" expanded="true" />
+            <element signature="e#8566#8589#0" expanded="true" />
+            <element signature="e#8664#8696#0" expanded="true" />
+            <element signature="e#8947#8970#0" expanded="true" />
+            <element signature="e#9088#9108#0" expanded="true" />
+            <element signature="e#9183#9215#0" expanded="true" />
+            <element signature="e#9517#9540#0" expanded="true" />
+            <element signature="e#9615#9640#0" expanded="true" />
+            <element signature="e#9893#9916#0" expanded="true" />
+            <element signature="e#10188#10220#0" expanded="true" />
+            <element signature="e#10378#10411#0" expanded="true" />
+            <element signature="e#10496#10519#0" expanded="true" />
+            <element signature="e#10875#10898#0" expanded="true" />
+            <element signature="e#10973#11005#0" expanded="true" />
+            <element signature="e#11259#11282#0" expanded="true" />
+            <element signature="e#11403#11426#0" expanded="true" />
+            <element signature="e#11501#11533#0" expanded="true" />
+            <element signature="e#11835#11858#0" expanded="true" />
+            <element signature="e#11933#11958#0" expanded="true" />
+            <element signature="e#12206#12229#0" expanded="true" />
+            <element signature="e#12269#12292#0" expanded="true" />
+            <element signature="e#12509#12525#0" expanded="true" />
+            <element signature="e#12609#12641#0" expanded="true" />
+            <element signature="e#12797#12825#0" expanded="true" />
+            <element signature="e#12933#12961#0" expanded="true" />
+            <element signature="e#13417#13431#0" expanded="true" />
+            <element signature="e#13506#13529#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3877551" vertical-offset="10690" max-vertical-offset="11360">
+          <caret line="636" column="38" selection-start-line="636" selection-start-column="38" selection-end-line="636" selection-end-column="38" />
+          <folding>
+            <element signature="e#6370#6400#0" expanded="true" />
+            <element signature="e#11063#11093#0" expanded="true" />
+            <element signature="e#11404#11448#0" expanded="true" />
+            <element signature="e#12593#12652#0" expanded="true" />
+            <element signature="e#13406#13450#0" expanded="true" />
+            <element signature="e#19553#19600#0" expanded="true" />
+            <element signature="e#20687#20736#0" expanded="true" />
+            <element signature="e#21415#21460#0" expanded="true" />
+            <element signature="e#21840#21885#0" expanded="true" />
+            <element signature="e#22264#22311#0" expanded="true" />
+            <element signature="e#23834#23887#0" expanded="true" />
+            <element signature="e#29153#29202#0" expanded="true" />
+            <element signature="e#29239#29250#0" expanded="true" />
+            <element signature="e#30614#30640#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/res/layout/fragment_info.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.7818182" vertical-offset="5572" max-vertical-offset="6660">
+          <caret line="289" column="48" selection-start-line="289" selection-start-column="33" selection-end-line="289" selection-end-column="48" />
+          <folding>
+            <element signature="e#417#450#0" expanded="true" />
+            <element signature="e#479#514#0" expanded="true" />
+            <element signature="e#544#579#0" expanded="true" />
+            <element signature="e#607#640#0" expanded="true" />
+            <element signature="e#1294#1317#0" expanded="true" />
+            <element signature="e#1359#1381#0" expanded="true" />
+            <element signature="e#1411#1430#0" expanded="true" />
+            <element signature="e#1774#1793#0" expanded="true" />
+            <element signature="e#1835#1857#0" expanded="true" />
+            <element signature="e#1950#1988#0" expanded="true" />
+            <element signature="e#2274#2293#0" expanded="true" />
+            <element signature="e#2335#2357#0" expanded="true" />
+            <element signature="e#2552#2590#0" expanded="true" />
+            <element signature="e#2979#2998#0" expanded="true" />
+            <element signature="e#3133#3171#0" expanded="true" />
+            <element signature="e#3685#3723#0" expanded="true" />
+            <element signature="e#4114#4133#0" expanded="true" />
+            <element signature="e#4268#4306#0" expanded="true" />
+            <element signature="e#4709#4732#0" expanded="true" />
+            <element signature="e#4888#4926#0" expanded="true" />
+            <element signature="e#5270#5293#0" expanded="true" />
+            <element signature="e#5666#5689#0" expanded="true" />
+            <element signature="e#5731#5753#0" expanded="true" />
+            <element signature="e#5783#5800#0" expanded="true" />
+            <element signature="e#6209#6232#0" expanded="true" />
+            <element signature="e#6404#6430#0" expanded="true" />
+            <element signature="e#6948#6986#0" expanded="true" />
+            <element signature="e#7388#7411#0" expanded="true" />
+            <element signature="e#7454#7473#0" expanded="true" />
+            <element signature="e#7517#7536#0" expanded="true" />
+            <element signature="e#7865#7884#0" expanded="true" />
+            <element signature="e#8332#8359#0" expanded="true" />
+            <element signature="e#8691#8718#0" expanded="true" />
+            <element signature="e#9089#9112#0" expanded="true" />
+            <element signature="e#9484#9507#0" expanded="true" />
+            <element signature="e#9549#9571#0" expanded="true" />
+            <element signature="e#9601#9629#0" expanded="true" />
+            <element signature="e#9972#9991#0" expanded="true" />
+            <element signature="e#10033#10056#0" expanded="true" />
+            <element signature="e#10379#10406#0" expanded="true" />
+            <element signature="e#10502#10528#0" expanded="true" />
+            <element signature="e#10799#10821#0" expanded="true" />
+            <element signature="e#11209#11235#0" expanded="true" />
+            <element signature="e#11403#11425#0" expanded="true" />
+            <element signature="e#12218#12244#0" expanded="true" />
+            <element signature="e#12657#12680#0" expanded="true" />
+            <element signature="e#13114#13133#0" expanded="true" />
+            <element signature="e#13623#13650#0" expanded="true" />
+            <element signature="e#14112#14139#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Adapters/CompanyListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.392857" vertical-offset="1513" max-vertical-offset="2460">
+          <caret line="106" column="21" selection-start-line="106" selection-start-column="21" selection-end-line="106" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/AttributeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.821429" vertical-offset="3857" max-vertical-offset="4880">
+          <caret line="239" column="65" selection-start-line="239" selection-start-column="65" selection-end-line="239" selection-end-column="65" />
+          <folding>
+            <element signature="e#9425#9438#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.821429" vertical-offset="6797" max-vertical-offset="10120">
+          <caret line="404" column="54" selection-start-line="404" selection-start-column="23" selection-end-line="404" selection-end-column="54" />
+          <folding>
+            <element signature="e#5704#5728#0" expanded="true" />
+            <element signature="e#14309#14357#0" expanded="true" />
+            <element signature="e#17032#17043#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Book/BookFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.821429" vertical-offset="4217" max-vertical-offset="18960">
+          <caret line="315" column="0" selection-start-line="315" selection-start-column="0" selection-end-line="315" selection-end-column="0" />
+          <folding>
+            <element signature="e#9255#9303#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaxiLimoNewUI/src/digital/dispatch/TaxiLimoNewUI/Task/GetCompanyListTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33898306" vertical-offset="880" max-vertical-offset="2280">
+          <caret line="76" column="9" selection-start-line="76" selection-start-column="9" selection-end-line="76" selection-end-column="9" />
+          <folding />
+        </state>
       </provider>
     </entry>
   </component>

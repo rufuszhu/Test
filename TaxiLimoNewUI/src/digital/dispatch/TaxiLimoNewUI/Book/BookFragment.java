@@ -233,6 +233,10 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					address_bar_text.setText(getActivity().getString(R.string.err_no_pickup_address));
 					setPickupButtonClicked = true; 
 				}
+
+                else if(Utils.mPickupAddress.getLocality()==null){
+                    Utils.showMessageDialog(getActivity().getString(R.string.invade_address), getActivity());
+                }
 				
 				//TODO: decide if we should check pickup here
 				// no house number in pickup address
@@ -313,8 +317,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		String ad = address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "";
 		String[] strArray = TextUtils.split(ad, " ");
 
-		if (!Utils.isNumeric(strArray[0]) && Utils.pickupHouseNumber.equals("")) {
-
+		if (strArray.length>0 && !Utils.isNumeric(strArray[0]) && Utils.pickupHouseNumber.equals("")) {
 			return false;
 		} else
 			return true;
@@ -675,7 +678,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 							// Get the first address
 							Address address = addressList.get(0);
 							Utils.mPickupAddress = address;
-                            Utils.pickupHouseNumber="";
+                            Utils.pickupHouseNumber = "";
 							if(isAdded())
 								return LocationUtils.addressToString(getActivity(), address);
 							else
@@ -684,7 +687,8 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 					} else {
 						// If there aren't any addresses, post a message
 						Utils.mPickupAddress = null;
-                        Utils.pickupHouseNumber="";
+                        Utils.pickupHouseNumber = "";
+
 						if(isAdded())
 							return getString(R.string.no_address_found);
 						else

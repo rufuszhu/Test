@@ -57,13 +57,6 @@ public class AttributeActivity extends BaseActivity {
 		setContentView(R.layout.activity_attribute);
 		_context = this;
 		// mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
-		DaoManager daoManager = DaoManager.getInstance(this);
-		DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-		List<DBAttribute> attrList = attributeDao.queryBuilder().list();
-
-		GridView gridview = (GridView) findViewById(R.id.gridview);
-		gridview.setAdapter(new AttributeItemAdapter(this, attrList));
-
 
 
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
@@ -239,14 +232,13 @@ public class AttributeActivity extends BaseActivity {
 		}
 	}
 
-	// called from getCompanyListResponse, load attribute grid here to prevent user filter before get company request is done
+	// called from getCompanyListResponse, filter attribute grid here to make sure app not showing unused attributes
 	public void loadCompanyList(CompanyItem[] tempCompList) {
 		//stopUpdateAnimation();
 		companyArr = tempCompList;
 
-		for (int i = 0; i < tempCompList.length; i++) {
-			CompanyItem.printCompanyItem(tempCompList[i]);
-		}
+        //TL-376 Only show applicable attributes on OPTIONS page.
+        setUpAttributeGridBaseOnCompanyAttribut(tempCompList);
 
         if(Utils.selected_attribute!=null) {
             filterCompany(Utils.selected_attribute);
@@ -256,6 +248,29 @@ public class AttributeActivity extends BaseActivity {
         }
 	}
 
+    private void setUpAttributeGridBaseOnCompanyAttribut(CompanyItem[] tempCompList){
+        DaoManager daoManager = DaoManager.getInstance(this);
+        DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
+        List<DBAttribute> attrList = attributeDao.queryBuilder().list();
 
+        String companyAttrList = "";
+        for(int i = 0 ; i< tempCompList.length; i++){
+            companyAttrList += tempCompList[i].attributes + " ";
+        }
+
+        List<DBAttribute> temp = new ArrayList<DBAttribute>();
+        for(int i = attrList.size()-1; i >= 0; i--){
+            if(!companyAttrList.contains(attrList.get(i).getAttributeId())) {
+                temp.add(attrList.get(i));
+            }
+        }
+
+        for(int i = 0; i < temp.size(); i++){
+            attrList.remove(temp.get(i));
+        }
+
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new AttributeItemAdapter(this, attrList));
+    }
 
 }

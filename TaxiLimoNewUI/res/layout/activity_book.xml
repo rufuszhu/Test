@@ -65,8 +65,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/normal_padding"
-                android:layout_toRightOf="@+id/icon_dropoff"
                 android:layout_toLeftOf="@+id/clear_dropoff"
+                android:layout_toRightOf="@+id/icon_dropoff"
                 android:singleLine="true"
                 android:text="@string/enter_for_est_fare"
                 android:textColor="@color/list_gray_text"
@@ -82,7 +82,6 @@
                 android:clickable="true"
                 android:textColor="@color/background_tab"
                 android:textSize="30sp" />
-
 
 
         </RelativeLayout>
@@ -287,27 +286,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"
             android:layout_marginRight="@dimen/normal_padding"
             android:layout_toLeftOf="@+id/angle_right3"
+            android:layout_toRightOf="@+id/tv_company_title"
+            android:gravity="right"
             android:singleLine="true"
             android:text="@string/choose"
             android:textColor="@color/list_gray_text"
             android:textSize="@dimen/book_activity_font_size" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/book_button"
-        style="@style/TextDropShadow"
+    <FrameLayout
+        android:id="@+id/fl_book_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/map_book_btn_height"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/small_padding"
-        android:background="@drawable/green_btn_selector"
-        android:clickable="true"
         android:gravity="center"
-        android:text="@string/book"
-        android:textColor="@color/white"
-        android:textSize="@dimen/book_font_size"
-        android:textStyle="bold" />
+        android:minHeight="@dimen/map_book_btn_height"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/book_button"
+            style="@style/TextDropShadow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/green_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/book"
+            android:textColor="@color/white"
+            android:textSize="@dimen/book_font_size"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/book_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha=".7"
+            android:background="@color/background"
+            android:clickable="true"
+            android:visibility="gone"
+             />
+    </FrameLayout>•
 
 </RelativeLayout>
