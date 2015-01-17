@@ -55,6 +55,9 @@ public void onResponseReady(GetMBParamResponse response) {
 	SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_SAME_LOG_BOOK_ALLOWED, paramList.getSameLocBookAllowed());
 	SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_SND_MSG_DRV, paramList.getMsgToDriver());
 	SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_TIP_BUTTON1, paramList.getTip1Btn());
+    SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_SUPPORT_EMAIL, paramList.getSupportEmail()); //TL-379
+    SharedPreferencesManager.savePreferences(sharedPreferences, MBDefinition.SHARE_SUPPORT_PHONE, paramList.getSupportPhone());
+
 	
 //	for(int i=0;i<attributeList.size();i++){
 //		AttributeItem item = attributeList.get(i);

@@ -77,6 +77,8 @@ public class MBDefinition {
 	public static final String SHARE_CC_PIN = "SHARE_CC_PIN";
 	public static final String SHARE_ALREADY_SMS_VERIFY = "SHARE_ALREADY_SMS_VERIFY";
 	public static final String SHARE_START_REGISTER = "SHARE_START_REGISTER";
+    public static final String SHARE_SUPPORT_PHONE = "C_MB_SUPPORT_PHONE"; //TL_379
+    public static final String SHARE_SUPPORT_EMAIL = "C_MB_SUPPORT_EMAIL";
 	
 	public static final int MDT_MAX_SEQUENCE_NUM = 255;
 	//GCM notification event

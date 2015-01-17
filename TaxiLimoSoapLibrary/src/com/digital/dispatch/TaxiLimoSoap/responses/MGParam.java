@@ -3,6 +3,7 @@ package com.digital.dispatch.TaxiLimoSoap.responses;
 public class MGParam {
 	private int useAccPW, tipButton1, baseRate, ratePerDistance, paymentTimeout;
 	private boolean ccPaymentEnabled, msgToDriver, dropOffRequired, multiBookAllowed, sameLocBookAllowed;
+    private String supportPhone, supportEmail;
 	
 	private final static boolean DEFAULT_BOOL = false;
 	
@@ -17,10 +18,13 @@ public class MGParam {
 		dropOffRequired = false; 
 		multiBookAllowed = true;
 		sameLocBookAllowed = false;
+        supportEmail = null;
+        supportPhone = null;
+
 	}
 	
 	public MGParam(String bRate, String rPDistance, String msgDriver, String doMand, String multiBookAllow, 
-			String sameLocBookAllow, String useAPW, String ccPayEnabled, String tip1, String pTimeOut) {
+			String sameLocBookAllow, String useAPW, String ccPayEnabled, String tip1, String pTimeOut, String supportEmail, String supportPhone) {
 		if (useAPW != null) {
 			useAccPW = Integer.parseInt(useAPW);
 		}
@@ -46,6 +50,12 @@ public class MGParam {
 			multiBookAllowed = parseBool(multiBookAllow);
 		if(sameLocBookAllow!=null)
 			sameLocBookAllowed = parseBool(sameLocBookAllow);
+        //TL-379
+        if(supportEmail!= null && supportEmail.trim().length()>0)
+            this.supportEmail = supportEmail;
+
+        if(supportPhone != null && supportPhone.trim().length()>0)
+            this.supportPhone = supportPhone;
 	}
 	
 	public int getUseAccPW() {
@@ -87,6 +97,10 @@ public class MGParam {
 	public boolean getSameLocBookAllowed() {
 		return sameLocBookAllowed;
 	}
+
+    public String getSupportPhone() {return supportPhone;}
+
+    public String getSupportEmail() {return supportEmail;}
 	
 	private boolean parseBool(String str) {
 		if (str.equalsIgnoreCase("Y")) {
