@@ -665,16 +665,13 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 					if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
 						Utils.mDropoffAddress = addresses.get(0);
 					} else {
+                        Utils.pickupHouseNumber = "";
 						Utils.mPickupAddress = addresses.get(0);
 					}
 					getActivity().finish();
 					
 				} else {
-                    Utils.pickupHouseNumber="";
-					Utils.mPickupAddress = addresses.get(0);
-				
 					Utils.showErrorDialog(getActivity().getString(R.string.cannot_get_address_from_google), getActivity());
-
 				}
 			}
 		}

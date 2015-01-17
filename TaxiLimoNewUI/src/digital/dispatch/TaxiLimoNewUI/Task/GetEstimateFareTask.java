@@ -16,9 +16,14 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //Get fare estimate and load onto screen
@@ -29,14 +34,17 @@ public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {
 	TextView fareView;
 	private int baseRate;
 	private int ratePerDistance;
-	
+	private RelativeLayout rl_fare;
+    private Context context;
 
 	
-	public GetEstimateFareTask(TextView fareView, int baseRate, int ratePerDistance) {
+	public GetEstimateFareTask(Context context, RelativeLayout rl_fare, TextView fareView, int baseRate, int ratePerDistance) {
 
 		this.fareView = fareView;
 		this.baseRate = baseRate;
 		this.ratePerDistance = ratePerDistance;
+        this.rl_fare = rl_fare;
+        this.context = context;
 		
 	}
 	// The code to be executed in a background thread.
@@ -93,6 +101,17 @@ public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {
 			double finalFare = (baseRateInCents + (dynamicRateCentPerKM * distance / 1000)) / 100;
 			fareView.setText("$" + (int)Math.ceil(finalFare));
 		}
+        else{
+            fareView.setText("$-");
+            if(rl_fare!=null && context!=null) {
+                rl_fare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.showMessageDialog(context.getString(R.string.invalid_address), context);
+                    }
+                });
+            }
+        }
 		
 	}
 

@@ -1,11 +1,13 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
 import java.util.Locale;
+import java.util.logging.Handler;
 
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.CompanyListRequest;
@@ -40,7 +42,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	@Override
 	protected void onPreExecute() {
 		if (!isFromBooking)
-			Utils.showProcessingDialog(_context);
+			Utils.showProcessingDialogWithMessage(_context, "Getting available companies in " + mAddress.getLocality());
 	}
 
 	// The code to be executed in a background thread.
@@ -78,7 +80,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 		if (isFromBooking) {
 			((BookActivity) _context).handleGetCompanyListResponse(tempCompList, mAddress.getLocality());
 		} else {
-			Utils.stopProcessingDialog(_context);
+			Utils.stopProcessingDialogWithMessage(_context);
 			((AttributeActivity) _context).loadCompanyList(tempCompList);
 		}
 	}
@@ -94,7 +96,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 
 		Log.v(TAG, "ResponseError - " + errorString);
 		if (!isFromBooking)
-			Utils.stopProcessingDialog(_context);
+			Utils.stopProcessingDialogWithMessage(_context);
 		try {
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 		} catch (Exception e) {
@@ -114,7 +116,7 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 		}
 		
 		if (!isFromBooking)
-			Utils.stopProcessingDialog(_context);
+			Utils.stopProcessingDialogWithMessage(_context);
 		try {
 			Utils.showMessageDialog(_context.getString(R.string.err_msg_no_response), _context);
 		} catch (Exception e) {

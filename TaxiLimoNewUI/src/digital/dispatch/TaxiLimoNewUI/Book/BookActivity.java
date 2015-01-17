@@ -58,6 +58,7 @@ public class BookActivity extends BaseActivity {
     private TextView icon_pickup, icon_dropoff, icon_date, icon_note, icon_company, tv_date_title, tv_note_title, tv_company_title, angle_right3, angle_right2,
             angle_right1, clear_dropoff;
     private BroadcastReceiver bcReceiver;
+    private boolean noCompanyAvailable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +124,8 @@ public class BookActivity extends BaseActivity {
         setTimeIfExist();
         setDriverNoteIfExist();
         setCompanyIfExist();
+
+        noCompanyAvailable=false;
     }
 
     @Override
@@ -146,6 +149,7 @@ public class BookActivity extends BaseActivity {
     private void setEstFareIfExist(CompanyItem[] tempCompList) {
         // TL-88 add fare estimate if drop off address is set and baseRate set up
         RelativeLayout rl_fare = (RelativeLayout) findViewById(R.id.rl_fare);
+        TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
         rl_fare.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,12 +157,11 @@ public class BookActivity extends BaseActivity {
             }
         });
         //if there is a selected company
-        if (Utils.mDropoffAddress != null && Utils.mSelectedCompany != null && Utils.mSelectedCompany.baseRate != 0
-                && Utils.mSelectedCompany.ratePerDistance != 0) {
+        if (Utils.mDropoffAddress != null && Utils.mPickupAddress != null && Utils.mSelectedCompany != null && Utils.mSelectedCompany.baseRate != 0
+                && Utils.mSelectedCompany.ratePerDistance != 0 ) {
             Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
             Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
             Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-            TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
             TextView tv_est = (TextView) findViewById(R.id.tv_est);
             TextView tv_mark = (TextView) findViewById(R.id.tv_mark);
 
@@ -170,16 +173,20 @@ public class BookActivity extends BaseActivity {
             rl_fare.setVisibility(View.VISIBLE);
             rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_with_fare_selector));
             rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_with_fare_selector));
+
+            tv_est_fare.setText("");
+
             // --post GB use serial executor by default --
-            new GetEstimateFareTask(tv_est_fare, Utils.mSelectedCompany.baseRate, Utils.mSelectedCompany.ratePerDistance).executeOnExecutor(
+            new GetEstimateFareTask(this, rl_fare, tv_est_fare, Utils.mSelectedCompany.baseRate, Utils.mSelectedCompany.ratePerDistance).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
                     Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
-        } else if (tempCompList != null && tempCompList.length > 0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mDropoffAddress != null) {
+
+        } else if (tempCompList != null && tempCompList.length > 0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mPickupAddress != null && Utils.mDropoffAddress != null) {
             Logger.d(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
             Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
             Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
             Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-            TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
+
             TextView tv_est = (TextView) findViewById(R.id.tv_est);
             TextView tv_mark = (TextView) findViewById(R.id.tv_mark);
 
@@ -191,11 +198,14 @@ public class BookActivity extends BaseActivity {
             rl_fare.setVisibility(View.VISIBLE);
             rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_with_fare_selector));
             rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_with_fare_selector));
+
+            tv_est_fare.setText("");
             // --post GB use serial executor by default --
-            new GetEstimateFareTask(tv_est_fare, tempCompList[0].baseRate, tempCompList[0].ratePerDistance).executeOnExecutor(
+            new GetEstimateFareTask(this, rl_fare, tv_est_fare, tempCompList[0].baseRate, tempCompList[0].ratePerDistance).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
                     Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
         } else {
+            tv_est_fare.setText("");
             rl_fare.setVisibility(View.GONE);
             rl_drop_off.setBackground(getResources().getDrawable(R.drawable.dropoff_selector));
             rl_pick_up.setBackground(getResources().getDrawable(R.drawable.pickup_selector));
@@ -313,7 +323,7 @@ public class BookActivity extends BaseActivity {
 
         rl_company.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (Utils.mPickupAddress != null) {
+                if (Utils.mPickupAddress != null && !noCompanyAvailable) {
                     Intent intent = new Intent(_this, AttributeActivity.class);
                     intent.putExtra(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER, false);
                     ((BookActivity) _this).startActivityForAnim(intent);
@@ -624,14 +634,20 @@ public class BookActivity extends BaseActivity {
         Utils.last_city = locality;
         if (tempCompList.length == 0) {
             tv_company.setText("No fleets in " + locality);
+            noCompanyAvailable = true;
+            tv_company.setTextColor(_this.getResources().getColor(R.color.red_light));
+            View book_cover = findViewById(R.id.book_cover);
+            book_cover.setVisibility(View.VISIBLE);
         } else if (tempCompList.length == 1) {
             tv_company.setTextColor(_this.getResources().getColor(R.color.black));
             Utils.mSelectedCompany = tempCompList[0];
             tv_company.setText(Utils.mSelectedCompany.name);
+            noCompanyAvailable = false;
         } else {
             // show please choose a company
             tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
             tv_company.setText(getString(R.string.choose));
+            noCompanyAvailable = false;
         }
         setEstFareIfExist(tempCompList);
     }
