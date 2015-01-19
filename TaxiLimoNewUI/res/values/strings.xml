@@ -189,7 +189,7 @@
 
     <!-- <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
     <!-- QA -->
-<!--     <string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string> -->
+    <!--<string name="url">http://192.168.50.82:90/Service.asmx?wsdl</string>-->
     <string name="protocol">3.0</string>
     <string name="reg_device_start">Login&#8230;</string>
     <string name="default_country_code">ca</string>

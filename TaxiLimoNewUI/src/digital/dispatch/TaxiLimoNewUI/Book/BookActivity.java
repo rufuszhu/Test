@@ -217,6 +217,8 @@ public class BookActivity extends BaseActivity {
         if (Utils.mSelectedCompany != null && Utils.last_city.equals(Utils.mPickupAddress.getLocality())) {
             tv_company.setText(Utils.mSelectedCompany.name);
         } else {
+            tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
+            tv_company.setText(getString(R.string.choose));
             boolean isFromBooking = true;
             new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
@@ -453,12 +455,9 @@ public class BookActivity extends BaseActivity {
                             Utils.showErrorDialog(_this.getString(R.string.err_msg_no_same_loc), _this);
                             return false;
                         }
-
                     }
                 }
-
             }
-
         }
         // check if drop off MANDATORY
         if (SharedPreferencesManager.loadBooleanPreferences(sharedPreferences, MBDefinition.SHARE_DROP_OFF_MANDATORY, false) && Utils.mDropoffAddress == null) {
