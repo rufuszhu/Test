@@ -585,8 +585,11 @@ public class TrackDetailActivity extends BaseActivity {
 			trans.commit();
 		}
 
-		if (mPager.getCurrentItem() == 1 && (shouldShowCar())) {
-			zoom_btn.setVisibility(View.VISIBLE);
+		if (mPager.getCurrentItem() == 1) {
+            if(shouldShowCar())
+			    zoom_btn.setVisibility(View.VISIBLE);
+            else
+                zoom_btn.setVisibility(View.GONE);
 			setTab1Text();
 		} else {
 			zoom_btn.setVisibility(View.GONE);

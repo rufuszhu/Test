@@ -105,6 +105,10 @@ public class TripDetailActivity extends BaseActivity {
 		TextView tv_delete = (TextView) findViewById(R.id.tv_delete);
 		TextView tv_bookAgain = (TextView) findViewById(R.id.tv_bookAgain);
 
+        ImageView icon_taxi = (ImageView) findViewById(R.id.icon_taxi);
+        View space_diver_car = (View) findViewById(R.id.space_diver_car);
+        TextView icon_male_user = (TextView) findViewById(R.id.icon_male_user);
+
 
 		
 		delete_icon.setTypeface(icon_pack);
@@ -129,6 +133,9 @@ public class TripDetailActivity extends BaseActivity {
 		tv_driver.setTypeface(exo2SemiBold,Typeface.BOLD);
 		tv_car_num.setTypeface(exo2SemiBold,Typeface.BOLD);
 		tv_call.setTypeface(exo2SemiBold,Typeface.BOLD);
+
+        icon_male_user.setTypeface(icon_pack);
+        icon_male_user.setText(MBDefinition.ICON_MALE_USER);
 		
 		icon_call.setTypeface(icon_pack);
         icon_calander.setTypeface(icon_pack);
@@ -144,8 +151,39 @@ public class TripDetailActivity extends BaseActivity {
 		
 		setUpListener();
 
-		tv_driver.setText("Driver # " + dbBook.getDispatchedDriver());
-		tv_car_num.setText("Car # " + dbBook.getDispatchedCar());
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+        //else if only driver is available
+        if ((dbBook.getDispatchedDriver() != null && !dbBook.getDispatchedDriver().equals("")) &&  (dbBook.getDispatchedCar() == null || dbBook.getDispatchedCar().length() == 0)){
+            linearLayout.setVisibility(View.VISIBLE);
+            icon_taxi.setVisibility(View.GONE);
+            space_diver_car.setVisibility(View.GONE);
+            icon_male_user.setVisibility(View.VISIBLE);
+            tv_driver.setVisibility(View.VISIBLE);
+            tv_car_num.setVisibility(View.GONE);
+            tv_driver.setText(dbBook.getDispatchedDriver());
+        }
+        //else if only car is available
+        else if((dbBook.getDispatchedDriver() == null || dbBook.getDispatchedDriver().equals("")) && (dbBook.getDispatchedCar() != null && dbBook.getDispatchedCar().length() > 0)){
+            linearLayout.setVisibility(View.VISIBLE);
+            icon_taxi.setVisibility(View.VISIBLE);
+            space_diver_car.setVisibility(View.GONE);
+            icon_male_user.setVisibility(View.GONE);
+            tv_driver.setVisibility(View.GONE);
+            tv_car_num.setVisibility(View.VISIBLE);
+            tv_car_num.setText(dbBook.getDispatchedCar());
+        }
+        //both available
+        else if((dbBook.getDispatchedDriver() != null && dbBook.getDispatchedDriver().length()>0) && (dbBook.getDispatchedCar() != null && dbBook.getDispatchedCar().length() > 0)){
+            linearLayout.setVisibility(View.VISIBLE);
+            icon_taxi.setVisibility(View.VISIBLE);
+            space_diver_car.setVisibility(View.VISIBLE);
+            icon_male_user.setVisibility(View.VISIBLE);
+            tv_driver.setVisibility(View.VISIBLE);
+            tv_car_num.setVisibility(View.VISIBLE);
+            tv_driver.setText(dbBook.getDispatchedDriver());
+            tv_car_num.setText(dbBook.getDispatchedCar());
+        }
+
 		
 		
 		tv_id.setText("Trip ID " + dbBook.getTaxi_ride_id());
