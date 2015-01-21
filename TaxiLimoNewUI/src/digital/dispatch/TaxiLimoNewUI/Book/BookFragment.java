@@ -239,11 +239,11 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
                     Utils.showMessageDialog(getActivity().getString(R.string.invade_address), getActivity());
                 }
 				
-				//TODO: decide if we should check pickup here
+				//TL-388 Allow landmark booking (no need to force user to enter in street number, if returned address does not have street number).
 				// no house number in pickup address
-				else if (!validateHasHouseNumber()) {
-					showEnterHouseNumberDialog();
-				}
+//				else if (!validateHasHouseNumber()) {
+//					showEnterHouseNumberDialog();
+//				}
 				// house number return by Google has a range
 				else if (!validateHouseNumberHasNoRange()) {
 					Address address = Utils.mPickupAddress;

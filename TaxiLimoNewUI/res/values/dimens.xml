@@ -139,4 +139,8 @@
     <dimen name="lock_screen_text_font_size">16sp</dimen>
     <dimen name="lock_screen_btn_font_size">18sp</dimen>
 
+
+    <dimen name="history_404_font_size">16sp</dimen>
+    <dimen name="track_404_font_size">16sp</dimen>
+
 </resources>

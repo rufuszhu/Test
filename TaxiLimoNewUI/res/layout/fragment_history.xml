@@ -6,6 +6,17 @@
     android:padding="@dimen/small_padding"
     tools:context="digital.dispatch.TaxiLimoNewUI.MainActivity$PlaceholderFragment" >
 
+    <TextView
+        android:id="@+id/tv_history_404"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/very_big_margin"
+        android:layout_centerHorizontal="true"
+        android:text="@string/history_404"
+        android:textColor="@color/list_gray_text"
+        android:textSize="@dimen/history_404_font_size"
+        style="@style/TextDropShadowWhite"/>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

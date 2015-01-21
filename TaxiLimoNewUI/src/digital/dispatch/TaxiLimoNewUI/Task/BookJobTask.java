@@ -172,7 +172,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 
 			//Utils.showMessageDialog(_context.getString(R.string.message_book_successful), _context);
 			Utils.currentTab = 1;
-            ((BookActivity) _context).showBookSuccessDialog();
+			((BookActivity) _context).showBookSuccessDialog(mbook);
 			Logger.d(TAG, "ride id: " + mbook.getTaxi_ride_id());
 			Logger.d(TAG, "create time: " + mbook.getTripCreationTime());
 		} else {

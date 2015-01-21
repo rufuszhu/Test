@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -45,6 +46,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
@@ -479,6 +481,8 @@ public class ContactsFragment extends ListFragment {
 					else {
                         Utils.pickupHouseNumber="";
                         Utils.mPickupAddress = addressesObj.get(0);
+                        Intent intent = new Intent(getActivity(), BookActivity.class);
+                        ((ModifyAddressActivity) getActivity()).startActivityForAnim(intent);
                     }
 					getActivity().finish();
 				} else
@@ -603,6 +607,8 @@ public class ContactsFragment extends ListFragment {
 					else {
                         Utils.pickupHouseNumber="";
                         Utils.mPickupAddress = addresses.get(0);
+                        Intent intent = new Intent(getActivity(), BookActivity.class);
+                        ((ModifyAddressActivity) getActivity()).startActivityForAnim(intent);
                     }
 					getActivity().finish();
 	

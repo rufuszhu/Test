@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -20,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
@@ -63,9 +65,6 @@ public class TrackFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		isRefreshing = false;
-		
-		BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
-		setListAdapter(adapter);
 	}
 	
 	private List<DBBooking> getActiveJobs(){
@@ -116,6 +115,9 @@ public class TrackFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_track, container, false);
+        TextView tv_track_404 = (TextView) rootView.findViewById(R.id.tv_track_404);
+        Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+        tv_track_404.setTypeface(rionaSansMedium);
 		return rootView;
 	}
 
@@ -124,7 +126,14 @@ public class TrackFragment extends ListFragment {
 		super.onResume();
 		Logger.d(TAG, "on RESUME");
 		BookingListAdapter adapter = new BookingListAdapter(getActivity(), getActiveJobs());
-		setListAdapter(adapter);
+
+        if(adapter.getCount()==0) {
+            getListView().setVisibility(View.GONE);
+        }
+        else {
+            getListView().setVisibility(View.VISIBLE);
+            setListAdapter(adapter);
+        }
 		Utils.isInternetAvailable(getActivity());
 	}
 
@@ -226,9 +235,12 @@ public class TrackFragment extends ListFragment {
 		List<DBBooking> activeJobs = getActiveJobs();
 		if( activeJobs.size() > 0){	
 			BookingListAdapter adapter = new BookingListAdapter(getActivity(), activeJobs);
-			if(adapter.getCount()>0)
-			Logger.i(TAG,"trip status: " + adapter.getItem(0).getTripStatus());
-			setListAdapter(adapter);
+			if(adapter.getCount()>0) {
+                getListView().setVisibility(View.VISIBLE);
+                setListAdapter(adapter);
+            }
+            else
+                getListView().setVisibility(View.GONE);
 		}
 	}
 
