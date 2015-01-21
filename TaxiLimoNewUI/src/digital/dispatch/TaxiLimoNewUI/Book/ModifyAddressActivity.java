@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +21,8 @@ import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
@@ -121,8 +122,8 @@ public class ModifyAddressActivity extends BaseActivity {
 	private void setUpTab() {
 		mPager = (NonSwipeableViewPager) findViewById(R.id.pager);
 		setTabListener();
-		favoritesFragment = FavoritesFragment.newInstance();
-		contactsFragment = new ContactsFragment();
+		//favoritesFragment = FavoritesFragment.newInstance();
+		//contactsFragment = new ContactsFragment();
 		searchFragment = SearchFragment.newInstance();
 
 		tab0 = (RelativeLayout) findViewById(R.id.tab0);
@@ -133,17 +134,17 @@ public class ModifyAddressActivity extends BaseActivity {
 		tab1_text = (TextView) findViewById(R.id.tab1_text);
 		tab2_text = (TextView) findViewById(R.id.tab2_text);
 		
-		Typeface exoFamily = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+		Typeface exoFamily = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
 		tab0_text.setTypeface(exoFamily);
 		tab1_text.setTypeface(exoFamily);
 		tab2_text.setTypeface(exoFamily);
 
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		Typeface fontFamily = FontCache.getFont(this, "fonts/icon_pack.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
 		tab0_icon.setTypeface(fontFamily);
 		tab0_icon.setText(MBDefinition.icon_tab_search);
 
-		Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
+		Typeface fontAwesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
 		tab1_icon = (TextView) findViewById(R.id.tab1_icon);
 		tab1_icon.setTypeface(fontAwesome);
 		tab1_icon.setText(MBDefinition.icon_tab_fav);
@@ -254,9 +255,16 @@ public class ModifyAddressActivity extends BaseActivity {
 			case 0:
 				return searchFragment;
 			case 1:
-				return favoritesFragment;
+                //TL-369 only create fragment when we need it
+                if(favoritesFragment != null)
+                    return favoritesFragment;
+                else
+				    return FavoritesFragment.newInstance();
 			case 2:
-				return contactsFragment;
+                if(contactsFragment != null)
+                    return contactsFragment;
+                else
+				    return ContactsFragment.newInstance();
 			default:
 				return null;
 			}
@@ -279,6 +287,7 @@ public class ModifyAddressActivity extends BaseActivity {
 		bcReceiver = CommonUtilities.getGenericReceiver(_context, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
+
 	}
 
 	@Override
@@ -286,6 +295,13 @@ public class ModifyAddressActivity extends BaseActivity {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
 		super.onPause();
 	}
+
+    @Override
+    public void onDestroy(){
+        Logger.d(TAG, "onDestroy");
+        super.onDestroy();
+
+    }
 
 
 }

@@ -52,6 +52,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -110,10 +111,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		view = inflater.inflate(R.layout.fragment_search, container, false);
 		Logger.d(TAG, "onCreateView");
 		scrollView1 = (ScrollView) view.findViewById(R.id.scrollView1);
-		fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
-		rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-		rionaRegularFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
-		fontAwesome = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+		fontFamily = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
+		rionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
+		rionaRegularFamily = FontCache.getFont(getActivity(), "fonts/RionaSansRegular.otf");
+		fontAwesome = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
 		findViewAndBindEvent();
 
 		contactResults = new ArrayList<ListItem>();

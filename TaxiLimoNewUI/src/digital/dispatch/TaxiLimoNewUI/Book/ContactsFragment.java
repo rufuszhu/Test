@@ -50,6 +50,7 @@ import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
@@ -109,8 +110,8 @@ public class ContactsFragment extends ListFragment {
 	}
 
 	private void setUp404(View view) {
-		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+		Typeface rionaSansMedium = FontCache.getFont (getActivity(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = FontCache.getFont (getActivity(), "fonts/icon_pack.ttf");
 		// TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
 		TextView tv_contact404_text = (TextView) view.findViewById(R.id.tv_contact404_text);
 		tv_contact404_text.setTypeface(rionaSansMedium);
@@ -281,9 +282,9 @@ public class ContactsFragment extends ListFragment {
 			super(context, R.layout.contact_item, values);
 			this.context = context;
 			this.values = values;
-			fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
-			RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
-			RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+			fontFamily = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
+			RionaSansMedium = FontCache.getFont (getActivity(), "fonts/RionaSansMedium.otf");
+			RionaSansRegular = FontCache.getFont (getActivity(), "fonts/RionaSansRegular.otf");
 		}
 
 		public class ViewHolder {

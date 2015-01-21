@@ -37,6 +37,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -157,15 +158,15 @@ public class ProfileActivity extends BaseActivity implements
 	}
 
 	private void styleView() {
-		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(),
-				"fonts/RionaSansRegular.otf");
-		Typeface icon_pack = Typeface.createFromAsset(getAssets(),
+		Typeface rionaSansRegular = FontCache.getFont(this,
+                "fonts/RionaSansRegular.otf");
+		Typeface icon_pack = FontCache.getFont(this,
 				"fonts/icon_pack.ttf");
-		Typeface rionaMedium = Typeface.createFromAsset(getAssets(),
+		Typeface rionaMedium = FontCache.getFont(this,
 				"fonts/RionaSansMedium.otf");
-		Typeface rionaBold = Typeface.createFromAsset(getAssets(),
+		Typeface rionaBold = FontCache.getFont(this,
 				"fonts/RionaSansBold.otf");
-		Typeface exoBold = Typeface.createFromAsset(getAssets(),
+		Typeface exoBold = FontCache.getFont(this,
 				"fonts/Exo2-Bold.ttf");
 
 		question_ic.setTypeface(icon_pack);

@@ -34,6 +34,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -74,8 +75,8 @@ public class MapNotAvailableFragment extends Fragment {
 	}
 	
 	private void fillValue() {
-		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
-		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
+		Typeface rionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
 	
 		textView.setTypeface(rionaSansMedium);
 		icon.setTypeface(icon_pack);

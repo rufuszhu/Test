@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -67,9 +68,9 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		super(context, textViewResourceId);
 		_context = context;
 		resultList = new ArrayList<String>();
-		RionaSansMedium = Typeface.createFromAsset(_context.getAssets(), "fonts/RionaSansMedium.otf");
-		fontFamily = Typeface.createFromAsset(_context.getAssets(), "fonts/fontawesome.ttf");
-		icon_pack = Typeface.createFromAsset(_context.getAssets(), "fonts/icon_pack.ttf");
+		RionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+		fontFamily = FontCache.getFont(context, "fonts/fontawesome.ttf");
+		icon_pack = FontCache.getFont(context, "fonts/icon_pack.ttf");
 	}
 
 	@Override
