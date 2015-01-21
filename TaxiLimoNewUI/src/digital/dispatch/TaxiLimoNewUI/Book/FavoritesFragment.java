@@ -28,8 +28,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -80,8 +83,8 @@ public class FavoritesFragment extends ListFragment {
 	}
 
 	private void setUp404(View view) {
-		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-		Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
+		Typeface rionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
 		//TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
 		TextView tv_fav404_text = (TextView) view.findViewById(R.id.tv_fav404_text);
 		tv_fav404_text.setTypeface(rionaSansMedium);
@@ -127,7 +130,48 @@ public class FavoritesFragment extends ListFragment {
 		Logger.d(TAG, "on RESUME");
 
 		Utils.isInternetAvailable(getActivity());
+        /*
+        int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
+        String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
+        Logger.d(TAG,  usedMegsString);
+        */
 	}
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Logger.d(TAG, "on Pause");
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbindDrawables(view.findViewById(R.id.fav_frag));
+        Logger.d(TAG, "onDestroyView");
+    }
+
+
+    //TL-369
+    public void unbindDrawables(View view ){
+
+        if(view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+
+        if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+            imageView.setImageBitmap(null);
+        }
+        else if(view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for( int i= 0; i< ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            if(!(view instanceof AdapterView))
+                viewGroup.removeAllViews();
+        }
+    }
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -215,9 +259,9 @@ public class FavoritesFragment extends ListFragment {
 			super(context, R.layout.favorite_item, values);
 			this.context = context;
 			this.values = values;
-			fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/icon_pack.ttf");
-			RionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
-			RionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+			fontFamily = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
+			RionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
+			RionaSansRegular = FontCache.getFont(getActivity(), "fonts/RionaSansRegular.otf");
 		}
 
 		public class ViewHolder {

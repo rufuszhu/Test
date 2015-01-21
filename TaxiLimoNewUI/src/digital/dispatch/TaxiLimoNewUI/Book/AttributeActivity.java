@@ -33,6 +33,7 @@ import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -75,8 +76,8 @@ public class AttributeActivity extends BaseActivity {
 				}
 			}
 		});
-		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
-        Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
+        Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
 		TextView textView2 = (TextView) findViewById(R.id.textView2);
         tv_company404_text = (TextView) findViewById(R.id.tv_company404_text);
@@ -93,7 +94,24 @@ public class AttributeActivity extends BaseActivity {
 //		refreshing = true;
 		boolean isFromBooking = false;
 		new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        /*
+        int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
+        String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
+        Logger.e(TAG, usedMegsString);
+        */
 	}
+
+    @Override
+    protected void onDestroy(){
+        Logger.d(TAG, "onDestroy");
+        super.onDestroy();
+        //TL-369
+        if(findViewById(R.id.RootView) != null) {
+            unbindDrawables(findViewById(R.id.RootView));
+            System.gc();
+        }
+
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

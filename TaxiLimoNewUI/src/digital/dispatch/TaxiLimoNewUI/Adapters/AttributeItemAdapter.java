@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
@@ -28,7 +29,7 @@ public class AttributeItemAdapter extends BaseAdapter {
     public AttributeItemAdapter(Context c, List<DBAttribute> attrList) {
         mContext = c;
         this.attrList = attrList;
-        exo2SemiBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Exo2-SemiBold.ttf");
+        exo2SemiBold = FontCache.getFont(mContext, "fonts/Exo2-SemiBold.ttf");
     }
 
     @Override

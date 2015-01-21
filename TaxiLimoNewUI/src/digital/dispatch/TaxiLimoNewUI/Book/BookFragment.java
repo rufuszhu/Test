@@ -76,6 +76,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -182,7 +183,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		}
 
 		TextView add_fav_btn = (TextView) view.findViewById(R.id.add_fav_btn);
-		Typeface fontFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+		Typeface fontFamily = FontCache.getFont (getActivity(), "fonts/fontawesome.ttf");
 		add_fav_btn.setTypeface(fontFamily);
 		add_fav_btn.setText(MBDefinition.icon_star_hollow);
 		add_fav_btn.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +194,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		});
 
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		Typeface rionaFamily = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansRegular.otf");
+		Typeface rionaFamily = FontCache.getFont (getActivity(), "fonts/RionaSansRegular.otf");
 		address_bar_text.setTypeface(rionaFamily);
         TextView tv_angle_right = (TextView) view.findViewById(R.id.tv_angle_right);
 

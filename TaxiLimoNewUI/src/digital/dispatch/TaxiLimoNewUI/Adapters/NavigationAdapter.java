@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 
 
 public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
@@ -20,7 +21,7 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItemAdapter> {
 	public NavigationAdapter(Context context) {
 		super(context, 0);
 		this.context = context;
-		ex2Medium = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Medium.ttf");
+		ex2Medium = FontCache.getFont(context, "fonts/Exo2-Medium.ttf");
 	}
 
 

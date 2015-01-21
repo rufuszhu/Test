@@ -193,7 +193,7 @@ public class Utils {
                         attr_custom.setLayoutParams(layoutParams);
                         attr_custom.setGravity(Gravity.CENTER);
                         attr_custom.setTextColor(context.getResources().getColor(R.color.blue_grenn_color2));
-                        attr_custom.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf"));
+                        attr_custom.setTypeface(FontCache.getFont(context, "fonts/Exo2-SemiBold.ttf"));
 
                         ll_attr.addView(attr_custom);
                     }
@@ -509,9 +509,9 @@ public class Utils {
 		lockScreenDialog.setContentView(R.layout.dialog_lock_screen);
 		lockScreenDialog.setCanceledOnTouchOutside(false);
 		lockScreenDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		Typeface icon_pack = Typeface.createFromAsset(context.getAssets(), "fonts/icon_pack.ttf");
-		Typeface rionaMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
-		Typeface exoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Bold.ttf");
+		Typeface icon_pack = FontCache.getFont(context, "fonts/icon_pack.ttf");
+		Typeface rionaMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+		Typeface exoBold = FontCache.getFont(context, "fonts/Exo2-Bold.ttf");
 		
 		TextView icon_call = (TextView) lockScreenDialog.getWindow().findViewById(R.id.icon_call);
 		TextView icon_email = (TextView) lockScreenDialog.getWindow().findViewById(R.id.icon_email);

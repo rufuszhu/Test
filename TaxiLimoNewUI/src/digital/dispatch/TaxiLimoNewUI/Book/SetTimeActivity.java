@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
@@ -56,10 +57,10 @@ public class SetTimeActivity extends BaseActivity {
 	}
 	
 	private void setStyles() {
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		Typeface fontFamily = FontCache.getFont(this, "fonts/icon_pack.ttf");
 
-		Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
-		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+		Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
+		Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
         question_exclamation.setTypeface(fontFamily);
         question_exclamation.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
 		info.setTypeface(rionaSansMedium);
@@ -106,7 +107,7 @@ public class SetTimeActivity extends BaseActivity {
 		
 		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon);
 		TextView save_icon = (TextView) findViewById(R.id.save_icon);
-		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
 		cancel_icon.setTypeface(icon_pack);
 
 		cancel_icon.setText(MBDefinition.ICON_CROSS);
@@ -116,7 +117,7 @@ public class SetTimeActivity extends BaseActivity {
 		
 		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel);
 		TextView tv_save = (TextView) findViewById(R.id.tv_save);
-		Typeface exoBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Bold.ttf");
+		Typeface exoBold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
 		tv_cancel.setTypeface(exoBold);
 		tv_save.setTypeface(exoBold);
 	}

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -35,7 +36,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	public DateAdapter(Context context, boolean misDate, ArrayList<Date> list) {
 		super(context, R.layout.date_holo_layout, NO_RESOURCE);
 		setItemTextResource(R.id.date_text);
-		rionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
+		rionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
 		this.isDate = misDate;
 		if(isDate){
 			dateList = list;

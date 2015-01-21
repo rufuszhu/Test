@@ -40,6 +40,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.History.HistoryFragment;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -124,9 +125,15 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		bcReceiver = CommonUtilities.getGenericReceiver(this, isTrackDetail);
 		LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver, new IntentFilter(gcmType.message.toString()));
 		super.onResume();
-		Logger.d(TAG, "onReusme");
+		Logger.d(TAG, "onResume");
 		CommonUtilities.checkLateTrip(this, -1);
 		mPager.setCurrentItem(Utils.currentTab);
+
+        /*
+        int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
+        String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
+        Logger.e(TAG,  usedMegsString);
+        */
 	}
 
 	@Override
@@ -196,13 +203,13 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		tab0_text = (TextView) findViewById(R.id.tab0_text);
 		tab1_text = (TextView) findViewById(R.id.tab1_text);
 		tab2_text = (TextView) findViewById(R.id.tab2_text);
-		
-		Typeface exoFamily = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
+
+        Typeface exoFamily = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
 		tab0_text.setTypeface(exoFamily);
 		tab1_text.setTypeface(exoFamily);
 		tab2_text.setTypeface(exoFamily);
 
-		Typeface fontFamily = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+        Typeface fontFamily = FontCache.getFont(this, "fonts/icon_pack.ttf");
 		tab0_icon = (TextView) findViewById(R.id.tab0_icon);
 		tab0_icon.setTypeface(fontFamily);
 		tab0_icon.setText(MBDefinition.icon_tab_calendar);
@@ -346,7 +353,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		actionBar.setIcon(null);
 		int titleId = getResources().getIdentifier("action_bar_title", "id",
 	            "android");
-		Typeface face = Typeface.createFromAsset(_context.getAssets(), "fonts/Exo2-Light.ttf");
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
 	    TextView yourTextView = (TextView) findViewById(titleId);
 	    yourTextView.setTypeface(face);
 		// if we want customize action bar

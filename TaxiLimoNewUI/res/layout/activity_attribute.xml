@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
+    android:id="@+id/RootView"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity" >
 
     <TextView
