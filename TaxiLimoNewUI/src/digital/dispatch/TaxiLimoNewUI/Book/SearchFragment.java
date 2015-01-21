@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -46,6 +47,7 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
@@ -667,6 +669,8 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 					} else {
                         Utils.pickupHouseNumber = "";
 						Utils.mPickupAddress = addresses.get(0);
+                        Intent intent = new Intent(getActivity(), BookActivity.class);
+                        ((ModifyAddressActivity) getActivity()).startActivityForAnim(intent);
 					}
 					getActivity().finish();
 					
@@ -695,11 +699,14 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (isAdded()) {
-					if (((ModifyAddressActivity) getActivity()).getIsDesitination())
-						Utils.mDropoffAddress = addressesObj.get(which);
+					if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
+                        Utils.mDropoffAddress = addressesObj.get(which);
+                    }
 					else {
                         Utils.pickupHouseNumber="";
                         Utils.mPickupAddress = addressesObj.get(which);
+                        Intent intent = new Intent(getActivity(), BookActivity.class);
+                        ((ModifyAddressActivity) getActivity()).startActivityForAnim(intent);
                     }
 					getActivity().finish();
 				} else {

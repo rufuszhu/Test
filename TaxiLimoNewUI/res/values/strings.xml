@@ -184,7 +184,7 @@
     <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
 <!--     <string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string> -->
     
-     <!--<string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>-->
+<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>-->
 
 
     <!-- <string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string> -->
@@ -476,6 +476,11 @@
     <string name="disclaimer">Disclaimer: This is an estimate only and the actual amount charged by the taxi could vary</string>
     <string name="invalid_address">Invalid Address</string>
     <string name="invade_address">Invalid Address</string>
+    <string name="book_anyway">Book Anyway</string>
+    <string name="msg_suggest_to_enter_driver_note">The pickup address has no street number, do you want to leave some instructions for drivers to help them find you better?</string>
+    <string name="booking_confirmed">Booking Confirmed</string>
+    <string name="track404_text">You have no active bookings</string>
+    <string name="history_404">You have no previous bookings</string>
 
 
 </resources>

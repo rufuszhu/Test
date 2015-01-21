@@ -3,6 +3,7 @@ package digital.dispatch.TaxiLimoNewUI.History;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.greenrobot.dao.query.QueryBuilder;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
@@ -72,8 +74,13 @@ public class HistoryFragment extends ListFragment {
 			bookingDao.queryBuilder().where(Properties.Id.lt(smallestId)).buildDelete().executeDeleteWithoutDetachingEntities();
 		}
 
-		BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
-		setListAdapter(adapter);
+        if(values.size()>0) {
+            getListView().setVisibility(View.VISIBLE);
+            BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
+            setListAdapter(adapter);
+        }
+        else
+            getListView().setVisibility(View.GONE);
 
 		Utils.isInternetAvailable(getActivity());
 	}
@@ -96,6 +103,9 @@ public class HistoryFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        TextView tv_history_404 = (TextView) rootView.findViewById(R.id.tv_history_404);
+        Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+        tv_history_404.setTypeface(rionaSansMedium);
 		return rootView;
 	}
 

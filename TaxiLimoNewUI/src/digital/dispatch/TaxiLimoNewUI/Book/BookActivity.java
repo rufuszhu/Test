@@ -44,6 +44,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -59,6 +60,8 @@ public class BookActivity extends BaseActivity {
             angle_right1, clear_dropoff;
     private BroadcastReceiver bcReceiver;
     private boolean noCompanyAvailable;
+    private boolean bookAnyway;// if this flag is true, let user to book job without driver instruction even if the pickup address has no street number
+    private CompanyItem[] cachedCompanyArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,13 +121,13 @@ public class BookActivity extends BaseActivity {
         super.onResume();
         Logger.d(TAG, "on RESUME");
         checkInternet();
-        setEstFareIfExist(null);
+        setEstFareIfExist();
         setPickupIfExist();
         setDropOffIfExist();
         setTimeIfExist();
         setDriverNoteIfExist();
         setCompanyIfExist();
-
+        bookAnyway = false;
         noCompanyAvailable=false;
     }
 
@@ -146,7 +149,7 @@ public class BookActivity extends BaseActivity {
         }
     }
 
-    private void setEstFareIfExist(CompanyItem[] tempCompList) {
+    private void setEstFareIfExist() {
         // TL-88 add fare estimate if drop off address is set and baseRate set up
         RelativeLayout rl_fare = (RelativeLayout) findViewById(R.id.rl_fare);
         TextView tv_est_fare = (TextView) findViewById(R.id.tv_est_fare);
@@ -181,8 +184,8 @@ public class BookActivity extends BaseActivity {
                     AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
                     Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
 
-        } else if (tempCompList != null && tempCompList.length > 0 && tempCompList[0].baseRate != 0 && tempCompList[0].ratePerDistance != 0 && Utils.mPickupAddress != null && Utils.mDropoffAddress != null) {
-            Logger.d(TAG, tempCompList[0].destID + " " + tempCompList[0].baseRate + " " + tempCompList[0].ratePerDistance);
+        } else if (cachedCompanyArray != null && cachedCompanyArray.length > 0 && cachedCompanyArray[0].baseRate != 0 && cachedCompanyArray[0].ratePerDistance != 0 && Utils.mPickupAddress != null && Utils.mDropoffAddress != null) {
+            Logger.d(TAG, cachedCompanyArray[0].destID + " " + cachedCompanyArray[0].baseRate + " " + cachedCompanyArray[0].ratePerDistance);
             Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
             Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
             Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
@@ -201,7 +204,7 @@ public class BookActivity extends BaseActivity {
 
             tv_est_fare.setText("");
             // --post GB use serial executor by default --
-            new GetEstimateFareTask(this, rl_fare, tv_est_fare, tempCompList[0].baseRate, tempCompList[0].ratePerDistance).executeOnExecutor(
+            new GetEstimateFareTask(this, rl_fare, tv_est_fare, cachedCompanyArray[0].baseRate, cachedCompanyArray[0].ratePerDistance).executeOnExecutor(
                     AsyncTask.THREAD_POOL_EXECUTOR, Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(),
                     Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
         } else {
@@ -213,12 +216,13 @@ public class BookActivity extends BaseActivity {
     }
 
     private void setCompanyIfExist() {
+        tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
+        tv_company.setText(getString(R.string.choose));
         // no need to get company list again if pick up city is not changed
-        if (Utils.mSelectedCompany != null && Utils.last_city.equals(Utils.mPickupAddress.getLocality())) {
-            tv_company.setText(Utils.mSelectedCompany.name);
+        if (Utils.last_city.equals(Utils.mPickupAddress.getLocality())) {
+            if(Utils.mSelectedCompany != null)
+                tv_company.setText(Utils.mSelectedCompany.name);
         } else {
-            tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
-            tv_company.setText(getString(R.string.choose));
             boolean isFromBooking = true;
             new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
@@ -284,7 +288,7 @@ public class BookActivity extends BaseActivity {
                     tv_drop_off.setText(_this.getString(R.string.enter_for_est_fare));
                     tv_drop_off.setTextColor(_this.getResources().getColor(R.color.list_gray_text));
                     Utils.mDropoffAddress = null;
-                    setEstFareIfExist(null);
+                    setEstFareIfExist();
                 }
             }
         });
@@ -414,9 +418,29 @@ public class BookActivity extends BaseActivity {
         // Utils.showMessageDialog(_this.getString(R.string.err_no_company_found) + " " + Utils.mPickupAddress.getLocality(), _this);
         // return false;
         // }
+        //TL-388 Popup dialog to hint user to enter in detail information in “Message to Driver”, eg. which mall entrance, which aiport terminal, etc.
         // no house number in pickup address
-        if (!validateHasHouseNumber()) {
-            showEnterHouseNumberDialog();
+        if (!validateHasHouseNumber() && !bookAnyway && Utils.driverNoteString.length()==0) {
+            //showEnterHouseNumberDialog();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(_this);
+            builder.setMessage(getString(R.string.msg_suggest_to_enter_driver_note));
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Intent intent = new Intent(_this, DriverNoteActivity.class);
+                    ((BookActivity) _this).startActivityForAnim(intent);
+                }
+            });
+
+            builder.setNegativeButton(R.string.book_anyway, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    bookAnyway = true;
+                    book_btn.performClick();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
             return false;
         }
         // house number return by Google has a range
@@ -609,18 +633,25 @@ public class BookActivity extends BaseActivity {
         houseNumRangeDialog.show();
     }
 
-    public void showBookSuccessDialog() {
+    public void showBookSuccessDialog(final DBBooking dbBooking) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(_this);
+        builder.setTitle(R.string.booking_confirmed);
         builder.setMessage(_this.getString(R.string.message_book_successful));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(_this, TrackDetailActivity.class);
+                intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBooking);
+                startActivity(intent);
                 finish();
             }
         });
         builder.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                Intent intent = new Intent(_this, TrackDetailActivity.class);
+                intent.putExtra(MBDefinition.DBBOOKING_EXTRA, dbBooking);
+                startActivity(intent);
                 finish();
             }
         });
@@ -631,6 +662,7 @@ public class BookActivity extends BaseActivity {
 
     public void handleGetCompanyListResponse(CompanyItem[] tempCompList, String locality) {
         Utils.last_city = locality;
+        cachedCompanyArray = tempCompList;
         if (tempCompList.length == 0) {
             tv_company.setText("No fleets in " + locality);
             noCompanyAvailable = true;
@@ -648,6 +680,6 @@ public class BookActivity extends BaseActivity {
             tv_company.setText(getString(R.string.choose));
             noCompanyAvailable = false;
         }
-        setEstFareIfExist(tempCompList);
+        setEstFareIfExist();
     }
 }
