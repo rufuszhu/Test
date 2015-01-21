@@ -172,7 +172,7 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 
 			//Utils.showMessageDialog(_context.getString(R.string.message_book_successful), _context);
 			Utils.currentTab = 1;
-			((BookActivity) _context).showBookSuccessDialog();
+            ((BookActivity) _context).showBookSuccessDialog();
 			Logger.d(TAG, "ride id: " + mbook.getTaxi_ride_id());
 			Logger.d(TAG, "create time: " + mbook.getTripCreationTime());
 		} else {
@@ -221,6 +221,9 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
 				Utils.showMessageDialog(_context.getString(R.string.err_msg_book_req_account_err).replace("[company phone]", mbook.getCompany_phone_number()),
 						_context);
 				break;
+            case 41:
+                Utils.showUILockScreen(_context);
+                break;
 			default:
 				Utils.showMessageDialog(_context.getString(R.string.booking_failed_generic_msg).replace("[company phone]", mbook.getCompany_phone_number()),
 						_context);

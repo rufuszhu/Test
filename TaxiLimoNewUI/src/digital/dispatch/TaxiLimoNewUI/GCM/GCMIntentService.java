@@ -40,6 +40,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -193,7 +195,11 @@ public class GCMIntentService extends GCMBaseIntentService
 		if(trID != 0){
 			DaoManager daoManager = DaoManager.getInstance(ctx);
 			DBBookingDao bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-			final DBBooking dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(trID)).list().get(0);
+            List<DBBooking> list = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(trID)).list();
+            DBBooking dbBook = null;
+            if(list.size()>0)
+			    dbBook = list.get(0);
+
 	
 			if (dbBook != null) {
 				if (dbBook.getTripStatus() == MBDefinition.MB_STATUS_CANCELLED) {
