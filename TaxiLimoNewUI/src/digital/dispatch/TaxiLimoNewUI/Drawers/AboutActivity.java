@@ -5,6 +5,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.R.id;
 import digital.dispatch.TaxiLimoNewUI.R.layout;
 import digital.dispatch.TaxiLimoNewUI.R.menu;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -57,10 +58,10 @@ public class AboutActivity extends BaseActivity {
         LinearLayout llContact = (LinearLayout)findViewById(id.ll_support_phone);
         LinearLayout llEmail = (LinearLayout)findViewById(id.ll_support_email);
 
-		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
-		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
-		Typeface rionaSansMedium = Typeface.createFromAsset(getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
+		Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
+		Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
+		Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
 
 		tv_email_icon.setTypeface(icon_pack);
 		tv_phone_icon.setTypeface(icon_pack);

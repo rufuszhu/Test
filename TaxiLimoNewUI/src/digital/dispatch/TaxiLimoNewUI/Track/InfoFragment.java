@@ -42,6 +42,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.SendDriverMsgTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -132,11 +133,11 @@ public class InfoFragment extends Fragment {
         icon_male_user = (TextView) view.findViewById(R.id.icon_male_user);
 
 
-        Typeface icon_pack = Typeface.createFromAsset(getActivity().getAssets(), "fonts/icon_pack.ttf");
-        Typeface fontawesome = Typeface.createFromAsset(getActivity().getAssets(), "fonts/fontawesome.ttf");
+        Typeface icon_pack = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
+        Typeface fontawesome = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
 //		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-        Typeface exo2Light = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Exo2-Light.ttf");
-        Typeface exo2SemiBold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Exo2-SemiBold.ttf");
+        Typeface exo2Light = FontCache.getFont(getActivity(), "fonts/Exo2-Light.ttf");
+        Typeface exo2SemiBold = FontCache.getFont(getActivity(), "fonts/Exo2-SemiBold.ttf");
 
 
         tv_company_name.setTypeface(exo2SemiBold, Typeface.BOLD);

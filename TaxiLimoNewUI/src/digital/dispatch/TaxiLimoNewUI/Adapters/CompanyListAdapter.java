@@ -19,6 +19,7 @@ import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 
@@ -38,10 +39,10 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		this.context = context;
 		this.items = items;
 		this.bookRightAfter = bookRightAfter;
-		rionaSansMedium = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansMedium.otf");
-		rionaSansRegular = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
+		rionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+		rionaSansRegular = FontCache.getFont(context, "fonts/RionaSansRegular.otf");
 		
-		exoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-Bold.ttf");
+		exoBold = FontCache.getFont(context, "fonts/Exo2-Bold.ttf");
 	}
 
 	public static class ViewHolder {

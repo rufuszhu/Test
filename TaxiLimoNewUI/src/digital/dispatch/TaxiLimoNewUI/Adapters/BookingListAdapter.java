@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class BookingListAdapter extends ArrayAdapter<DBBooking> {
@@ -49,8 +50,8 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		super(context, R.layout.booking_list_item, values);
 		this.context = context;
 		this.values = values;
-		fontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/RionaSansRegular.otf");
-		exo2FontFamily = Typeface.createFromAsset(context.getAssets(), "fonts/Exo2-SemiBold.ttf");
+		fontFamily = FontCache.getFont(context, "fonts/RionaSansRegular.otf");
+		exo2FontFamily = FontCache.getFont(context, "fonts/Exo2-SemiBold.ttf");
 	}
 
 	public static class ViewHolder {

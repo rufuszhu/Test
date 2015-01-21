@@ -44,6 +44,7 @@ import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
@@ -71,10 +72,10 @@ public class BookActivity extends BaseActivity {
     }
 
     private void styleView() {
-        Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
-        Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
-        Typeface fontAwesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome.ttf");
-        Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
+        Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
+        Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
+        Typeface fontAwesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
+        Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
 
         icon_pickup.setTypeface(fontAwesome);
         icon_dropoff.setTypeface(fontAwesome);
@@ -159,9 +160,9 @@ public class BookActivity extends BaseActivity {
         //if there is a selected company
         if (Utils.mDropoffAddress != null && Utils.mPickupAddress != null && Utils.mSelectedCompany != null && Utils.mSelectedCompany.baseRate != 0
                 && Utils.mSelectedCompany.ratePerDistance != 0 ) {
-            Typeface exo2Regular = Typeface.createFromAsset(getAssets(), "fonts/Exo2-Regular.ttf");
-            Typeface exo2SemiBold = Typeface.createFromAsset(getAssets(), "fonts/Exo2-SemiBold.ttf");
-            Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+            Typeface exo2Regular = FontCache.getFont(this, "fonts/Exo2-Regular.ttf");
+            Typeface exo2SemiBold = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
+            Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
             TextView tv_est = (TextView) findViewById(R.id.tv_est);
             TextView tv_mark = (TextView) findViewById(R.id.tv_mark);
 

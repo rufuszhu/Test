@@ -36,6 +36,7 @@ import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
@@ -216,13 +217,18 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	}
 
 	private void styleView() {
-		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
-		Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
+        Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
+		//Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
+        Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
+		//Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 
-		Typeface rionaBold = Typeface.createFromAsset(getAssets(),
-				"fonts/RionaSansBold.otf");
-		Typeface rionaMedium = Typeface.createFromAsset(getAssets(),
-				"fonts/RionaSansMedium.otf");
+        Typeface rionaBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
+        Typeface rionaMedium = FontCache.getFont(this,
+                "fonts/RionaSansMedium.otf");
+		//Typeface rionaBold = Typeface.createFromAsset(getAssets(),
+				//"fonts/RionaSansBold.otf");
+		//Typeface rionaMedium = Typeface.createFromAsset(getAssets(),
+				//"fonts/RionaSansMedium.otf");
 		
 		name.setTypeface(rionaSansRegular);
 		phone_number.setTypeface(rionaSansRegular);

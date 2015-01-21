@@ -10,8 +10,13 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 
 
 public class BaseActivity extends ActionBarActivity {
@@ -36,7 +41,7 @@ public class BaseActivity extends ActionBarActivity {
 		actionBar.setIcon(null);
 		int titleId = getResources().getIdentifier("action_bar_title", "id",
 	            "android");
-		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/Exo2-Light.ttf");
+        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
 	    TextView yourTextView = (TextView) findViewById(titleId);
 
 	    yourTextView.setTypeface(face);
@@ -65,6 +70,27 @@ public class BaseActivity extends ActionBarActivity {
     private void init() {
     	activityAnimEnter = R.anim.base_activity_enter;
         activityAnimExit = R.anim.base_activity_exit;
+    }
+
+    //TL-369 used by activity onDestroy() to unbind drawables
+    public void unbindDrawables(View view ){
+
+        if(view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+
+        if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+            imageView.setImageBitmap(null);
+        }
+        else if(view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for( int i= 0; i< (( ViewGroup ) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            if(!(view instanceof AdapterView))
+                viewGroup.removeAllViews();
+        }
     }
     
 
