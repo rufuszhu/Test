@@ -16,6 +16,7 @@ public class MBDefinition {
 	public final static String SELECTED_ATTRIBUTE = "SELECTED_ATTRIBUTE";
 	
 	public final static String ADDRESSBAR_TEXT_EXTRA= "ADDRESSBAR_TEXT_EXTRA";
+    public final static String EXTRA_AUTO_RECOVERY= "EXTRA_AUTO_RECOVERY";
 	public final static String EXTRA_SHOULD_BOOK_RIGHT_AFTER= "EXTRA_SHOULD_BOOK_RIGHT_AFTER";
 	public static final String EXTRA_RETURN_SHOULD_BOOK_RIGHT_AFTER = "EXTRA_SHOULD_BOOK_RIGHT_AFTER";
 	public final static String IS_DESTINATION= "IS_DESTINATION";
