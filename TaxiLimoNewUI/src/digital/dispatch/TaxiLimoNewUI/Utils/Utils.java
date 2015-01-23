@@ -6,6 +6,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -168,8 +169,11 @@ public class Utils {
 			if (!attr_id_list[i].equalsIgnoreCase("")) {
 				DaoManager daoManager = DaoManager.getInstance(context);
 				DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
-                DBAttribute dbAttr = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attr_id_list[i])).list().get(0);
-				String iconId = dbAttr.getIconId();
+                List<DBAttribute> list = attributeDao.queryBuilder().where(digital.dispatch.TaxiLimoNewUI.DBAttributeDao.Properties.AttributeId.eq(attr_id_list[i])).list();
+                String iconId = "";
+                if(list.size()>0){
+                    iconId = list.get(0).getIconId();
+                }
 				if (!iconId.equalsIgnoreCase("")) {
                     int dimens = (int) (30 * scale + 0.5f);
                     int margin_right = (int) (marginRight * scale + 0.5f);
@@ -187,7 +191,7 @@ public class Utils {
                     else{
                         TextView attr_custom = new TextView(context);
                         attr_custom.setBackground(context.getResources().getDrawable(R.drawable.attr_icon_background));
-                        attr_custom.setText(getShortName(attributeDao, dbAttr, i, attr_id_list));
+                        attr_custom.setText(getShortName(attributeDao, list.get(0), i, attr_id_list));
                         // setting image position
 
                         attr_custom.setLayoutParams(layoutParams);

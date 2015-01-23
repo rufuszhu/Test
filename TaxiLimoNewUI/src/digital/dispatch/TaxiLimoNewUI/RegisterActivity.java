@@ -34,6 +34,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
+import digital.dispatch.TaxiLimoNewUI.Task.GetMBParamTask;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
@@ -94,8 +95,8 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			Log.i(TAG, "No valid Google Play Services APK found.");
 			Toast.makeText(_context, "No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
 		}
-		
-		
+
+
 		if (alreadyRegister && alreadySMSVerify) {
 			Intent intent = new Intent(_context, MainActivity.class);
 			startActivity(intent);
@@ -173,7 +174,23 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			@Override
 			public void onClick(View arg0) {
 
+                new GetMBParamTask(_context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 				if (validate(null)) {
+
+                    // Check device for Play Services APK. If check succeeds, proceed with
+                    // GCM registration.
+                    if (checkPlayServices()) {
+                        gcm = GoogleCloudMessaging.getInstance(_context);
+                        regid = getRegistrationId(_context);
+                        boolean alreadyRegister = false;
+                        if (regid.isEmpty())
+                            registerInBackground(alreadyRegister);
+                    } else {
+                        Log.i(TAG, "No valid Google Play Services APK found.");
+                        Toast.makeText(_context, "No valid Google Play Services APK found.", Toast.LENGTH_LONG).show();
+                    }
+
 
 					Utils.showProcessingDialog(_context);
 
@@ -441,11 +458,14 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 
 					// update gcm id to the server if the app is updated
 					if(alreadyRegister){
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
 						boolean isFirstTime = false;
 						boolean verifySMS = false;
 						boolean isUpdateGCM = true;
 						RegisterDeviceTask task = new RegisterDeviceTask(_context, regid, isFirstTime, verifySMS, isUpdateGCM);
-						String[] params1 = { name.getText().toString(), email.getText().toString(), phone_number.getText().toString() };
+						String[] params1 = { SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_NAME),
+                                SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_EMAIL),
+                                SharedPreferencesManager.loadStringPreferences(sharedPreferences, MBDefinition.SHARE_PHONE_NUMBER)};
 						task.execute(params1);
 					}
 						
