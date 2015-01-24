@@ -236,9 +236,9 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
                 case 42:
                     showMeesageAndGoToProfile(_context.getString(R.string.err_user_waiting));
                     break;
-                case 99:
-                    showMeesageAndGoToProfile(_context.getString(R.string.err_user_waiting));
-                    break;
+//                case 99:
+//                    showMeesageAndGoToProfile(_context.getString(R.string.err_user_waiting));
+//                    break;
                 default:
                     Utils.showMessageDialog(_context.getString(R.string.booking_failed_generic_msg).replace("[company phone]", mbook.getCompany_phone_number()),
                             _context);

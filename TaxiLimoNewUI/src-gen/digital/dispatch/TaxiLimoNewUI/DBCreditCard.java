@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Entity mapped to table DBCREDIT_CARD.
  */
-public class DBCreditCard implements Serializable {
+public class DBCreditCard implements Serializable{
 
     private Long id;
     private String first4CardNum;
