@@ -13,10 +13,32 @@ import de.greenrobot.daogenerator.ToMany;
  * 
  * @author Markus
  */
+
+/*IMPORTANT to update database, increase the schema number and need to read this 
+ * http://stackoverflow.com/questions/24515967/green-dao-onupdate-how-can-i-add-new-columns-to-old-tables  
+ * You need to code this, not just copy and paste
+ * EXAMPLE:
+ * 
+ * @Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    Log.i(TAG, "Update Schema to version: "+Integer.toString(oldVersion)+"->"+Integer.toString(newVersion));
+    switch (oldVersion) {
+        case 1:
+            // v1->v2: all changes made in version 2 come here
+            db.execSQL("ALTER TABLE "+MyDao.TABLENAME+" ADD COLUMN 'NEW_COL_1' INTEGER;");
+            db.execSQL("DROP TABLE IF EXISTS 'MY_OLD_ENTITY'");
+            // break was omitted by purpose.
+        case 2:
+            // v2->v3: all changes made in version 3 come here 
+            MyNewDao.createTable(db, true);
+            db.execSQL("ALTER TABLE "+MyDao.TABLENAME+" ADD COLUMN 'NEW_COL_2' TEXT;");
+            // break was omitted by purpose.
+    }
+} */
 public class LimoDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1000, "digital.dispatch.TaxiLimoNewUI");
+        Schema schema = new Schema(1, "digital.dispatch.TaxiLimoNewUI");
 
         addAddress(schema);
         addJob(schema);
