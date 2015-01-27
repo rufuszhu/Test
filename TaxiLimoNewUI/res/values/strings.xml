@@ -34,7 +34,7 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="re_enter_email">Re-Enter Email</string>
-    <string name="phone_number">Phone Number(with country code)</string>
+    <string name="phone_number">Phone Number</string>
     <string name="personal_info">PERSONAL INFO</string>
     <string name="confirmation">CONFIRMATION</string>
     <string name="payment_method">Payment Method</string>
