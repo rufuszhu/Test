@@ -127,39 +127,49 @@ public class Utils {
 
 	public static void isInternetAvailable(final Context context) {
 
-		new AsyncTask<URL, Integer, Boolean>() {
-			protected Boolean doInBackground(URL... urls) {
-				ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-				NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-				if (activeNetwork != null && activeNetwork.isConnected()) {
-					try {
-						URL url = new URL("http://www.google.com/");
-						HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-						urlc.setRequestProperty("User-Agent", "test");
-						urlc.setRequestProperty("Connection", "close");
-						urlc.setConnectTimeout(5000); // mTimeout is in 5 seconds
-						urlc.connect();
-						if (urlc.getResponseCode() == 200) {
-							return true;
-						} else {
-							return false;
-						}
-					} catch (IOException e) {
-						Log.i("warning", "Error checking internet connection", e);
-						return false;
-					}
-				}
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-				return false;
-			}
+        if(!isConnected)
+            Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
 
-			protected void onPostExecute(Boolean result) {
-				if (!result)
-					Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
-			}
-		}.execute();
+        else {
 
+            new AsyncTask<URL, Integer, Boolean>() {
+                protected Boolean doInBackground(URL... urls) {
+                    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                    if (activeNetwork != null && activeNetwork.isConnected()) {
+                        try {
+                            URL url = new URL("http://www.google.com/");
+                            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                            urlc.setRequestProperty("User-Agent", "test");
+                            urlc.setRequestProperty("Connection", "close");
+                            urlc.setConnectTimeout(5000); // mTimeout is in 5 seconds
+                            urlc.connect();
+                            if (urlc.getResponseCode() == 200) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } catch (IOException e) {
+                            Log.i("warning", "Error checking internet connection", e);
+                            return false;
+                        }
+                    }
+
+                    return false;
+                }
+
+                protected void onPostExecute(Boolean result) {
+                    if (!result)
+                        Toast.makeText(context, R.string.err_no_internet, Toast.LENGTH_LONG).show();
+                }
+            }.execute();
+        }
 	}
 
 	public static void showOption(LinearLayout ll_attr, String[] attr_id_list, Context context, int marginRight) {
