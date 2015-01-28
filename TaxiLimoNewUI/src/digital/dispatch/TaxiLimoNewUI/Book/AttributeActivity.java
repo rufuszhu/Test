@@ -179,6 +179,11 @@ public class AttributeActivity extends BaseActivity {
         if(Utils.mSelectedCompany==null)
             return;
 
+        if(cp_adapter==null) {
+            Utils.mSelectedCompany = null;
+            return;
+        }
+
         for(int i = 0; i< cp_adapter.getCount(); i++){
             if(cp_adapter.getCompanyItem(i).destID.equals(Utils.mSelectedCompany.destID))
                 companyAvailable = true;
