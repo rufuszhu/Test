@@ -122,8 +122,8 @@ public class ModifyAddressActivity extends BaseActivity {
 	private void setUpTab() {
 		mPager = (NonSwipeableViewPager) findViewById(R.id.pager);
 		setTabListener();
-		//favoritesFragment = FavoritesFragment.newInstance();
-		//contactsFragment = new ContactsFragment();
+//		favoritesFragment = FavoritesFragment.newInstance();
+//		contactsFragment = new ContactsFragment();
 		searchFragment = SearchFragment.newInstance();
 
 		tab0 = (RelativeLayout) findViewById(R.id.tab0);
@@ -258,13 +258,17 @@ public class ModifyAddressActivity extends BaseActivity {
                 //TL-369 only create fragment when we need it
                 if(favoritesFragment != null)
                     return favoritesFragment;
-                else
-				    return FavoritesFragment.newInstance();
+                else {
+                    favoritesFragment = FavoritesFragment.newInstance();
+                    return favoritesFragment;
+                }
 			case 2:
                 if(contactsFragment != null)
                     return contactsFragment;
-                else
-				    return ContactsFragment.newInstance();
+                else {
+                    contactsFragment = ContactsFragment.newInstance();
+                    return contactsFragment;
+                }
 			default:
 				return null;
 			}
