@@ -226,13 +226,13 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		HttpURLConnection conn = null;
 		StringBuilder jsonResults = new StringBuilder();
 		try {
-			String RADIS = "200000";// 200 KM
+			String RADIUS = "150000";// 150 KM
 			StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
 			sb.append("?key=" + API_KEY);
 			// sb.append("&components=country:" + _context.getString(R.string.default_country_code));
 			if (Utils.mPickupAddress != null) {
 				sb.append("&location=" + Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude());
-				sb.append("&radius=" + RADIS);
+				sb.append("&radius=" + RADIUS);
 			}
 			sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
