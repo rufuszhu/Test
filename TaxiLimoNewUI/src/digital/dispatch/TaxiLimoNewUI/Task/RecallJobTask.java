@@ -202,13 +202,14 @@ public class RecallJobTask extends AsyncTask<String, Integer, Boolean> implement
             //remove this job from reqJobs if it's response is updated
             reqJobs.remove(jobArr[i].taxi_ride_id);
         }
-        //TL-264
+        //TL-442
         if (!reqJobs.isEmpty()) {
             //set the rest of job status to UNKNOWN
             for (int i = 0; i < reqJobs.size(); i++) {
                 Logger.d(TAG, "set unknow status for job " + reqJobs.get(i));
                 dbBook = bookingDao.queryBuilder().where(Properties.Taxi_ride_id.eq(reqJobs.get(i))).list().get(0);
-                dbBook.setTripStatus(MBDefinition.MB_STATUS_UNKNOWN);
+                dbBook.setShouldForceDisableCancel(true);
+                //dbBook.setTripStatus(MBDefinition.MB_STATUS_UNKNOWN);
                 bookingDao.update(dbBook);
                 bookingList.add(dbBook);
 

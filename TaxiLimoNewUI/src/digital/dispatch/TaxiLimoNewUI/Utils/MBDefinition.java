@@ -58,7 +58,7 @@ public class MBDefinition {
 	public final static int MB_STATUS_IN_SERVICE = 14;
 	public final static int MB_STATUS_COMPLETED = 15;
 	public final static int MB_STATUS_CANCELLED = 16;
-	public final static int MB_STATUS_UNKNOWN = 17;
+//	public final static int MB_STATUS_UNKNOWN = 17;
 	
 	public final static int IS_FOR_MAP = 1;
 	public final static int IS_FOR_ONE_JOB = 2;
