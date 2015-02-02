@@ -56,8 +56,8 @@ public class HistoryFragment extends ListFragment {
 		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
 		qb = bookingDao.queryBuilder()
 				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
-						Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED),
-						Properties.TripStatus.eq(MBDefinition.MB_STATUS_UNKNOWN)) //TL-264
+						Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED))
+						//Properties.TripStatus.eq(MBDefinition.MB_STATUS_UNKNOWN)) //TL-264
 				.orderDesc(Properties.TripCreationTime).limit(MAX_HISTORY_CAP);
 	}
 

@@ -612,7 +612,7 @@ public class TrackDetailActivity extends BaseActivity {
 			setUpInServiceUI();
 			break;
 		case MBDefinition.MB_STATUS_COMPLETED:
-		case MBDefinition.MB_STATUS_UNKNOWN: //TL-264
+		//case MBDefinition.MB_STATUS_UNKNOWN: //TL-264
 			setUpInCompletedUI();
 			break;
 		case MBDefinition.MB_STATUS_CANCELLED:

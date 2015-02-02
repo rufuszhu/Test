@@ -89,8 +89,8 @@ public class MapNotAvailableFragment extends Fragment {
 			textView.setText(getActivity().getString(R.string.map_not_available_complete));
 		else if(book.getTripStatus()==MBDefinition.MB_STATUS_CANCELLED)
 			textView.setText(getActivity().getString(R.string.map_not_available_cancel));
-		else if(book.getTripStatus()==MBDefinition.MB_STATUS_UNKNOWN) //TL-264
-			textView.setText(getActivity().getString(R.string.map_not_available_complete));
+//		else if(book.getTripStatus()==MBDefinition.MB_STATUS_UNKNOWN) //TL-264
+//			textView.setText(getActivity().getString(R.string.map_not_available_complete));
 		else
 			textView.setText(getActivity().getString(R.string.tracking_map_not_available));
 	}

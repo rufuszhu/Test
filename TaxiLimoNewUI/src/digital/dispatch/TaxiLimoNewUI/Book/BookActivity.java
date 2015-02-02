@@ -406,7 +406,7 @@ public class BookActivity extends BaseActivity {
         List<DBBooking> activeBookingList = bookingDao.queryBuilder()
                 .where(Properties.TripStatus.notEq(MBDefinition.MB_STATUS_CANCELLED),
                         Properties.TripStatus.notEq(MBDefinition.MB_STATUS_COMPLETED),
-                        Properties.TripStatus.notEq(MBDefinition.MB_STATUS_UNKNOWN)).list();
+                        Properties.ShouldForceDisableCancel.eq(false)).list(); //ShouldForceDisableCancel means the job is Unknown, if a job is unknown we dont block future booking TL-442
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_this);
 
@@ -525,9 +525,7 @@ public class BookActivity extends BaseActivity {
             }
             // within the duplicate job time frame then consider duplicate job
             if (Math.abs(bookingTime - checkingTime) > 60000 * bufferTime) {
-
                 return false;
-
             }
 
         } catch (Exception e) {
