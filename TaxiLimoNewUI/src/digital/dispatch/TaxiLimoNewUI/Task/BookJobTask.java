@@ -72,9 +72,6 @@ public class BookJobTask extends AsyncTask<Void, Integer, Void> implements IBook
         bjReq.setHardwareID(Utils.getHardWareId(_context));
         bjReq.setOSPVersion("3.0");
 
-        Logger.e(TAG, Utils.getHardWareId(_context));
-        String multiPay_allow = "";
-
         bjReq.setTaxiCompanyID(mbook.getDestID() + "");
 
         bjReq.setPickUpTime(mbook.getPickup_time());
