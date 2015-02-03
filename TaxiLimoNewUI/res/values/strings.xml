@@ -483,6 +483,7 @@
     <string name="history_404">You have no previous bookings</string>
     <string name="err_user_unknown">It seems that we do not have your data on the server, please verify your phone number again, sorry for the inconvenience</string>
     <string name="err_user_waiting">Please verify your phone number</string>
+    <string name="message_book_successful_future_job">Booking confirmed. We’ll alert you when your cab is on the way.</string>
 
 
 </resources>

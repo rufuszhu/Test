@@ -141,8 +141,6 @@ public class BookActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logger.d("onActivityResult");
-        Logger.d("requestCode: " + requestCode);
         if (requestCode == MBDefinition.REQUEST_SELECT_COMPANY_TO_BOOK) {
             if (resultCode == RESULT_OK) {
                 Utils.bookJob(Utils.mSelectedCompany, this);
@@ -636,7 +634,11 @@ public class BookActivity extends BaseActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(_this);
         builder.setTitle(R.string.booking_confirmed);
-        builder.setMessage(_this.getString(R.string.message_book_successful));
+        //is ASAP job
+        if(dbBooking.getPickup_time()==null || dbBooking.getPickup_time().length()==0)
+            builder.setMessage(getString(R.string.message_book_successful));
+        else
+            builder.setMessage(getString(R.string.message_book_successful_future_job));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent intent = new Intent(_this, TrackDetailActivity.class);
