@@ -2,34 +2,28 @@ package digital.dispatch.TaxiLimoNewUI.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.location.Address;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 
 public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 
 	private final Context context;
 	private final CompanyItem[] items;
 	boolean bookRightAfter;
-	private Typeface rionaSansMedium;
-	private Typeface rionaSansRegular;
+	private Typeface OpenSansSemibold;
+	private Typeface OpenSansRegular;
 	//private Typeface rionaSansBold;
 	private Typeface exoBold;
 	
@@ -39,8 +33,8 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		this.context = context;
 		this.items = items;
 		this.bookRightAfter = bookRightAfter;
-		rionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
-		rionaSansRegular = FontCache.getFont(context, "fonts/RionaSansRegular.otf");
+        OpenSansSemibold = FontCache.getFont(context, "fonts/OpenSansSemibold.ttf");
+        OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
 		
 		exoBold = FontCache.getFont(context, "fonts/Exo2-Bold.ttf");
 	}
@@ -78,9 +72,9 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			viewHolder = (ViewHolder) rowView.getTag();
 		}
 		
-		viewHolder.name.setTypeface(rionaSansMedium);
+		viewHolder.name.setTypeface(OpenSansSemibold);
 		//viewHolder.tv_round_btn.setTypeface(exoBold);
-		viewHolder.description.setTypeface(rionaSansRegular);
+		viewHolder.description.setTypeface(OpenSansRegular);
 		
 		/*
 		if (bookRightAfter)

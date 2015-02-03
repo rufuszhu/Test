@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,8 +23,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +30,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -106,7 +102,7 @@ public class TrackDetailActivity extends BaseActivity {
 	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
 	private LinearLayout ll_cancel_btn, ll_pay_btn;
 	private ImageView zoom_btn;
-	private Typeface icon_pack, rionaSansMedium, rionaSansBold, exo2SemiBold, fontawesome, exo2Bold;
+	private Typeface icon_pack, OpenSansSemiBold, OpenSansBold, exo2SemiBold, fontawesome, exo2Bold;
 
 	private View cancel_cover;
 
@@ -120,8 +116,8 @@ public class TrackDetailActivity extends BaseActivity {
 		_context = this;
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
 		icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
-		rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
-		rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
+        OpenSansSemiBold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
+        OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
 		exo2SemiBold = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
 		exo2Bold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
 		fontawesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
@@ -245,8 +241,8 @@ public class TrackDetailActivity extends BaseActivity {
 		icon_info.setText(MBDefinition.ICON_INFO);
 		//icon_track.setText(MBDefinition.icon_tab_track);
 
-		tv_info.setTypeface(rionaSansMedium, Typeface.NORMAL);
-		tv_track.setTypeface(rionaSansMedium, Typeface.NORMAL);
+		tv_info.setTypeface(OpenSansSemiBold, Typeface.NORMAL);
+		tv_track.setTypeface(OpenSansSemiBold, Typeface.NORMAL);
 
 		trackingMapFragment = TrackingMapFragment.newInstance();
 		infoFragment = new InfoFragment();

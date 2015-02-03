@@ -27,7 +27,6 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Contacts.Photo;
 import android.support.v4.app.ListFragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -46,7 +45,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BuildConfig;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
@@ -110,11 +108,11 @@ public class ContactsFragment extends ListFragment {
 	}
 
 	private void setUp404(View view) {
-		Typeface rionaSansMedium = FontCache.getFont (getActivity(), "fonts/RionaSansMedium.otf");
+		Typeface OpenSansSemibold = FontCache.getFont (getActivity(), "fonts/OpenSansSemibold.ttf");
 		Typeface icon_pack = FontCache.getFont (getActivity(), "fonts/icon_pack.ttf");
 		// TextView attention_icon = (TextView) view.findViewById(R.id.attention_icon);
 		TextView tv_contact404_text = (TextView) view.findViewById(R.id.tv_contact404_text);
-		tv_contact404_text.setTypeface(rionaSansMedium);
+		tv_contact404_text.setTypeface(OpenSansSemibold);
 		// attention_icon.setTypeface(icon_pack);
 		// attention_icon.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
 		// RelativeLayout llcontact404 = (RelativeLayout) view.findViewById(R.id.llcontact404);
@@ -267,8 +265,8 @@ public class ContactsFragment extends ListFragment {
 		private final Context context;
 		private List<MyContact> values;
 		private Typeface fontFamily;
-		private Typeface RionaSansMedium;
-		private Typeface RionaSansRegular;
+		private Typeface OpenSansSemibold;
+		private Typeface OpenSansRegular;
 
 		public List<MyContact> getValues() {
 			return values;
@@ -283,8 +281,8 @@ public class ContactsFragment extends ListFragment {
 			this.context = context;
 			this.values = values;
 			fontFamily = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
-			RionaSansMedium = FontCache.getFont (getActivity(), "fonts/RionaSansMedium.otf");
-			RionaSansRegular = FontCache.getFont (getActivity(), "fonts/RionaSansRegular.otf");
+            OpenSansSemibold = FontCache.getFont (getActivity(), "fonts/OpenSansSemibold.ttf");
+            OpenSansRegular = FontCache.getFont (getActivity(), "fonts/OpenSansRegular.ttf");
 		}
 
 		public class ViewHolder {
@@ -330,10 +328,10 @@ public class ContactsFragment extends ListFragment {
 
 			mImageLoader.loadImage(values.get(position).getImg_URI().toString() + "/photo", viewHolder.profile_icon);
 
-			viewHolder.tv_name.setTypeface(RionaSansMedium);
+			viewHolder.tv_name.setTypeface(OpenSansSemibold);
 			viewHolder.tv_name.setText(values.get(position).getName());
 
-			viewHolder.address.setTypeface(RionaSansRegular);
+			viewHolder.address.setTypeface(OpenSansRegular);
 			viewHolder.address.setText(values.get(position).getAddress());
 			final TextView green_circle = viewHolder.green_circle;
 			viewHolder.contact_option.setOnClickListener(new OnClickListener() {

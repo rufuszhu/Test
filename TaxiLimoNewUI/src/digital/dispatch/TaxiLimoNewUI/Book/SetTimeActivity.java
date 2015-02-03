@@ -59,13 +59,13 @@ public class SetTimeActivity extends BaseActivity {
 	private void setStyles() {
 		Typeface fontFamily = FontCache.getFont(this, "fonts/icon_pack.ttf");
 
-		Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
-		Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
+		Typeface OpenSansSemibold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
+		Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
         question_exclamation.setTypeface(fontFamily);
         question_exclamation.setText(MBDefinition.ICON_EXCLAMATION_CIRCLE_CODE);
-		info.setTypeface(rionaSansMedium);
-		now_btn.setTypeface(rionaSansRegular);
-		later_btn.setTypeface(rionaSansRegular);
+		info.setTypeface(OpenSansSemibold);
+		now_btn.setTypeface(OpenSansRegular);
+		later_btn.setTypeface(OpenSansRegular);
 	}
 
 	@Override

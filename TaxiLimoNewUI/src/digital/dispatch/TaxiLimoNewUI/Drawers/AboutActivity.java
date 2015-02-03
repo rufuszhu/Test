@@ -59,22 +59,22 @@ public class AboutActivity extends BaseActivity {
         LinearLayout llEmail = (LinearLayout)findViewById(id.ll_support_email);
 
 		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
-		Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
-		Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
-		Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
+		Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
+		Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
+		Typeface OpenSansSemibold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
 
 		tv_email_icon.setTypeface(icon_pack);
 		tv_phone_icon.setTypeface(icon_pack);
 		tv_email_icon.setText(MBDefinition.ICON_MESSAGE);
 		tv_phone_icon.setText(MBDefinition.icon_phone);
 
-		tvVersion.setTypeface(rionaSansBold);
-		tv_update.setTypeface(rionaSansRegular);
-		tvSupport.setTypeface(rionaSansBold);
-		tvContactNum.setTypeface(rionaSansRegular);
-		tvVersion.setTypeface(rionaSansBold);
-		tvContactEmail.setTypeface(rionaSansRegular);
-		tvAboutFooter.setTypeface(rionaSansMedium);
+		tvVersion.setTypeface(OpenSansBold);
+		tv_update.setTypeface(OpenSansRegular);
+		tvSupport.setTypeface(OpenSansBold);
+		tvContactNum.setTypeface(OpenSansRegular);
+		tvVersion.setTypeface(OpenSansBold);
+		tvContactEmail.setTypeface(OpenSansRegular);
+		tvAboutFooter.setTypeface(OpenSansSemibold);
 
 		tvVersion.setText("Version " + versionName);
         //Tl-379

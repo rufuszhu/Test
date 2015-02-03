@@ -22,7 +22,6 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +46,6 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
@@ -83,7 +81,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 	private RelativeLayout rl_no_result;
 	private TextView no_result_icon, tv_no_result, tv_street, power_by_google;
-	private Typeface fontFamily, rionaSansMedium, rionaRegularFamily, fontAwesome;
+	private Typeface fontFamily, OpenSansSemibold, OpenSansRegular, fontAwesome;
 	
 	private ScrollView scrollView1;
 	
@@ -112,8 +110,8 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		Logger.d(TAG, "onCreateView");
 		scrollView1 = (ScrollView) view.findViewById(R.id.scrollView1);
 		fontFamily = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
-		rionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
-		rionaRegularFamily = FontCache.getFont(getActivity(), "fonts/RionaSansRegular.otf");
+        OpenSansSemibold = FontCache.getFont(getActivity(), "fonts/OpenSansSemibold.ttf");
+        OpenSansRegular = FontCache.getFont(getActivity(), "fonts/OpenSansRegular.ttf");
 		fontAwesome = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
 		findViewAndBindEvent();
 
@@ -179,10 +177,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		no_result_icon.setTypeface(fontAwesome);
 		no_result_icon.setText(MBDefinition.ICON_SEARCH_AWESOME);
 
-		tv_no_result.setTypeface(rionaSansMedium);
-		tv_street.setTypeface(rionaSansMedium);
+		tv_no_result.setTypeface(OpenSansSemibold);
+		tv_street.setTypeface(OpenSansSemibold);
 
-		autoCompView.setTypeface(rionaRegularFamily);
+		autoCompView.setTypeface(OpenSansRegular);
 		if (((ModifyAddressActivity) getActivity()).getIsDesitination()) {
 			autoCompView.setHint(getActivity().getString(R.string.enter_dropoff_address));
 		} else {
@@ -395,10 +393,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			String a = contactResults.get(position).bold;
 
-			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
+			holder.bold.setTypeface(OpenSansSemibold, Typeface.BOLD);
 			holder.bold.setText(a);
 
-			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
+			holder.notBold.setTypeface(OpenSansSemibold, Typeface.NORMAL);
 			holder.notBold.setText(contactResults.get(position).notBold);
 			
 			holder.viewHeader.setOnClickListener(new OnClickListener() {
@@ -490,10 +488,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 			String a = favoriteResults.get(position).bold;
 
-			holder.bold.setTypeface(rionaSansMedium, Typeface.BOLD);
+			holder.bold.setTypeface(OpenSansSemibold, Typeface.BOLD);
 			holder.bold.setText(a);
 
-			holder.notBold.setTypeface(rionaSansMedium, Typeface.NORMAL);
+			holder.notBold.setTypeface(OpenSansSemibold, Typeface.NORMAL);
 			holder.notBold.setText(favoriteResults.get(position).notBold);
 			
 			holder.viewHeader.setOnClickListener(new OnClickListener() {

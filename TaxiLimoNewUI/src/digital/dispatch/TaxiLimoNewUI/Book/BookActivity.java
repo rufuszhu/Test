@@ -75,10 +75,10 @@ public class BookActivity extends BaseActivity {
     }
 
     private void styleView() {
-        Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
+        Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
         Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
         Typeface fontAwesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
-        Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
+        Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
 
         icon_pickup.setTypeface(fontAwesome);
         icon_dropoff.setTypeface(fontAwesome);
@@ -102,15 +102,15 @@ public class BookActivity extends BaseActivity {
         angle_right2.setText(MBDefinition.ICON_ANGLE_RIGHT);
         angle_right3.setText(MBDefinition.ICON_ANGLE_RIGHT);
 
-        tv_date_title.setTypeface(rionaSansRegular);
-        tv_note_title.setTypeface(rionaSansRegular);
-        tv_company_title.setTypeface(rionaSansRegular);
-        tv_pick_up.setTypeface(rionaSansRegular);
-        tv_drop_off.setTypeface(rionaSansRegular);
-        tv_date.setTypeface(rionaSansRegular);
-        tv_driver_note.setTypeface(rionaSansRegular);
-        tv_company.setTypeface(rionaSansRegular);
-        book_btn.setTypeface(rionaSansBold);
+        tv_date_title.setTypeface(OpenSansRegular);
+        tv_note_title.setTypeface(OpenSansRegular);
+        tv_company_title.setTypeface(OpenSansRegular);
+        tv_pick_up.setTypeface(OpenSansRegular);
+        tv_drop_off.setTypeface(OpenSansRegular);
+        tv_date.setTypeface(OpenSansRegular);
+        tv_driver_note.setTypeface(OpenSansRegular);
+        tv_company.setTypeface(OpenSansRegular);
+        book_btn.setTypeface(OpenSansBold);
     }
 
     @Override

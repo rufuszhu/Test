@@ -116,8 +116,8 @@ public class TrackFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_track, container, false);
         TextView tv_track_404 = (TextView) rootView.findViewById(R.id.tv_track_404);
-        Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-        tv_track_404.setTypeface(rionaSansMedium);
+        Typeface OpenSansSemibold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSansSemibold.ttf");
+        tv_track_404.setTypeface(OpenSansSemibold);
 		return rootView;
 	}
 

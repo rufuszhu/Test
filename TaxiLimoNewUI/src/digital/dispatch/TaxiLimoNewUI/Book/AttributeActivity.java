@@ -76,16 +76,16 @@ public class AttributeActivity extends BaseActivity {
 				}
 			}
 		});
-		Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
-        Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
+		Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
+        Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
 		TextView textView2 = (TextView) findViewById(R.id.textView2);
         tv_company404_text = (TextView) findViewById(R.id.tv_company404_text);
         line = findViewById(R.id.line);
 
-		textView1.setTypeface(rionaSansBold);
-		textView2.setTypeface(rionaSansBold);
-        tv_company404_text.setTypeface(rionaSansMedium);
+		textView1.setTypeface(OpenSansBold);
+		textView2.setTypeface(OpenSansBold);
+        tv_company404_text.setTypeface(OpenSansRegular);
 	}
 
 	@Override

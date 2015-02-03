@@ -92,13 +92,16 @@
     <dimen name="track_circle_holo_size">20dp</dimen>
     <dimen name="track_detail_tab_font_size">13sp</dimen>
  	<dimen name="track_detail_tab_icon_size">25sp</dimen>
- 	<dimen name="company_font_size">18sp</dimen>
+ 	<dimen name="company_font_size">17sp</dimen>
  	<dimen name="company_description_font_size">15sp</dimen>
  	<dimen name="call_btn_font_size">17sp</dimen>
  	<dimen name="info_bar_text_size">11sp</dimen>
  	<dimen name="map_404_font_size">17sp</dimen>
  	<dimen name="track_detail_status_font_size">12sp</dimen>
-    <dimen name="track_detail_pickup_font_size">17sp</dimen>
+    <dimen name="track_detail_pickup_font_size">15sp</dimen>
+    <dimen name="track_detail_pickup_icon_size">18sp</dimen>
+    <dimen name="track_detail_carinfo_font_size">15sp</dimen>
+
  	
  	<!-- trip detail -->
  	<dimen name="history_status_size">20sp</dimen>

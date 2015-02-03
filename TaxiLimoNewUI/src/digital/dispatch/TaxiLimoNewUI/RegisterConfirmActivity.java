@@ -64,22 +64,18 @@ public class RegisterConfirmActivity extends BaseActivity {
 	
 	private void styleView() {
 
-        Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
-        Typeface rionaSansBold = FontCache.getFont(this,  "fonts/RionaSansBold.otf");
-        Typeface rionaSansLight = FontCache.getFont(this,  "fonts/RionaSans-Light.otf");
-        /*
-		Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
-		Typeface rionaSansBold = Typeface.createFromAsset(getAssets(), "fonts/RionaSansBold.otf");
-		Typeface rionaSansLight = Typeface.createFromAsset(getAssets(), "fonts/RionaSans-Light.otf");
-		*/
-		confirmTitle.setTypeface(rionaSansRegular);
+        Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
+        Typeface openSansBold = FontCache.getFont(this,  "fonts/OpenSansBold.ttf");
+        Typeface openSansLight = FontCache.getFont(this,  "fonts/OpenSansLight.ttf");
+
+		confirmTitle.setTypeface(OpenSansRegular);
 		SpannableString spanString = new SpannableString(confirmTitle.getText());
 		spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
 		confirmTitle.setText(spanString);	
 		
-		chkWarning.setTypeface(rionaSansRegular);
-		eula.setTypeface(rionaSansLight);
-		register_btn.setTypeface(rionaSansBold);
+		chkWarning.setTypeface(OpenSansRegular);
+		eula.setTypeface(openSansLight);
+		register_btn.setTypeface(openSansBold);
 	}
 	
 	
