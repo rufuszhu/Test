@@ -135,24 +135,24 @@ public class InfoFragment extends Fragment {
 
         Typeface icon_pack = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
         Typeface fontawesome = FontCache.getFont(getActivity(), "fonts/fontawesome.ttf");
-//		Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
+		Typeface openSansSemibold = FontCache.getFont(getActivity(), "fonts/OpenSansSemibold.ttf");
         Typeface exo2Light = FontCache.getFont(getActivity(), "fonts/Exo2-Light.ttf");
         Typeface exo2SemiBold = FontCache.getFont(getActivity(), "fonts/Exo2-SemiBold.ttf");
 
 
-        tv_company_name.setTypeface(exo2SemiBold, Typeface.BOLD);
-        tv_company_description.setTypeface(exo2Light, Typeface.ITALIC);
-        tv_driver.setTypeface(exo2SemiBold, Typeface.BOLD);
-        tv_car_num.setTypeface(exo2SemiBold, Typeface.NORMAL);
+        tv_company_name.setTypeface(openSansSemibold, Typeface.NORMAL);
+        tv_company_description.setTypeface(openSansSemibold, Typeface.ITALIC);
+        tv_driver.setTypeface(openSansSemibold, Typeface.NORMAL);
+        tv_car_num.setTypeface(openSansSemibold, Typeface.NORMAL);
         tv_text.setTypeface(exo2SemiBold, Typeface.NORMAL);
         tv_call.setTypeface(exo2SemiBold, Typeface.BOLD);
-        company_title.setTypeface(exo2SemiBold);
-        itinerary_title.setTypeface(exo2SemiBold);
-        option_title.setTypeface(exo2SemiBold);
+        company_title.setTypeface(openSansSemibold);
+        itinerary_title.setTypeface(openSansSemibold);
+        option_title.setTypeface(openSansSemibold);
 
-        tv_from.setTypeface(exo2Light);
-        tv_to.setTypeface(exo2Light);
-        tv_pickup_time.setTypeface(exo2Light);
+        tv_from.setTypeface(openSansSemibold);
+        tv_to.setTypeface(openSansSemibold);
+        tv_pickup_time.setTypeface(openSansSemibold);
 
 
         icon_text.setTypeface(icon_pack);
@@ -168,7 +168,7 @@ public class InfoFragment extends Fragment {
         icon_text.setText(MBDefinition.ICON_COMMENT);
         icon_call.setText(MBDefinition.icon_phone);
 
-        tv_waiting.setTypeface(exo2SemiBold, Typeface.NORMAL);
+        tv_waiting.setTypeface(openSansSemibold, Typeface.NORMAL);
         icon_male_user.setTypeface(icon_pack);
 
         icon_male_user.setText(MBDefinition.ICON_MALE_USER);

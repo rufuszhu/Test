@@ -52,7 +52,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 	private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
 	private static final String OUT_JSON = "/json";
 	private static Context _context;
-	private Typeface RionaSansMedium;
+	private Typeface OpenSansRegular;
 	private Typeface fontFamily;
 	private Typeface icon_pack;
 	private static final String API_KEY = "AIzaSyBZqkyqueJbnKhaUyudF6P6HwGTh1PtHVk";
@@ -68,7 +68,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		super(context, textViewResourceId);
 		_context = context;
 		resultList = new ArrayList<String>();
-		RionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+        OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
 		fontFamily = FontCache.getFont(context, "fonts/fontawesome.ttf");
 		icon_pack = FontCache.getFont(context, "fonts/icon_pack.ttf");
 	}
@@ -164,7 +164,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 		holder.notBold.setVisibility(View.GONE);
 
 		if (position < resultList.size()) {
-			holder.bold.setTypeface(RionaSansMedium, Typeface.NORMAL);
+			holder.bold.setTypeface(OpenSansRegular, Typeface.NORMAL);
 			holder.bold.setText(resultList.get(position));
 		}
 		

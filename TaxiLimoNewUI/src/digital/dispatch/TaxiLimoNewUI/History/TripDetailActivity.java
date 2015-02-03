@@ -70,12 +70,11 @@ public class TripDetailActivity extends BaseActivity {
 		_context = this;
 		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
 		Typeface fontawesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
-		Typeface rionaSansBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
-		Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
-		Typeface exo2Light = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
+		Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
+		Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
 		Typeface exo2SemiBold = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
 		Typeface exo2Bold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
-		Typeface rionaSansMedium = FontCache.getFont(this, "fonts/RionaSansMedium.otf");
+		Typeface OpenSansSemibold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
 		
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
 		TextView tv_trip_status = (TextView) findViewById(R.id.tv_trip_status);
@@ -119,21 +118,21 @@ public class TripDetailActivity extends BaseActivity {
 		tv_delete.setTypeface(exo2Bold);
 		tv_bookAgain.setTypeface(exo2Bold);
 		
-		itineary_title.setTypeface(rionaSansBold);
-		company_title.setTypeface(rionaSansBold);
+		itineary_title.setTypeface(OpenSansBold);
+		company_title.setTypeface(OpenSansBold);
 		
 		tv_trip_status.setTypeface(exo2SemiBold);
-		tv_id.setTypeface(rionaSansBold);
-		tv_receive.setTypeface(rionaSansRegular);
-		tv_from.setTypeface(rionaSansMedium);
-		tv_to.setTypeface(rionaSansMedium);
-        tv_pickup_time.setTypeface(rionaSansMedium);
+		tv_id.setTypeface(OpenSansBold);
+		tv_receive.setTypeface(OpenSansRegular);
+		tv_from.setTypeface(OpenSansSemibold);
+		tv_to.setTypeface(OpenSansSemibold);
+        tv_pickup_time.setTypeface(OpenSansSemibold);
 		
-		tv_company_name.setTypeface(exo2SemiBold,Typeface.BOLD);
-		tv_company_description.setTypeface(exo2Light, Typeface.ITALIC);
-		tv_driver.setTypeface(exo2SemiBold,Typeface.BOLD);
-		tv_car_num.setTypeface(exo2SemiBold,Typeface.BOLD);
-		tv_call.setTypeface(exo2SemiBold,Typeface.BOLD);
+		tv_company_name.setTypeface(OpenSansSemibold, Typeface.NORMAL);
+		tv_company_description.setTypeface(OpenSansSemibold, Typeface.ITALIC);
+		tv_driver.setTypeface(OpenSansSemibold,Typeface.NORMAL);
+		tv_car_num.setTypeface(OpenSansSemibold,Typeface.NORMAL);
+		tv_call.setTypeface(OpenSansSemibold,Typeface.NORMAL);
 
         icon_male_user.setTypeface(icon_pack);
         icon_male_user.setText(MBDefinition.ICON_MALE_USER);

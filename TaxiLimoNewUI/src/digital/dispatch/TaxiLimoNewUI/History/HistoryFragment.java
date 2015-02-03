@@ -104,8 +104,8 @@ public class HistoryFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         TextView tv_history_404 = (TextView) rootView.findViewById(R.id.tv_history_404);
-        Typeface rionaSansMedium = Typeface.createFromAsset(getActivity().getAssets(), "fonts/RionaSansMedium.otf");
-        tv_history_404.setTypeface(rionaSansMedium);
+        Typeface OpenSansSemibold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/OpenSansSemibold.ttf");
+        tv_history_404.setTypeface(OpenSansSemibold);
 		return rootView;
 	}
 

@@ -208,14 +208,14 @@ public class ProfileActivity extends BaseActivity implements
     }
 
     private void styleView() {
-        Typeface rionaSansRegular = FontCache.getFont(this,
-                "fonts/RionaSansRegular.otf");
+        Typeface OpenSansRegular = FontCache.getFont(this,
+                "fonts/OpenSansRegular.ttf");
         Typeface icon_pack = FontCache.getFont(this,
                 "fonts/icon_pack.ttf");
-        Typeface rionaMedium = FontCache.getFont(this,
-                "fonts/RionaSansMedium.otf");
-        Typeface rionaBold = FontCache.getFont(this,
-                "fonts/RionaSansBold.otf");
+        Typeface OpenSansSemibold = FontCache.getFont(this,
+                "fonts/OpenSansSemibold.ttf");
+        Typeface OpenSansBold = FontCache.getFont(this,
+                "fonts/OpenSansBold.ttf");
         Typeface exoBold = FontCache.getFont(this,
                 "fonts/Exo2-Bold.ttf");
 
@@ -236,24 +236,24 @@ public class ProfileActivity extends BaseActivity implements
 
 
         TextView register_title = (TextView) findViewById(R.id.register_title);
-        register_title.setTypeface(rionaMedium);
+        register_title.setTypeface(OpenSansSemibold);
 
 
-        verify_btn.setTypeface(rionaBold);
+        verify_btn.setTypeface(OpenSansBold);
 
-        edtPhone.setTypeface(rionaSansRegular);
-        edtName.setTypeface(rionaSansRegular);
-        edtUEmail.setTypeface(rionaSansRegular);
-        et_code.setTypeface(rionaSansRegular);
+        edtPhone.setTypeface(OpenSansRegular);
+        edtName.setTypeface(OpenSansRegular);
+        edtUEmail.setTypeface(OpenSansRegular);
+        et_code.setTypeface(OpenSansRegular);
 
         TextView verify_not_receive = (TextView) findViewById(R.id.verify_not_receive);
         TextView verify_check_phone = (TextView) findViewById(R.id.verify_check_phone);
         TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
         TextView enter_verification = (TextView) findViewById(R.id.enter_verification);
-        verify_not_receive.setTypeface(rionaSansRegular);
-        verify_check_phone.setTypeface(rionaSansRegular);
-        request_new_btn.setTypeface(rionaSansRegular);
-        enter_verification.setTypeface(rionaSansRegular);
+        verify_not_receive.setTypeface(OpenSansRegular);
+        verify_check_phone.setTypeface(OpenSansRegular);
+        request_new_btn.setTypeface(OpenSansRegular);
+        enter_verification.setTypeface(OpenSansRegular);
 
 
     }

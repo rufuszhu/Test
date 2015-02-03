@@ -76,9 +76,9 @@ public class MapNotAvailableFragment extends Fragment {
 	
 	private void fillValue() {
 		Typeface icon_pack = FontCache.getFont(getActivity(), "fonts/icon_pack.ttf");
-		Typeface rionaSansMedium = FontCache.getFont(getActivity(), "fonts/RionaSansMedium.otf");
+		Typeface OpenSansSemibold = FontCache.getFont(getActivity(), "fonts/OpenSansSemibold.ttf");
 	
-		textView.setTypeface(rionaSansMedium);
+		textView.setTypeface(OpenSansSemibold);
 		icon.setTypeface(icon_pack);
 		icon.setText(MBDefinition.ICON_FUNNEL);
 		

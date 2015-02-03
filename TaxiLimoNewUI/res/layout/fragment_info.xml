@@ -41,7 +41,7 @@
                 android:layout_marginLeft="@dimen/big_margin"
                 android:layout_marginTop="@dimen/small_padding"
                 android:textColor="@color/drawer_selected"
-                android:textSize="@dimen/track_detail_pickup_font_size" />
+                android:textSize="@dimen/track_detail_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_pickup_address"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/itinerary_title"
                 android:layout_marginLeft="@dimen/big_margin"
-                android:layout_marginTop="@dimen/small_padding"
+                android:layout_marginTop="4dp"
                 android:layout_toRightOf="@+id/icon_pickup"
                 android:singleLine="true"
                 android:textColor="@color/drawer_selected"
@@ -65,7 +65,7 @@
                 android:layout_marginTop="@dimen/big_margin"
                 android:singleLine="true"
                 android:textColor="@color/drawer_selected"
-                android:textSize="@dimen/track_detail_pickup_font_size" />
+                android:textSize="@dimen/track_detail_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_dropoff_address"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/tv_pickup_address"
                 android:layout_below="@+id/tv_pickup_address"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:layout_toRightOf="@+id/icon_dropoff"
                 android:textColor="@color/drawer_selected"
                 android:textSize="@dimen/track_detail_pickup_font_size" />
@@ -84,11 +84,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/itinerary_title"
                 android:layout_below="@+id/icon_dropoff"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="13dp"
                 android:layout_marginTop="@dimen/big_margin"
                 android:singleLine="true"
                 android:textColor="@color/drawer_selected"
-                android:textSize="@dimen/track_detail_pickup_font_size" />
+                android:textSize="@dimen/track_detail_pickup_icon_size" />
 
             <TextView
                 android:id="@+id/tv_pickup_time"
@@ -96,11 +96,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/tv_dropoff_address"
                 android:layout_below="@+id/tv_dropoff_address"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="@dimen/normal_padding"
+                android:layout_marginTop="14dp"
+                android:singleLine="true"
+                android:layout_marginBottom="@dimen/big_margin"
                 android:layout_toRightOf="@+id/icon_calander"
                 android:textColor="@color/drawer_selected"
-
                 android:textSize="@dimen/track_detail_pickup_font_size" />
 
 
@@ -136,7 +136,6 @@
                 android:layout_toRightOf="@+id/company_icon"
                 android:layout_marginTop="@dimen/normal_padding"
                 android:singleLine="true"
-                android:text="Large Text"
                 android:textColor="@color/black_text"
                 android:textSize="@dimen/company_font_size"
                 android:textStyle="bold" />
@@ -246,7 +245,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_text"
-                    android:textSize="@dimen/company_font_size"
+                    android:textSize="@dimen/track_detail_carinfo_font_size"
                     android:visibility="gone" />
 
                 <View
@@ -269,7 +268,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black_text"
-                    android:textSize="@dimen/company_font_size"
+                    android:textSize="@dimen/track_detail_carinfo_font_size"
                     android:visibility="gone" />
 
 

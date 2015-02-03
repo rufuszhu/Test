@@ -194,15 +194,15 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		});
 
 		address_bar_text = (TextView) view.findViewById(R.id.text_address);
-		Typeface rionaFamily = FontCache.getFont (getActivity(), "fonts/RionaSansRegular.otf");
-		address_bar_text.setTypeface(rionaFamily);
+		Typeface OpenSansRegular = FontCache.getFont (getActivity(), "fonts/OpenSansRegular.ttf");
+		address_bar_text.setTypeface(OpenSansRegular);
         TextView tv_angle_right = (TextView) view.findViewById(R.id.tv_angle_right);
 
         tv_angle_right.setTypeface(fontFamily);
         tv_angle_right.setText(MBDefinition.ICON_ANGLE_RIGHT);
 
         TextView tv_pickup_location_lable = (TextView) view.findViewById(R.id.tv_pickup_location_lable);
-        tv_pickup_location_lable.setTypeface(rionaFamily);
+        tv_pickup_location_lable.setTypeface(OpenSansRegular);
 
 
 		TextView my_location_icon = (TextView) view.findViewById(R.id.my_location_icon);

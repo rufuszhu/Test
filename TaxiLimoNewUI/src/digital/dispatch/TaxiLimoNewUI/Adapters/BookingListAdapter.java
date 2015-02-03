@@ -4,12 +4,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.R;
@@ -20,7 +18,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 
 	private final Context context;
 	private List<DBBooking> values;
-	private Typeface fontFamily,exo2FontFamily;
+	private Typeface OpenSansRegular,exo2FontFamily;
 
 	public List<DBBooking> getValues() {
 		return values;
@@ -50,7 +48,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		super(context, R.layout.booking_list_item, values);
 		this.context = context;
 		this.values = values;
-		fontFamily = FontCache.getFont(context, "fonts/RionaSansRegular.otf");
+        OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
 		exo2FontFamily = FontCache.getFont(context, "fonts/Exo2-SemiBold.ttf");
 	}
 
@@ -84,7 +82,7 @@ public class BookingListAdapter extends ArrayAdapter<DBBooking> {
 		}
 
 		// fill data
-		viewHolder.address.setTypeface(fontFamily);
+		viewHolder.address.setTypeface(OpenSansRegular);
 		viewHolder.address.setText(values.get(position).getPickupAddress());
 		
 		viewHolder.status.setTypeface(exo2FontFamily);

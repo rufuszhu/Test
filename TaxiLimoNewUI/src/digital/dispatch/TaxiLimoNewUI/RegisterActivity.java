@@ -234,23 +234,20 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	}
 
 	private void styleView() {
-        Typeface rionaSansRegular = FontCache.getFont(this, "fonts/RionaSansRegular.otf");
-		//Typeface rionaSansRegular = Typeface.createFromAsset(getAssets(), "fonts/RionaSansRegular.otf");
         Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
-		//Typeface icon_pack = Typeface.createFromAsset(getAssets(), "fonts/icon_pack.ttf");
 
-        Typeface rionaBold = FontCache.getFont(this, "fonts/RionaSansBold.otf");
-        Typeface rionaMedium = FontCache.getFont(this,
-                "fonts/RionaSansMedium.otf");
+        Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
+        Typeface OpenSansRegular = FontCache.getFont(this,
+                "fonts/OpenSansRegular.ttf");
 		//Typeface rionaBold = Typeface.createFromAsset(getAssets(),
 				//"fonts/RionaSansBold.otf");
 		//Typeface rionaMedium = Typeface.createFromAsset(getAssets(),
 				//"fonts/RionaSansMedium.otf");
 		
-		name.setTypeface(rionaSansRegular);
-		phone_number.setTypeface(rionaSansRegular);
-		email.setTypeface(rionaSansRegular);
-		et_code.setTypeface(rionaSansRegular);
+		name.setTypeface(OpenSansRegular);
+		phone_number.setTypeface(OpenSansRegular);
+		email.setTypeface(OpenSansRegular);
+		et_code.setTypeface(OpenSansRegular);
         question_ic.setTypeface(icon_pack);
         question_ic.setText(MBDefinition.ICON_QUESTION_CIRCLE_CODE);
         
@@ -259,17 +256,17 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 		TextView request_new_btn = (TextView) findViewById(R.id.request_new_btn);
 		TextView enter_verification = (TextView) findViewById(R.id.enter_verification);
 
-		verify_not_receive.setTypeface(rionaSansRegular);
-		verify_check_phone.setTypeface(rionaSansRegular);
-		request_new_btn.setTypeface(rionaSansRegular);
-		enter_verification.setTypeface(rionaSansRegular);
+		verify_not_receive.setTypeface(OpenSansRegular);
+		verify_check_phone.setTypeface(OpenSansRegular);
+		request_new_btn.setTypeface(OpenSansRegular);
+		enter_verification.setTypeface(OpenSansRegular);
 	
 		
-		verify_btn.setTypeface(rionaBold);
-		next_btn.setTypeface(rionaBold);
+		verify_btn.setTypeface(OpenSansBold);
+		next_btn.setTypeface(OpenSansBold);
 		
 		TextView register_title = (TextView) findViewById(R.id.register_title);
-		register_title.setTypeface(rionaMedium);
+		register_title.setTypeface(OpenSansRegular);
         
         
 		

@@ -2,13 +2,12 @@ package digital.dispatch.TaxiLimoNewUI.Adapters;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
@@ -26,7 +25,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	private ArrayList<Date> timeList;
 	private ArrayList<Date> dateList;
 	private boolean isDate;
-	private Typeface rionaSansMedium;
+	private Typeface OpenSansRegular;
 	private Context context;
 
 
@@ -36,7 +35,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 	public DateAdapter(Context context, boolean misDate, ArrayList<Date> list) {
 		super(context, R.layout.date_holo_layout, NO_RESOURCE);
 		setItemTextResource(R.id.date_text);
-		rionaSansMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+        OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
 		this.isDate = misDate;
 		if(isDate){
 			dateList = list;
@@ -52,7 +51,7 @@ public class DateAdapter extends AbstractWheelTextAdapter {
 		View view = super.getItem(index, cachedView, parent);
 		TextView date_text =  (TextView) view.findViewById(R.id.date_text);
 		
-		date_text.setTypeface(rionaSansMedium);
+		date_text.setTypeface(OpenSansRegular);
 		
 
 		return view;

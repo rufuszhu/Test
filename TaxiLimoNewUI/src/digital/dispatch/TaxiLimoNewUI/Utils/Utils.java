@@ -524,7 +524,7 @@ public class Utils {
 		lockScreenDialog.setCanceledOnTouchOutside(false);
 		lockScreenDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		Typeface icon_pack = FontCache.getFont(context, "fonts/icon_pack.ttf");
-		Typeface rionaMedium = FontCache.getFont(context, "fonts/RionaSansMedium.otf");
+		Typeface OpenSansSemibold = FontCache.getFont(context, "fonts/OpenSansSemibold.ttf");
 		Typeface exoBold = FontCache.getFont(context, "fonts/Exo2-Bold.ttf");
 		
 		TextView icon_call = (TextView) lockScreenDialog.getWindow().findViewById(R.id.icon_call);
@@ -536,7 +536,7 @@ public class Utils {
 		TextView tv_lock_text = (TextView) lockScreenDialog.getWindow().findViewById(R.id.tv_lock_text);
 
 		tv_denied.setTypeface(exoBold);
-		tv_lock_text.setTypeface(rionaMedium);
+		tv_lock_text.setTypeface(OpenSansSemibold);
 		tv_call_us.setTypeface(exoBold);
 		tv_email_us.setTypeface(exoBold);
 		
