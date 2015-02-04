@@ -95,7 +95,7 @@
  	<dimen name="company_font_size">17sp</dimen>
  	<dimen name="company_description_font_size">15sp</dimen>
  	<dimen name="call_btn_font_size">17sp</dimen>
- 	<dimen name="info_bar_text_size">11sp</dimen>
+ 	<dimen name="info_bar_text_size">10sp</dimen>
  	<dimen name="map_404_font_size">17sp</dimen>
  	<dimen name="track_detail_status_font_size">12sp</dimen>
     <dimen name="track_detail_pickup_font_size">15sp</dimen>

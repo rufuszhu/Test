@@ -102,7 +102,7 @@ public class TrackDetailActivity extends BaseActivity {
 	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
 	private LinearLayout ll_cancel_btn, ll_pay_btn;
 	private ImageView zoom_btn;
-	private Typeface icon_pack, OpenSansSemiBold, OpenSansBold, exo2SemiBold, fontawesome, exo2Bold;
+	private Typeface icon_pack, OpenSansSemiBold, exo2SemiBold, fontawesome, exo2Bold;
 
 	private View cancel_cover;
 
@@ -117,14 +117,12 @@ public class TrackDetailActivity extends BaseActivity {
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
 		icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
         OpenSansSemiBold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
-        OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
 		exo2SemiBold = FontCache.getFont(this, "fonts/Exo2-SemiBold.ttf");
 		exo2Bold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
 		fontawesome = FontCache.getFont(this, "fonts/fontawesome.ttf");
         findView();
         initListener();
 		setUpTab();
-		setTab0Text();
 		isRefreshing = false;
 	}
 
@@ -263,6 +261,8 @@ public class TrackDetailActivity extends BaseActivity {
 					if (shouldShowCar()) {
 						zoom_btn.setVisibility(View.VISIBLE);
 					}
+                    else
+                        zoom_btn.setVisibility(View.GONE);
 				}
 			}
 
@@ -418,8 +418,8 @@ public class TrackDetailActivity extends BaseActivity {
 		tv_id = (TextView) findViewById(R.id.tv_id);
 		tv_book_time = (TextView) findViewById(R.id.tv_book_time);
 
-		tv_id.setTypeface(exo2SemiBold);
-		tv_book_time.setTypeface(exo2SemiBold);
+		tv_id.setTypeface(OpenSansSemiBold);
+		tv_book_time.setTypeface(OpenSansSemiBold);
 
 		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
 		//ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);

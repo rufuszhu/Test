@@ -276,6 +276,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		tab0_icon.setTextColor(textColor);
 		tab1_icon.setTextColor(textColor);
 		tab2_icon.setTextColor(textColorSelected);
+
+        historyFragment.loadData(null);
 	}
 
 	private class PagerAdapter extends FragmentPagerAdapter {
