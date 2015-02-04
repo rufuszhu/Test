@@ -67,13 +67,22 @@ public class HistoryFragment extends ListFragment {
 		Logger.d(TAG, "on RESUME");
 
 		List<DBBooking> values = qb.list();
-
+        int numOfJobs = (int) bookingDao.queryBuilder().count();
+        Logger.e(TAG,"numOfJobs: " + numOfJobs);
 		// delete all older jobs
-		if (values.size() > 0) {
-			long smallestId = values.get(values.size() - 1).getId();
+		if (numOfJobs > MAX_HISTORY_CAP) {
+			long smallestId = values.get(values.size()-1).getId();
 			bookingDao.queryBuilder().where(Properties.Id.lt(smallestId)).buildDelete().executeDeleteWithoutDetachingEntities();
 		}
 
+        loadData(values);
+
+		Utils.isInternetAvailable(getActivity());
+	}
+
+    public void loadData(List<DBBooking> values){
+        if(values==null)
+            values = qb.list();
         if(values.size()>0) {
             getListView().setVisibility(View.VISIBLE);
             BookingListAdapter adapter = new BookingListAdapter(getActivity(), values);
@@ -81,9 +90,7 @@ public class HistoryFragment extends ListFragment {
         }
         else
             getListView().setVisibility(View.GONE);
-
-		Utils.isInternetAvailable(getActivity());
-	}
+    }
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
