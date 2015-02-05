@@ -153,14 +153,14 @@ public class MBDefinition {
     	aMap.put(1, R.drawable.attrbutes_icon_wheelchair);
         aMap.put(2, R.drawable.attrbutes_icon_van);  
         aMap.put(3, R.drawable.attrbutes_icon_pet);
-        aMap.put(4, R.drawable.attrbutes_icon_airport);
-        aMap.put(5, R.drawable.attrbutes_icon_ac);
-        aMap.put(6, R.drawable.attrbutes_icon_creditcard);
+        aMap.put(4, R.drawable.attrbutes_icon_smoking);
+        aMap.put(5, R.drawable.attrbutes_icon_nonsmoking);
+        aMap.put(6, R.drawable.attrbutes_icon_luggage);
         aMap.put(7, R.drawable.attrbutes_icon_female);
         aMap.put(8, R.drawable.attrbutes_icon_green);
         aMap.put(9, R.drawable.attrbutes_icon_grocery);
-        aMap.put(10, R.drawable.attrbutes_icon_newspaper);
-        aMap.put(11, R.drawable.attrbutes_icon_wifi);
+        aMap.put(10, R.drawable.attrbutes_icon_child_seat);
+        aMap.put(11, R.drawable.attrbutes_icon_sedan);
         
         attrIconMap = aMap;
     }
@@ -175,14 +175,14 @@ public class MBDefinition {
     	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_on);
         aMap.put(2, R.drawable.attrbutes_filter_van_on);   
         aMap.put(3, R.drawable.attrbutes_filter_pet_on);
-        aMap.put(4, R.drawable.attrbutes_filter_airport_on);
-        aMap.put(5, R.drawable.attrbutes_filter_ac_on);
-        aMap.put(6, R.drawable.attrbutes_filter_creditcard_on);
+        aMap.put(4, R.drawable.attrbutes_filter_smoking_on);
+        aMap.put(5, R.drawable.attrbutes_filter_nonsmoking_on);
+        aMap.put(6, R.drawable.attrbutes_filter_luggage_on);
         aMap.put(7, R.drawable.attrbutes_filter_female_on);
-        aMap.put(8, R.drawable.attrbutes_filter_green_on);
-        aMap.put(9, R.drawable.attrbutes_filter_grocery_on);
-        aMap.put(10, R.drawable.attrbutes_filter_newspaper_on);
-        aMap.put(11, R.drawable.attrbutes_filter_wifi_on);
+        aMap.put(8, R.drawable.attrbutes_filter_hybrid_on);
+        aMap.put(9, R.drawable.attrbutes_filter_delivery_on);
+        aMap.put(10, R.drawable.attrbutes_filter_child_seat_on);
+        aMap.put(11, R.drawable.attrbutes_filter_sedan_on);
         
         attrBtnOnMap = aMap;
     }
@@ -194,14 +194,14 @@ public class MBDefinition {
     	aMap.put(1, R.drawable.attrbutes_filter_wheelchair_off);
         aMap.put(2, R.drawable.attrbutes_filter_van_off);
         aMap.put(3, R.drawable.attrbutes_filter_pet_off);
-        aMap.put(4, R.drawable.attrbutes_filter_airport_off);
-        aMap.put(5, R.drawable.attrbutes_filter_ac_off);
-        aMap.put(6, R.drawable.attrbutes_filter_creditcard_off);
+        aMap.put(4, R.drawable.attrbutes_filter_smoking_off);
+        aMap.put(5, R.drawable.attrbutes_filter_nonsmoking_off);
+        aMap.put(6, R.drawable.attrbutes_filter_luggage_off);
         aMap.put(7, R.drawable.attrbutes_filter_female_off);
-        aMap.put(8, R.drawable.attrbutes_filter_green_off);
-        aMap.put(9, R.drawable.attrbutes_filter_grocery_off);
-        aMap.put(10, R.drawable.attrbutes_filter_newspaper_off);
-        aMap.put(11, R.drawable.attrbutes_filter_wifi_off);
+        aMap.put(8, R.drawable.attrbutes_filter_hybrid_off);
+        aMap.put(9, R.drawable.attrbutes_filter_delivery_off);
+        aMap.put(10, R.drawable.attrbutes_filter_child_seat_off);
+        aMap.put(11, R.drawable.attrbutes_filter_sedan_off);
         
         attrBtnOffMap = aMap;
     }
