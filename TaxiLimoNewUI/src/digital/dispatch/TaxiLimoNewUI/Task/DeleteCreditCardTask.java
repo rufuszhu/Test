@@ -9,7 +9,6 @@ import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizationResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
 
-import digital.dispatch.TaxiLimoNewUI.Installation;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;

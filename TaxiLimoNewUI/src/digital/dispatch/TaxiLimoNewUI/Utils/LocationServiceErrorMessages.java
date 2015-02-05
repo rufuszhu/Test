@@ -16,11 +16,12 @@
 
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import com.google.android.gms.common.ConnectionResult;
 
 import digital.dispatch.TaxiLimoNewUI.R;
-import android.content.Context;
-import android.content.res.Resources;
 
 
 /**

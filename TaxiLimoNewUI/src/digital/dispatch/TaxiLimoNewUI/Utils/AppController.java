@@ -1,14 +1,16 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.android.volley.toolbox.ImageLoader;
-import digital.dispatch.TaxiLimoNewUI.Task.GetMBParamTask;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+
+import digital.dispatch.TaxiLimoNewUI.Task.GetMBParamTask;
 
 public class AppController extends Application {
 

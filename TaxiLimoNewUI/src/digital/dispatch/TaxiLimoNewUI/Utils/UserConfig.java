@@ -1,8 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
-import digital.dispatch.TaxiLimoNewUI.R;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import digital.dispatch.TaxiLimoNewUI.R;
 
 public class UserConfig {
 	public static long lastCheckParamTime(Context context) {

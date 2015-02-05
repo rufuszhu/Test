@@ -1,12 +1,10 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.io.StringReader;
-import java.net.URI;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -15,16 +13,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import java.io.StringReader;
+import java.net.URI;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 //Get fare estimate and load onto screen
 public class GetEstimateFareTask extends AsyncTask<String, Integer, Integer> {

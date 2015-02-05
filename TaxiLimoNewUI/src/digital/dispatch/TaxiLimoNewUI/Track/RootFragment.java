@@ -1,12 +1,13 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
-import digital.dispatch.TaxiLimoNewUI.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import digital.dispatch.TaxiLimoNewUI.R;
 
 /**
  * Example about replacing fragments inside a ViewPager. I'm using

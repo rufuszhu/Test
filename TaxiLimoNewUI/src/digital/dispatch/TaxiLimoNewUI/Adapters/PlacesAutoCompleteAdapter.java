@@ -1,5 +1,28 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -7,42 +30,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.AddFavoriteTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
-
-import android.content.Context;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Animation.AnimationListener;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	private ArrayList<String> resultList;
@@ -67,7 +64,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 	public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 		_context = context;
-		resultList = new ArrayList<String>();
+		resultList = new ArrayList<>();
         OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
 		fontFamily = FontCache.getFont(context, "fonts/fontawesome.ttf");
 		icon_pack = FontCache.getFont(context, "fonts/icon_pack.ttf");
@@ -205,8 +202,18 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
-				resultList = (ArrayList<String>) results.values;
-				if (results != null && results.count > 0) {
+                ArrayList<String> temp = new ArrayList<>();
+                final Object myListObj = results.values;
+                if(myListObj instanceof List<?>) {
+                    for (int i=0; i<((List) myListObj).size(); i++) {
+                        if (((List) myListObj).get(i) instanceof String) {
+                            temp.add((String)((List) myListObj).get(i));
+                        }
+                    }
+                }
+
+				resultList = temp;
+				if (results.count > 0) {
 					((ModifyAddressActivity) _context).searchFragment.resetGoogleListViewHight();
 					((ModifyAddressActivity) _context).searchFragment.hideNoResultFoundLayout();
 					notifyDataSetChanged();
@@ -264,7 +271,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 			JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 
 			// Extract the Place descriptions from the results
-			resultList = new ArrayList<String>(predsJsonArray.length());
+			resultList = new ArrayList<>(predsJsonArray.length());
 			for (int i = 0; i < predsJsonArray.length(); i++) {
 				resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
 			}

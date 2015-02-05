@@ -1,7 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI;
 
 import android.content.Context;
-import digital.dispatch.TaxiLimoNewUI.Adapters.*;
+
+import digital.dispatch.TaxiLimoNewUI.Adapters.NavigationAdapter;
+import digital.dispatch.TaxiLimoNewUI.Adapters.NavigationItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class NavigationList {

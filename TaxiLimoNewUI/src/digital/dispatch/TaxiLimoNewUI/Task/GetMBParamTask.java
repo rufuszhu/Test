@@ -1,6 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.GetMBParamRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.GetMBParamRequest.IMGParamResponseListener;
@@ -10,19 +13,16 @@ import com.digital.dispatch.TaxiLimoSoap.responses.GetMBParamResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.MGParam;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
+import java.util.ArrayList;
+
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 public class GetMBParamTask extends AsyncTask<String, Integer, Void> 
 implements IMGParamResponseListener, IRequestTimerListener {

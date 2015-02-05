@@ -1,20 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI;
 
-import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
-import javax.crypto.interfaces.DHPrivateKey;
-import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.DHParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -50,15 +35,29 @@ import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizat
 import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
 
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.crypto.Cipher;
+import javax.crypto.interfaces.DHPrivateKey;
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Track.PayActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
 import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
 import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class RegisterCreditCardActivity extends BaseActivity implements TextWatcher, OnFocusChangeListener {
 

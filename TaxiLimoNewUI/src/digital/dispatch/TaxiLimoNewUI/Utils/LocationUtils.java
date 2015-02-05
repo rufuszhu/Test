@@ -16,17 +16,18 @@
 
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import digital.dispatch.TaxiLimoNewUI.R;
-import android.content.Context;
-import android.location.Address;
-import android.location.Location;
 
 /**
  * Defines app-wide constants and utilities

@@ -1,14 +1,15 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class DownloadLogoTask extends AsyncTask<Void, Integer, Bitmap> {

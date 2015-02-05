@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-
 import android.preference.PreferenceManager;
-
 
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest;
@@ -17,10 +15,9 @@ import com.digital.dispatch.TaxiLimoSoap.requests.VerifySMSRequest.IVerifySMSRes
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 import com.digital.dispatch.TaxiLimoSoap.responses.VerifySMSResponse;
 
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;

@@ -1,18 +1,11 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
-import java.util.Locale;
-
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract.Contacts;
 import android.support.v4.widget.CursorAdapter;
-import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +14,10 @@ import android.widget.AlphabetIndexer;
 import android.widget.QuickContactBadge;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.ImageLoader;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 
 /**

@@ -1,16 +1,17 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import android.content.Context;
+import android.location.Address;
+import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
-
-import org.xmlpull.v1.XmlPullParserException;
-import android.content.Context;
-import android.location.Address;
-import android.util.Log;
 
 public class GecoderGoogle {
   private static final String TAG="GecoderGoogle";

@@ -1,13 +1,14 @@
 package digital.dispatch.TaxiLimoNewUI.DaoManager;
 
+import android.location.Address;
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import android.location.Address;
-import android.text.TextUtils;
+import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
-import digital.dispatch.TaxiLimoNewUI.Book.MyContact;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 

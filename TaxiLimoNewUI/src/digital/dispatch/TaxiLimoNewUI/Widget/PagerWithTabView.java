@@ -1,19 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Widget;
 
-import digital.dispatch.TaxiLimoNewUI.R;
 import android.content.Context;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ViewDragHelper;
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+import android.util.AttributeSet;
+import android.widget.RelativeLayout;
 
 
 
