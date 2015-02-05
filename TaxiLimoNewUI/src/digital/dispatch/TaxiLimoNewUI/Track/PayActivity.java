@@ -1,23 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
-
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +22,25 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.PayByCreditCardTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.PIN;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.UserAccount;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class PayActivity extends Activity {
 

@@ -1,41 +1,35 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-
 import android.text.Editable;
-
 import android.text.TextWatcher;
-
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.RegisterDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Task.VerifyDeviceTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;

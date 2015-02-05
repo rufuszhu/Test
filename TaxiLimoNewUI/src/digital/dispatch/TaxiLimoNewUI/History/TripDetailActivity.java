@@ -1,5 +1,28 @@
 package digital.dispatch.TaxiLimoNewUI.History;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.android.volley.toolbox.NetworkImageView;
+import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,49 +31,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Typeface;
-
-import android.content.IntentFilter;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.android.volley.toolbox.NetworkImageView;
-import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
-
-
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
-import digital.dispatch.TaxiLimoNewUI.Task.DownloadImageTask;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
-import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;

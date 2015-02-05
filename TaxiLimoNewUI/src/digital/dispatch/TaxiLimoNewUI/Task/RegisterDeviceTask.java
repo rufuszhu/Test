@@ -1,16 +1,11 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.RegDevRequest.IRegDevResponseListener;
@@ -18,14 +13,12 @@ import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.RegDevResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import java.util.Locale;
+
+import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.RegisterActivity;
-import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class RegisterDeviceTask extends AsyncTask<String, Integer, Boolean> implements IRegDevResponseListener, IRequestTimerListener {

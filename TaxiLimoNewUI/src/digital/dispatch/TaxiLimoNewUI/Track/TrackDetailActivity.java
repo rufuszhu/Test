@@ -1,11 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,15 +31,21 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Drawers.EditCreditCardActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;

@@ -1,9 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,13 +20,16 @@ import android.widget.TextView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
+import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
-import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;

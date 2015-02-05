@@ -1,11 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -27,21 +21,26 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;

@@ -1,10 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,13 +16,17 @@ import com.digital.dispatch.TaxiLimoSoap.responses.BookJobResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.JobIDListItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
+import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;

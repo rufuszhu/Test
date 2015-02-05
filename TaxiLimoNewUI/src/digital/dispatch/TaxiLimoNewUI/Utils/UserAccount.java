@@ -1,8 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
-import digital.dispatch.TaxiLimoNewUI.R;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import digital.dispatch.TaxiLimoNewUI.R;
 
 public class UserAccount {
 	public static String userName(Context context) {

@@ -1,5 +1,13 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import android.content.Context;
+import android.location.Address;
+import android.util.Log;
+import android.util.Xml;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,14 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import digital.dispatch.TaxiLimoNewUI.R;
-import android.content.Context;
-import android.location.Address;
-import android.util.Log;
-import android.util.Xml;
 
 
 public class GoogleMapXMLParser {

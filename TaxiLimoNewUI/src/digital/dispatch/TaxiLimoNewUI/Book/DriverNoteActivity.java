@@ -1,25 +1,17 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
+
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class DriverNoteActivity extends BaseActivity {
 	private EditText driverMessage;

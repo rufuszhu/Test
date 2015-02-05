@@ -15,14 +15,6 @@
  */
 package digital.dispatch.TaxiLimoNewUI.GCM;
 
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -31,6 +23,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.CancelJobTask;
+import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 
 /**
  * Helper class providing methods and constants common to other classes in the

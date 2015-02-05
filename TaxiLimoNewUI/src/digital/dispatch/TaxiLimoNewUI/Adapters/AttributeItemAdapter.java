@@ -1,8 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.StateListDrawable;
@@ -14,9 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;

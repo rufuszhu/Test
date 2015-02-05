@@ -8,8 +8,8 @@ import com.digital.dispatch.TaxiLimoSoap.requests.GetServiceListRequest.IGetServ
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.GetServiceListResponse;
 
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AddPreferenceActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class GetServiceListTask extends AsyncTask<String, Integer, Void> implements IGetServiceListResponseListener, IRequestTimerListener {

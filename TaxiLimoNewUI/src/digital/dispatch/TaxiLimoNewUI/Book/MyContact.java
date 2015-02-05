@@ -1,7 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import java.io.InputStream;
-
 import android.net.Uri;
 
 public class MyContact {

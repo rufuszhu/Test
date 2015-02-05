@@ -1,48 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import java.math.BigInteger;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.Calendar;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.crypto.Cipher;
-import javax.crypto.interfaces.DHPrivateKey;
-import javax.crypto.interfaces.DHPublicKey;
-import javax.crypto.spec.DHParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest.IKeyExchangeResponseListener;
-import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
-import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest;
-import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizationResponseListener;
-import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
-import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
-
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.R.color;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.R.string;
-import digital.dispatch.TaxiLimoNewUI.Task.DeleteCreditCardTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -65,8 +22,44 @@ import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest;
+import com.digital.dispatch.TaxiLimoSoap.requests.KeyExchangeRequest.IKeyExchangeResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
+import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest;
+import com.digital.dispatch.TaxiLimoSoap.requests.TokenizationRequest.ITokenizationResponseListener;
+import com.digital.dispatch.TaxiLimoSoap.responses.KeyExchangeResponse;
+import com.digital.dispatch.TaxiLimoSoap.responses.TokenizationResponse;
+
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Calendar;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.crypto.Cipher;
+import javax.crypto.interfaces.DHPrivateKey;
+import javax.crypto.interfaces.DHPublicKey;
+import javax.crypto.spec.DHParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.DeleteCreditCardTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition.ccRequestType;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class EditCreditCardActivity extends BaseActivity implements TextWatcher, OnFocusChangeListener {
 	private EditText edtCardNum, edtHolderName, edtExpiryMonth, edtExpiryYear, edtZip, edtNickname;

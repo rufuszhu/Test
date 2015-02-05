@@ -1,7 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -20,21 +18,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
-import digital.dispatch.TaxiLimoNewUI.Drawers.PaymentActivity;
-import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;

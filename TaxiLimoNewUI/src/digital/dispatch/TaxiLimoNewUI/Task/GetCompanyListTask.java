@@ -1,13 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.util.Locale;
-import java.util.logging.Handler;
-
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.digital.dispatch.TaxiLimoSoap.requests.CompanyListRequest;
@@ -15,15 +11,14 @@ import com.digital.dispatch.TaxiLimoSoap.requests.CompanyListRequest.ICompRespon
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyListResponse;
+
+import java.util.Locale;
+
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
-import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackFragment;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
 
 public class GetCompanyListTask extends AsyncTask<String, Integer, Void> implements ICompResponseListener, IRequestTimerListener {
 	private static final String TAG = "GetCompanyListTask";

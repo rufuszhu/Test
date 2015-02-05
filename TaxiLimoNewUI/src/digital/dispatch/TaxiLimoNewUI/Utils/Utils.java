@@ -1,14 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -44,13 +35,22 @@ import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
-import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
+import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Installation;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.BookJobTask;
 
 public class Utils {

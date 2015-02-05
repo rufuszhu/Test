@@ -1,9 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Track;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -22,18 +18,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.digital.dispatch.TaxiLimoSoap.responses.JobItem;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.dao.query.CloseableListIterator;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Task.RecallJobTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;

@@ -1,12 +1,12 @@
 package digital.dispatch.TaxiLimoNewUI.Utils;
 
+import android.util.Base64;
+
 import java.security.SecureRandom;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-
-import android.util.Base64;
 
 public class PIN {
     // The higher the number of iterations the more 

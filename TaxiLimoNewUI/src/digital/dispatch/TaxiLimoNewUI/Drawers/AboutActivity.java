@@ -1,29 +1,25 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
-
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.R.id;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
 
 public class AboutActivity extends BaseActivity {
 

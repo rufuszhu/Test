@@ -1,19 +1,16 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
-import java.util.List;
-
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
+
+import java.util.List;
+
 import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class CreditCardListAdapter extends ArrayAdapter<DBCreditCard> {
 

@@ -1,12 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.StringTokenizer;
-
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -18,12 +11,19 @@ import com.digital.dispatch.TaxiLimoSoap.responses.RecallJobsResponse;
 import com.digital.dispatch.TaxiLimoSoap.responses.ResponseWrapper;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
+
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;

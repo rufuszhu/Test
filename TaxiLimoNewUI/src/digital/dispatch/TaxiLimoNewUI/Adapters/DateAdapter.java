@@ -1,5 +1,11 @@
 package digital.dispatch.TaxiLimoNewUI.Adapters;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,12 +13,6 @@ import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
-
-import android.content.Context;
-import android.graphics.Typeface;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import kankan.wheel.widget.adapters.AbstractWheelTextAdapter;
 
 /**

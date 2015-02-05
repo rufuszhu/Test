@@ -1,32 +1,25 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import java.util.List;
-
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
-import digital.dispatch.TaxiLimoNewUI.Adapters.CreditCardListAdapter;
-import digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
-import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import android.support.v7.app.ActionBarActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
+import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.Adapters.CreditCardListAdapter;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
+import digital.dispatch.TaxiLimoNewUI.DBCreditCardDao;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
 public class PaymentActivity extends ActionBarActivity {
 

@@ -15,19 +15,6 @@
  */
 package digital.dispatch.TaxiLimoNewUI.GCM;
 
-import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.*;
-
-
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
-import digital.dispatch.TaxiLimoNewUI.DBBooking;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
-import digital.dispatch.TaxiLimoNewUI.MainActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -40,8 +27,21 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.DBBooking;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
+import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.MainActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
+import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+
+import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.LATE_TRIP_TRID;
+import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.SENDER_ID;
+import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.displayMessage;
+import static digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
 
 
 /**

@@ -1,7 +1,5 @@
 package digital.dispatch.TaxiLimoNewUI.History;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,15 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
+
 import de.greenrobot.dao.query.QueryBuilder;
+import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.Adapters.BookingListAdapter;
-import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;

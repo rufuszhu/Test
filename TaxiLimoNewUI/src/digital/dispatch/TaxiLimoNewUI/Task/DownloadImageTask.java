@@ -1,13 +1,12 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
-import java.io.InputStream;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.widget.ImageView;
+
+import java.io.InputStream;
+
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 

@@ -3,8 +3,6 @@
  */
 package digital.dispatch.TaxiLimoNewUI;
 
-import java.util.Locale;
-
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;

@@ -1,5 +1,9 @@
 package digital.dispatch.TaxiLimoNewUI.Task;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+
 import com.digital.dispatch.TaxiLimoSoap.requests.PayByTokenRequest;
 import com.digital.dispatch.TaxiLimoSoap.requests.PayByTokenRequest.IPayByTokenResponseListener;
 import com.digital.dispatch.TaxiLimoSoap.requests.Request.IRequestTimerListener;
@@ -8,20 +12,13 @@ import com.digital.dispatch.TaxiLimoSoap.responses.PayByTokenResponse;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBCreditCard;
-import digital.dispatch.TaxiLimoNewUI.Installation;
-import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Track.PayActivity;
-import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.UserConfig;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 
 public class PayByCreditCardTask extends AsyncTask<Void, Integer, Void> implements IPayByTokenResponseListener, IRequestTimerListener {
 	private static final String TAG = "PayByCreditCardTask";

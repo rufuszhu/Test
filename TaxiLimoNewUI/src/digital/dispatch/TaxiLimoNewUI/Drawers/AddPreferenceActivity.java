@@ -1,31 +1,27 @@
 package digital.dispatch.TaxiLimoNewUI.Drawers;
 
-import java.util.ArrayList;
-
-import com.digital.dispatch.TaxiLimoSoap.responses.Node;
-
-import digital.dispatch.TaxiLimoNewUI.BaseActivity;
-import digital.dispatch.TaxiLimoNewUI.R;
-import digital.dispatch.TaxiLimoNewUI.R.id;
-import digital.dispatch.TaxiLimoNewUI.R.layout;
-import digital.dispatch.TaxiLimoNewUI.R.menu;
-import digital.dispatch.TaxiLimoNewUI.Task.GetServiceListTask;
-import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
+
+import com.digital.dispatch.TaxiLimoSoap.responses.Node;
+
+import java.util.ArrayList;
+
+import digital.dispatch.TaxiLimoNewUI.BaseActivity;
+import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.GetServiceListTask;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 
 public class AddPreferenceActivity extends BaseActivity {
 

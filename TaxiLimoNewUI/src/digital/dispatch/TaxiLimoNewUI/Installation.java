@@ -1,12 +1,12 @@
 package digital.dispatch.TaxiLimoNewUI;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.UUID;
-
-import android.content.Context;
 
 public class Installation {
     private static String sID = null;
