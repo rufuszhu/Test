@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 	private RelativeLayout tab0, tab1, tab2;
 	private PagerAdapter mAdapter;
 	private OnPageChangeListener pageChangeListener;
-	private BookFragment bookFragment;
+	public BookFragment bookFragment;
 	public TrackFragment trackFragment;
 	private HistoryFragment historyFragment;
 	

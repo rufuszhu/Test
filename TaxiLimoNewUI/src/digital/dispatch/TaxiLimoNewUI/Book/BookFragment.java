@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.digital.dispatch.TaxiLimoSoap.responses.CarGPSItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -52,9 +53,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +71,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.MainActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Task.AvailableCarsTask;
 import digital.dispatch.TaxiLimoNewUI.Utils.ErrorDialogFragment;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.GecoderGoogle;
@@ -96,9 +101,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	
 	private boolean setPickupButtonClicked;
 	
-	private ArrayList<LatLng> carPos;
+	//private ArrayList<LatLng> carPos;
 	private ArrayList<Marker> carMarkers;
-	//private final static int INTERVAL = 1000 * 5; // 5 second
+	private final static int GPS_PULL_INTERVAL = 1000 * 20; // 20 seconds
 	private Runnable mHandlerTask;
 	private Handler mHandler;
 	private int counter = 0;
@@ -141,22 +146,19 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		
 		setPickupButtonClicked = false;
 
-        //uncomment to enable (fake) car on map
-//		mHandler = new Handler();
-//		mHandlerTask = new Runnable() {
-//			@Override
-//			public void run() {
-//				if(carPos!=null && carMarkers!=null &&carPos.size()==12 && carMarkers.size()==12){
-//
-//					moveCar(counter);
-//					if(counter==11)
-//						counter = 0;
-//					else
-//						counter++;
-//				}
-//				mHandler.postDelayed(mHandlerTask, (long) (4000*Math.random()));
-//			}
-//		};
+        //TL-305 get available cars gps to enable car on map
+        carMarkers = new ArrayList<Marker>();
+		mHandler = new Handler();
+		mHandlerTask = new Runnable() {
+			@Override
+			public void run() {
+                if(Utils.mPickupAddress != null) {
+                    new AvailableCarsTask(getActivity(), Utils.mPickupAddress).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                mHandler.postDelayed(mHandlerTask, GPS_PULL_INTERVAL);
+            }
+
+        };
 
 		mLocationRequest = LocationRequest.create();
 		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -432,17 +434,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	public void onPause() {
 		super.onPause();
 		Logger.d(TAG, "on PAUSE");
-        //uncomment to enable (fake) car on map
-		//stopRepeatingTask();
+        //enable car on map
+        stopAvailableCarsTask();
 	}
-    //uncomment to enable (fake) car on map
-//	private void startRepeatingTask() {
-//		mHandlerTask.run();
-//	}
-//
-//	private void stopRepeatingTask() {
-//		mHandler.removeCallbacks(mHandlerTask);
-//	}
+    //TL-305 cars on the map
+	private void startAvailableCarsTask() {
+		mHandlerTask.run();
+	}
+
+	private void stopAvailableCarsTask() {
+		mHandler.removeCallbacks(mHandlerTask);
+	}
 	private void checkGPSEnable() {
 		final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -855,20 +857,18 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			address_bar_text.setText(LocationUtils.addressToString(getActivity(), address));
 			if (checkReady()) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.addressToLatLng(address), MBDefinition.DEFAULT_ZOOM));
-                //uncomment to enable (fake) car on map
-//				cleanUP();
-//				generate12CarsWithin5MilesRandom(address.getLatitude(),address.getLongitude());
-//				startRepeatingTask();
+                //TL-305
+				cleanUP();
+				startAvailableCarsTask();
 			}
 		} else {
 			if (checkReady() && servicesConnected()) {
 				// Get the current location
 				Location currentLocation = mLocationClient.getLastLocation();
 				if (currentLocation != null){
-                    //uncomment to enable (fake) car on map
-//					cleanUP();
-//					generate12CarsWithin5MilesRandom(currentLocation.getLatitude(),currentLocation.getLongitude());
-//                  startRepeatingTask();
+                    //TL-305
+                    cleanUP();
+                    startAvailableCarsTask();
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
 
 				}
@@ -880,6 +880,53 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		}
 	}
+    //TL-305
+    private void cleanUP(){
+        if(carMarkers!=null && carMarkers.size()>0){
+            for(int i=0;i<carMarkers.size();i++){
+                carMarkers.get(i).remove();
+            }
+            carMarkers.clear();
+        }
+    }
+
+    public void handleAvailableCarsResponse(CarGPSItem[] tempCarList, int nbrCars) {
+        Logger.d(TAG, "handleAvailableCarsResponse nbrCars:" + nbrCars);
+        //clear the markers
+        cleanUP();
+        CarGPSItem[] cachedCarArray;
+        if (nbrCars > 0 ) {
+            cachedCarArray = tempCarList;
+            for (int i = 0; i < cachedCarArray.length; i++){
+                double lat = Double.parseDouble(cachedCarArray[i].carLatitude);
+                double lng = Double.parseDouble(cachedCarArray[i].carLongitude);
+                LatLng carLatLng = new LatLng(lat, lng);
+                BitmapDescriptor icon = getIcon(cachedCarArray[i].carFile);
+                Marker carMarker = mMap.addMarker(new MarkerOptions().position(carLatLng).draggable(false).icon(icon));
+                carMarkers.add(carMarker);
+            }
+        }
+
+    }
+
+    public BitmapDescriptor getIcon(String carFile){
+
+        BitmapDescriptor icon = null;
+        if (carFile == null || carFile.isEmpty()) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow); // default
+        } else if (MBDefinition.ICON_TRACK_TAXI_BLUE.equalsIgnoreCase(carFile)) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_blue);
+        } else if (MBDefinition.ICON_TRACK_TAXI_RED.equalsIgnoreCase(carFile)) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_red);
+        } else if (MBDefinition.ICON_TRACK_TAXI_GREEN.equalsIgnoreCase(carFile)) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_green);
+        } else if (MBDefinition.ICON_TRACK_TAXI_ORANGE.equalsIgnoreCase(carFile)) {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_orange);
+        } else {
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow);
+        }
+        return icon;
+    }
     //uncomment to enable (fake) car on map
 //	private void moveCar(int carNum){
 //		double MOVE_AMOUNT = 0.005;
