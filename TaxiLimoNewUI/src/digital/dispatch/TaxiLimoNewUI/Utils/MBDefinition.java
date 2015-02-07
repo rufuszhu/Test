@@ -23,7 +23,7 @@ public class MBDefinition {
 	public final static String IS_DESTINATION= "IS_DESTINATION";
 	public static final String EXTRA_BOOKING = "EXTRA_BOOKING";
 	public final static String DBBOOKING_EXTRA= "DBBOOKING";
-	public final static float DEFAULT_ZOOM = 15.5f;
+	public final static float DEFAULT_ZOOM = 15f;
 	
 	public final static int REQUEST_PICKUPADDRESS_CODE = 2;
 	public final static int REQUEST_DROPOFFADDRESS_CODE = 3;
