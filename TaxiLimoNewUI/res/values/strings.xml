@@ -180,9 +180,9 @@
 
     <!-- Variables -->
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
-    <!--<string name="url">http://192.168.50.160:76/Service.asmx</string>-->
+    <string name="url">http://192.168.50.160:76/Service.asmx</string>
     <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
-     <string name="url">https://zoro.digital-dispatch.com:443/Service.asmx?wsdl</string>
+     <!--<string name="url">https://zoro.digital-dispatch.com:443/Service.asmx?wsdl</string>-->
     
 <!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>-->
 
@@ -473,7 +473,8 @@
     <string name="awaiting_dispatch">Awaiting dispatch</string>
     <string name="driver_and_vehicle"><![CDATA[DRIVER & VEHICLE]]></string>
     <string name="pickup_location">PICKUP LOCATION</string>
-    <string name="disclaimer">Disclaimer: This is an estimate only and the actual amount charged by the taxi could vary</string>
+    <string name="estimate_disclaimer">This is an estimate only and the actual amount charged by the taxi could vary</string>
+    <string name="estimate_disclaimer_title">Disclaimer</string>
     <string name="invalid_address">Invalid Address</string>
     <string name="invade_address">Invalid Address</string>
     <string name="book_anyway">Book Anyway</string>

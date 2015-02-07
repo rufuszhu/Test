@@ -1,6 +1,8 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
+import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
@@ -21,6 +24,7 @@ public class DriverNoteActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_driver_note);
+        setToolBar();
 		driverMessage = (EditText) findViewById(R.id.message);
 		textRemaining = (TextView) findViewById(R.id.text_remaining);
 		driverMessage.addTextChangedListener(new TextWatcher() {
@@ -56,6 +60,15 @@ public class DriverNoteActivity extends BaseActivity {
 		});
 
 	}
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
+        yourTextView.setTypeface(face);
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

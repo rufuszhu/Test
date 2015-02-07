@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,9 +69,20 @@ public class BookActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         _this = this;
+        setToolBar();
         findView();
         styleView();
         bindEvent();
+    }
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
+        yourTextView.setTypeface(face);
     }
 
     private void styleView() {
@@ -154,7 +166,16 @@ public class BookActivity extends BaseActivity {
         rl_fare.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.showMessageDialog(getString(R.string.disclaimer), _this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(_this);
+                builder.setMessage(getString(R.string.estimate_disclaimer));
+                builder.setTitle(getString(R.string.estimate_disclaimer_title));
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
         //if there is a selected company

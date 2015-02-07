@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class AboutActivity extends BaseActivity {
 
@@ -31,6 +33,7 @@ public class AboutActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
         _this = this;
+        setToolBar();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_this); //TL-379
 
 		String versionName = "";
@@ -103,6 +106,8 @@ public class AboutActivity extends BaseActivity {
 			}
 		});
 
+
+
 		tvContactEmail.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -120,6 +125,17 @@ public class AboutActivity extends BaseActivity {
 		});
 
 	}
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
+        yourTextView.setTypeface(face);
+
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

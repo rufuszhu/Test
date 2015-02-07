@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TaxiLimoNewUI/TaxiLimoNewUI.iml" filepath="$PROJECT_DIR$/TaxiLimoNewUI/TaxiLimoNewUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaxiLimoSoapLibrary/TaxiLimoSoapLibrary.iml" filepath="$PROJECT_DIR$/TaxiLimoSoapLibrary/TaxiLimoSoapLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" filepath="$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" />
-      <module fileurl="file://$PROJECT_DIR$/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/google-play-services_lib/google-play-services_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobile-booker-android-newui.iml" filepath="$PROJECT_DIR$/mobile-booker-android-newui.iml" />
       <module fileurl="file://$PROJECT_DIR$/wheel/wheel.iml" filepath="$PROJECT_DIR$/wheel/wheel.iml" />
     </modules>

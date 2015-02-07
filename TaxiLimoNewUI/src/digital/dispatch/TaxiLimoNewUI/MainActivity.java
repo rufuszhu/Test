@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -72,6 +73,8 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 	private TextView tab1_text;
 	private TextView tab2_text;
 
+    private Toolbar toolbar;
+
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
@@ -84,13 +87,17 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		setContentView(R.layout.activity_main);
 		Logger.d(TAG, "onCreate");
 
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
 		_context = this;
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout),toolbar);
 
 		// initView();
 
@@ -347,20 +354,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		actionBar.setDisplayUseLogoEnabled(false);
 		actionBar.setIcon(R.color.transparent);
 		actionBar.setIcon(null);
-		int titleId = getResources().getIdentifier("action_bar_title", "id",
-	            "android");
+
         Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
-	    TextView yourTextView = (TextView) findViewById(titleId);
+	    TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
 	    yourTextView.setTypeface(face);
-		// if we want customize action bar
-		// actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-		// actionBar.setCustomView(R.layout.actionbar);
-		// actionBar.setDisplayShowTitleEnabled(true);
-		// actionBar.setDisplayUseLogoEnabled(false);
-		// getActionBar().setHomeButtonEnabled(true);
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
-		// actionBar.setIcon(R.color.transparent);
-		// actionBar.setIcon(null);
+
 		switch (mPager.getCurrentItem()) {
 		case 0:
 			Utils.currentTab = 0;

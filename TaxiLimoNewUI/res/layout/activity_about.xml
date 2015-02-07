@@ -1,104 +1,114 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity" >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity">
 
-    <LinearLayout
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/very_big_margin" >
-
-        <TextView
-            android:id="@+id/tvVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/version"
-            android:textColor="@color/actionbar_background"
-            android:textSize="@dimen/about_font_size" />
-
-        <TextView
-            android:id="@+id/tv_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:text="@string/update"
-            android:textColor="@color/actionbar_background"
-            android:textSize="@dimen/about_font_size"  />
-
-        <TextView
-            android:id="@+id/tvSupport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/support"
-            android:textColor="@color/actionbar_background"
-            android:layout_marginTop="@dimen/big_margin"
-            android:textSize="@dimen/about_font_size" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ll_support_phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/very_big_margin">
 
             <TextView
-                android:id="@+id/tv_phone_icon"
+                android:id="@+id/tvVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/version"
                 android:textColor="@color/actionbar_background"
-                android:textSize="@dimen/about_font_size"  />
+                android:textSize="@dimen/about_font_size" />
 
             <TextView
-                android:id="@+id/tvContactNum"
+                android:id="@+id/tv_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@drawable/request_new_selector"
-                android:clickable="true"
-                android:layout_marginLeft="@dimen/small_padding"
-                android:textSize="@dimen/about_font_size"  />
+                android:layout_marginTop="@dimen/normal_padding"
+                android:text="@string/update"
+                android:textColor="@color/actionbar_background"
+                android:textSize="@dimen/about_font_size" />
+
+            <TextView
+                android:id="@+id/tvSupport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/big_margin"
+                android:text="@string/support"
+                android:textColor="@color/actionbar_background"
+                android:textSize="@dimen/about_font_size" />
+
+            <LinearLayout
+                android:id="@+id/ll_support_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_phone_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/actionbar_background"
+                    android:textSize="@dimen/about_font_size" />
+
+                <TextView
+                    android:id="@+id/tvContactNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/small_padding"
+                    android:clickable="true"
+                    android:textColor="@drawable/request_new_selector"
+                    android:textSize="@dimen/about_font_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_support_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_email_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/actionbar_background"
+                    android:textSize="@dimen/about_font_size" />
+
+                <TextView
+                    android:id="@+id/tvContactEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/small_padding"
+
+                    android:clickable="true"
+                    android:textColor="@drawable/request_new_selector"
+                    android:textSize="@dimen/about_font_size" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_support_email"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvAboutFooter"
+            style="@style/TextDropShadowWhite"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:text="@string/aboutFooter"
+            android:textColor="@color/gray_line"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_email_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/actionbar_background"
-                android:textSize="@dimen/about_font_size"  />
-
-            <TextView
-                android:id="@+id/tvContactEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/about_font_size" 
-                
-                android:clickable="true"
-                android:layout_marginLeft="@dimen/small_padding"
-                android:textColor="@drawable/request_new_selector"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvAboutFooter"
-        style="@style/TextDropShadowWhite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/big_margin"
-        android:text="@string/aboutFooter"
-        android:textColor="@color/gray_line"
-        android:textSize="13sp"
-        android:textStyle="bold" />
-
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

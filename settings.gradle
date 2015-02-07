@@ -1,5 +1,3 @@
 include ':TaxiLimoNewUI'
-include ':google-play-services_lib'
 include ':wheel'
-include ':appcompat_v7'
 include ':TaxiLimoSoapLibrary'

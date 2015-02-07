@@ -1,12 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity">
+
+    <include layout="@layout/toolbar" />
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:paddingBottom="@dimen/normal_padding"
     android:paddingLeft="@dimen/normal_padding"
     android:paddingRight="@dimen/normal_padding"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity" >
+     >
 
     <LinearLayout
         android:id="@+id/status_bar"
@@ -423,3 +433,4 @@
         android:visibility="gone" />
 
 </RelativeLayout>
+    </LinearLayout>

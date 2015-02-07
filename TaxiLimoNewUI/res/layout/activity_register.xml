@@ -1,12 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context="digital.dispatch.TaxiLimoNewUI.RegisterActivity">
+
+    <include layout="@layout/toolbar" />
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/normal_margin"
-    android:background="@color/background"
-    tools:context="digital.dispatch.TaxiLimoNewUI.RegisterActivity" >
-    
-    
+    android:background="@color/background">
+
+
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
@@ -200,4 +210,4 @@
             android:visibility="gone"/>
 
 </RelativeLayout>
-
+    </LinearLayout>
