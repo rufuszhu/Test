@@ -913,17 +913,17 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
         BitmapDescriptor icon = null;
         if (carFile == null || carFile.isEmpty()) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow); // default
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_yellow); // default
         } else if (MBDefinition.ICON_TRACK_TAXI_BLUE.equalsIgnoreCase(carFile)) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_blue);
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_blue);
         } else if (MBDefinition.ICON_TRACK_TAXI_RED.equalsIgnoreCase(carFile)) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_red);
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_red);
         } else if (MBDefinition.ICON_TRACK_TAXI_GREEN.equalsIgnoreCase(carFile)) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_green);
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_green);
         } else if (MBDefinition.ICON_TRACK_TAXI_ORANGE.equalsIgnoreCase(carFile)) {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_orange);
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_orange);
         } else {
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.icon_track_taxi_yellow);
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.car_map_icon_yellow);
         }
         return icon;
     }
