@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -69,10 +70,20 @@ public class ProfileActivity extends BaseActivity implements
             isAutoRecovery = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_AUTO_RECOVERY, false);
         else
             isAutoRecovery = false;
-
+        setToolBar();
         findView();
         styleView();
         bindEvent();
+    }
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
+        yourTextView.setTypeface(face);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override

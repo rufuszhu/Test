@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,11 +50,21 @@ public class SetTimeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_time);
 		_context = this;
+        setToolBar();
 		findView();
 		setStyles();
 		setUpWheel();
 		bindEvents();
 	}
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
+        yourTextView.setTypeface(face);
+    }
 	
 	private void setStyles() {
 		Typeface fontFamily = FontCache.getFont(this, "fonts/icon_pack.ttf");

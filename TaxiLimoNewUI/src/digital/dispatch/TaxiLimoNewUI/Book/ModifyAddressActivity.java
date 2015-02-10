@@ -1,6 +1,6 @@
 package digital.dispatch.TaxiLimoNewUI.Book;
 
-import android.app.ActionBar;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +27,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager;
 
 public class ModifyAddressActivity extends BaseActivity {
@@ -63,10 +66,20 @@ public class ModifyAddressActivity extends BaseActivity {
 
 		isDesitination = getIntent().getBooleanExtra(MBDefinition.IS_DESTINATION, false);
 		addressFromMap = getIntent().getStringExtra(MBDefinition.ADDRESSBAR_TEXT_EXTRA);
+        setToolBar();
 		setupActionBarTitle();
 		setUpTab();
 		bindEvents();
 	}
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
+        yourTextView.setTypeface(face);
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -87,7 +100,7 @@ public class ModifyAddressActivity extends BaseActivity {
 	}
 
 	private void setupActionBarTitle() {
-		ActionBar ab = getActionBar();
+		ActionBar ab = getSupportActionBar();
 		if (isDesitination) {
 			ab.setTitle(getString(R.string.title_activity_destination));
 		} else {

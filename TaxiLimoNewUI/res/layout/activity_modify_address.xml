@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity" >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="digital.dispatch.TaxiLimoNewUI.Book.ModifyAddressActivity">
+
+    <include layout="@layout/toolbar" />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
 
     <digital.dispatch.TaxiLimoNewUI.Widget.NonSwipeableViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -106,3 +116,4 @@
         </LinearLayout>
 
 </RelativeLayout>
+    </LinearLayout>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.SharedPreferencesManager;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class RegisterConfirmActivity extends BaseActivity {
 
@@ -30,12 +32,12 @@ public class RegisterConfirmActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register_confirm);
-		getActionBar().setTitle(R.string.title_activity_register);
+
 		_context = this;
 		findBindView();
 		styleView();
+        setToolBar();
 		updateActionBar();
-
 	}
 
 
@@ -77,16 +79,26 @@ public class RegisterConfirmActivity extends BaseActivity {
 		eula.setTypeface(openSansLight);
 		register_btn.setTypeface(openSansBold);
 	}
-	
-	
-	
+
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
+        yourTextView.setTypeface(face);
+    }
 	private void updateActionBar(){
+
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(false);
 		actionBar.setIcon(R.color.transparent);
 		actionBar.setIcon(null);
+        actionBar.setTitle(R.string.title_activity_register);
         /*
 		int titleId = getResources().getIdentifier("action_bar_title", "id",
 	            "android");

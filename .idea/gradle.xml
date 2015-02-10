@@ -11,8 +11,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/TaxiLimoNewUI" />
             <option value="$PROJECT_DIR$/TaxiLimoSoapLibrary" />
-            <option value="$PROJECT_DIR$/appcompat_v7" />
-            <option value="$PROJECT_DIR$/google-play-services_lib" />
             <option value="$PROJECT_DIR$/wheel" />
           </set>
         </option>

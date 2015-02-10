@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -114,6 +115,7 @@ public class TrackDetailActivity extends BaseActivity {
 		Logger.d(TAG, "onCreate");
 		setContentView(R.layout.activity_track_detail);
 		_context = this;
+        setToolBar();
 		dbBook = (DBBooking) getIntent().getSerializableExtra(MBDefinition.DBBOOKING_EXTRA);
 		icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
         OpenSansSemiBold = FontCache.getFont(this, "fonts/OpenSansSemibold.ttf");
@@ -125,6 +127,16 @@ public class TrackDetailActivity extends BaseActivity {
 		setUpTab();
 		isRefreshing = false;
 	}
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
+        yourTextView.setTypeface(face);
+    }
 
 	public DBBooking getDBBook() {
 		return dbBook;

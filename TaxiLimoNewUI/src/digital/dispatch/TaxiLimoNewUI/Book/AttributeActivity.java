@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -55,9 +56,8 @@ public class AttributeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_attribute);
 		_context = this;
-		// mAddress = getIntent().getParcelableExtra(MBDefinition.ADDRESS);
 
-
+        setToolBar();
 		shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
 		lv_company = (ListView) findViewById(R.id.lv_company);
 		lv_company.setOnItemClickListener(new OnItemClickListener() {
@@ -74,6 +74,7 @@ public class AttributeActivity extends BaseActivity {
 				}
 			}
 		});
+
 		Typeface OpenSansBold = FontCache.getFont(this, "fonts/OpenSansBold.ttf");
         Typeface OpenSansRegular = FontCache.getFont(this, "fonts/OpenSansRegular.ttf");
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
@@ -85,6 +86,16 @@ public class AttributeActivity extends BaseActivity {
 		textView2.setTypeface(OpenSansBold);
         tv_company404_text.setTypeface(OpenSansRegular);
 	}
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
+        yourTextView.setTypeface(face);
+    }
 
 	@Override
 	protected void onResume() {
@@ -121,43 +132,9 @@ public class AttributeActivity extends BaseActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-//
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		Logger.d(TAG, "onCreateOptionsMenu");
-//		getMenuInflater().inflate(R.menu.attribute, menu);
-//		refresh_icon = menu.findItem(R.id.action_refresh);
-//		if (refreshing) {
-//			boolean isFromBooking = false;
-//			new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//			startUpdateAnimation(refresh_icon);
-//		} else {
-//			refresh_icon.setVisible(false);
-//		}
-//		return true;
-//	}
 
-	public void startUpdateAnimation(MenuItem item) {
-		// Do animation start
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		ImageView iv = (ImageView) inflater.inflate(R.layout.iv_refresh, null);
-		Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
-		rotation.setRepeatCount(Animation.INFINITE);
-		iv.startAnimation(rotation);
-		item.setActionView(iv);
-	}
 
-	public void stopUpdateAnimation() {
-		// Get our refresh item from the menu
-		if (refresh_icon.getActionView() != null) {
-			// Remove the animation.
-			refresh_icon.getActionView().clearAnimation();
-			refresh_icon.setActionView(null);
-			refresh_icon.setVisible(false);
-			refreshing = false;
-			this.invalidateOptionsMenu();
-		}
-	}
+
 
 	// override android back button
 	@Override

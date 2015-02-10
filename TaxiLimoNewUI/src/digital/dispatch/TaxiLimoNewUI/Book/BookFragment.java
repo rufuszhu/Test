@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.InflateException;
@@ -42,12 +43,11 @@ import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CarGPSItem;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -80,7 +80,8 @@ import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
-public class BookFragment extends Fragment implements OnConnectionFailedListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks,
+public class BookFragment extends Fragment implements LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
 		OnCameraChangeListener {
 	/**
 	 * The fragment argument representing the section number for this fragment.
@@ -93,7 +94,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	private ImageView blue_pin;
 
 	private LocationRequest mLocationRequest;
-	private LocationClient mLocationClient;
+	private GoogleApiClient mGoogleApiClient;
 
 	private GoogleMap mMap;
 	private TextView address_bar_text;
@@ -130,6 +131,9 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		args.putInt(ARG_SECTION_NUMBER, 1);
 		fragment.setArguments(args);
 
+
+
+
 		return fragment;
 	}
 
@@ -160,10 +164,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 
         };
 
-		mLocationRequest = LocationRequest.create();
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-		mLocationClient = new LocationClient(getActivity(), this, this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
@@ -175,6 +181,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		} catch (InflateException e) {
 			/* map is already there, just return view as it is */
 		}
+
 
 		TextView add_fav_btn = (TextView) view.findViewById(R.id.add_fav_btn);
 		Typeface fontFamily = FontCache.getFont (getActivity(), "fonts/fontawesome.ttf");
@@ -258,12 +265,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	public void onStop() {
 
 		// If the client is connected
-		if (mLocationClient.isConnected()) {
+		if (mGoogleApiClient.isConnected()) {
 			// stopPeriodicUpdates();
 		}
 
 		// After disconnect() is called, the client is considered "dead".
-		mLocationClient.disconnect();
+        mGoogleApiClient.disconnect();
 
 		super.onStop();
 	}
@@ -271,7 +278,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	@Override
 	public void onStart() {
 		super.onStart();
-		mLocationClient.connect();
+        mGoogleApiClient.connect();
 
 	}
 
@@ -471,7 +478,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		// Do a null check to confirm that we have not already instantiated the map.
 		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
 				mMap.setMyLocationEnabled(true);
@@ -534,7 +541,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	private void onCurrentLocationClick() {
 
 		// Get the current location
-		Location currentLocation = mLocationClient.getLastLocation();
+		Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 		if (servicesConnected() && currentLocation != null) {
 
 			LatLng currLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
@@ -850,6 +857,10 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 	@Override
 	public void onConnected(Bundle arg0) {
 		Logger.d(TAG, "onConnected");
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 		setUpMapIfNeeded();
 		Address address = Utils.mPickupAddress;
 		
@@ -864,7 +875,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 		} else {
 			if (checkReady() && servicesConnected()) {
 				// Get the current location
-				Location currentLocation = mLocationClient.getLastLocation();
+				Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 				if (currentLocation != null){
                     //TL-305
                     cleanUP();
@@ -880,6 +891,12 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 			}
 		}
 	}
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "GoogleApiClient connection has been suspend");
+    }
+
     //TL-305
     private void cleanUP(){
         if(carMarkers!=null && carMarkers.size()>0){
@@ -1056,11 +1073,7 @@ public class BookFragment extends Fragment implements OnConnectionFailedListener
 //        });
 //    }
 
-	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
 
-	}
 
 	private void setUpEnterNickNameDialog(final Address address) {
 		final EditText nickname_edit;

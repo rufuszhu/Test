@@ -22,7 +22,11 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -575,4 +579,29 @@ public class Utils {
 
 		lockScreenDialog.show();
 	}
+
+
+
+    public static TextView getToolbarTitleView(ActionBarActivity activity, Toolbar toolbar){
+        ActionBar actionBar = activity.getSupportActionBar();
+        CharSequence actionbarTitle = null;
+        if(actionBar != null)
+            actionbarTitle = actionBar.getTitle();
+        actionbarTitle = TextUtils.isEmpty(actionbarTitle) ? toolbar.getTitle() : actionbarTitle;
+        if(TextUtils.isEmpty(actionbarTitle)) return null;
+        // can't find if title not set
+        for(int i= 0; i < toolbar.getChildCount(); i++){
+            View v = toolbar.getChildAt(i);
+            if(v != null && v instanceof TextView){
+                TextView t = (TextView) v;
+                CharSequence title = t.getText();
+                if(!TextUtils.isEmpty(title) && actionbarTitle.equals(title) && t.getId() == View.NO_ID){
+                    //Toolbar does not assign id to views with layout params SYSTEM, hence getId() == View.NO_ID
+                    //in same manner subtitle TextView can be obtained.
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -5,10 +5,13 @@
     android:background="@color/background"
     tools:context="digital.dispatch.TaxiLimoNewUI.History.TripDetailActivity">
 
+    <include layout="@layout/toolbar" />
+
     <LinearLayout
         android:id="@+id/ll_status"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="@dimen/big_margin"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="horizontal">

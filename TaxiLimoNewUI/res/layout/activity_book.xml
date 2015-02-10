@@ -1,9 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/normal_padding"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="digital.dispatch.TaxiLimoNewUI.Book.BookActivity">
+
+    <include layout="@layout/toolbar" />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/normal_padding" >
 
     <RelativeLayout
         android:id="@+id/address_box"
@@ -34,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:textColor="@color/black"
                 android:layout_marginLeft="@dimen/normal_padding"
                 android:layout_toRightOf="@+id/icon_pickup"
                 android:singleLine="true"
@@ -69,7 +79,7 @@
                 android:layout_toRightOf="@+id/icon_dropoff"
                 android:singleLine="true"
                 android:text="@string/enter_for_est_fare"
-                android:textColor="@color/list_gray_text"
+                android:textColor="@color/black"
                 android:textSize="@dimen/book_activity_font_size" />
 
             <TextView
@@ -101,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
+                android:textColor="@color/black"
                 android:singleLine="true"
                 android:textSize="30sp" />
 
@@ -332,3 +343,4 @@
     </FrameLayout>•
 
 </RelativeLayout>
+    </LinearLayout>

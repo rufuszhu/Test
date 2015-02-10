@@ -16,12 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,11 +39,13 @@ import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 
-public class TrackingMapFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+public class TrackingMapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 	private static final String TAG = "TrackingMapFragment";
 	private SupportMapFragment fragment;
 	private GoogleMap map;
-	private LocationClient mLocationClient;
+	private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 	private View view;
 
 	private DBBooking dbBook;
@@ -105,6 +106,22 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 		}
 	}
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Connect the client.
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        // Disconnecting the client invalidates it.
+        if(null!=mGoogleApiClient)
+            mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -112,8 +129,6 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 			map = fragment.getMap();
 			map.setMyLocationEnabled(true);
 		}
-		setUpLocationClientIfNeeded();
-		mLocationClient.connect();
 
         dbBook = ((TrackDetailActivity) getActivity()).getDBBook();
         carLatLng = new LatLng(dbBook.getCarLatitude(), dbBook.getCarLongitude());
@@ -129,9 +144,6 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 	public void onPause() {
 		super.onPause();
 		Logger.d(TAG, "on PAUSE");
-		if (mLocationClient != null) {
-			mLocationClient.disconnect();
-		}
 		stopRepeatingTask();
 	}
 
@@ -197,24 +209,23 @@ public class TrackingMapFragment extends Fragment implements ConnectionCallbacks
 
 	}
 
-	private void setUpLocationClientIfNeeded() {
-		if (mLocationClient == null) {
-			mLocationClient = new LocationClient(getActivity(), this, this); // OnConnectionFailedListener
-		}
-	}
-
 	@Override
 	public void onConnected(Bundle arg0) {
-		mLocationClient.requestLocationUpdates(REQUEST, this); // LocationListener
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(10000); // Update location every 10 second
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
 		//map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(mLocationClient.getLastLocation()), MBDefinition.DEFAULT_ZOOM));
 		pickupMarker = map.addMarker(new MarkerOptions().position(pickupLatLng).draggable(false));
 	}
 
-	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
+    @Override
+    public void onConnectionSuspended(int i) {
+        Logger.i(TAG, "GoogleApiClient connection has been suspend");
+    }
 
-	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {

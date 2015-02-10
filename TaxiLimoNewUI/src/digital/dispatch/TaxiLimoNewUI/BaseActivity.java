@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 
 public class BaseActivity extends ActionBarActivity {
@@ -26,24 +28,24 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
+    }
+
+    @Override
+    protected void onResume(){
         setUpActionBar();
+        super.onResume();
     }
     
     
     private void setUpActionBar() {
     	ActionBar actionBar = getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 		actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setIcon(R.color.transparent);
 		actionBar.setIcon(null);
-		int titleId = getResources().getIdentifier("action_bar_title", "id",
-	            "android");
-        Typeface face = FontCache.getFont(this, "fonts/Exo2-Light.ttf");
-	    TextView yourTextView = (TextView) findViewById(titleId);
-
-	    yourTextView.setTypeface(face);
-		
 	}
 
 
@@ -90,6 +92,4 @@ public class BaseActivity extends ActionBarActivity {
                 viewGroup.removeAllViews();
         }
     }
-    
-
 }

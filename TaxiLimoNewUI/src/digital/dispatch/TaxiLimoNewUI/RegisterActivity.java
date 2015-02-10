@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -65,16 +66,29 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+        _context = this;
 		setContentView(R.layout.activity_register);
-		getActionBar().setTitle(R.string.title_activity_register);
+        setToolBar();
 
 		findView();
 		styleView();
 		bindView();
-		_context = this;
+
 
 	}
+
+    private void setToolBar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+
+        Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
+        TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
+        yourTextView.setTypeface(face);
+
+        getSupportActionBar().setTitle(R.string.title_activity_register);
+    }
 
 	@Override
 	protected void onResume() {
@@ -107,7 +121,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			startActivity(intent);
 			finish();
 
-		} else if (!alreadyRegister && alreadySMSVerify) {
+		} else if (true || !alreadyRegister && alreadySMSVerify) {
 			// show register confirmation page if SMS is verified but registration is not completed
 			Intent intent = new Intent(_context, RegisterConfirmActivity.class);
 			startActivity(intent);

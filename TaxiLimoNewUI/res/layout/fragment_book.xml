@@ -42,6 +42,7 @@
                 android:layout_toRightOf="@+id/add_fav_btn"
                 android:layout_toLeftOf="@+id/tv_angle_right"
                 android:layout_below="@+id/tv_pickup_location_lable"
+                android:textColor="@color/black"
                 android:textSize="@dimen/address_text_size"
                 android:singleLine="true" />
 
