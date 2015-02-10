@@ -68,7 +68,6 @@ public class HistoryFragment extends ListFragment {
 
 		List<DBBooking> values = qb.list();
         int numOfJobs = (int) bookingDao.queryBuilder().count();
-        Logger.e(TAG,"numOfJobs: " + numOfJobs);
 		// delete all older jobs
 		if (numOfJobs > MAX_HISTORY_CAP) {
 			long smallestId = values.get(values.size()-1).getId();
