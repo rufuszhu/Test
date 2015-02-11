@@ -1,11 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="digital.dispatch.TaxiLimoNewUI.DriverNoteActivity" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_accept"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_accept"
         android:title="@string/action_settings"/>
 
 </menu>

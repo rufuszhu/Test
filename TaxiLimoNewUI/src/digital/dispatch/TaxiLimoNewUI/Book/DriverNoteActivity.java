@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -13,12 +14,14 @@ import android.widget.TextView;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class DriverNoteActivity extends BaseActivity {
+
 	private EditText driverMessage;
-	private TextView textRemaining, ok ,clear;
+	private TextView textRemaining;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +47,15 @@ public class DriverNoteActivity extends BaseActivity {
 
 		driverMessage.setText(Utils.driverNoteString);
 		driverMessage.setSelection(Utils.driverNoteString.length());
-		ok = (TextView) findViewById(R.id.ok);
-		ok.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Utils.driverNoteString = driverMessage.getText().toString();
-				
-				finish();
-			}
-		});
-		clear = (TextView) findViewById(R.id.clear);
-		clear.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				driverMessage.setText("");
-			}
-		});
+
 
 	}
+
+    @Override
+    protected void onResume(){
+        driverMessage.requestFocus();
+        super.onResume();
+    }
     private void setToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if (toolbar != null) {
@@ -69,6 +65,12 @@ public class DriverNoteActivity extends BaseActivity {
         TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
         yourTextView.setTypeface(face);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.driver_note, menu);
+        return true;
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -77,6 +79,11 @@ public class DriverNoteActivity extends BaseActivity {
 			finish();
 			return true;
 		}
+        if(id==R.id.action_accept){
+            Utils.driverNoteString = driverMessage.getText().toString();
+            finish();
+            return true;
+        }
 		return super.onOptionsItemSelected(item);
 	}
 

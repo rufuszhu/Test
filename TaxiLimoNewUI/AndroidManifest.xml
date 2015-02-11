@@ -245,7 +245,8 @@
         <activity
             android:name="digital.dispatch.TaxiLimoNewUI.Book.DriverNoteActivity"
             android:label="@string/title_activity_driver_note"
-            android:parentActivityName=".Book.BookActivity" 
+            android:parentActivityName=".Book.BookActivity"
+            android:windowSoftInputMode="stateVisible"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
