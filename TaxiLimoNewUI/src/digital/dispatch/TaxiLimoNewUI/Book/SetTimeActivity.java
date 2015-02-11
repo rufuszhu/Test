@@ -257,8 +257,7 @@ public class SetTimeActivity extends BaseActivity {
 			cal.set(Calendar.MILLISECOND, 0);
 		}
 		while (cal.get(Calendar.DATE) == today.get(Calendar.DATE)) {
-			Date temp = new Date();
-			temp = cal.getTime();
+			Date temp = cal.getTime();
 			timeList.add(temp);
 			cal.add(Calendar.MINUTE, 5);
 		}
@@ -269,8 +268,7 @@ public class SetTimeActivity extends BaseActivity {
 		ArrayList<Date> dateList = new ArrayList<Date>();
 		Calendar cal = Calendar.getInstance();
 		for (int i = 0; i <= MBDefinition.FUTURE_BOOKING_RANGE; i++) {
-			Date temp = new Date();
-			temp = cal.getTime();
+			Date temp = cal.getTime();
 			dateList.add(temp);
 			cal.add(Calendar.DATE, 1);
 		}
