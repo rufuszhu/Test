@@ -52,13 +52,7 @@ public class HistoryFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		DaoManager daoManager = DaoManager.getInstance(getActivity());
-		bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
-		qb = bookingDao.queryBuilder()
-				.whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED), 
-						Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED))
-						//Properties.TripStatus.eq(MBDefinition.MB_STATUS_UNKNOWN)) //TL-264
-				.orderDesc(Properties.TripCreationTime).limit(MAX_HISTORY_CAP);
+
 	}
 
 	@Override
@@ -66,9 +60,16 @@ public class HistoryFragment extends ListFragment {
 		super.onResume();
 		Logger.d(TAG, "on RESUME");
 
+        DaoManager daoManager = DaoManager.getInstance(getActivity());
+        bookingDao = daoManager.getDBBookingDao(DaoManager.TYPE_WRITE);
+        qb = bookingDao.queryBuilder()
+                .whereOr(Properties.TripStatus.eq(MBDefinition.MB_STATUS_CANCELLED),
+                        Properties.TripStatus.eq(MBDefinition.MB_STATUS_COMPLETED))
+                        //Properties.TripStatus.eq(MBDefinition.MB_STATUS_UNKNOWN)) //TL-264
+                .orderDesc(Properties.TripCreationTime).limit(MAX_HISTORY_CAP);
+
 		List<DBBooking> values = qb.list();
         int numOfJobs = (int) bookingDao.queryBuilder().count();
-        Logger.e(TAG,"numOfJobs: " + numOfJobs);
 		// delete all older jobs
 		if (numOfJobs > MAX_HISTORY_CAP) {
 			long smallestId = values.get(values.size()-1).getId();
