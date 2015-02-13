@@ -82,6 +82,11 @@ public class TrackingMapFragment extends Fragment implements GoogleApiClient.Con
 				mHandler.postDelayed(mHandlerTask, INTERVAL);
 			}
 		};
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
 		return view;
 	}

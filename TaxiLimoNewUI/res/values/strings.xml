@@ -184,7 +184,7 @@
     <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
      <string name="url">https://zoro.digital-dispatch.com:443/Service.asmx?wsdl</string>
     
-<!--     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>-->
+     <!--<string name="url">https://mg.digital-dispatch.com:443/Service.asmx?wsdl</string>-->
 
 
      <!--<string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string>-->

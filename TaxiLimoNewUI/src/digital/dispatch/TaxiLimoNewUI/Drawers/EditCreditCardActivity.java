@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -121,10 +122,14 @@ public class EditCreditCardActivity extends BaseActivity implements TextWatcher,
 		
 		findView();
 		cardToEdit = (DBCreditCard) getIntent().getSerializableExtra(MBDefinition.EXTRA_CREDIT_CARD);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
 		if (cardToEdit == null)
-			getActionBar().setTitle(getResources().getString(R.string.title_activity_register_credit_card));
+			getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_register_credit_card));
 		else{
-			getActionBar().setTitle(getResources().getString(R.string.title_activity_edit_credit_card));
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_edit_credit_card));
 			setupEditView(cardToEdit);
 		}
 		context = this;

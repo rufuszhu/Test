@@ -1,145 +1,152 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:padding="20dp"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.EditCreditCardActivity" >
+    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.EditCreditCardActivity">
 
-    <TableLayout
+    <include layout="@layout/toolbar" />
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <TableRow
+
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/card_nick_name" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_nickname"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_nick_name" />
+
+                <EditText
+                    android:id="@+id/et_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
+                    android:padding="@dimen/normal_padding"></EditText>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_textview_border"
-                android:padding="@dimen/normal_padding" >
-            </EditText>
-        </TableRow>
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal">
 
-        <TableRow
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_holder_name" />
+
+                <EditText
+                    android:id="@+id/et_holder_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
+                    android:inputType="textPersonName"
+                    android:padding="@dimen/normal_padding"></EditText>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/cardit_card_form_lable_width"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_number" />
+
+                <EditText
+                    android:id="@+id/et_card_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
+                    android:hint="xxxx xxxx xxxx xxxx"
+                    android:inputType="number"
+                    android:padding="@dimen/normal_padding"></EditText>
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_mm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:background="@drawable/shape_textview_border"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:padding="@dimen/normal_padding"></EditText>
+
+                <TextView
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/et_yy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:background="@drawable/shape_textview_border"
+                    android:hint="YY"
+                    android:inputType="number"
+                    android:padding="@dimen/normal_padding" />
+            </LinearLayout>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zip_code" />
+
+                <EditText
+                    android:id="@+id/et_zip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
+                    android:hint="A0A 0A0"
+                    android:padding="@dimen/normal_padding"
+                    android:singleLine="true"></EditText>
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/save_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/white_button_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="Save" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/card_holder_name" />
-
-            <EditText
-                android:id="@+id/et_holder_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_textview_border"
-                android:inputType="textPersonName"
-                android:padding="@dimen/normal_padding" >
-            </EditText>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="@dimen/cardit_card_form_lable_width"
-                android:layout_height="wrap_content"
-                android:text="@string/card_number" />
-
-            <EditText
-                android:id="@+id/et_card_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_textview_border"
-                android:hint="xxxx xxxx xxxx xxxx"
-                android:inputType="number"
-                android:padding="@dimen/normal_padding" >
-            </EditText>
-        </TableRow>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/et_mm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:background="@drawable/shape_textview_border"
-                android:hint="MM"
-                android:inputType="number"
-                android:padding="@dimen/normal_padding" >
-            </EditText>
-
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/et_yy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:background="@drawable/shape_textview_border"
-                android:hint="YY"
-                android:inputType="number"
-                android:padding="@dimen/normal_padding" />
-        </LinearLayout>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_padding"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zip_code" />
-
-            <EditText
-                android:id="@+id/et_zip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_textview_border"
-                android:hint="A0A 0A0"
-                android:padding="@dimen/normal_padding" 
-                android:singleLine="true"
-                android:layout_weight="1">
-            </EditText>
-        </TableRow>
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/save_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/white_button_selector"
-        android:clickable="true"
-        android:gravity="center"
-        android:text="Save" />
-
+    </LinearLayout>
 </LinearLayout>

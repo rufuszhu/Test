@@ -121,7 +121,7 @@ public class RegisterActivity extends BaseActivity implements OnFocusChangeListe
 			startActivity(intent);
 			finish();
 
-		} else if (true || !alreadyRegister && alreadySMSVerify) {
+		} else if (!alreadyRegister && alreadySMSVerify) {
 			// show register confirmation page if SMS is verified but registration is not completed
 			Intent intent = new Intent(_context, RegisterConfirmActivity.class);
 			startActivity(intent);
