@@ -207,7 +207,8 @@ public class InfoFragment extends Fragment {
 
         book = ((TrackDetailActivity) getActivity()).getDBBook();
         //if both no car and no driver available, show awaiting dispatch
-        if((book.getDispatchedCar() == null || book.getDispatchedCar().length() == 0) && (book.getDispatchedDriver() == null || book.getDispatchedDriver().equals(""))){
+        if((book.getDispatchedCar() == null || book.getDispatchedCar().length() == 0 || book.getDispatchedCar().equals("0"))
+                && (book.getDispatchedDriver() == null || book.getDispatchedDriver().length()==0) || book.getDispatchedDriver().equals("0")){
             tv_waiting.setVisibility(View.VISIBLE);
             icon_taxi.setVisibility(View.GONE);
             space_diver_car.setVisibility(View.GONE);
@@ -217,7 +218,8 @@ public class InfoFragment extends Fragment {
         }
         //TL-326 text driver button should be shown when status is dispatched or arrived, even when driver information is not available.
         //else if only driver is available
-        else if ((book.getDispatchedDriver() != null && !book.getDispatchedDriver().equals("")) &&  (book.getDispatchedCar() == null || book.getDispatchedCar().length() == 0)){
+        else if ((book.getDispatchedDriver() != null && book.getDispatchedDriver().length()>0 && !book.getDispatchedDriver().equals("0"))
+                && (book.getDispatchedCar() == null || book.getDispatchedCar().length() == 0) || book.getDispatchedCar().equals("0")){
             tv_waiting.setVisibility(View.GONE);
             icon_taxi.setVisibility(View.GONE);
             space_diver_car.setVisibility(View.GONE);
@@ -227,7 +229,8 @@ public class InfoFragment extends Fragment {
             tv_driver.setText(book.getDispatchedDriver());
         }
         //else if only car is available
-        else if((book.getDispatchedDriver() == null || book.getDispatchedDriver().equals("")) && (book.getDispatchedCar() != null && book.getDispatchedCar().length() > 0)){
+        else if((book.getDispatchedDriver() == null || book.getDispatchedDriver().equals("0") || book.getDispatchedDriver().length()==0)
+                && (book.getDispatchedCar() != null && book.getDispatchedCar().length() > 0 && !book.getDispatchedCar().equals("0"))){
             tv_waiting.setVisibility(View.GONE);
             icon_taxi.setVisibility(View.VISIBLE);
             space_diver_car.setVisibility(View.GONE);

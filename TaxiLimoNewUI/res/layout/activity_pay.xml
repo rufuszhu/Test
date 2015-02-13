@@ -1,156 +1,162 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/big_margin"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Track.PayActivity" >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="digital.dispatch.TaxiLimoNewUI.Track.PayActivity">
 
-    <Spinner
-        android:id="@+id/credit_card_spinner"
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_height="match_parent"
+        android:padding="@dimen/big_margin">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/credit_card_spinner"
-        android:layout_marginTop="@dimen/big_margin" >
-
-        <TableRow
+        <Spinner
+            android:id="@+id/credit_card_spinner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/pay_table_row_height"
-            android:minHeight="@dimen/pay_table_row_height" >
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/taxi_fare"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/et_fare_amount"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/normal_padding"
-                android:layout_weight="1"
-                android:background="@drawable/shape_textview_border"
-                android:ems="10"
-                android:inputType="number"
-                android:hint="0.00"
-                android:windowSoftInputMode="stateVisible"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="@dimen/normal_padding" >
-            </EditText>
-        </TableRow>
-
-        <TableRow
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/pay_table_row_height"
-            android:layout_marginTop="@dimen/normal_padding" >
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/credit_card_spinner"
+            android:layout_marginTop="@dimen/big_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tip"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pay_table_row_height"
+                android:minHeight="@dimen/pay_table_row_height">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <RadioButton
-                    android:id="@+id/percent_radio"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="onRadioButtonClicked"
-                    android:checked="true" />
-
-                <Spinner
-                    android:id="@+id/tips_spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".4" />
-
-                <RadioButton
-                    android:id="@+id/amount_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" 
-                    android:onClick="onRadioButtonClicked"/>
+                    android:layout_gravity="center"
+                    android:text="@string/taxi_fare"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <EditText
-                    android:id="@+id/et_tip_amount"
+                    android:id="@+id/et_fare_amount"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".4"
-                    android:paddingLeft="@dimen/normal_padding"
-                    android:background="@drawable/shape_textview_border"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/normal_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
                     android:ems="10"
                     android:hint="0.00"
+                    android:inputType="number"
+                    android:paddingLeft="@dimen/normal_padding"
+                    android:windowSoftInputMode="stateVisible"></EditText>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pay_table_row_height"
+                android:layout_marginTop="@dimen/normal_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tip"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/percent_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:onClick="onRadioButtonClicked" />
+
+                    <Spinner
+                        android:id="@+id/tips_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4" />
+
+                    <RadioButton
+                        android:id="@+id/amount_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="onRadioButtonClicked" />
+
+                    <EditText
+                        android:id="@+id/et_tip_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/normal_padding"
+                        android:layout_weight=".4"
+                        android:background="@drawable/shape_textview_border"
+                        android:ems="10"
+                        android:hint="0.00"
+                        android:inputType="number"
+                        android:paddingLeft="@dimen/normal_padding"></EditText>
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pay_table_row_height"
+                android:minHeight="@dimen/pay_table_row_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:inputType="number" >
-                </EditText>
-            </LinearLayout>
-        </TableRow>
+                    android:text="@string/total"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TableRow
+                <TextView
+                    android:id="@+id/tv_total"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/normal_padding"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_textview_border"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="0.00"
+                    android:inputType="number"
+                    android:paddingLeft="@dimen/normal_padding" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/pay_table_row_height"
-            android:minHeight="@dimen/pay_table_row_height">
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total"
-                android:layout_gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            
-            <TextView
-                android:id="@+id/tv_total"
+                android:id="@+id/pay_btn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/normal_padding"
-                android:layout_weight="1"
-                android:background="@drawable/shape_textview_border"
-                android:ems="10"
-                android:inputType="number"
-                android:hint="0.00"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/normal_padding" />
-        </TableRow>
-    </TableLayout>
+                android:layout_marginRight="@dimen/big_margin"
+                android:layout_weight=".5"
+                android:background="@drawable/white_button_selector"
+                android:gravity="center"
+                android:text="@string/pay" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp" 
-        >
-
-        <TextView
-            android:id="@+id/pay_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/big_margin"
-            android:layout_weight=".5"
-            android:background="@drawable/white_button_selector"
-            android:gravity="center"
-            android:text="@string/pay" />
-
-        <TextView
-            android:id="@+id/cancel_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:background="@drawable/white_button_selector"
-            android:gravity="center"
-            android:text="@string/cancel" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/cancel_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/white_button_selector"
+                android:gravity="center"
+                android:text="@string/cancel" />
+        </LinearLayout>
 
 
-
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

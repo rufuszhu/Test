@@ -100,8 +100,8 @@ public class TrackDetailActivity extends BaseActivity {
 
 	private BroadcastReceiver bcReceiver;
 
-	//private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
-	private LinearLayout ll_cancel_btn, ll_pay_btn;
+	private LinearLayout ll_btn_group, ll_cancel_btn_small, ll_pay_btn;
+	private LinearLayout ll_cancel_btn;
 	private ImageView zoom_btn;
 	private Typeface icon_pack, OpenSansSemiBold, exo2SemiBold, fontawesome, exo2Bold;
 
@@ -434,8 +434,8 @@ public class TrackDetailActivity extends BaseActivity {
 		tv_book_time.setTypeface(OpenSansSemiBold);
 
 		ll_cancel_btn = (LinearLayout) findViewById(R.id.ll_cancel_btn);
-		//ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
-		cancel_cover = findViewById(R.id.cancel_cover); 
+		ll_pay_btn = (LinearLayout) findViewById(R.id.ll_pay_btn);
+		//cancel_cover = findViewById(R.id.cancel_cover);
 	}
 
 	private void checkAndDisablePayBtns() {
@@ -503,8 +503,7 @@ public class TrackDetailActivity extends BaseActivity {
 		};
 
 		ll_cancel_btn.setOnClickListener(cancelListener);
-//		ll_cancel_btn_small.setOnClickListener(cancelListener);
-//		ll_pay_btn.setOnClickListener(payListener);
+		ll_pay_btn.setOnClickListener(payListener);
 
 		zoom_btn = (ImageView) findViewById(R.id.zoom_btn);
 		zoom_btn.setOnClickListener(new OnClickListener() {
@@ -654,9 +653,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpCanceledUI() {
-		disableCancelBtn();
-		//ll_cancel_btn.setVisibility(View.GONE);
-		//ll_pay_btn.setVisibility(View.GONE);
+		//disableCancelBtn();
+		ll_cancel_btn.setVisibility(View.GONE);
+		ll_pay_btn.setVisibility(View.GONE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -677,9 +676,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setupBookedUI() {
-		enableCancelBtn();
-		//ll_cancel_btn.setVisibility(View.VISIBLE);
-		//ll_pay_btn.setVisibility(View.VISIBLE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -700,9 +699,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpAcceptedUI() {
-		enableCancelBtn();
-//		ll_cancel_btn.setVisibility(View.VISIBLE);
-//		ll_pay_btn.setVisibility(View.VISIBLE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -724,9 +723,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpArrivedUI() {
-		enableCancelBtn();
-//		ll_cancel_btn.setVisibility(View.VISIBLE);
-//		ll_pay_btn.setVisibility(View.VISIBLE);
+		//enableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -747,9 +746,9 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInServiceUI() {
-		disableCancelBtn();
-//		ll_cancel_btn.setVisibility(View.VISIBLE);
-//		ll_pay_btn.setVisibility(View.VISIBLE);
+		//disableCancelBtn();
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 
@@ -770,10 +769,10 @@ public class TrackDetailActivity extends BaseActivity {
 	}
 
 	private void setUpInCompletedUI() {
-		disableCancelBtn();
+		//disableCancelBtn();
 		
-//		ll_cancel_btn.setVisibility(View.VISIBLE);
-//		ll_pay_btn.setVisibility(View.VISIBLE);
+		ll_cancel_btn.setVisibility(View.VISIBLE);
+		ll_pay_btn.setVisibility(View.VISIBLE);
 		
 		infoFragment.updateDriverAndVehicle();
 

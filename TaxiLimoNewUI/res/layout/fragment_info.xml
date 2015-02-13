@@ -237,7 +237,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginRight="@dimen/small_padding"
-                    android:src="@drawable/icon_taxi"
+                    android:src="@drawable/icon_taxi_black"
                     android:visibility="gone" />
 
                 <TextView

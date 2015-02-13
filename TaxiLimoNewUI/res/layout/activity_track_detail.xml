@@ -282,137 +282,136 @@
             android:textSize="@dimen/info_bar_text_size" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/fl_cancel_btn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bot_button_height"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:minHeight="@dimen/bot_button_height"
-        android:orientation="horizontal" >
+    <!--<FrameLayout-->
+        <!--android:id="@+id/fl_cancel_btn"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/bot_button_height"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:gravity="center"-->
+        <!--android:minHeight="@dimen/bot_button_height"-->
+        <!--android:orientation="horizontal" >-->
 
-        <LinearLayout
-            android:id="@+id/ll_cancel_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:gravity="center"
-            android:minHeight="@dimen/bot_button_height"
-            android:background="@drawable/searchbar_selector"
-            android:orientation="horizontal"
-            android:visibility="gone" >
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_cancel_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:clickable="true"-->
+            <!--android:gravity="center"-->
+            <!--android:minHeight="@dimen/bot_button_height"-->
+            <!--android:background="@drawable/searchbar_selector"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:visibility="gone" >-->
 
-            <TextView
-                android:id="@+id/cancel_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/red_color"
-                android:textSize="@dimen/btn_icon_size" />
+            <!--<TextView-->
+                <!--android:id="@+id/cancel_icon"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/red_color"-->
+                <!--android:textSize="@dimen/btn_icon_size" />-->
 
-            <Space
-                android:layout_width="@dimen/small_padding"
-                android:layout_height="match_parent" />
+            <!--<Space-->
+                <!--android:layout_width="@dimen/small_padding"-->
+                <!--android:layout_height="match_parent" />-->
 
-            <TextView
-                android:id="@+id/tv_cancel"
-                style="@style/RedBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel_trip" />
-        </LinearLayout>
+            <!--<TextView-->
+                <!--android:id="@+id/tv_cancel"-->
+                <!--style="@style/RedBtnText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/cancel_trip" />-->
+        <!--</LinearLayout>-->
 
-        <View
-            android:id="@+id/cancel_cover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha=".7"
-            android:background="@color/background"
-            android:clickable="true"
-            android:visibility="gone" />
-    </FrameLayout>
-
-
+        <!--<View-->
+            <!--android:id="@+id/cancel_cover"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:alpha=".7"-->
+            <!--android:background="@color/background"-->
+            <!--android:clickable="true"-->
+            <!--android:visibility="gone" />-->
+    <!--</FrameLayout>-->
 
 
-<!-- 	<LinearLayout -->
-<!--             android:id="@+id/ll_cancel_btn" -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="@dimen/bot_button_height" -->
-<!--             android:clickable="true" -->
-<!--             android:gravity="center" -->
-<!--             android:layout_alignParentBottom="true" -->
-<!--             android:layout_toLeftOf="@+id/space" -->
-<!--             android:minHeight="@dimen/bot_button_height" -->
-<!--             android:background="@drawable/searchbar_selector" -->
-<!--             android:orientation="horizontal" -->
-<!--             android:visibility="gone" > -->
 
-<!--             <TextView -->
-<!--                 android:id="@+id/cancel_icon" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:textColor="@color/red_color" -->
-<!--                 android:textSize="@dimen/btn_icon_size" /> -->
 
-<!--             <Space -->
-<!--                 android:layout_width="@dimen/small_padding" -->
-<!--                 android:layout_height="match_parent" /> -->
+ 	<LinearLayout
+             android:id="@+id/ll_cancel_btn"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/bot_button_height"
+             android:clickable="true"
+             android:gravity="center"
+             android:layout_alignParentBottom="true"
+             android:layout_toLeftOf="@+id/space"
+             android:minHeight="@dimen/bot_button_height"
+             android:background="@drawable/searchbar_selector"
+             android:orientation="horizontal"
+             android:visibility="gone" >
 
-<!--             <TextView -->
-<!--                 android:id="@+id/tv_cancel" -->
-<!--                 style="@style/RedBtnText" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:text="@string/cancel_trip" /> -->
-<!--      </LinearLayout> -->
+             <TextView
+                 android:id="@+id/cancel_icon"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/red_color"
+                 android:textSize="@dimen/btn_icon_size" />
+
+             <Space
+                 android:layout_width="@dimen/small_padding"
+                 android:layout_height="match_parent" />
+
+             <TextView
+                 android:id="@+id/tv_cancel"
+                 style="@style/RedBtnText"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/cancel_trip" />
+      </LinearLayout>
      
-<!-- 	<View -->
-<!-- 	    android:id="@+id/space" -->
-<!-- 	    android:layout_width="@dimen/normal_padding" -->
-<!--         android:layout_height="@dimen/bot_button_height" -->
-<!-- 	    android:layout_alignParentBottom="true" -->
-<!-- 	    android:layout_centerHorizontal="true"/> -->
+ 	<View
+ 	    android:id="@+id/space"
+ 	    android:layout_width="@dimen/normal_padding"
+         android:layout_height="@dimen/bot_button_height"
+ 	    android:layout_alignParentBottom="true"
+ 	    android:layout_centerHorizontal="true"/>
 	
-<!-- 	<LinearLayout -->
-<!--             android:id="@+id/ll_pay_btn" -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="@dimen/bot_button_height" -->
-<!--             android:clickable="true" -->
-<!--             android:gravity="center" -->
-<!--             android:layout_alignParentBottom="true" -->
-<!--             android:layout_toRightOf="@+id/space" -->
-<!--             android:minHeight="@dimen/bot_button_height" -->
-<!--             android:background="@drawable/green_btn_selector" -->
-<!--             android:orientation="horizontal" -->
-<!--             android:visibility="gone" > -->
+ 	<LinearLayout
+             android:id="@+id/ll_pay_btn"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/bot_button_height"
+             android:clickable="true"
+             android:gravity="center"
+             android:layout_alignParentBottom="true"
+             android:layout_toRightOf="@+id/space"
+             android:minHeight="@dimen/bot_button_height"
+             android:background="@drawable/green_btn_selector"
+             android:orientation="horizontal"
+             android:visibility="gone" >
 
-<!--             <TextView -->
-<!--                 android:id="@+id/pay_icon" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:textColor="@color/white" -->
-<!--                 android:textSize="@dimen/btn_icon_size" /> -->
+             <TextView
+                 android:id="@+id/pay_icon"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/white"
+                 android:textSize="@dimen/btn_icon_size" />
 
-<!--             <Space -->
-<!--                 android:layout_width="@dimen/small_padding" -->
-<!--                 android:layout_height="match_parent" /> -->
+             <Space
+                 android:layout_width="@dimen/small_padding"
+                 android:layout_height="match_parent" />
 
-<!--             <TextView -->
-<!--                 android:id="@+id/tv_pay" -->
-<!--                 style="@style/WhiteBtnText" -->
-<!--                 android:layout_width="wrap_content" -->
-<!--                 android:layout_height="wrap_content" -->
-<!--                 android:text="@string/pay" /> -->
-<!--      </LinearLayout> -->
+             <TextView
+                 android:id="@+id/tv_pay"
+                 style="@style/WhiteBtnText"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/pay" />
+      </LinearLayout>
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/info_bar"
-        android:layout_above="@+id/fl_cancel_btn"
+        android:layout_above="@+id/ll_cancel_btn"
         android:layout_marginBottom="@dimen/normal_padding"
         android:isScrollContainer="false" >
     </android.support.v4.view.ViewPager>
