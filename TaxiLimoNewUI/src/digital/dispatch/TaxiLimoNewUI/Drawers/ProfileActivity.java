@@ -66,10 +66,16 @@ public class ProfileActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        if(getIntent().getExtras()!=null)
+        if(getIntent().getExtras()!=null) {
             isAutoRecovery = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_AUTO_RECOVERY, false);
+        }
         else
             isAutoRecovery = false;
+        //TL-257 Auto Recovery
+        if(isAutoRecovery){
+            setUpAutoComplete();
+        }
+
         setToolBar();
         findView();
         styleView();
@@ -124,8 +130,27 @@ public class ProfileActivity extends BaseActivity implements
         LocalBroadcastManager.getInstance(this).registerReceiver(bcReceiver,
                 new IntentFilter(gcmType.message.toString()));
 
-        //TL-257 Auto Recovery
-        if(isAutoRecovery){
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        boolean alreadySMSVerify = SharedPreferencesManager
+                .loadBooleanPreferences(sharedPreferences,
+                        MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
+        if (alreadySMSVerify) {
+            super.onBackPressed();
+        }
+    }
+
+    private void setUpAutoComplete(){
             if(validate(null)){
                 ll_sms_verify.setVisibility(View.VISIBLE);
                 button_groups.setVisibility(View.GONE);
@@ -167,29 +192,7 @@ public class ProfileActivity extends BaseActivity implements
                     }
                 });
             }
-
-        }
-
-        super.onResume();
     }
-
-    @Override
-    public void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(bcReceiver);
-        super.onPause();
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        boolean alreadySMSVerify = SharedPreferencesManager
-                .loadBooleanPreferences(sharedPreferences,
-                        MBDefinition.SHARE_ALREADY_SMS_VERIFY, false);
-        if (alreadySMSVerify) {
-            super.onBackPressed();
-        }
-    }
-
     private void findView() {
         edtPhone = (EditText) findViewById(R.id.edt_phoneNum);
         edtName = (EditText) findViewById(R.id.edt_name);
