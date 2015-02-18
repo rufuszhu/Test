@@ -20,22 +20,16 @@
             android:layout_height="wrap_content"
             android:text="@string/fav404_text"
             android:textColor="@color/list_gray_text"
+            android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/very_big_margin"
             android:lineSpacingExtra="@dimen/normal_padding"
             android:textSize="@dimen/modify_address_404_font_size"
             style="@style/TextDropShadowWhite"  />
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/fav404" />
     </RelativeLayout>
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/fav_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"

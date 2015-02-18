@@ -203,7 +203,7 @@ public class AddFavoriteTask extends AsyncTask<String, Void, List<Address>> {
 					InputMethodManager imm = (InputMethodManager) localContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(nickname_edit.getWindowToken(), 0);
                     if (localContext instanceof ModifyAddressActivity) {
-                        ((ModifyAddressActivity) localContext).favoritesFragment.notifyChange();
+                        ((ModifyAddressActivity) localContext).getFavList();
                     }
 					nicknameDialog.dismiss();
 				}

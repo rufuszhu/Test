@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.Adapters.PlacesAutoCompleteAdapter;
+import digital.dispatch.TaxiLimoNewUI.BaseFragment;
 import digital.dispatch.TaxiLimoNewUI.DBAddress;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao;
 import digital.dispatch.TaxiLimoNewUI.DBAddressDao.Properties;
@@ -59,7 +60,7 @@ import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 
-public class SearchFragment extends Fragment implements OnItemClickListener {
+public class SearchFragment extends BaseFragment implements OnItemClickListener {
 
 	private static final String TAG = "SearchFragment";
 	private boolean logEnabled = false;
@@ -74,8 +75,6 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 
 	private List<ListItem> contactResults;
 	private List<ListItem> favoriteResults;
-	private List<MyContact> allContacts;
-	private List<DBAddress> allFavs;
 	private ContactResultAdapter contactAdapter;
 	private FavoriteResultAdapter favAdapter;
 	private PlacesAutoCompleteAdapter googleAdapter;
@@ -85,6 +84,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	private Typeface fontFamily, OpenSansSemibold, OpenSansRegular, fontAwesome;
 	
 	private ScrollView scrollView1;
+    private ModifyAddressActivity activity;
 	
 	private boolean mSwiping = false;
 	private boolean mItemPressed = false;
@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Logger.d(TAG, "onCreate");
-		getData();
+        activity = (ModifyAddressActivity)getActivity();
 	}
 
 	@Override
@@ -136,14 +136,6 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		listView_favorite.setOnTouchListener(dismissScrollListener);
 
 		return view;
-	}
-
-	public void getData() {
-		allContacts = new ArrayList<MyContact>();
-		readContacts();
-		daoManager = DaoManager.getInstance(getActivity());
-		addressDao = daoManager.getAddressDao(DaoManager.TYPE_READ);
-		allFavs = addressDao.queryBuilder().where(Properties.IsFavoriate.eq(true)).list();
 	}
 
 	public void resetGoogleListViewHight() {
@@ -274,16 +266,16 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	}
 
 	private void searchForContact(String string) {
-		for (int i = 0; i < allContacts.size(); i++) {
-			MyContact contact = allContacts.get(i);
+		for (int i = 0; i < activity.mContactList.size(); i++) {
+			MyContact contact = activity.mContactList.get(i);
 			if (contact.getAddress().toLowerCase().contains(string.toLowerCase()) || contact.getName().toLowerCase().contains(string.toLowerCase()))
 				contactResults.add(new ListItem(contact.getName(), contact.getAddress()));
 		}
 	}
 
 	private void searchForFavorite(String string) {
-		for (int i = 0; i < allFavs.size(); i++) {
-			DBAddress address = allFavs.get(i);
+		for (int i = 0; i < activity.mFavList.size(); i++) {
+			DBAddress address = activity.mFavList.get(i);
 			if (address.getFullAddress().toLowerCase().contains(string.toLowerCase()) || address.getNickName().toLowerCase().contains(string.toLowerCase()))
 				favoriteResults.add(new ListItem(address.getNickName(), address.getFullAddress()));
 		}
@@ -308,7 +300,10 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 	public void onResume() {
 		super.onResume();
 		Logger.d(TAG, "on RESUME");
-
+        if(canOpenTutorial(SearchFragment.class.getSimpleName())){
+            showToolTip(getString(R.string.tooltip_search), SearchFragment.class.getSimpleName());
+            //stopShowingToolTip(AttributeActivity.class.getSimpleName());
+        }
 	}
 
 	@Override
@@ -508,35 +503,6 @@ public class SearchFragment extends Fragment implements OnItemClickListener {
 		}
 	}
 
-	private void readContacts() {
-		String[] PROJECTION = new String[] { ContactsContract.Data.CONTACT_ID, ContactsContract.Contacts.DISPLAY_NAME, StructuredPostal.STREET };
-
-		ContentResolver cr = getActivity().getContentResolver();
-		Cursor cursor = cr.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, PROJECTION, null, null, ContactsContract.Contacts.DISPLAY_NAME);
-
-		if (cursor != null) {
-			try {
-				final int contactIdIndex = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);
-				final int displayNameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-				final int streetIndex = cursor.getColumnIndex(StructuredPostal.STREET);
-				String contactId;
-				String displayName, street;
-				while (cursor.moveToNext()) {
-					street = cursor.getString(streetIndex);
-					if (street != null && !street.equalsIgnoreCase("")) {
-						contactId = cursor.getString(contactIdIndex);
-						displayName = cursor.getString(displayNameIndex);
-						Uri img_uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId);
-
-						MyContact maddr = new MyContact(img_uri, displayName, street, (long) -1.0);
-						allContacts.add(maddr);
-					}
-				}
-			} finally {
-				cursor.close();
-			}
-		}
-	}
 
 	public void setListViewHeightBasedOnChildren(ListView listView) {
 		ListAdapter listAdapter = listView.getAdapter();

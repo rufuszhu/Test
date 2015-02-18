@@ -220,6 +220,7 @@ public class Utils {
 		}
 	}
 
+
     private static String getShortName(DBAttributeDao attributeDao, DBAttribute dbAttr, int position, String[] attr_id_list) {
         int repeatCount = 0;
         int beforeCount = 0;

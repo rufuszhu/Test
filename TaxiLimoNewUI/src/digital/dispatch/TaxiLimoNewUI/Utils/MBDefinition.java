@@ -140,7 +140,9 @@ public class MBDefinition {
 	public final static String ICON_PHONE_CIRCLE = "\ue062";
 	public final static String ICON_WARNNING = "\ue1ed";
     public final static String ICON_MALE_USER = "\ue47e";
-	
+    public final static String ICON_LIGHT_BULB = "\ue2ef";
+
+
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";
 	public final static String ICON_TRACK_TAXI_RED = "red";

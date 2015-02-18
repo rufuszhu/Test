@@ -103,6 +103,12 @@ public class AttributeActivity extends BaseActivity {
 //		refreshing = true;
 		boolean isFromBooking = false;
 		new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        if(canOpenTutorial(AttributeActivity.class.getSimpleName())){
+            showToolTip(getString(R.string.tooltip_attribute), AttributeActivity.class.getSimpleName());
+            //stopShowingToolTip(AttributeActivity.class.getSimpleName());
+        }
+
         /*
         int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
         String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
