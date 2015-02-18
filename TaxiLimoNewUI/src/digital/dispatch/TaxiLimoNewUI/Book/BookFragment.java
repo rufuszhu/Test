@@ -635,7 +635,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
 
 			// Try to get an address for the current location. Catch IO or network problems.
 			try {
-
 				/*
 				 * Get a new geocoding service instance, set for localized addresses. This example uses android.location.Geocoder, but other geocoders that conform
 				 * to address standards can also be used.
@@ -665,7 +664,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
 					return LocationUtils.addressToString(getActivity(), address);
 				else
 					return "";
-				
 			}else{	
 				//try HTTP lookup to the maps API					
 				GecoderGoogle mGecoderGoogle = new GecoderGoogle(localContext, Locale.getDefault(), logEnabled);
@@ -676,7 +674,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
 					addressList = mGecoderGoogle.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 					
 					if (addressList != null && addressList.size() > 0) {
-					
 							// Get the first address
 							Address address = addressList.get(0);
 							Utils.mPickupAddress = address;
@@ -685,7 +682,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
 								return LocationUtils.addressToString(getActivity(), address);
 							else
 								return "";
-						
 					} else {
 						// If there aren't any addresses, post a message
 						Utils.mPickupAddress = null;
@@ -696,8 +692,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
 						else
 							return "";
 					}
-					
-					
 				}catch (IOException e) {
 			
 					// print the stack trace
@@ -881,7 +875,6 @@ public class BookFragment extends Fragment implements LocationListener, GoogleAp
                     cleanUP();
                     startAvailableCarsTask();
 					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.locationToLatLng(currentLocation), MBDefinition.DEFAULT_ZOOM));
-
 				}
 				else
 					Toast.makeText(getActivity(), R.string.err_no_current_location, Toast.LENGTH_LONG).show();

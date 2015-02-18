@@ -14,7 +14,10 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
@@ -57,6 +60,13 @@ public class RegisterConfirmActivity extends BaseActivity {
 					TextView warning = (TextView) findViewById(R.id.chk_warning);
 					warning.setVisibility(View.VISIBLE);
 
+                    ScrollView scrollView = (ScrollView) findViewById(R.id.scrv_eula);
+                    RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    p.addRule(RelativeLayout.ABOVE, R.id.chk_warning);
+                    check_box.setLayoutParams(p);
+
 				} else {
 					showWelcomeDialog();
 				}
@@ -90,6 +100,8 @@ public class RegisterConfirmActivity extends BaseActivity {
         TextView yourTextView = Utils.getToolbarTitleView(this,toolbar);
         yourTextView.setTypeface(face);
     }
+
+
 	private void updateActionBar(){
 
 		ActionBar actionBar = getSupportActionBar();

@@ -145,5 +145,7 @@
 
     <dimen name="history_404_font_size">16sp</dimen>
     <dimen name="track_404_font_size">16sp</dimen>
-
+    <dimen name="tooltip_icon_size">20sp</dimen>
+    <dimen name="tooltip_close_icon_size">20sp</dimen>
+    <dimen name="tooltip_font_size">12sp</dimen>
 </resources>

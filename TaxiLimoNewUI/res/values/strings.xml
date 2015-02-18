@@ -182,9 +182,9 @@
     <string name="name_space">http://iis.com.dds.osp.itaxi.interface/</string>
     <!--<string name="url">http://192.168.50.160:76/Service.asmx</string>-->
     <!--<string name="url">http://173.240.187.140:8285/Service.asmx?wsdl</string>-->
-     <string name="url">https://zoro.digital-dispatch.com:443/Service.asmx?wsdl</string>
+     <!--<string name="url">https://zoro.digital-dispatch.com:443/Service.asmx?wsdl</string>-->
     
-     <!--<string name="url">https://mg.digital-dispatch.com:443/Service.asmx?wsdl</string>-->
+     <string name="url">https://mg.digital-dispatch.com:444/Service.asmx?wsdl</string>
 
 
      <!--<string name="url">https://192.168.50.161:444/Service.asmx?wsdl</string>-->
@@ -485,6 +485,10 @@
     <string name="err_user_unknown">It seems that we do not have your data on the server, please verify your phone number again, sorry for the inconvenience</string>
     <string name="err_user_waiting">Please verify your phone number</string>
     <string name="message_book_successful_future_job">Booking confirmed. We’ll alert you when your cab is on the way.</string>
+    <string name="tooltip_attribute">Long click to set your preferred company for the city</string>
+    <string name="tooltip_favorite">Swipe on an favorite to edit/delete</string>
+    <string name="tooltip_search">Swipe on an address to add it as favorite</string>
+    <string name="tooltip_contacts">Swipe on an address to add it as favorite</string>
 
 
 </resources>

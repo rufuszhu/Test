@@ -5,6 +5,8 @@ import android.content.SharedPreferences.Editor;
 
 public class SharedPreferencesManager {
 
+    public static String SP_TUTORIALS = "tutorials";
+
 	public static boolean loadBooleanPreferences(SharedPreferences sharedPreferences, String key, Boolean defaultValue) {
 		return sharedPreferences.getBoolean(key, defaultValue);
 	}
