@@ -71,10 +71,6 @@ public class ProfileActivity extends BaseActivity implements
         }
         else
             isAutoRecovery = false;
-        //TL-257 Auto Recovery
-        if(isAutoRecovery){
-            setUpAutoComplete();
-        }
 
         setToolBar();
         findView();
@@ -121,6 +117,11 @@ public class ProfileActivity extends BaseActivity implements
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
 
+            //TL-257 Auto Recovery
+            if(isAutoRecovery){
+                isAutoRecovery=false;
+                setUpAutoRecovery();
+            }
         }
 
         // TL-235
@@ -150,7 +151,7 @@ public class ProfileActivity extends BaseActivity implements
         }
     }
 
-    private void setUpAutoComplete(){
+    private void setUpAutoRecovery(){
             if(validate(null)){
                 ll_sms_verify.setVisibility(View.VISIBLE);
                 button_groups.setVisibility(View.GONE);

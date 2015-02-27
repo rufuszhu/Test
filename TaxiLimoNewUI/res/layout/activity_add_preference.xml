@@ -1,38 +1,101 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AddPreferenceActivity" >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.AddPreferenceActivity">
 
-    <Spinner
-        android:id="@+id/country_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        
-        />
+    <include layout="@layout/toolbar" />
 
-    <Spinner
-        android:id="@+id/state_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/country_spinner" />
 
-    <Spinner
-        android:id="@+id/region_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/state_spinner" />
-
-    <ListView
-        android:id="@+id/company_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/region_spinner" >
-    </ListView>
+        android:paddingTop="@dimen/normal_padding"
+        android:paddingLeft="@dimen/normal_padding"
+        android:paddingRight="@dimen/normal_padding"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_country"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:background="@drawable/shape_spinner_background"
+            android:layout_marginBottom="@dimen/normal_padding">
+
+            <digital.dispatch.TaxiLimoNewUI.Widget.MySpinner
+                android:id="@+id/country_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_state"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_below="@+id/rl_country"
+            android:background="@drawable/shape_spinner_background"
+            android:layout_marginBottom="@dimen/normal_padding">
+
+            <digital.dispatch.TaxiLimoNewUI.Widget.MySpinner
+                android:id="@+id/state_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_region"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_below="@+id/rl_state"
+            android:background="@drawable/shape_spinner_background"
+            android:layout_marginBottom="@dimen/normal_padding">
+
+            <digital.dispatch.TaxiLimoNewUI.Widget.MySpinner
+                android:id="@+id/region_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_choose_prefer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:layout_below="@id/rl_region"
+            android:background="@drawable/shape_textview_border"
+            android:paddingLeft="@dimen/normal_padding">
+
+
+            <TextView
+                android:id="@+id/tv_choose_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="@dimen/normal_padding"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/choose_prefer_company" />
+
+
+            <TextView
+                android:id="@+id/right_angle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:paddingRight="2dp"
+                android:textSize="@dimen/right_triangle_size"
+                />
+        </RelativeLayout>
+        <include layout="@layout/company_list_item"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

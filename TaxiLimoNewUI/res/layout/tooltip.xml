@@ -8,7 +8,8 @@
     android:background="@color/gray"
     android:alpha=".7"
     android:clickable="true"
-    android:padding="@dimen/normal_padding">
+    android:paddingLeft="@dimen/normal_padding"
+    android:paddingRight="@dimen/normal_padding">
 
 
     <TextView
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/normal_padding"
         android:layout_toRightOf="@+id/icon_light_bulb"
+        android:layout_toLeftOf="@+id/icon_close"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
         android:textSize="@dimen/tooltip_font_size"/>

@@ -24,7 +24,12 @@ public class MBDefinition {
 	public static final String EXTRA_BOOKING = "EXTRA_BOOKING";
 	public final static String DBBOOKING_EXTRA= "DBBOOKING";
 	public final static float DEFAULT_ZOOM = 15f;
-	
+    public final static String EXTRA_CITY= "EXTRA_CITY";
+    public final static String EXTRA_PROVINCE= "EXTRA_PROVINCE";
+    public final static String EXTRA_COUNTRY= "EXTRA_COUNTRY";
+
+    //public final static String EXTRA_PREFERED_ATTR= "EXTRA_PREFERED_ATTR";
+
 	public final static int REQUEST_PICKUPADDRESS_CODE = 2;
 	public final static int REQUEST_DROPOFFADDRESS_CODE = 3;
 	public final static int REQUEST_COMPANYITEM_CODE = 4;
@@ -141,7 +146,7 @@ public class MBDefinition {
 	public final static String ICON_WARNNING = "\ue1ed";
     public final static String ICON_MALE_USER = "\ue47e";
     public final static String ICON_LIGHT_BULB = "\ue2ef";
-
+    public final static String ICON_RIGHT_TRIANGLE = "\ue592";
 
 	public final static String ICON_TRACK_TAXI_YELLOW = "yellow";
 	public final static String ICON_TRACK_TAXI_BLUE = "blue";

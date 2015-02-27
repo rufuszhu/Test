@@ -6,36 +6,47 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
+import java.util.List;
+
+import digital.dispatch.TaxiLimoNewUI.DBAddress;
+import digital.dispatch.TaxiLimoNewUI.DBPreference;
+import digital.dispatch.TaxiLimoNewUI.DBPreferenceDao;
+import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
+import digital.dispatch.TaxiLimoNewUI.Drawers.CompanyPreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
 public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 
-	private final Context context;
-	private final CompanyItem[] items;
-	boolean bookRightAfter;
+    private static final java.lang.String TAG = "CompanyListAdapter";
+    private final Context context;
+	public CompanyItem[] items;
+	boolean isFromPreference;
 	private Typeface OpenSansSemibold;
 	private Typeface OpenSansRegular;
 	//private Typeface rionaSansBold;
 	private Typeface exoBold;
 	
 
-	public CompanyListAdapter(Context context, CompanyItem[] items, boolean bookRightAfter) {
+	public CompanyListAdapter(Context context, CompanyItem[] items, boolean isFromPreference) {
 		super(context, R.layout.company_list_item, items);
 		this.context = context;
 		this.items = items;
-		this.bookRightAfter = bookRightAfter;
+		this.isFromPreference = isFromPreference;
         OpenSansSemibold = FontCache.getFont(context, "fonts/OpenSansSemibold.ttf");
         OpenSansRegular = FontCache.getFont(context, "fonts/OpenSansRegular.ttf");
-		
+
 		exoBold = FontCache.getFont(context, "fonts/Exo2-Bold.ttf");
 	}
 
@@ -44,6 +55,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		public TextView name;
 		public TextView description;
 		public LinearLayout ll_attr;
+        public FrameLayout icon_preferred;
 		//public TextView tv_round_btn;
 		//public TextView estFare;
 	}
@@ -62,6 +74,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 			viewHolder.name = (TextView) rowView.findViewById(R.id.tv_name);
 			viewHolder.description = (TextView) rowView.findViewById(R.id.tv_description);
 			viewHolder.ll_attr = (LinearLayout) rowView.findViewById(R.id.ll_attr);
+            viewHolder.icon_preferred = (FrameLayout) rowView.findViewById(R.id.icon_preferred);
 			//TL-333
 			//viewHolder.tv_round_btn = (TextView) rowView.findViewById(R.id.tv_round_btn);
 			//viewHolder.estFare = (TextView) rowView.findViewById(R.id.tv_est_fare);
@@ -75,24 +88,13 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		viewHolder.name.setTypeface(OpenSansSemibold);
 		//viewHolder.tv_round_btn.setTypeface(exoBold);
 		viewHolder.description.setTypeface(OpenSansRegular);
-		
-		/*
-		if (bookRightAfter)
-			//viewHolder.tv_round_btn.setText(context.getString(R.string.book));
-		else
-			//viewHolder.tv_round_btn.setText(context.getString(R.string.select));
-			
-			 */
+
 
 		CompanyItem item = items[position];
 
 		viewHolder.name.setText(item.name);
 		String prefixURL = context.getResources().getString(R.string.url);
 		prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
-		// String[] locArray = item.logo.split("/");
-		// new DownloadLogoTask(prefixURL + item.logo, locArray[locArray.length - 1], viewHolder.icon,
-		// context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		// new DownloadImageTask(viewHolder.icon).execute(prefixURL + item.logo);
 		viewHolder.icon.setDefaultImageResId(R.drawable.launcher);
 		viewHolder.icon.setImageUrl(prefixURL + item.logo, AppController.getInstance().getImageLoader());
 		viewHolder.description.setText(item.description);
@@ -100,35 +102,64 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyItem> {
 		String[] attrs = item.attributes.split(",");
 		int marginRight = 10;
 		Utils.showOption(viewHolder.ll_attr, attrs, context, marginRight);
-		
-//		if(position%2==1){
-//			rowView.setBackgroundResource(R.drawable.list_background2_selector);
-//		}
-		
-		
-		// TL-88 add fare estimate if drop off address is set and baseRate set up
-//		if (Utils.mDropoffAddress != null && item.baseRate != 0 && item.ratePerDistance != 0) {
-//
-//			if (Utils.hasHoneycomb()) {
-//				// --post GB use serial executor by default --
-//				new GetEstimateFareTask(viewHolder.estFare, item.baseRate, item.ratePerDistance).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-//						Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude(), Utils.mDropoffAddress.getLatitude() + ","
-//								+ Utils.mDropoffAddress.getLongitude(), "driving");
-//			} else {
-//				// --GB uses ThreadPoolExecutor by default--
-//				new GetEstimateFareTask(viewHolder.estFare, item.baseRate, item.ratePerDistance).execute(Utils.mPickupAddress.getLatitude() + ","
-//						+ Utils.mPickupAddress.getLongitude(), Utils.mDropoffAddress.getLatitude() + "," + Utils.mDropoffAddress.getLongitude(), "driving");
-//			}
-//
-//		} else {
-//			viewHolder.estFare.setText("");
-//		}
-
+        viewHolder.icon_preferred.setVisibility(View.GONE);
+        //printPreferCompany();
+        String city;
+        String province;
+        if(isFromPreference){
+           city = ((CompanyPreferenceActivity)context).getCity();
+           province = ((CompanyPreferenceActivity)context).getProvince() ;
+        }
+        else{
+            city = Utils.mPickupAddress.getLocality();
+            province = LocationUtils.states.get(Utils.mPickupAddress.getAdminArea());
+        }
+        if(isPreferedCompany(item.destID, city, province)){
+            viewHolder.icon_preferred.setVisibility(View.VISIBLE);
+        }
+        else {
+            viewHolder.icon_preferred.setVisibility(View.GONE);
+        }
 		return rowView;
 	}
 
 	public CompanyItem getCompanyItem(int i) {
 		return items[i];
 	}
+    @Override
+    public CompanyItem getItem(int i) {
+        return items[i];
+    }
+
+    public boolean isPreferedCompany(String destID, String city, String province){
+        DaoManager daoManager = DaoManager.getInstance(context);
+        DBPreferenceDao preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_READ);
+        List<DBPreference> preferenceList = preferenceDao.queryBuilder().list();
+        for(int i=0; i<preferenceList.size(); i++){
+            if(preferenceList.get(i).getDestId().equalsIgnoreCase(destID)
+                    && preferenceList.get(i).getCity().equalsIgnoreCase(city)
+                        && preferenceList.get(i).getState().equalsIgnoreCase(province))
+            return true;
+        }
+        return false;
+    }
+
+    public boolean printPreferCompany(){
+        DaoManager daoManager = DaoManager.getInstance(context);
+        DBPreferenceDao preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_READ);
+        List<DBPreference> preferenceList = preferenceDao.queryBuilder().list();
+        for(int i=0; i<preferenceList.size(); i++){
+            Logger.e(TAG, "current prefered: " + preferenceList.get(i).getCompanyName());
+        }
+        return false;
+    }
+    @Override
+    public int getCount() {
+        int count = 0;
+        if (items != null) {
+            count = items.length;
+        }
+        return count;
+    }
 
 }

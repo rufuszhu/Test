@@ -327,13 +327,6 @@ public class FavoritesFragment extends BaseFragment {
 
                 }
             });
-            holder.swipeContactView.setOnTouchListener(mTouchListener);
-            holder.viewHeader.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new ValidateAddressTask(getActivity()).execute(adapter.getValues().get(position).getFullAddress());
-                }
-            });
 
             holder.delete_btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -387,6 +380,7 @@ public class FavoritesFragment extends BaseFragment {
             if (position % 2 == 1) {
                 holder.viewHeader.setBackgroundResource(R.drawable.list_background2_selector);
             }
+
             holder.swipeContactView.setOnTouchListener(mTouchListener);
             holder.viewHeader.setOnClickListener(new OnClickListener() {
                 @Override

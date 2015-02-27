@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.Book.BookActivity;
+import digital.dispatch.TaxiLimoNewUI.Drawers.CompanyPreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
@@ -25,19 +26,32 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	CompanyListRequest clReq;
 	Context _context;
 	private Address mAddress;
-	private Boolean isFromBooking;
+	private boolean isFromBooking;
+    private boolean isFromPreference;
+    private String city;
+    private String province;
+    private String country;
 
-	public GetCompanyListTask(Context context, Address mAddress, Boolean isFromBooking) {
+	public GetCompanyListTask(Context context, Address mAddress, Boolean isFromBooking, boolean isFromPreference, String city, String province, String country) {
 		_context = context;
 		this.mAddress = mAddress;
 		this.isFromBooking = isFromBooking;
+        this.isFromPreference = isFromPreference;
+
+        this.city = city;
+        this.country = country;
+        this.province = province;
 	}
 
 	// Before running code in separate thread
 	@Override
 	protected void onPreExecute() {
-		if (!isFromBooking)
-			Utils.showProcessingDialogWithMessage(_context, "Getting available companies in " + mAddress.getLocality());
+		if (!isFromBooking) {
+            if(isFromPreference)
+                Utils.showProcessingDialogWithMessage(_context, "Getting available companies in " + city);
+            else
+                Utils.showProcessingDialogWithMessage(_context, "Getting available companies in " + mAddress.getLocality());
+        }
 	}
 
 	// The code to be executed in a background thread.
@@ -45,9 +59,17 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 	protected Void doInBackground(String... params) {
 		try {
 			clReq = new CompanyListRequest(this, this);
-			clReq.setRegionName(mAddress.getLocality().toUpperCase(Locale.US));
-			clReq.setStateProvince(LocationUtils.states.get(mAddress.getAdminArea()));
-			clReq.setCountry(mAddress.getCountryCode().toUpperCase(Locale.US));
+            if(isFromPreference){
+                clReq.setRegionName(city.toUpperCase(Locale.US));
+                clReq.setStateProvince(LocationUtils.states.get(province));
+                clReq.setCountry(country);
+            }
+            else{
+                clReq.setRegionName(mAddress.getLocality().toUpperCase(Locale.US));
+                clReq.setStateProvince(LocationUtils.states.get(mAddress.getAdminArea()));
+                clReq.setCountry(mAddress.getCountryCode().toUpperCase(Locale.US));
+            }
+
 			clReq.sendRequest(_context.getString(R.string.name_space), _context.getString(R.string.url));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,7 +96,12 @@ public class GetCompanyListTask extends AsyncTask<String, Integer, Void> impleme
 		CompanyItem[] tempCompList = response.GetList();
 		if (isFromBooking) {
 			((BookActivity) _context).handleGetCompanyListResponse(tempCompList, mAddress.getLocality());
-		} else {
+		}
+        else if(isFromPreference){
+            Utils.stopProcessingDialogWithMessage(_context);
+            ((CompanyPreferenceActivity) _context).loadCompanyList(tempCompList);
+        }
+        else {
 			Utils.stopProcessingDialogWithMessage(_context);
 			((AttributeActivity) _context).loadCompanyList(tempCompList);
 		}

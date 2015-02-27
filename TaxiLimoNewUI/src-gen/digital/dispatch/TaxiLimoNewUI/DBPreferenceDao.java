@@ -31,6 +31,8 @@ public class DBPreferenceDao extends AbstractDao<DBPreference, Long> {
         public final static Property DestId = new Property(5, String.class, "destId", false, "DEST_ID");
         public final static Property CompanyName = new Property(6, String.class, "companyName", false, "COMPANY_NAME");
         public final static Property Img = new Property(7, String.class, "img", false, "IMG");
+        public final static Property AttributeList = new Property(8, String.class, "attributeList", false, "ATTRIBUTE_LIST");
+        public final static Property Description = new Property(9, String.class, "description", false, "DESCRIPTION");
     };
 
 
@@ -53,7 +55,9 @@ public class DBPreferenceDao extends AbstractDao<DBPreference, Long> {
                 "'STATE' TEXT," + // 4: state
                 "'DEST_ID' TEXT," + // 5: destId
                 "'COMPANY_NAME' TEXT," + // 6: companyName
-                "'IMG' TEXT);"); // 7: img
+                "'IMG' TEXT," + // 7: img
+                "'ATTRIBUTE_LIST' TEXT," + // 8: attributeList
+                "'DESCRIPTION' TEXT);"); // 9: description
     }
 
     /** Drops the underlying database table. */
@@ -106,6 +110,16 @@ public class DBPreferenceDao extends AbstractDao<DBPreference, Long> {
         if (img != null) {
             stmt.bindString(8, img);
         }
+ 
+        String attributeList = entity.getAttributeList();
+        if (attributeList != null) {
+            stmt.bindString(9, attributeList);
+        }
+ 
+        String description = entity.getDescription();
+        if (description != null) {
+            stmt.bindString(10, description);
+        }
     }
 
     /** @inheritdoc */
@@ -125,7 +139,9 @@ public class DBPreferenceDao extends AbstractDao<DBPreference, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // state
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // destId
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // companyName
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // img
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // img
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // attributeList
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // description
         );
         return entity;
     }
@@ -141,6 +157,8 @@ public class DBPreferenceDao extends AbstractDao<DBPreference, Long> {
         entity.setDestId(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCompanyName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setImg(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setAttributeList(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setDescription(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */

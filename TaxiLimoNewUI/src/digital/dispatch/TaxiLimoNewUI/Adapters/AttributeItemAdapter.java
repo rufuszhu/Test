@@ -16,8 +16,10 @@ import java.util.List;
 
 import digital.dispatch.TaxiLimoNewUI.Book.AttributeActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
+import digital.dispatch.TaxiLimoNewUI.Drawers.CompanyPreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 
@@ -25,10 +27,14 @@ public class AttributeItemAdapter extends BaseAdapter {
     private Context mContext;
     private List<DBAttribute> attrList;
     private Typeface exo2SemiBold;
+    private boolean isFromPreference;
+    private List<Integer> selectedAttrList;
 
-    public AttributeItemAdapter(Context c, List<DBAttribute> attrList) {
+    public AttributeItemAdapter(Context c, List<DBAttribute> attrList, boolean isFromPreference, List<Integer> selectedAttrList) {
         mContext = c;
         this.attrList = attrList;
+        this.isFromPreference = isFromPreference;
+        this.selectedAttrList = selectedAttrList;
         exo2SemiBold = FontCache.getFont(mContext, "fonts/Exo2-SemiBold.ttf");
     }
 
@@ -80,8 +86,9 @@ public class AttributeItemAdapter extends BaseAdapter {
             states.addState(new int[]{},
                     mContext.getResources().getDrawable(R.drawable.attr_btn_background));
 
-            TextView shortName = (TextView)view.findViewById(R.id.shortName);
-            TextView longName = (TextView)view.findViewById(R.id.longName);
+            TextView shortName = (TextView) view.findViewById(R.id.shortName);
+            TextView longName = (TextView) view.findViewById(R.id.longName);
+            ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
 
             shortName.setVisibility(View.VISIBLE);
             longName.setVisibility(View.VISIBLE);
@@ -89,6 +96,9 @@ public class AttributeItemAdapter extends BaseAdapter {
             shortName.setTypeface(exo2SemiBold);
             longName.setTypeface(exo2SemiBold);
 
+
+            shortName.setTextColor(mContext.getResources().getColor(R.color.attr_color));
+            longName.setTextColor(mContext.getResources().getColor(R.color.attr_color));
             shortName.setText(getShortName(position));
             longName.setText(attrList.get(position).getName());
         }
@@ -97,23 +107,39 @@ public class AttributeItemAdapter extends BaseAdapter {
 
         toggleButton.setBackgroundDrawable(states);
 
-        if ((Utils.selected_attribute != null && Utils.selected_attribute.contains(Integer.parseInt(attrList.get(position).getAttributeId())))) {
+        if (isFromPreference) {
+            if (selectedAttrList != null && selectedAttrList.contains(Integer.parseInt(attrList.get(position).getAttributeId()))) {
+                toggleButton.setChecked(true);
+            }
+        } else if ((Utils.selected_attribute != null && Utils.selected_attribute.contains(Integer.parseInt(attrList.get(position).getAttributeId())))) {
             toggleButton.setChecked(true);
         }
 
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ArrayList<Integer> positive_IDs = new ArrayList<Integer>();
                 for (int i = 0; i < parent.getChildCount(); i++) {
                     ToggleButton toggleButton = (ToggleButton) parent.getChildAt(i).findViewById(R.id.toggleButton);
-                    if (toggleButton.isChecked()) {
+
+                    TextView shortName = (TextView)  parent.getChildAt(i).findViewById(R.id.shortName);
+                    TextView longName = (TextView)  parent.getChildAt(i).findViewById(R.id.longName);
+
+                    if(toggleButton.isChecked()) {
                         positive_IDs.add(Integer.valueOf(attrList.get(i).getAttributeId()));
+                        shortName.setTextColor(mContext.getResources().getColor(R.color.blue_grenn_color2));
+                        longName.setTextColor(mContext.getResources().getColor(R.color.blue_grenn_color2));
+                    }
+                    else{
+                        shortName.setTextColor(mContext.getResources().getColor(R.color.attr_color));
+                        longName.setTextColor(mContext.getResources().getColor(R.color.attr_color));
                     }
                 }
-                ((AttributeActivity) mContext).filterCompany(positive_IDs);
-
+                if (isFromPreference) {
+                    ((CompanyPreferenceActivity) mContext).filterCompany(positive_IDs);
+                } else {
+                    ((AttributeActivity) mContext).filterCompany(positive_IDs);
+                }
             }
         });
         return view;
@@ -125,7 +151,7 @@ public class AttributeItemAdapter extends BaseAdapter {
         char firstChar = attrList.get(position).getName().charAt(0);
         for (int i = 0; i < attrList.size(); i++) {
             if (attrList.get(i).getName().charAt(0) == firstChar) {
-                if(!checkIconAvailable(Integer.parseInt(attrList.get(i).getIconId()))) {
+                if (!checkIconAvailable(Integer.parseInt(attrList.get(i).getIconId()))) {
                     repeatCount++;
                     if (i < position)
                         beforeCount++;
@@ -139,7 +165,7 @@ public class AttributeItemAdapter extends BaseAdapter {
 
     }
 
-    private boolean checkIconAvailable(int attrIconId){
+    private boolean checkIconAvailable(int attrIconId) {
         return MBDefinition.attrBtnOnMap.get(attrIconId) != 0 && MBDefinition.attrBtnOffMap.get(attrIconId) != 0;
     }
 
