@@ -42,7 +42,7 @@ public class GetServiceListResponse extends ResponseWrapper {
 					for (int j = 0; j < ((SoapObject) item).getPropertyCount(); j++){
 						if(j==0){
 							countryName = ((SoapObject) item).getProperty(j).toString();
-							Node country = new Node(countryName,"");
+							Node country = new Node(countryName,null);
 							countryList.add(country);
 						}
 						else{

@@ -91,6 +91,7 @@
                 android:textSize="@dimen/right_triangle_size"
                 />
         </RelativeLayout>
+
         <include layout="@layout/company_list_item"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>

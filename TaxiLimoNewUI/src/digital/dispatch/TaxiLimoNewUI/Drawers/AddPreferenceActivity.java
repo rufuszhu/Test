@@ -144,7 +144,6 @@ public class AddPreferenceActivity extends BaseActivity {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				//if (stateAdapter.objects.size() > 0) {
 					String stateName = stateAdapter.objects.get(position).getName();
-                Logger.e(TAG, "on state " + stateName + " selected");
 					regionAdapter.clear();
 
 					for (int i = 0; i < regionList.size(); i++) {
@@ -252,12 +251,10 @@ public class AddPreferenceActivity extends BaseActivity {
         if(countryList.size()>0)
             countrySpinner.setSelection(0);
         //stateSpinner.setOnItemSelectedEvenIfUnchangedListener(stateListener);
-
-
 	}
 
     private void searchPreference(){
-        if(null!= countryAdapter && null != regionAdapter&& null!= stateAdapter) {
+        if(null!= countryAdapter && null != regionAdapter&& null!= stateAdapter && null != regionSpinner.getSelectedItem()) {
 //            Logger.e(TAG, "region getSelectedItem().toString(): " + ((Node) regionSpinner.getSelectedItem()).getName());
 //            Logger.e(TAG, "country getSelectedItem().toString(): " + ((Node) countrySpinner.getSelectedItem()).getName());
 //            Logger.e(TAG, "sate getSelectedItem().toString(): " + ((Node) stateSpinner.getSelectedItem()).getName());
@@ -268,12 +265,15 @@ public class AddPreferenceActivity extends BaseActivity {
                     DBPreferenceDao.Properties.State.eq(((Node) stateSpinner.getSelectedItem()).getName().toUpperCase())).list();
 
             if (preferedCompanyList.size() > 0) {
-                Logger.e(TAG, "Found company: " + preferedCompanyList.get(0).getCompanyName());
+                //Logger.e(TAG, "Found company: " + preferedCompanyList.get(0).getCompanyName());
                 setUpCompanyView(preferedCompanyList.get(0));
 
             } else {
                 company_list_item.setVisibility(View.GONE);
             }
+        }
+        else {
+            company_list_item.setVisibility(View.GONE);
         }
     }
 
@@ -295,8 +295,16 @@ public class AddPreferenceActivity extends BaseActivity {
 			// Declaring and Typecasting the textview in the inflated layout
 			TextView tvLanguage = (TextView) layout.findViewById(R.id.tv);
 
-			// Setting the text using the array
-			tvLanguage.setText(objects.get(position).getName());
+			//it means this is country adapter
+            if(objects.get(position).getParent()==null){
+                if(LocationUtils.countrys.containsKey(objects.get(position).getName()))
+                    tvLanguage.setText(LocationUtils.countrys.get(objects.get(position).getName()));
+                else
+                    tvLanguage.setText(objects.get(position).getName());
+            }
+            else{
+                tvLanguage.setText(objects.get(position).getName());
+            }
 
 			// Setting the color of the text
 			tvLanguage.setTypeface(OpenSansRegular);

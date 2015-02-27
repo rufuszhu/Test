@@ -86,7 +86,7 @@ public class CompanyPreferenceActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                builder.setMessage(_context.getString(R.string.save_preference_confirmation) + " " + Utils.mPickupAddress.getLocality() + "?");
+                builder.setMessage(_context.getString(R.string.save_preference_confirmation) + " " + city + "?");
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -198,7 +198,7 @@ public class CompanyPreferenceActivity extends BaseActivity {
     public boolean printPreferCompany(){
         List<DBPreference> preferenceList = preferenceDao.queryBuilder().list();
         for(int i=0; i<preferenceList.size(); i++){
-            Logger.e(TAG, "prefered: " + preferenceList.get(i).getCompanyName());
+            Logger.d(TAG, "prefered: " + preferenceList.get(i).getCompanyName());
         }
         return false;
     }

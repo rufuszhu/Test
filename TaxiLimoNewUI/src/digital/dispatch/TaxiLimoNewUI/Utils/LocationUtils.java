@@ -67,6 +67,14 @@ public final class LocationUtils {
 	// Create an empty string for initializing strings
 	public static final String EMPTY_STRING = new String();
 
+    public static final Map<String, String> countrys = new HashMap<String, String>();
+    static {
+        countrys.put("CA", "Canada");
+        countrys.put("US", "USA");
+        countrys.put("FI", "Finland");
+        countrys.put("UK", "United Kingdom");
+    }
+
 	public static final Map<String, String> states = new HashMap<String, String>();
 	static {
 		states.put("Alabama", "AL");

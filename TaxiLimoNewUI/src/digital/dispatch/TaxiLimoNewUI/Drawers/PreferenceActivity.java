@@ -38,6 +38,7 @@ import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
+import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
 import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
@@ -251,8 +252,12 @@ public class PreferenceActivity extends BaseActivity {
             final ViewHolder holder = (ViewHolder) convertView.getTag();
 
             if(type==TYPE_HAS_HEADER){
+                String country = values.get(position).getCountry();
+                if(LocationUtils.countrys.containsKey(country)){
+                    country = LocationUtils.countrys.get(country);
+                }
                 holder.tv_header.setTypeface(OpenSansSemibold);
-                holder.tv_header.setText(values.get(position).getCountry());
+                holder.tv_header.setText(country);
             }
 
             String prefixURL = context.getResources().getString(R.string.url);

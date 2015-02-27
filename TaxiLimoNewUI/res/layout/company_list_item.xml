@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/company_list_item"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/company_list_item_height"
-    android:background="@drawable/companylist_background_selector"
-    android:minHeight="@dimen/company_list_item_height">
+    android:layout_height="wrap_content"
+    android:background="@drawable/companylist_background_selector">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="@dimen/normal_padding">
 
         <com.android.volley.toolbox.NetworkImageView
