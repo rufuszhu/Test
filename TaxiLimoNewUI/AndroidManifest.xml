@@ -13,7 +13,6 @@
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
            where PACKAGE is the application's package name.
-
     -->
     <permission
         android:name="digital.dispatch.TaxiLimoNewUI.permission.C2D_MESSAGE"
@@ -46,6 +45,11 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".Utils.AppController"
@@ -127,7 +131,6 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
 
-
         <!--
           BroadcastReceiver that will receive intents from GCM
           services and handle them to the custom IntentService.
@@ -161,15 +164,6 @@
 
           By default, it must be named .GCMIntentService, unless the
           application uses a custom BroadcastReceiver that redefines its name.
-
-
-
-
-
-
-
-
-
         -->
         <service android:name=".GCM.GCMIntentService" />
 
@@ -183,7 +177,7 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name="digital.dispatch.TaxiLimoNewUI.Drawers.EditCreditCardActivity"
+            android:name=".Drawers.EditCreditCardActivity"
             android:label="@string/title_activity_edit_credit_card"
             android:parentActivityName=".Drawers.PaymentActivity"
             android:screenOrientation="portrait" >
@@ -234,20 +228,20 @@
                 android:value="digital.dispatch.TaxiLimoNewUI.MainActivity" />
         </activity>
         <activity
-            android:name="digital.dispatch.TaxiLimoNewUI.Book.SetTimeActivity"
+            android:name=".Book.SetTimeActivity"
             android:label="@string/title_activity_set_time"
-            android:parentActivityName=".Book.BookActivity" 
-            android:screenOrientation="portrait">
+            android:parentActivityName=".Book.BookActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" />
         </activity>
         <activity
-            android:name="digital.dispatch.TaxiLimoNewUI.Book.DriverNoteActivity"
+            android:name=".Book.DriverNoteActivity"
             android:label="@string/title_activity_driver_note"
             android:parentActivityName=".Book.BookActivity"
-            android:windowSoftInputMode="stateVisible"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.Book.BookActivity" />
@@ -260,6 +254,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="digital.dispatch.TaxiLimoNewUI.RegisterActivity" />
+        </activity>
+        <activity
+            android:name=".Drawers.CompanyPreferenceActivity"
+            android:label="@string/title_activity_company_preference"
+            android:parentActivityName=".Drawers.PreferenceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity" />
         </activity>
     </application>
 

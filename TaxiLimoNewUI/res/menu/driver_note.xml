@@ -8,6 +8,6 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_accept"
-        android:title="@string/action_settings"/>
+        android:title="@string/save"/>
 
 </menu>

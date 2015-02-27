@@ -1,4 +1,4 @@
-package digital.dispatch.TaxiLimoNewUI.Book;
+package digital.dispatch.TaxiLimoNewUI.Drawers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,34 +7,28 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
 import digital.dispatch.TaxiLimoNewUI.Adapters.AttributeItemAdapter;
 import digital.dispatch.TaxiLimoNewUI.Adapters.CompanyListAdapter;
 import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBAttribute;
 import digital.dispatch.TaxiLimoNewUI.DBAttributeDao;
-import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBPreference;
 import digital.dispatch.TaxiLimoNewUI.DBPreferenceDao;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
@@ -45,98 +39,74 @@ import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
 import digital.dispatch.TaxiLimoNewUI.Utils.MBDefinition;
 import digital.dispatch.TaxiLimoNewUI.Utils.Utils;
-import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 
-public class AttributeActivity extends BaseActivity {
-    private static final String TAG = "AttributeActivity";
+
+public class CompanyPreferenceActivity extends BaseActivity {
+
+    private static final String TAG = "CompanyPreferenceActivity";
     private CompanyItem[] companyArr;
     private ListView lv_company;
     private CompanyListAdapter cp_adapter;
     // private Address mAddress;
     // private ArrayList<Integer> selected_attributes;
-    private MenuItem refresh_icon;
-    private boolean refreshing;
-    private boolean shouldBookRightAfter;
+
     private TextView tv_company404_text;
     private View line;
     private Context _context;
     private DBPreferenceDao preferenceDao;
 
+    public String getCity() {
+        return city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    private String city;
+    private String province;
+    private String country;
+    private String preferedAttrList;
+    private ArrayList<Integer> selectedAttrList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attribute);
+        setContentView(R.layout.activity_company_preference);
         _context = this;
 
+        city = getIntent().getExtras().getString(MBDefinition.EXTRA_CITY);
+        province = getIntent().getExtras().getString(MBDefinition.EXTRA_PROVINCE);
+        country = getIntent().getExtras().getString(MBDefinition.EXTRA_COUNTRY);
+
         setToolBar();
-        shouldBookRightAfter = getIntent().getExtras().getBoolean(MBDefinition.EXTRA_SHOULD_BOOK_RIGHT_AFTER);
+
         lv_company = (ListView) findViewById(R.id.lv_company);
-        lv_company.setOnItemClickListener(new OnItemClickListener() {
+        lv_company.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (shouldBookRightAfter) {
-                    Utils.mSelectedCompany = cp_adapter.getCompanyItem(position);
-                    Intent returnIntent = new Intent();
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                } else {
-                    Utils.mSelectedCompany = cp_adapter.getCompanyItem(position);
-                    finish();
-                }
-            }
-        });
-
-        lv_company.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                if (null != cp_adapter) {
-                    //if it is already preferred company, delete it
-                    if (view.findViewById(R.id.icon_preferred).getVisibility() == View.VISIBLE) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                        builder.setMessage(_context.getString(R.string.delete_preference_confirmation) + " " + Utils.mPickupAddress.getLocality() + "?");
-                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deletePreferedByCity();
-                                cp_adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.show();
-
-                    } else {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-                        builder.setMessage(_context.getString(R.string.save_preference_confirmation) + " " + Utils.mPickupAddress.getLocality() + "?");
-                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //delete previous preferred company
-                                deletePreferedByCity();
-                                //add preferred company with empty attrList
-                                addPreference(cp_adapter.getItem(position));
-                                cp_adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.show();
-
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                builder.setMessage(_context.getString(R.string.save_preference_confirmation) + " " + Utils.mPickupAddress.getLocality() + "?");
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //delete previous preferred company
+                        deletePreferedByCity();
+                        //add preferred company with empty attrList
+                        addPreference(cp_adapter.getCompanyItem(position));
+                        finish();
                     }
-                    return true;
-                }
-                return false;
+                });
+
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+
+
             }
         });
 
@@ -152,45 +122,83 @@ public class AttributeActivity extends BaseActivity {
         tv_company404_text.setTypeface(OpenSansRegular);
     }
 
-    private void deletePreferedByCity() {
-//        Logger.e(TAG, "before delete");
-//        printPreferCompany();
-        Address address = Utils.mPickupAddress;
-        QueryBuilder qb = preferenceDao.queryBuilder();
+    @Override
+    protected void onResume() {
+        super.onResume();
+//		refreshing = true;
+        boolean isFromBooking = false;
+        boolean isFromPrefernece = true;
+        new GetCompanyListTask(this, null, isFromBooking, isFromPrefernece, city, province, country).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        qb.where(DBPreferenceDao.Properties.City.eq(address.getLocality().toUpperCase()),
-                DBPreferenceDao.Properties.Country.eq(address.getCountryCode().toUpperCase()),
-                DBPreferenceDao.Properties.State.eq(LocationUtils.states.get(address.getAdminArea())));
+        if (canOpenTutorial(CompanyPreferenceActivity.class.getSimpleName())) {
+            showToolTip(getString(R.string.tooltip_preference), CompanyPreferenceActivity.class.getSimpleName());
+        }
 
-        qb.buildDelete().executeDeleteWithoutDetachingEntities();
+        DaoManager daoManager = DaoManager.getInstance(this);
+        preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_WRITE);
 
-//        Logger.e(TAG, "after delete");
-//        printPreferCompany();
+        loadSavedAttrList();
+
+        companyArr = new CompanyItem[0];
+        boolean isFromPreference = true;
+        cp_adapter = new CompanyListAdapter(this, companyArr, isFromPreference);
+        lv_company.setAdapter(cp_adapter);
+
+        /*
+        int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
+        String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
+        Logger.e(TAG, usedMegsString);
+        */
     }
 
-    private void addPreference(final CompanyItem item) {
+    private void loadSavedAttrList(){
+        List<DBPreference> preferedCompanyInThisCity = preferenceDao.queryBuilder().where(DBPreferenceDao.Properties.City.eq(city.toUpperCase()),
+                DBPreferenceDao.Properties.Country.eq(country),
+                DBPreferenceDao.Properties.State.eq(province)).list();
 
+        if(preferedCompanyInThisCity.size()==0){
+            preferedAttrList = "";
+        }
+        else
+        {
+            preferedAttrList = preferedCompanyInThisCity.get(0).getAttributeList();
+        }
+    }
+
+    private void deletePreferedByCity(){
+        preferenceDao.queryBuilder().where(DBPreferenceDao.Properties.City.eq(city.toUpperCase()),
+                DBPreferenceDao.Properties.Country.eq(country),
+                DBPreferenceDao.Properties.State.eq(province)).buildDelete().executeDeleteWithoutDetachingEntities();
+    }
+
+    private void addPreference(CompanyItem item){
         Address address = Utils.mPickupAddress;
+
+        //over write company for this trip if changing preference for the same city
+        if(address!=null && province.equalsIgnoreCase(LocationUtils.states.get(address.getAdminArea()))
+                && city.equalsIgnoreCase(address.getLocality())
+                && country.equalsIgnoreCase(address.getCountryCode())){
+            Utils.mSelectedCompany = item;
+            Utils.selected_attribute = selectedAttrList;
+        }
+
         DBPreference newPreference = new DBPreference();
-        newPreference.setAttributeList(Utils.setupAttributeIdList(Utils.selected_attribute));
-        newPreference.setCity(address.getLocality().toUpperCase());
-        newPreference.setCountry(address.getCountryCode().toUpperCase());
+        newPreference.setAttributeList(Utils.setupAttributeIdList(selectedAttrList));
+        newPreference.setCity(city.toUpperCase());
+        newPreference.setCountry(country.toUpperCase());
         newPreference.setCompanyName(item.name);
         newPreference.setDestId(item.destID);
         newPreference.setImg(item.logo);
         newPreference.setDescription(item.description);
-        newPreference.setState(LocationUtils.states.get(address.getAdminArea()));
+        //Logger.e(TAG,"saving province: " + province + ", city: " + city + ", country: " + country);
+        newPreference.setState(province.toUpperCase());
         preferenceDao.insert(newPreference);
-
-
     }
 
-    public boolean printPreferCompany() {
-        DaoManager daoManager = DaoManager.getInstance(this);
-        preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_WRITE);
+    public boolean printPreferCompany(){
         List<DBPreference> preferenceList = preferenceDao.queryBuilder().list();
-        for (int i = 0; i < preferenceList.size(); i++) {
-            Logger.d(TAG, "prefered: " + preferenceList.get(i).getCompanyName() + ", country: " + preferenceList.get(i).getCountry() + ", city: " + preferenceList.get(i).getCity() + ", state: " + preferenceList.get(i).getState());
+        for(int i=0; i<preferenceList.size(); i++){
+            Logger.e(TAG, "prefered: " + preferenceList.get(i).getCompanyName());
         }
         return false;
     }
@@ -203,33 +211,7 @@ public class AttributeActivity extends BaseActivity {
         Typeface face = FontCache.getFont(_context, "fonts/Exo2-Light.ttf");
         TextView yourTextView = Utils.getToolbarTitleView(this, toolbar);
         yourTextView.setTypeface(face);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//		refreshing = true;
-        boolean isFromBooking = false;
-        boolean isPreference = false;
-        new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking, isPreference, "", "", "").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        if (canOpenTutorial(AttributeActivity.class.getSimpleName())) {
-            showToolTip(getString(R.string.tooltip_attribute), AttributeActivity.class.getSimpleName());
-            //stopShowingToolTip(AttributeActivity.class.getSimpleName());
-        }
-
-        DaoManager daoManager = DaoManager.getInstance(this);
-        preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_WRITE);
-        companyArr = new CompanyItem[0];
-        boolean isFromPreference = false;
-        cp_adapter = new CompanyListAdapter(this, companyArr, isFromPreference);
-        lv_company.setAdapter(cp_adapter);
-
-        /*
-        int usedMegs = (int)(Debug.getNativeHeapAllocatedSize() / 1048576L);
-        String usedMegsString = String.format(" - Memory Used: %d MB", usedMegs);
-        Logger.e(TAG, usedMegsString);
-        */
+        getSupportActionBar().setTitle(province + " | " + city);
     }
 
     @Override
@@ -241,14 +223,13 @@ public class AttributeActivity extends BaseActivity {
             unbindDrawables(findViewById(R.id.RootView));
             System.gc();
         }
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            clearSelectedCompanyIfNotAvailable();
+            //clearSelectedCompanyIfNotAvailable();
             finish();
             return true;
         }
@@ -261,37 +242,36 @@ public class AttributeActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             //TL-359
-            clearSelectedCompanyIfNotAvailable();
+            //clearSelectedCompanyIfNotAvailable();
 
             finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    private void clearSelectedCompanyIfNotAvailable() {
-        boolean companyAvailable = false;
-        if (Utils.mSelectedCompany == null)
-            return;
-
-        if (cp_adapter == null) {
-            Utils.mSelectedCompany = null;
-            return;
-        }
-
-        for (int i = 0; i < cp_adapter.getCount(); i++) {
-            if (cp_adapter.getCompanyItem(i).destID.equals(Utils.mSelectedCompany.destID))
-                companyAvailable = true;
-        }
-
-        if (!companyAvailable)
-            Utils.mSelectedCompany = null;
-    }
+//
+//    private void clearSelectedCompanyIfNotAvailable() {
+//        boolean companyAvailable = false;
+//        if (Utils.mSelectedCompany == null)
+//            return;
+//
+//        if (cp_adapter == null) {
+//            Utils.mSelectedCompany = null;
+//            return;
+//        }
+//
+//        for (int i = 0; i < cp_adapter.getCount(); i++) {
+//            if (cp_adapter.getCompanyItem(i).destID.equals(Utils.mSelectedCompany.destID))
+//                companyAvailable = true;
+//        }
+//
+//        if (!companyAvailable)
+//            Utils.mSelectedCompany = null;
+//    }
 
     // call from AttributeItemAdapter
     public void filterCompany(ArrayList<Integer> positive_attribute_IDs) {
-        // selected_attributes = positive_attribute_IDs;
-        Utils.selected_attribute = positive_attribute_IDs;
+        selectedAttrList = positive_attribute_IDs;
         if (positive_attribute_IDs.size() == 0 && companyArr != null) {
             //cp_adapter = new CompanyListAdapter(this, companyArr, shouldBookRightAfter);
             //lv_company.setAdapter(cp_adapter);
@@ -302,9 +282,9 @@ public class AttributeActivity extends BaseActivity {
                 lv_company.setVisibility(View.GONE);
                 tv_company404_text.setVisibility(View.VISIBLE);
                 line.setVisibility(View.GONE);
-                if (Utils.mPickupAddress != null) {
+                if (city != null) {
                     String string = "No Fleets available ";
-                    string += Utils.mPickupAddress.getLocality() != null ? ("in " + Utils.mPickupAddress.getLocality()) : "";
+                    string += city != null ? ("in " + city) : "";
                     tv_company404_text.setText(string);
                 } else
                     tv_company404_text.setText("Please select a pickup address first");
@@ -335,8 +315,6 @@ public class AttributeActivity extends BaseActivity {
                     compArr[i] = temp.get(i);
                 }
 
-//                cp_adapter = new CompanyListAdapter(this, compArr, shouldBookRightAfter);
-//                lv_company.setAdapter(cp_adapter);
                 cp_adapter.items = compArr;
                 cp_adapter.notifyDataSetChanged();
 
@@ -358,16 +336,29 @@ public class AttributeActivity extends BaseActivity {
         //stopUpdateAnimation();
         companyArr = tempCompList;
 
+        selectedAttrList = attrStringToList(preferedAttrList);
+
         //TL-376 Only show applicable attributes on OPTIONS page.
         setUpAttributeGridBaseOnCompanyAttribut(tempCompList);
 
-        if (Utils.selected_attribute != null) {
-            filterCompany(Utils.selected_attribute);
+        if (selectedAttrList != null) {
+            filterCompany(selectedAttrList);
         } else {
             filterCompany(new ArrayList<Integer>());
         }
     }
 
+    private ArrayList<Integer> attrStringToList(String list){
+        String[] temp = list.split(",");
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int i = 0; i < temp.length; i++){
+            if(temp[i].length()>0)
+            result.add(Integer.valueOf(temp[i]));
+        }
+        return result;
+    }
+
+    //only shows attributes exist in the cities' companies
     private void setUpAttributeGridBaseOnCompanyAttribut(CompanyItem[] tempCompList) {
         DaoManager daoManager = DaoManager.getInstance(this);
         DBAttributeDao attributeDao = daoManager.getDBAttributeDao(DaoManager.TYPE_READ);
@@ -390,8 +381,8 @@ public class AttributeActivity extends BaseActivity {
         }
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        boolean isFromPreference = false;
-        gridview.setAdapter(new AttributeItemAdapter(this, attrList, isFromPreference, null));
+        boolean isFromPreference = true;
+        gridview.setAdapter(new AttributeItemAdapter(this, attrList, isFromPreference, selectedAttrList));
     }
 
 }

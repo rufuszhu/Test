@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/background"
+android:orientation="vertical"
+android:id="@+id/RootView"
+tools:context="digital.dispatch.TaxiLimoNewUI.Drawers.CompanyPreferenceActivity" >
+<include layout="@layout/toolbar" />
+
+<TextView
+    android:id="@+id/textView1"
+    style="@style/TextDropShadowWhite"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginLeft="@dimen/normal_margin"
+    android:text="@string/options"
+    android:textColor="@color/list_gray_text"
+    android:textSize="@dimen/select_company_font_size"
+    android:textStyle="bold" />
+
+<GridView
+    android:id="@+id/gridview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="3"
+    android:gravity="center"
+    android:horizontalSpacing="@dimen/small_padding"
+    android:numColumns="3"
+    android:padding="@dimen/normal_padding"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="@dimen/small_padding" >
+</GridView>
+
+<TextView
+    android:id="@+id/textView2"
+    style="@style/TextDropShadowWhite"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/normal_margin"
+    android:layout_marginBottom="@dimen/normal_margin"
+    android:layout_marginLeft="@dimen/normal_margin"
+    android:text="@string/please_select_one_preferred_company"
+    android:textColor="@color/list_gray_text"
+    android:textSize="@dimen/select_company_font_size"
+    android:textStyle="bold" />
+
+<View
+    android:id="@+id/line"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/gray_extra_light" />
+
+
+<TextView
+    android:id="@+id/tv_company404_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:lineSpacingExtra="@dimen/normal_padding"
+    android:layout_marginTop="@dimen/big_margin"
+    android:text="No matching taxi company.\nTry selecting fewer booking options."
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/list_gray_text"
+    android:textSize="@dimen/modify_address_404_font_size"
+    style="@style/TextDropShadowWhite"
+    android:visibility="gone"/>
+
+<ListView
+    android:id="@+id/lv_company"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:divider="@android:color/transparent" >
+</ListView>
+
+</LinearLayout>

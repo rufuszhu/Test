@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="USA"
+        android:clickable="false"
+        android:textSize="20sp"
+        android:padding="@dimen/normal_padding"
+        android:background="@color/background"/>
+
+    <digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem
+        android:id="@+id/swipeContactView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/preference_list_item_height"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:background="@drawable/list_background_selector"
+        android:layout_below="@+id/tv_header">
+
+        <RelativeLayout
+            android:id="@+id/viewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/preference_list_item_height"
+            android:background="@drawable/list_background_selector"
+            android:padding="@dimen/normal_padding">
+
+
+            <TextView
+                android:id="@+id/tv_province"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/preference_list_item_font_size"
+                android:singleLine="true"
+                android:text="New Text" />
+
+            <TextView
+                android:id="@+id/tv_seprator1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_province"
+                android:layout_toRightOf="@+id/tv_province"
+                android:paddingLeft="@dimen/small_padding"
+                android:paddingRight="@dimen/small_padding"
+                android:textSize="@dimen/preference_list_item_font_size"
+                android:text="|" />
+
+            <TextView
+                android:id="@+id/tv_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_seprator1"
+                android:layout_toRightOf="@+id/tv_seprator1"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/preference_list_item_font_size"
+                android:singleLine="true"
+                android:text="New Text" />
+
+            <TextView
+                android:id="@+id/tv_seprator2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_city"
+                android:layout_toRightOf="@+id/tv_city"
+                android:paddingLeft="@dimen/small_padding"
+                android:paddingRight="@dimen/small_padding"
+                android:textSize="@dimen/preference_list_item_font_size"
+                android:text="|" />
+
+            <TextView
+                android:id="@+id/tv_company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv_seprator2"
+                android:layout_toLeftOf="@+id/company_icon"
+                android:layout_toRightOf="@+id/tv_seprator2"
+                android:textColor="@color/green"
+                android:textSize="@dimen/preference_list_item_font_size"
+                android:singleLine="true"
+                android:text="New Text" />
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/company_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/contact_option"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/preference_list_item_height"
+            android:background="@color/green"
+            android:tag="desc">
+
+            <FrameLayout
+                android:layout_width="@dimen/swipe_btn_width"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/green_circle_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_green_circle"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/delete_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="@string/delete"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/swipe_btn_font_size" />
+            </FrameLayout>
+        </RelativeLayout>
+    </digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem>
+</LinearLayout>

@@ -14,6 +14,8 @@ public class DBPreference {
     private String destId;
     private String companyName;
     private String img;
+    private String attributeList;
+    private String description;
 
     public DBPreference() {
     }
@@ -22,7 +24,7 @@ public class DBPreference {
         this.id = id;
     }
 
-    public DBPreference(Long id, String country, String city, String region, String state, String destId, String companyName, String img) {
+    public DBPreference(Long id, String country, String city, String region, String state, String destId, String companyName, String img, String attributeList, String description) {
         this.id = id;
         this.country = country;
         this.city = city;
@@ -31,6 +33,8 @@ public class DBPreference {
         this.destId = destId;
         this.companyName = companyName;
         this.img = img;
+        this.attributeList = attributeList;
+        this.description = description;
     }
 
     public Long getId() {
@@ -95,6 +99,22 @@ public class DBPreference {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getAttributeList() {
+        return attributeList;
+    }
+
+    public void setAttributeList(String attributeList) {
+        this.attributeList = attributeList;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

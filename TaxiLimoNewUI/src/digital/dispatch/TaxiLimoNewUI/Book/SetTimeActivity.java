@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,8 +36,8 @@ public class SetTimeActivity extends BaseActivity {
 	private WheelView times;
 	private RadioButton now_btn;
 	private RadioButton later_btn;
-	private LinearLayout save;
-	private LinearLayout cancel;
+//	private LinearLayout save;
+//	private LinearLayout cancel;
 	private TextView question_exclamation;
 	private TextView info;
 	private DateAdapter dateAdapter;
@@ -78,15 +79,41 @@ public class SetTimeActivity extends BaseActivity {
 		later_btn.setTypeface(OpenSansRegular);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if(id==android.R.id.home){
-			finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.driver_note, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id==android.R.id.home){
+            finish();
+            return true;
+        }
+        if(id==R.id.action_accept){
+            if (now_btn.isChecked()) {
+                Utils.pickupDate=null;
+                Utils.pickupTime=null;
+            } else {
+                int dateIndex = dates.getCurrentItem();
+                int timeIndex = times.getCurrentItem();
+
+                if (dates.getCurrentItem() == 0) {
+                    Utils.pickupTime = timeTodayAdapter.getTime(timeIndex);
+
+                } else {
+                    Utils.pickupTime = timeNotTodayAdapter.getTime(timeIndex);
+                }
+                Utils.pickupDate = dateAdapter.getDate(dateIndex);
+            }
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 	
 	@Override
 	public void onResume() {
@@ -110,26 +137,26 @@ public class SetTimeActivity extends BaseActivity {
 		times = (WheelView) findViewById(R.id.times);
 		now_btn = (RadioButton) findViewById(R.id.now);
 		later_btn = (RadioButton) findViewById(R.id.later);
-		save = (LinearLayout) findViewById(R.id.save);
-		cancel = (LinearLayout) findViewById(R.id.cancel);
+//		save = (LinearLayout) findViewById(R.id.save);
+//		cancel = (LinearLayout) findViewById(R.id.cancel);
 		info = (TextView) findViewById(R.id.info);
 		question_exclamation = (TextView) findViewById(R.id.question_exclamation);
 		
-		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon);
-		TextView save_icon = (TextView) findViewById(R.id.save_icon);
-		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
-		cancel_icon.setTypeface(icon_pack);
+//		TextView cancel_icon = (TextView) findViewById(R.id.cancel_icon);
+//		TextView save_icon = (TextView) findViewById(R.id.save_icon);
+//		Typeface icon_pack = FontCache.getFont(this, "fonts/icon_pack.ttf");
+//		cancel_icon.setTypeface(icon_pack);
 
-		cancel_icon.setText(MBDefinition.ICON_CROSS);
-		save_icon.setText(MBDefinition.ICON_CHECK_CODE);
-		save_icon.setTypeface(icon_pack);
+//		cancel_icon.setText(MBDefinition.ICON_CROSS);
+//		save_icon.setText(MBDefinition.ICON_CHECK_CODE);
+//		save_icon.setTypeface(icon_pack);
 		
 		
-		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel);
-		TextView tv_save = (TextView) findViewById(R.id.tv_save);
-		Typeface exoBold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
-		tv_cancel.setTypeface(exoBold);
-		tv_save.setTypeface(exoBold);
+//		TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel);
+//		TextView tv_save = (TextView) findViewById(R.id.tv_save);
+//		Typeface exoBold = FontCache.getFont(this, "fonts/Exo2-Bold.ttf");
+//		tv_cancel.setTypeface(exoBold);
+//		tv_save.setTypeface(exoBold);
 	}
 	
 	private void setUpWheel() {
@@ -210,31 +237,31 @@ public class SetTimeActivity extends BaseActivity {
 			}
 		});
 
-		save.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				if (now_btn.isChecked()) {
-					Utils.pickupDate=null;
-					Utils.pickupTime=null;
-				} else {
-					int dateIndex = dates.getCurrentItem();
-					int timeIndex = times.getCurrentItem();
-
-					if (dates.getCurrentItem() == 0) {
-						Utils.pickupTime = timeTodayAdapter.getTime(timeIndex);
-
-					} else {
-						Utils.pickupTime = timeNotTodayAdapter.getTime(timeIndex);
-					}
-					Utils.pickupDate = dateAdapter.getDate(dateIndex);
-				}
-				finish();
-			}
-		});
-		cancel.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
+//		save.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				if (now_btn.isChecked()) {
+//					Utils.pickupDate=null;
+//					Utils.pickupTime=null;
+//				} else {
+//					int dateIndex = dates.getCurrentItem();
+//					int timeIndex = times.getCurrentItem();
+//
+//					if (dates.getCurrentItem() == 0) {
+//						Utils.pickupTime = timeTodayAdapter.getTime(timeIndex);
+//
+//					} else {
+//						Utils.pickupTime = timeNotTodayAdapter.getTime(timeIndex);
+//					}
+//					Utils.pickupDate = dateAdapter.getDate(dateIndex);
+//				}
+//				finish();
+//			}
+//		});
+//		cancel.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				finish();
+//			}
+//		});
 
 		dates.addChangingListener(wheelListener);
 	}

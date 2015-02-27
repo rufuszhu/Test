@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import digital.dispatch.TaxiLimoNewUI.Book.BookFragment;
 import digital.dispatch.TaxiLimoNewUI.Drawers.AboutActivity;
+import digital.dispatch.TaxiLimoNewUI.Drawers.PreferenceActivity;
 import digital.dispatch.TaxiLimoNewUI.Drawers.ProfileActivity;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities.gcmType;
@@ -336,11 +337,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 		// intent = new Intent(this, PaymentActivity.class);
 		// startActivityForAnim(intent);
 		// break;
-		// case 2:
-		// intent = new Intent(this, PreferenceActivity.class);
-		// startActivityForAnim(intent);
-		// break;
 		case 1:
+		intent = new Intent(this, PreferenceActivity.class);
+		startActivityForAnim(intent);
+		break;
+		case 2:
 			intent = new Intent(this, AboutActivity.class);
 			startActivityForAnim(intent);
 			break;

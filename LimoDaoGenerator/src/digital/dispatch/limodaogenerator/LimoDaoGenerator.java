@@ -35,10 +35,22 @@ import de.greenrobot.daogenerator.ToMany;
             // break was omitted by purpose.
     }
 } */
+
+//@Override
+//public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//    Log.i(TAG, "Update Schema to version: "+Integer.toString(oldVersion)+"->"+Integer.toString(newVersion));
+//    switch (oldVersion) {
+//        case 1:
+//            // v1->v2: all changes made in version 2 come here
+//            db.execSQL("ALTER TABLE "+DBPreferenceDao.TABLENAME+" ADD COLUMN 'ATTRIBUTE_LIST' TEXT;");
+//            db.execSQL("ALTER TABLE "+DBPreferenceDao.TABLENAME+" ADD COLUMN 'DESCRIPTION' TEXT;");
+//            // break was omitted by purpose.
+//    }
+//}
 public class LimoDaoGenerator {
 
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1, "digital.dispatch.TaxiLimoNewUI");
+        Schema schema = new Schema(2, "digital.dispatch.TaxiLimoNewUI");
 
         addAddress(schema);
         addJob(schema);
@@ -58,6 +70,8 @@ public class LimoDaoGenerator {
     	preference.addStringProperty("destId");
     	preference.addStringProperty("companyName");
     	preference.addStringProperty("img");
+    	preference.addStringProperty("attributeList");
+    	preference.addStringProperty("description");
 	}
 
 	private static void addAddress(Schema schema) {

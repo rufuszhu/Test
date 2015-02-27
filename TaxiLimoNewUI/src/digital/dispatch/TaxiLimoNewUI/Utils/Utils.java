@@ -75,7 +75,7 @@ public class Utils {
     private static ProgressDialog progressDialogWithMessage;
 	// Set all the navigation icons and always to set "zero 0" for the item is a category
 	// public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_payment, R.drawable.icon_preferences, R.drawable.icon_about };
-	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_about };
+	public static int[] iconNavigation = new int[] { R.drawable.icon_profile, R.drawable.icon_preferences, R.drawable.icon_about };
 	public static String pickupHouseNumber = "";
 
 	// use the old hardwareId if exist, otherwise create a new one and save it in share preference
@@ -250,7 +250,7 @@ public class Utils {
         return MBDefinition.attrBtnOnMap.get(attrIconId) != 0 && MBDefinition.attrBtnOffMap.get(attrIconId) != 0;
     }
 
-	private static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
+	public static String setupAttributeIdList(ArrayList<Integer> selectedAttribute) {
 		String temp = "";
 		if (selectedAttribute == null)
 			return temp;

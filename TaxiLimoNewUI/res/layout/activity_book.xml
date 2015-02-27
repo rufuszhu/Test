@@ -297,15 +297,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/normal_padding"
             android:layout_marginRight="@dimen/normal_padding"
             android:layout_toLeftOf="@+id/angle_right3"
-            android:layout_toRightOf="@+id/tv_company_title"
             android:gravity="right"
             android:singleLine="true"
             android:text="@string/choose"
             android:textColor="@color/list_gray_text"
             android:textSize="@dimen/book_activity_font_size" />
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/company_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="@dimen/normal_padding"
+            android:gravity="right"
+            android:layout_toLeftOf="@+id/tv_company"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_padding"/>
+
+        <FrameLayout
+            android:id="@+id/icon_preferred"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignLeft="@+id/company_icon"
+            android:layout_alignTop="@+id/company_icon"
+            android:layout_marginLeft="-5dp"
+            android:layout_marginTop="-5dp"
+            android:background="@drawable/icon_preferred"
+            android:visibility="gone"
+           ></FrameLayout>
+
+
     </RelativeLayout>
 
     <FrameLayout

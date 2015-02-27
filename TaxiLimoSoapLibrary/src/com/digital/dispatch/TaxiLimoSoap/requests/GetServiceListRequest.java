@@ -51,6 +51,7 @@ public class GetServiceListRequest extends Request {
 
 						if (GlobalVar.logEnable) {
 							Log.e(TAG, "Response Error: " + e.toString());
+                            e.printStackTrace();
 						}
 					}
 

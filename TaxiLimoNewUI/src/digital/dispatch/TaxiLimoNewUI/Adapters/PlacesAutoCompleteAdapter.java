@@ -43,7 +43,7 @@ import digital.dispatch.TaxiLimoNewUI.Widget.SwipableListItem;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 	private ArrayList<String> resultList;
-	private static final String LOG_TAG = "PlacesAutoCompleteAdapter";
+	private static final String LOG_TAG = "PlacesAutoComplete";
 
 	private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 	private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
@@ -222,7 +222,6 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 					notifyDataSetInvalidated();
 				}
 			}
-
 		};
 		return filter;
 	}
@@ -241,6 +240,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 				sb.append("&location=" + Utils.mPickupAddress.getLatitude() + "," + Utils.mPickupAddress.getLongitude());
 				sb.append("&radius=" + RADIUS);
 			}
+
 			sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
 			URL url = new URL(sb.toString());

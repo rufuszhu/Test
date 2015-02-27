@@ -5,8 +5,8 @@
 
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/ic_add"
-        android:title="@string/add_credit_card"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/add_preference"
         app:showAsAction="ifRoom"/>
 
 </menu>

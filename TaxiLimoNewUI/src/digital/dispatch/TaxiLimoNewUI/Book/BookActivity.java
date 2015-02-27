@@ -22,12 +22,15 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.digital.dispatch.TaxiLimoSoap.responses.CompanyItem;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +40,8 @@ import digital.dispatch.TaxiLimoNewUI.BaseActivity;
 import digital.dispatch.TaxiLimoNewUI.DBBooking;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao;
 import digital.dispatch.TaxiLimoNewUI.DBBookingDao.Properties;
+import digital.dispatch.TaxiLimoNewUI.DBPreference;
+import digital.dispatch.TaxiLimoNewUI.DBPreferenceDao;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.AddressDaoManager;
 import digital.dispatch.TaxiLimoNewUI.DaoManager.DaoManager;
 import digital.dispatch.TaxiLimoNewUI.GCM.CommonUtilities;
@@ -45,6 +50,7 @@ import digital.dispatch.TaxiLimoNewUI.R;
 import digital.dispatch.TaxiLimoNewUI.Task.GetCompanyListTask;
 import digital.dispatch.TaxiLimoNewUI.Task.GetEstimateFareTask;
 import digital.dispatch.TaxiLimoNewUI.Track.TrackDetailActivity;
+import digital.dispatch.TaxiLimoNewUI.Utils.AppController;
 import digital.dispatch.TaxiLimoNewUI.Utils.FontCache;
 import digital.dispatch.TaxiLimoNewUI.Utils.LocationUtils;
 import digital.dispatch.TaxiLimoNewUI.Utils.Logger;
@@ -63,6 +69,9 @@ public class BookActivity extends BaseActivity {
     private boolean noCompanyAvailable;
     private boolean bookAnyway;// if this flag is true, let user to book job without driver instruction even if the pickup address has no street number
     private CompanyItem[] cachedCompanyArray;
+    private DBPreference preferedForThisCity;
+    private NetworkImageView company_icon;
+    private FrameLayout icon_preferred;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,9 +147,48 @@ public class BookActivity extends BaseActivity {
         setDropOffIfExist();
         setTimeIfExist();
         setDriverNoteIfExist();
+
+        DaoManager daoManager = DaoManager.getInstance(this);
+        DBPreferenceDao preferenceDao = daoManager.getDBPreferenceDao(DaoManager.TYPE_WRITE);
+        List<DBPreference> preferedCompanyList = preferenceDao.queryBuilder().where(DBPreferenceDao.Properties.City.eq(Utils.mPickupAddress.getLocality().toUpperCase(Locale.US)),
+                DBPreferenceDao.Properties.Country.eq(Utils.mPickupAddress.getCountryCode()),
+                DBPreferenceDao.Properties.State.eq(LocationUtils.states.get(Utils.mPickupAddress.getAdminArea()))).list();
+        Logger.i(TAG, "searching city: " + Utils.mPickupAddress.getLocality().toUpperCase(Locale.US) + ", country: " + Utils.mPickupAddress.getCountryCode() + ", state: " + LocationUtils.states.get(Utils.mPickupAddress.getAdminArea()));
+
+        if(preferedCompanyList.size()>0){
+            preferedForThisCity = preferedCompanyList.get(0);
+            Logger.i(TAG,"Found preferred company: " + preferedForThisCity.getCompanyName());
+            Logger.i(TAG,"Preferred company attr list: " + preferedForThisCity.getAttributeList());
+        }
+        else{
+            Logger.i(TAG,"Preferred company not found");
+            preferedForThisCity = null;
+        }
+
         setCompanyIfExist();
+        loadSavedAttrList();
+
         bookAnyway = false;
         noCompanyAvailable=false;
+    }
+
+    private void loadSavedAttrList(){
+        if(preferedForThisCity!=null) {
+            //if user has not manually modified attribute for this trip, use the saved preferred attribute
+            if (Utils.selected_attribute == null) {
+                Utils.selected_attribute = attrStringToList(preferedForThisCity.getAttributeList());
+            }
+        }
+    }
+
+    private ArrayList<Integer> attrStringToList(String list){
+        String[] temp = list.split(",");
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int i = 0; i < temp.length; i++){
+            if(temp[i].length()>0)
+                result.add(Integer.valueOf(temp[i]));
+        }
+        return result;
     }
 
     @Override
@@ -237,13 +285,30 @@ public class BookActivity extends BaseActivity {
     private void setCompanyIfExist() {
         tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
         tv_company.setText(getString(R.string.choose));
-        // no need to get company list again if pick up city is not changed
+        company_icon.setVisibility(View.GONE);
+        icon_preferred.setVisibility(View.GONE);
+        // no need to get company list again if pick up city is not changed and user already selected a company
         if (Utils.last_city.equals(Utils.mPickupAddress.getLocality())) {
-            if(Utils.mSelectedCompany != null)
+            if(Utils.mSelectedCompany != null) {
                 tv_company.setText(Utils.mSelectedCompany.name);
+                String prefixURL = getResources().getString(R.string.url);
+                prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+                company_icon.setVisibility(View.VISIBLE);
+                company_icon.setDefaultImageResId(R.drawable.launcher);
+                company_icon.setImageUrl(prefixURL + Utils.mSelectedCompany.logo, AppController.getInstance().getImageLoader());
+                if(preferedForThisCity!=null && preferedForThisCity.getDestId().equalsIgnoreCase(Utils.mSelectedCompany.destID)){
+                    icon_preferred.setVisibility(View.VISIBLE);
+                }
+                else{
+                    icon_preferred.setVisibility(View.GONE);
+                }
+
+            }
         } else {
             boolean isFromBooking = true;
-            new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            boolean isPreference = false;
+            Utils.selected_attribute=null;
+            new GetCompanyListTask(this, Utils.mPickupAddress, isFromBooking, isPreference, "", "", "").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
@@ -395,6 +460,9 @@ public class BookActivity extends BaseActivity {
         angle_right3 = (TextView) findViewById(R.id.angle_right3);
         angle_right2 = (TextView) findViewById(R.id.angle_right2);
         angle_right1 = (TextView) findViewById(R.id.angle_right1);
+
+        company_icon = (NetworkImageView) findViewById(R.id.company_icon);
+        icon_preferred = (FrameLayout) findViewById(R.id.icon_preferred);
     }
 
 	/*
@@ -690,17 +758,57 @@ public class BookActivity extends BaseActivity {
             tv_company.setTextColor(_this.getResources().getColor(R.color.red_light));
             View book_cover = findViewById(R.id.book_cover);
             book_cover.setVisibility(View.VISIBLE);
-        } else if (tempCompList.length == 1) {
+        }
+        //if there is only one company we auto select, do not care about preference
+        else if (tempCompList.length == 1) {
             tv_company.setTextColor(_this.getResources().getColor(R.color.black));
             Utils.mSelectedCompany = tempCompList[0];
             tv_company.setText(Utils.mSelectedCompany.name);
+            String prefixURL = getResources().getString(R.string.url);
+            prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+            company_icon.setVisibility(View.VISIBLE);
+            company_icon.setDefaultImageResId(R.drawable.launcher);
+            company_icon.setImageUrl(prefixURL + tempCompList[0].logo, AppController.getInstance().getImageLoader());
             noCompanyAvailable = false;
-        } else {
-            // show please choose a company
-            tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
-            tv_company.setText(getString(R.string.choose));
+            if(preferedForThisCity!=null && preferedForThisCity.getDestId().equalsIgnoreCase(Utils.mSelectedCompany.destID)){
+                icon_preferred.setVisibility(View.VISIBLE);
+            }
+            else{
+                icon_preferred.setVisibility(View.GONE);
+            }
+
+        }
+
+        else {
+            if(preferedForThisCity!=null){
+                Utils.mSelectedCompany = getPreferedCompany(tempCompList);
+                if(null != Utils.mSelectedCompany){
+                   tv_company.setText(Utils.mSelectedCompany.name);
+                    String prefixURL = getResources().getString(R.string.url);
+                    prefixURL = prefixURL.substring(0, prefixURL.lastIndexOf("/"));
+                    company_icon.setVisibility(View.VISIBLE);
+                    company_icon.setDefaultImageResId(R.drawable.launcher);
+                    company_icon.setImageUrl(prefixURL + Utils.mSelectedCompany.logo, AppController.getInstance().getImageLoader());
+                    icon_preferred.setVisibility(View.VISIBLE);
+                }
+            }
+            else {
+                // show please choose a company
+                tv_company.setTextColor(_this.getResources().getColor(R.color.gray_light));
+                tv_company.setText(getString(R.string.choose));
+                icon_preferred.setVisibility(View.GONE);
+            }
             noCompanyAvailable = false;
         }
         setEstFareIfExist();
+    }
+
+    private CompanyItem getPreferedCompany(CompanyItem[] companyItems){
+        for(int i = 0; i < companyItems.length; i++){
+            if(companyItems[i].destID.equals(preferedForThisCity.getDestId())){
+                return companyItems[i];
+            }
+        }
+        return null;
     }
 }

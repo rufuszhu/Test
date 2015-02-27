@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/company_list_item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/company_list_item_height"
     android:background="@drawable/companylist_background_selector"
-    android:minHeight="@dimen/company_list_item_height"
-    android:padding="@dimen/normal_padding" >
+    android:minHeight="@dimen/company_list_item_height">
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/company_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_alignParentLeft="true" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/normal_padding"
-        android:orientation="vertical" 
-        android:layout_toRightOf="@+id/company_icon">
+        android:padding="@dimen/normal_padding">
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/gray"
-            android:textStyle="italic" />
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/company_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center" />
 
         <LinearLayout
-            android:id="@+id/ll_attr"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/small_padding" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normal_padding"
+            android:layout_toRightOf="@+id/company_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/gray"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:id="@+id/ll_attr"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/small_padding"></LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-	<!--  
-    <TextView
-        android:id="@+id/tv_round_btn"
-        style="@style/TextDropShadowWhite"
-        android:layout_width="@dimen/selection_btn_width"
-        android:layout_height="@dimen/selection_btn_height"
-        android:background="@drawable/shape_white_button"
-        android:gravity="center"
-        android:text="@string/select"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/blue_grenn_color2"
-        android:textSize="@dimen/selection_btn_font_size"
-        android:textStyle="bold" />
-     -->
+
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/icon_preferred"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/icon_preferred"
+        android:visibility="gone"></FrameLayout>
 
 </RelativeLayout>

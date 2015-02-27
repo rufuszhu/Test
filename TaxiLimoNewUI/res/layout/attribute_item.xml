@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="45dp"
     android:maxHeight="45dp"
     android:orientation="vertical" >
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:maxHeight="35dp"
-        android:textOff=""
-        android:textOn="" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:maxHeight="35dp"
+            android:textOff=""
+            android:textOn="" />
+
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/shortName"
@@ -20,9 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="@dimen/big_margin"
-            android:textColor="@color/attr_color"
-            android:visibility="gone"/>
+
+            android:visibility="gone"
+            android:paddingLeft="@dimen/normal_padding"/>
 
         <TextView
             android:id="@+id/longName"
@@ -31,12 +38,9 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/shortName"
             android:textSize="11sp"
-            android:singleLine="true"
             android:visibility="gone"
-            android:textColor="@color/attr_color"
+            android:singleLine="true"
             android:paddingLeft="@dimen/small_padding"
             android:paddingRight="@dimen/small_padding"/>
-
-
 
 </RelativeLayout>
